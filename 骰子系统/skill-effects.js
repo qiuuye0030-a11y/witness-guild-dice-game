@@ -23,8 +23,16 @@
     const effects=args.effects?.length?args.effects.map(e=>({...e})):generate({seed,style:args.style,channel:skill.channel,category:args.category,Q:skill.Q});
     const s={...skill,category:args.category,effects,effectCount:effects.length,effectSeed:seed,effectRulesVersion:10,buff:0};delete s.effectVariant;
     s.name=args.soul.name+(args.category==='强化'?'·多维加持':'·多维削弱');
-    s.effect=effects.map(e=>labels[e.key]+(s.category==='强化'?'提高':'降低')+(e.value*100).toFixed(2).replace(/\.?0+$/,'')+'%').join('、')+(s.category==='强化'?'；持续整场，同源不叠加':'；共享一次精神判定，持续12秒，同源不叠加');
+    s.effect=effects.map(e=>labels[e.key]+(s.category==='强化'?'提高':'降低')+(e.value*100).toFixed(2).replace(/\.?0+$/,'')+'%').join('、')+(s.category==='强化'?'；持续整场，同源不叠加':'；共享一次精神判定，持续整场，同源不叠加');
     return s;
   }
-  const api={generate,decorate,weights,labels};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessSkillEffects=api;
+  function make(base,args){
+    let mode=args.damageMode;
+    if(args.category==='持续伤害')mode='periodic';
+    if(args.category==='攻击'&&!mode&&!args.npcTemplate){const seed=args.effectSeed||[args.soul.id,args.index,args.years,args.variant||0].join('|');mode=random(seed+'|attack-mode')()<.25?'periodic':'direct';}
+    const resolved={...args,category:mode==='periodic'?'持续伤害':args.category};
+    const skill=decorate(base(resolved),resolved);
+    return resolved.category==='持续伤害'?{...skill,category:'攻击',damageMode:'periodic'}:args.category==='攻击'?{...skill,damageMode:'direct'}:skill;
+  }
+  const api={generate,decorate,make,weights,labels};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessSkillEffects=api;
 })(typeof globalThis==='undefined'?this:globalThis);

@@ -84,7 +84,7 @@
     if(category==='控制')effect=`基础控制 ${round2(Math.min(3,1+.5*Q))}秒；实际成功率与时长受双方精神力影响，结束后4秒免控`;
     if(category==='治疗')effect=`回复${channel==='精神'?'精神护持':'生命'} ${Math.round(.40*Q*power)}，不超过最大值`;
     if(category==='回蓝')effect=`为另一名队友回复 ${Math.round(25+10*Q)}MP，每战一次，不能给自己`;
-    if(category==='持续伤害')effect=`${attackChannel}总原始伤害 ${Math.round(1.4*Q*attack)}，分3次每2秒一跳，同技能不叠层`;
+    if(category==='持续伤害')effect=`${attackChannel}总原始伤害 ${Math.round(1.4*Q*attack)}，分3次每3秒一跳，同技能不叠层`;
     const owned=Math.max(1,stats.rings),relative=index/owned;
     const fraction=index===owned?.34:relative>=.70?.22:relative>=.40?.15:.10;
     const baseCost=stats.derived.MP*fraction*(.92+.08*q),baseTime=1.4+.2*(q-1);
@@ -98,7 +98,7 @@
   }
   const api={rating,ringFloor,ringRange,KEYS,LABELS,BASE,GRADE,STYLE,CAPS,BAND_LIMITS,BANDS,QS,WEIGHTS,CATEGORIES,benchmark,shapeMods,mainStyles,isMental,derive,buildStats,controlEffect,band,pickCategory,makeSkill,round2};
   const SE=typeof module!=='undefined'&&module.exports?require('./skill-effects.js'):root.WitnessSkillEffects;
-  api.makeSkill=args=>SE.decorate(makeSkill(args),args);
+  api.makeSkill=args=>SE.make(makeSkill,args);
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessRules=api;
 })(typeof globalThis==='undefined'?this:globalThis);
 

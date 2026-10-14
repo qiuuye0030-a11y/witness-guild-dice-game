@@ -1,12 +1,14 @@
 # 见证者公会 · 互动式骰子文字游戏
 
-当前版本：**10.03**。单人离线文字养成与斗魂游戏，提供经典深靛、晨曦朝阳两种主题。
+当前版本：**10.04**。单人离线文字养成与斗魂游戏，提供经典深靛、晨曦朝阳两种主题。
 
 ## 游玩
 
 在仓库的 Releases 下载版本分享包，解压后使用浏览器打开HTML。无需联网。存档保存在当前浏览器，可从游戏内导出备份。
 
 ## 版本记录
+
+- 10.04：考官战胜记录、猎魂重新抽取强化、减益持续整场；新猎魂移除治疗，持续伤害归入攻击，兼容旧魂技。
 
 - 10.03：首页赞助子入口与简洁口令窗口；魅力和气运固定于初始骰，移除事件和任务链的魅力成长。
 - 10.02：斗魂台开场、有限重战与遗憾结局、猎魂月份代价、任务环节与人物介绍、命名和潜力概率调整。
@@ -31,13 +33,15 @@ python -X utf8 _full_package.py
 使用Node.js 22与Python 3.10或更高版本。在`骰子系统`目录运行：
 
 ```text
+node verify-1004.cjs
 node verify-1003.cjs
-node verify-quests-1003.cjs
-node verify-journeys-1003.cjs
-python -X utf8 verify-package-1003.py
+node simulate-1004.cjs
+node verify-quests-1004.cjs
+node verify-journeys-1004.cjs
+python -X utf8 verify-package-1004.py
 ```
 
-浏览器检查另需Playwright及Microsoft Edge，入口为`verify-ui-1003.cjs`。构建与测试生成的包体、截图及临时输出不进入源码提交。
+浏览器检查另需Playwright及Microsoft Edge，入口为`verify-ui-1004.cjs`。构建与测试生成的包体、截图及临时输出不进入源码提交。
 
 ## 后续更新
 

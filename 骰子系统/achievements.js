@@ -51,6 +51,7 @@
       if(targets.length&&targets.every(x=>this.data.examiners[x]?.length)&&new Set(targets.flatMap(x=>this.data.examiners[x]||[])).size>=2)this.unlock('all_examiners_defeated',s);
       this.save();
     }
+    examinerProgress(templates){return templates.map(t=>{const ids=this.data.examiners[t.id]||[];return {id:t.id,name:t.name,style:t.style,weapon:t.weapon,defeated:ids.length>0,characters:ids.map(id=>this.data.participants[id]?.name||'旧旅程'),count:ids.length};});}
     entries(){return Object.entries(this.data.unlocked).map(([id,item])=>({id,title:definitions[id][0],description:definitions[id][1],...item}));}
   }
   const api={Archive,migrateIdentity,newId,definitions,KEY};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessAchievements=api;

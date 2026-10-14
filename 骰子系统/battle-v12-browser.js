@@ -110,7 +110,6 @@
   function band(years){if(!Number.isInteger(years)||years<10||years>100000)throw Error('魂环年限无效');return BAND_LIMITS.findIndex(n=>years<=n);}
   function pickCategory(style,roll){let n=0;return CATEGORIES[WEIGHTS[style].findIndex(w=>(n+=w)>=roll)];}
   function makeSkill({soul,style,stats,index,years,category,variant=0}){
-    if(style!=='辅助'&&category==='治疗')category='强化';
     const b=band(years),q=QS[b],K=1+.15*(soul.tier-1),Q=round2(q*K);
     const mental=isMental(soul),attackChannel=mental?'精神':soul.main_kind==='兽'||(soul.main_kind==='器'&&soul.subkind==='战斗')?'物理':'能量';
     const channel=(category==='治疗'||category==='防御')?(mental?'精神':'生命'):attackChannel;
@@ -135,7 +134,7 @@
   }
 
   function skillBudget(model,s){
-    const magnitude=(s.category==='持续伤害'?1.4:1.2)*(s.Q||1)*(s.budgetFactor??s.factor??1);
+    const magnitude=((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*(s.Q||1)*(s.budgetFactor??s.factor??1);
     let fraction;
     if(['攻击','持续伤害'].includes(s.category))fraction=clamp(.045+.025*magnitude,.10,.28);
     else if(s.category==='强化')fraction=.06+(s.buff||0)*.06+(s.agility||0)*.05+(s.evasion||0)*.10+(s.dotBuff||0)*.04+(s.budgetColdOnHit??s.coldOnHit??0)*.08;
@@ -357,11 +356,11 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
   const clamp=(v,l,h)=>Math.max(l,Math.min(h,v));
   const copy=o=>JSON.parse(JSON.stringify(o));
   function fxFor(soul){const el=soul.elements||[];if(soul.spirit_specialist)return 'mind';if(el.includes('雷'))return 'lightning';if(el.includes('冰'))return 'ice';if(el.includes('毒'))return 'poison';if(el.includes('火'))return 'fire';if(el.includes('木'))return 'petal';if(el.includes('风'))return 'wind';if(soul.main_kind==='器'&&soul.subkind==='战斗')return 'slash';return 'wave';}
-  function normalizeSkill(skill){return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
+  function normalizeSkill(skill){if(skill.category==='持续伤害')skill={...skill,category:'攻击',damageMode:'periodic'};if(skill.category==='减益')skill={...skill,effect:String(skill.effect||'').replace(/持续\d+(?:\.\d+)?秒/g,'持续整场')};return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
   function playerUnit(character,soul){soul=copy(soul);
     if(!character.stats)throw Error('先生成角色基础能力');
     const model=R.buildStats({...character,soul});
-    const skills=(character.rings||[]).flatMap(r=>r.skills.map(s=>({...R.makeSkill({soul,style:character.style,stats:model,index:r.index,years:r.years,category:s.category,effectVariant:s.effectVariant,effects:s.effects,effectSeed:s.effectSeed}),...(!['控制','减益'].includes(s.category)?{name:s.category==='治疗'&&character.style!=='辅助'?soul.name+'·增幅':s.name}:{})}))).map(s=>normalizeSkill({...s,fx:fxFor(soul)}));
+    const skills=(character.rings||[]).flatMap(r=>r.skills.map(s=>({...R.makeSkill({soul,style:character.style,stats:model,index:r.index,years:r.years,category:s.category,damageMode:s.damageMode||((s.category==='持续伤害'||s?.damageMode==='periodic')?'periodic':'direct'),effectVariant:s.effectVariant,effects:s.effects,effectSeed:s.effectSeed}),...(!['控制','减益'].includes(s.category)?{name:s.name}:{})}))).map(s=>normalizeSkill({...s,fx:fxFor(soul)}));
     return {id:'player',name:character.name||'你的见证者',team:0,soul:copy(soul),style:character.style,release:character.release,level:character.level,model,skills,portrait:null,source:'玩家人设'};
   }
   function templateUnit(template,level,id,team){
@@ -528,7 +527,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
       if(['defend','defendSH'].includes(cast.action)){p.effects.push(()=>this.setStatus(u,cast.action==='defendSH'?'defendSH':'defendHP',1,3));return p;}
       if(cast.action==='tune'){p.effects.push(()=>{u.mp=Math.min(u.model.derived.MP,u.mp+Math.round(u.model.derived.baseMP*.08));this.addLog(u.name+'调息恢复魂力',{type:'restore',actor:u.id,target:u.id,fx:'restore'});});return p;}
       if(cast.action==='calm'){p.heal=Math.round(u.model.derived.SH*.08);p.channel='精神';return p;}
-      const cat=s?.category||'攻击',channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');p.channel=channel;
+      const cat=s?.damageMode==='periodic'?'持续伤害':s?.category||'攻击',channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');p.channel=channel;
       const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA,Q=s?.Q||1;
       if(cat==='攻击'||cat==='持续伤害'){
         const hit=this.hit(u,t,channel);p.hit=hit;
@@ -573,7 +572,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
         if(mental)t.shieldSH=Math.max(t.shieldSH,shield);else t.shieldHP=Math.max(t.shieldHP,shield);
         t.shieldUntil=this.now+8000;t.oneHit=!!s.oneHit;t.guard=s.guard||0;t.rageOnBreak=!!s.rageOnBreak;
       });
-      if(cat==='治疗'&&u.style==='辅助'){p.channel=channel==='精神'?'精神':'生命';p.heal=Math.min(Math.round(t.model.derived[p.channel==='精神'?'SH':'HP']*.12),Math.round(.4*Q*(p.channel==='精神'?a.MA:a.SA)));if(this.trait(u)==='healing')p.heal=Math.round(p.heal*1.15);if(this.trait(u)==='life'&&p.channel!=='精神')p.heal=Math.round(p.heal*1.12);}
+      if(cat==='治疗'){p.channel=channel==='精神'?'精神':'生命';p.heal=Math.min(Math.round(t.model.derived[p.channel==='精神'?'SH':'HP']*.12),Math.round(.4*Q*(p.channel==='精神'?a.MA:a.SA)));if(this.trait(u)==='healing')p.heal=Math.round(p.heal*1.15);if(this.trait(u)==='life'&&p.channel!=='精神')p.heal=Math.round(p.heal*1.12);}
       if(cat==='回蓝')p.effects.push(()=>t.mp=Math.min(t.model.derived.MP,t.mp+Math.round(25+10*Q)));
       if(cat==='控制'&&s.chipFactor){p.damage=this.damageValue(u,t,1.2*Q*a.MA*s.chipFactor,channel,pre);}
       if(cat==='控制')p.effects.push(()=>{if(s.dispel)t.shieldHP=Math.round(t.shieldHP*(1-s.dispel));this.tryControl(u,t,s,s.baseControl);});
@@ -650,10 +649,10 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
       const damage=(s,t)=>{
         const channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
         const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-        let raw=s?(s.category==='持续伤害'?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
+        let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
         if(s?.secondaryFactor)raw+=1.2*s.Q*power*s.secondaryFactor;
         if(this.value(u,'coldAura'))raw+=a.SA*this.value(u,'coldAura')*(s?.secondaryFactor?2:1);
-        if(s?.category==='持续伤害')raw*=1+this.value(u,'dotBoost');
+        if((s?.category==='持续伤害'||s?.damageMode==='periodic'))raw*=1+this.value(u,'dotBoost');
         if(s?.rageSpend)raw*=1+.15*Math.min(3,u.rage);
         if(s?.detonate)raw+=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*d.ticks,0)*(100+this.effective(t).DEF)/100;
         return this.damageValue(u,t,raw,channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
@@ -668,10 +667,10 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
           let score=-Infinity;
           if(['攻击','持续伤害'].includes(s.category)){
             if(s.detonate&&!t.dots.some(d=>d.source===u.id))continue;
-            if(s.category==='持续伤害'&&t.dots.some(d=>d.key===u.id+'-'+s.id))continue;
+            if((s.category==='持续伤害'||s?.damageMode==='periodic')&&t.dots.some(d=>d.key===u.id+'-'+s.id))continue;
             score=damage(s,t)/u.model.derived.HP*100-cost;
             if(s.detonate)score+=12;
-            if(s.category==='持续伤害')score*=.85;
+            if((s.category==='持续伤害'||s?.damageMode==='periodic'))score*=.85;
             if(damage(s,t)>=t[s.channel==='精神'?'sh':'hp']+(s.channel==='精神'?t.shieldSH:t.shieldHP))score+=60;
           }
           if(s.category==='强化'){
@@ -680,7 +679,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
             let improvement=0;
             for(const [type,v]of Object.entries(fields))improvement+=this.buffImprovement(t,type,v,s,u)*(type==='evasion'?100:type==='agility'?40:type==='controlWard'?5:60);
             if(!improvement)continue;
-            if(s.dotBuff&&!foes.some(f=>f.dots.some(d=>d.source===u.id))&&!valid.some(x=>x.category==='持续伤害'))continue;
+            if(s.dotBuff&&!foes.some(f=>f.dots.some(d=>d.source===u.id))&&!valid.some(x=>(x.category==='持续伤害'||x?.damageMode==='periodic')))continue;
             if(s.burstActions){improvement*=.55;if(s.evasion&&ratio(t,'生命')>.65)improvement*=.55;}
             score=improvement*(s.burstActions?1:horizon*.65)-cost;
             if(this.resourceConfig.selfBuffBonus&&t.id===u.id&&u.mp>=this.cost(u,s)+this.basicCost(u))score+=Math.max(...foes.map(f=>damage(null,f)))*.9/u.model.derived.HP*100-this.basicCost(u)/u.model.derived.baseMP*12;
@@ -695,7 +694,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
             const duration=Math.min(4,(s.baseControl||effect.duration)*effect.ratio);
             const enemyHit=t.skills.filter(x=>['攻击','持续伤害'].includes(x.category));
             const enemyPower=this.effective(t);
-            const estimate=x=>this.damageValue(t,u,(x.category==='持续伤害'?1.4:1.2)*x.Q*(x.channel==='物理'?enemyPower.PA:x.mindPower?enemyPower.MA:enemyPower.SA)*(x.factor??1),x.channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
+            const estimate=x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?enemyPower.PA:x.mindPower?enemyPower.MA:enemyPower.SA)*(x.factor??1),x.channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
             const blocked=willInterrupt&&t.cast.skill?estimate(t.cast.skill):0;
             const typical=enemyHit.length?Math.max(...enemyHit.map(estimate)):0;
             const window=(duration+t.progress/Math.max(.06,this.actionRate(t)))/(1/this.actionRate(t)+1.5);
@@ -712,7 +711,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
             if(this.resourceConfig.domainAI&&s.fieldEvasion){
               const ownAttack=Math.max(0,...u.skills.filter(x=>['攻击','持续伤害'].includes(x.category)&&!x.detonate).map(x=>damage(x,t)));
               const ta=this.effective(t),pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
-              const enemyAttack=Math.max(0,...t.skills.filter(x=>['攻击','持续伤害'].includes(x.category)).map(x=>this.damageValue(t,u,(x.category==='持续伤害'?1.4:1.2)*x.Q*(x.channel==='物理'?ta.PA:x.mindPower?ta.MA:ta.SA)*(x.factor??1),x.channel,pre)));
+              const enemyAttack=Math.max(0,...t.skills.filter(x=>['攻击','持续伤害'].includes(x.category)).map(x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?ta.PA:x.mindPower?ta.MA:ta.SA)*(x.factor??1),x.channel,pre)));
               const horizon=Math.min(2,(s.duration||6)/(1/this.actionRate(u)+1.2));
               const defense=ta.DEF*130/Math.max(20,t.model.benchmark);
               const offenseGain=ownAttack*defGain*defense/(100+defense)*Math.min(1,horizon);
@@ -947,10 +946,10 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
   proto.forecastDamage=function(u,t,s){
     const a=this.effective(u),channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
     const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-    let raw=s?(s.category==='持续伤害'?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
+    let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
     if(s?.secondaryFactor)raw+=1.2*s.Q*power*s.secondaryFactor;
-    if(s?.category==='持续伤害')raw*=1+this.value(u,'dotBoost');
-    if(s?.category==='持续伤害'&&this.trait(u)==='poison')raw*=1.14;
+    if((s?.category==='持续伤害'||s?.damageMode==='periodic'))raw*=1+this.value(u,'dotBoost');
+    if((s?.category==='持续伤害'||s?.damageMode==='periodic')&&this.trait(u)==='poison')raw*=1.14;
     if(s?.category==='攻击'&&this.trait(u)==='poison')raw*=.95;
     if(s?.category==='攻击'&&this.trait(u)==='fire'&&channel==='能量')raw*=1.1;
     const pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
@@ -1011,8 +1010,8 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
   proto.aiStrike=function(u,t,s,at=0,defense=null){
     const ch=channel(u,s),a=this.effective(u),pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
     const power=s?.mindPower?a.MA:ch==='精神'?a.MA:ch==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-    let raw=s?(s.category==='持续伤害'?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
-    const trait=this.trait(u),dot=s?.category==='持续伤害';
+    let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
+    const trait=this.trait(u),dot=(s?.category==='持续伤害'||s?.damageMode==='periodic');
     if(!s)raw*=trait==='heavy'?1.12:trait==='swift'?.96:['guard','ghost'].includes(trait)?.94:1;
     if(dot)raw*=(1+this.value(u,'dotBoost'))*(trait==='poison'?1.14:1);
     if(s?.category==='攻击')raw*=trait==='poison'?.95:trait==='fire'&&ch==='能量'?1.1:1;
@@ -1035,7 +1034,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=known;
   // At most three future attacks. Paid casts are included even when MP is now empty.
   proto.aiSequence=function(u,t,horizon,delay=0,mp=u.mp,defense=null,reserved=null){
     const hits=[],used=new Map(),cooldowns=new Map();
-    if(reserved){used.set(reserved.id,1);cooldowns.set(reserved.id,Math.max(reserved.cooldown,reserved.category==='持续伤害'?9:0));}
+    if(reserved){used.set(reserved.id,1);cooldowns.set(reserved.id,Math.max(reserved.cooldown,(reserved.category==='持续伤害'||reserved?.damageMode==='periodic')?9:0));}
     let at=Math.max(0,(u.readyAt-this.now)/1000)+delay+(u.id===this.activeId?0:(1-u.progress)/this.actionRate(u));
     const recovery=this.difficulty==='admission'&&u.team===1?.8:.3;
     const controlled=Math.max(0,...this.status(u,'control').map(x=>(x.until-this.now)/1000));
@@ -1185,7 +1184,7 @@ WitnessControlV9.setConfig({ai:"compact"});
   proto.darkActionScore=function(u,t,action,score){
     if(u.templateId!=='anmu')return score;
     const s=u.skills.find(x=>x.id===action),foes=this.units.filter(x=>x.team!==u.team&&this.alive(x));
-    const poison=u.skills.find(x=>x.category==='持续伤害');
+    const poison=u.skills.find(x=>(x.category==='持续伤害'||x?.damageMode==='periodic'));
     const readyPoison=poison&&!this.actionReason(u,poison.id);
     const dots=foes.flatMap(f=>f.dots.filter(d=>d.source===u.id).map(d=>({f,d})));
     const penalty=cost=>cost/u.model.derived.baseMP*12;
@@ -1200,7 +1199,7 @@ WitnessControlV9.setConfig({ai:"compact"});
       }
       return hit.health>=t[hit.ch==='精神'?'sh':'hp']?Math.max(score,80):score;
     }
-    if(s?.category==='持续伤害'){
+    if((s?.category==='持续伤害'||s?.damageMode==='periodic')){
       const hit=this.aiStrike(u,t,s),basic=this.aiStrike(u,t,null),cycle=basic.cast+.3+1/this.actionRate(u);
       const existing=t.dots.reduce((n,d)=>n+this.dotDamage(d)/3,0);
       const life=t.hp/Math.max(1,basic.health/cycle+existing),ticks=Math.max(1,Math.min(3,Math.floor(life/3)));
@@ -1245,18 +1244,26 @@ WitnessControlV9.setConfig({ai:"compact"});
     const effects=args.effects?.length?args.effects.map(e=>({...e})):generate({seed,style:args.style,channel:skill.channel,category:args.category,Q:skill.Q});
     const s={...skill,category:args.category,effects,effectCount:effects.length,effectSeed:seed,effectRulesVersion:10,buff:0};delete s.effectVariant;
     s.name=args.soul.name+(args.category==='强化'?'·多维加持':'·多维削弱');
-    s.effect=effects.map(e=>labels[e.key]+(s.category==='强化'?'提高':'降低')+(e.value*100).toFixed(2).replace(/\.?0+$/,'')+'%').join('、')+(s.category==='强化'?'；持续整场，同源不叠加':'；共享一次精神判定，持续12秒，同源不叠加');
+    s.effect=effects.map(e=>labels[e.key]+(s.category==='强化'?'提高':'降低')+(e.value*100).toFixed(2).replace(/\.?0+$/,'')+'%').join('、')+(s.category==='强化'?'；持续整场，同源不叠加':'；共享一次精神判定，持续整场，同源不叠加');
     return s;
   }
-  const api={generate,decorate,weights,labels};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessSkillEffects=api;
+  function make(base,args){
+    let mode=args.damageMode;
+    if(args.category==='持续伤害')mode='periodic';
+    if(args.category==='攻击'&&!mode&&!args.npcTemplate){const seed=args.effectSeed||[args.soul.id,args.index,args.years,args.variant||0].join('|');mode=random(seed+'|attack-mode')()<.25?'periodic':'direct';}
+    const resolved={...args,category:mode==='periodic'?'持续伤害':args.category};
+    const skill=decorate(base(resolved),resolved);
+    return resolved.category==='持续伤害'?{...skill,category:'攻击',damageMode:'periodic'}:args.category==='攻击'?{...skill,damageMode:'direct'}:skill;
+  }
+  const api={generate,decorate,make,weights,labels};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessSkillEffects=api;
 })(typeof globalThis==='undefined'?this:globalThis);
 
 (function(root){
   'use strict';
   const R=root.WitnessRules,B=root.WitnessBattle,SE=root.WitnessSkillEffects,p=B.Battle.prototype,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const config={coefficient:.40,bonus:.35,cap:.90,costFraction:.02,duration:4};
-  const oldMake=R.makeSkill;R.makeSkill=args=>SE.decorate(oldMake(args),args);
-  const oldSnapshot=p.snapshot;p.snapshot=function(){return {...oldSnapshot.call(this),tacticsRulesVersion:10,dodgeConfig:{...config,...this.dodgeConfig}};};
+  const oldMake=R.makeSkill;R.makeSkill=args=>SE.make(oldMake,args);
+  const oldSnapshot=p.snapshot;p.snapshot=function(){return {...oldSnapshot.call(this),tacticsRulesVersion:1004,dodgeConfig:{...config,...this.dodgeConfig}};};
   p.dodgeCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*(this.dodgeConfig||config).costFraction));};
   const oldReason=p.actionReason;p.actionReason=function(u,action){
     if(action!=='dodge')return oldReason.call(this,u,action);
@@ -1297,7 +1304,7 @@ WitnessControlV9.setConfig({ai:"compact"});
     const s=cast.skill;if(!s?.effects?.length)return oldPlan.call(this,u,cast,pre);
     const t=this.unit(cast.target),plan={u,t,cast,s,damage:0,heal:0,channel:s.channel,effects:[]};if(!t||!this.alive(t))return plan;
     plan.effects.push(()=>{if(s.category==='减益'){const chance=R.controlEffect(s.Q,pre[u.id],pre[t.id]).chance,roll=this.rng.die(100);this.addLog(s.name+'判定 '+roll+' / '+Math.round(chance)+'%',{type:roll<=Math.round(chance)?'status':'resist',actor:u.id,target:t.id});if(roll>Math.round(chance))return;}
-      for(const effect of s.effects){const type=(s.category==='强化'?'statUp':'statDown')+effect.key,extra={source:this.statusSource(u,s),label:s.name,from:u.name};if(s.category==='强化')this.setBuff(t,type,effect.value,s,extra);else this.setStatus(t,type,effect.value,12,extra);}
+      for(const effect of s.effects){const type=(s.category==='强化'?'statUp':'statDown')+effect.key,extra={source:this.statusSource(u,s),label:s.name,from:u.name};if(s.category==='强化')this.setBuff(t,type,effect.value,s,extra);else this.setStatus(t,type,effect.value,180.001,extra);}
     });return plan;
   };
   const oldAI=p.aiChoice;p.aiChoice=function(u){
@@ -1313,6 +1320,15 @@ WitnessControlV9.setConfig({ai:"compact"});
   p.dotLabel=function(dot){const owner=this.unit(dot.source),s=owner?.skills.find(s=>dot.key===owner.id+'-'+s.id);return (dot.damageNature||this.dotNature(owner,s))==='poison'?'毒伤':'残伤';};
   p.applyDotDamage=function(t,dot){const nature=this.dotLabel(dot)==='毒伤'?'poison':'residual',start=this.events.length;this.applyDamage(t,dot.damage,dot.channel,this.unit(dot.source),dot.fx);for(const event of this.events.slice(start))if(event.type==='damage'){event.periodic=true;event.damageNature=nature;event.text=(nature==='poison'?'毒伤：':'残伤：')+event.text;}};
   root.WitnessTacticsV10={config};
+})(globalThis);
+
+(function(root){
+  const p=root.WitnessBattle.Battle.prototype,oldPlan=p.plan;
+  p.plan=function(u,cast,pre){
+    const plan=oldPlan.call(this,u,cast,pre);if(cast.skill?.category!=='减益')return plan;
+    plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.until=180001;delete status.hitsRemaining;delete status.actionsRemaining;}});
+    return plan;
+  };
 })(globalThis);
 
   // END V12 PLAYER ENGINE

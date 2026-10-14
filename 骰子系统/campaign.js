@@ -66,7 +66,7 @@
       const s=this.state,c=s.character;if(!c)return;this.ensureStoryState();
       c.talent=copy(Creation.TALENTS[(c.talent?.rank||1)-1]);if(!c.identity.originRank)c.identity.originRank=3;
       if(!s.growthPlan){const remaining=Math.max(1,c.time.quarters-s.completed);s.growthPlan={target:41,baseXP:Math.ceil(Math.max(50,(Math.max(0,41-c.level)*100-s.xp)/remaining)*100)/100,createdAt:s.completed};}
-      if(s.battleSnapshot&&(s.battleSnapshot.tacticsRulesVersion!==10||s.battleSnapshot.playerRulesVersion!==1||s.battleSnapshot.version!==9||s.battleSnapshot.combatRulesVersion!==12||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;if(s.phase==='battle'){s.result=null;s.resultHandled=false;s.phase='arrival';}}
+      if(s.phase==='battle'&&s.battleSnapshot&&(s.battleSnapshot.tacticsRulesVersion!==1004||s.battleSnapshot.playerRulesVersion!==1||s.battleSnapshot.version!==9||s.battleSnapshot.combatRulesVersion!==12||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;s.result=null;s.resultHandled=false;s.phase='arrival';}
       if(s.hunt&&!s.hunt.stage){const h=s.hunt;if(h.result){h.stage='result';h.plan=h.result.plan||'balanced';h.quality=h.result.quality||50;h.low=h.high=h.years=h.result.years;}else h.stage='plan';h.initial=false;}if(s.version<3&&s.hunt){const h=s.hunt;h.selectedCategory='random';h.location='forest';h.attempt=1;h.legacyFloor=true;h.absorbed=!!h.result;}if(s.version<4){if(s.pending)s.pending.legacyEvent=true;s.eventHistory={};s.failureStreak=0;}c.luck=c.luck||5;c.eventFlags=c.eventFlags||{};c.bones=c.bones||[];c.boneInventory=c.boneInventory||[];c.mutations=c.mutations||[];s.eventHistory=s.eventHistory||{};c.charm=c.charm||5;c.fatigue=c.fatigue||0;this.freezeFortune();s.hiddenRolls=s.hiddenRolls||[];if(s.pending){s.pending.bias=s.pending.bias||10;s.pending.receipts=s.pending.receipts||[];}s.version=8;
     }
     freezeFortune(){
@@ -93,7 +93,7 @@
     sync(){this.state.rngState=this.rng.state;}
     refresh(){
       const c=this.state.character,soul=this.soul();if(!c)return;this.freezeFortune();c.stats=R.buildStats({...c,soul});
-      for(const ring of c.rings)ring.skills=ring.skills.map((skill,i)=>({...R.makeSkill({soul,style:c.style,stats:c.stats,index:ring.index,years:ring.years,category:skill.category,variant:i,effects:skill.effects,effectSeed:skill.effectSeed||this.state.seed+'|'+ring.index+'|'+i}),name:skill.name}));
+      for(const ring of c.rings)ring.skills=ring.skills.map((skill,i)=>({...R.makeSkill({soul,style:c.style,stats:c.stats,index:ring.index,years:ring.years,category:skill.category,damageMode:skill.damageMode||(skill.category==='持续伤害'?'periodic':'direct'),variant:i,effects:skill.effects,effectSeed:skill.effectSeed||this.state.seed+'|'+ring.index+'|'+i}),name:skill.name}));
     }
     review({name,style,release=this.state.character.release}){
       if(this.state.phase!=='review')throw Error('人物已进入旅程');const c=this.state.character,soul=this.soul();
@@ -369,6 +369,7 @@
         }
         const roll=this.draw(100,'第'+index+'环魂技类别');let total=0;category=R.CATEGORIES[weights.findIndex(w=>(total+=w)>=roll)];
       }
+      if(category==='治疗')category='强化';
       let guarantee='';
       const needs=['强攻','敏攻'].includes(c.style)||(soul.spirit_specialist&&c.style==='控制');
       const has=c.rings.some(r=>r.skills.some(s=>['攻击','持续伤害'].includes(s.category)));
@@ -376,10 +377,10 @@
       if(index===last&&index!==7&&needs&&!has&&!['攻击','持续伤害'].includes(category)){category='攻击';guarantee='初次攻击魂技保底';}
       
       const skills=[R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category,effectSeed:this.state.seed+'|'+index+'|0'})];
-      if(years===100000){let second=R.pickCategory(c.style,this.draw(100,'十万年第二魂技'));if(second===category)second=R.CATEGORIES[(R.CATEGORIES.indexOf(second)+1)%8];skills.push(R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category:second,variant:1,effectSeed:this.state.seed+'|'+index+'|1'}));guarantee+='；同环两技共享冷却';}
+      if(years===100000){let second=R.pickCategory(c.style,this.draw(100,'十万年第二魂技'));if(second==='治疗')second='强化';if(second===category)second=this.huntCategories(index).find(x=>x!==category);skills.push(R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category:second,variant:1,effectSeed:this.state.seed+'|'+index+'|1'}));guarantee+='；同环两技共享冷却';}
       return {index,years,cap,quality,plan,band:R.BANDS[R.band(years)],q:R.QS[R.band(years)],skills,guarantee,acquiredAt:copy(this.state.date)};
     }
-    huntCategories(index=this.state.hunt?.index){return index===7?['强化','防御']:R.CATEGORIES;}
+    huntCategories(index=this.state.hunt?.index){return index===7?['强化','防御']:R.CATEGORIES.filter(x=>!['治疗','持续伤害'].includes(x));}
     huntPlan(plan='balanced',category='random',location='forest'){
       const s=this.state,h=s.hunt;
       if(!['hunt','initialHunt'].includes(s.phase)||!h||h.stage!=='plan'||!['balanced','offense','guard'].includes(plan)||!['forest','valley','wetland'].includes(location)||category!=='random'&&!this.huntCategories(h.index).includes(category))throw Error('请先选择魂技类别与猎魂路线');
@@ -413,8 +414,9 @@
     prepareHuntCandidate(){
       const s=this.state,h=s.hunt,c=s.character,soul=this.soul();
       const previewStats=R.buildStats({...c,soul});
-      const skills=[R.makeSkill({soul,style:c.style,stats:previewStats,index:h.index,years:h.years,category:h.category,effectSeed:s.seed+'|'+h.index+'|0'})];
-      if(h.secondCategory)skills.push(R.makeSkill({soul,style:c.style,stats:previewStats,index:h.index,years:h.years,category:h.secondCategory,variant:1,effectSeed:s.seed+'|'+h.index+'|1'}));
+      const skills=[R.makeSkill({soul,style:c.style,stats:previewStats,index:h.index,years:h.years,category:h.category,effectSeed:s.seed+'|hunt|'+h.index+'|'+(h.attempt||1)+'|0'})];
+      if(h.secondCategory)skills.push(R.makeSkill({soul,style:c.style,stats:previewStats,index:h.index,years:h.years,category:h.secondCategory,variant:1,effectSeed:s.seed+'|hunt|'+h.index+'|'+(h.attempt||1)+'|1'}));
+      h.category=skills[0].category;if(skills[1])h.secondCategory=skills[1].category;
       h.result={index:h.index,years:h.years,cap:R.CAPS[h.index-1],quality:h.quality,plan:h.plan,location:h.location,band:R.BANDS[R.band(h.years)],q:R.QS[R.band(h.years)],skills,guarantee:h.secondCategory?'同环两技共享冷却':'',acquiredAt:copy(s.date)};
       h.stage='result';h.absorbed=false;
     }

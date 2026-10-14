@@ -83,7 +83,7 @@
     };
     const oldSettle=P.settleQuest;
     P.settleQuest=function(p){const before=p.questId;oldSettle.call(this,p);if(p.questId){const chain=chains.find(c=>c.id===p.questId),node=chain?.nodes.find(n=>n.eventId===this.event().id);p.castIntroductions={...(p.castIntroductions||{}),...(node?.castIntroductions||{})};if(!before)p.questStarted=true;}};
-    const oldSnapshot=P.snapshot;P.snapshot=function(){this.ensure1002();return {...oldSnapshot.call(this),gameVersion:'10.03'};};
+    const oldSnapshot=P.snapshot;P.snapshot=function(){this.ensure1002();return {...oldSnapshot.call(this),gameVersion:'10.04'};};
     const oldValidate=Campaign.validate;
     Campaign.validate=function(s,catalog){oldValidate(s,catalog);if(s.exam){const e=s.exam,max=e.mode==='member'?11:6;if(!['normal','member'].includes(e.mode)||!Number.isInteger(e.starts)||e.starts<0||e.starts>max||e.opponent!==null&&typeof e.opponent!=='string'||e.badEnding&&(s.phase!=='ending'||e.starts!==max||s.result?.winner===0))throw Error('考核机会存档无效');}if(s.huntDelayMonths!==undefined&&(!Number.isInteger(s.huntDelayMonths)||s.huntDelayMonths<0||s.huntDelayMonths>1000))throw Error('猎魂月份无效');if(s.hunt?.budgetStart!==undefined&&(!Number.isInteger(s.hunt.budgetStart)||s.hunt.budgetStart<1||s.hunt.budgetStart>(s.hunt.attempt||1)))throw Error('猎魂回合无效');return true;};
   }
