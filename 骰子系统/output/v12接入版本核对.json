@@ -1,0 +1,17 @@
+{
+  "originalSha256": "285caadf42499de14ed2a2d506591ddac0bf6387c348a905a252195488974e7a",
+  "adaptedSha256": "1b417780b0954e14e0a2741af457bf620b80898cbeef09f3ea67a50af9b6a296",
+  "changes": [
+    "保留玩家真实武魂潜力",
+    "保留玩家全部已有魂技",
+    "不补造玩家魂环",
+    "考官继续四技",
+    "旧战报规则标记检查",
+    "原平局比较队伍剩余生命，仍相同主角胜",
+    "原平局比较队伍剩余生命百分比，低于对手主角负，相同主角胜"
+  ],
+  "v12CombatRules": 12,
+  "playerRulesVersion": 1,
+  "drawRulesVersion": 2,
+  "tacticsRulesVersion": 10
+}

@@ -1,0 +1,71 @@
+/* 晨曦城：完整旅程的天空与阅读界面。保持独立骰台的原有主题。 */
+body.campaign-mode{color-scheme:dark;--predawn:#1e2447;--deepnight:#141833;--mist:#b3afcf;--rose:#e8a0a6;--gold:#f6d58e;--cyan:#9fd3e0;--dew:#f1f0f8;--bg:var(--deepnight);--paper:#1e2447;--ink:var(--dew);--muted:var(--mist);--line:#8c86b438;--green:var(--gold);--dark:var(--deepnight);background:var(--deepnight);font-size:14px;--sun-y:120%;--glow:.25;--sil:#191c3c}
+body[data-dawn="1"]{--sun-y:103%;--glow:.5;--sil:#23264c}
+body[data-dawn="2"]{--sun-y:83%;--glow:1;--sil:#303360}
+body[data-dawn="3"]{--sun-y:52%;--glow:.7;--sil:#4a4e80}
+.campaign-mode main{max-width:1440px;padding:0 clamp(18px,4vw,64px);position:relative}
+.campaign-root{padding-top:26px;position:relative;min-height:100vh}
+.dawn-scenery{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:#141833}
+.dawn-sky{position:absolute;inset:0;transition:opacity 2.4s ease;opacity:0}
+.dawn-sky-0{opacity:1;background:linear-gradient(180deg,#141833,#2a2c5e 35%,#5b4a7a 62%,#c98a9a 78%,#1e2447 78.3%)}
+.dawn-sky-1{background:linear-gradient(180deg,#1e2447,#3e3f7a 35%,#b07a98 62%,#e8a0a6 78%,#1e2447 78.3%)}
+.dawn-sky-2{background:linear-gradient(180deg,#2d3a72,#7c7ab6 35%,#e8a0a6 62%,#f6d58e 78%,#1e2447 78.3%)}
+.dawn-sky-3{background:linear-gradient(180deg,#5c79b4,#a9bee0 35%,#f3d9c4 62%,#f6d58e 78%,#1e2447 78.3%)}
+[data-dawn="1"] .dawn-sky-1,[data-dawn="2"] .dawn-sky-2,[data-dawn="3"] .dawn-sky-3{opacity:1}
+.dawn-sun{position:absolute;left:79%;top:var(--sun-y);width:250px;height:250px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff4d6 0%,#f6d58ed9 20%,#f6d58e30 45%,transparent 70%);transition:top 2.4s ease}
+.dawn-stars{position:absolute;inset:0 0 40%;opacity:.65;background-image:radial-gradient(circle at 14% 18%,#f1f0f8 0 1px,transparent 1.8px),radial-gradient(circle at 54% 9%,#f1f0f8 0 1px,transparent 1.8px),radial-gradient(circle at 89% 21%,#f1f0f8 0 1px,transparent 1.8px),radial-gradient(circle at 35% 31%,#f1f0f8 0 1px,transparent 1.8px),radial-gradient(circle at 72% 24%,#f1f0f8 0 1px,transparent 1.8px);transition:opacity 2.4s}
+[data-dawn="1"] .dawn-stars{opacity:.25}[data-dawn="2"] .dawn-stars,[data-dawn="3"] .dawn-stars{opacity:0}
+.dawn-city{position:absolute;top:calc(78% - 240px);height:240px;width:100%;fill:var(--sil)}
+.dawn-city path{transition:fill 2.4s}.dawn-city .dawn-near{fill:#1e2447}
+.dawn-horizon{position:absolute;top:78%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#f6d58e,transparent);box-shadow:0 0 24px 4px #f6d58e60;opacity:var(--glow);transition:opacity 2.4s}
+.dawn-fog{position:absolute;inset:64% -20% 4%;background:radial-gradient(ellipse at 30% 50%,#f1f0f820,transparent 60%),radial-gradient(ellipse at 75% 60%,#8c86b42e,transparent 55%);animation:dawnDrift 60s linear infinite alternate;transition:opacity 2.4s}
+[data-dawn="3"] .dawn-fog{opacity:.15}@keyframes dawnDrift{to{transform:translateX(12%)}}
+.campaign-heading{border-color:#f1f0f820;align-items:center;padding-bottom:20px}
+.campaign-mode .seal{background:#f6d58e14;border:1px solid #f6d58e65;color:var(--gold);transform:none;border-radius:2px 12px 2px 12px}
+.campaign-mode .brand strong{letter-spacing:.16em;font-size:21px}.campaign-mode .brand div>span{font-size:10px;color:var(--mist);letter-spacing:.08em}
+.campaign-tools .quiet{font-size:12px;min-height:38px}.campaign-tools .speed-buttons{width:190px}
+.dawn-hud{display:flex;justify-content:space-between;align-items:center;padding:28px 0 24px;gap:16px}
+.dawn-kicker{font-size:11px;letter-spacing:.16em;color:#ded8ee}.dawn-hud p{font:23px var(--serif);letter-spacing:.06em;margin:7px 0 0;color:var(--dew)}
+.dawn-progress{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--gold);font-variant-numeric:tabular-nums;background:#141833a6;padding:11px 14px;border-radius:3px}
+.dawn-bars{display:flex;gap:5px}.dawn-bars i{width:20px;height:3px;background:#8c86b455;border-radius:2px}.dawn-bars .on{background:var(--gold)}
+.camp-steps{margin:0 0 28px;border-radius:2px;background:#141833a6;border:1px solid #f1f0f824;max-width:740px}
+.camp-steps span{font-size:12px;color:var(--mist);padding:12px 8px}.camp-steps .current{background:#f6d58e1c;color:var(--gold);box-shadow:inset 0 -2px var(--gold)}.camp-steps .done{color:var(--dew);background:#8c86b415}
+.campaign-layout{grid-template-columns:minmax(0,740px) 270px;justify-content:space-between;gap:clamp(20px,5vw,80px);align-items:start}
+.campaign-layout:has(.camp-sidebar[hidden]){grid-template-columns:minmax(0,740px)}
+.camp-story,.camp-sidebar,.camp-history,.campaign-mode .battle-section{background:linear-gradient(160deg,#1e2447f0,#141833f2);border:1px solid #8c86b428;border-top:1px solid #f6d58e70;border-radius:2px 18px 2px 18px;box-shadow:0 18px 50px #14183338;backdrop-filter:blur(8px)}
+.camp-story{padding:32px 36px;min-height:400px}.camp-story h1{font-size:30px;letter-spacing:.02em;line-height:1.65}.camp-date{color:var(--cyan);font-size:12px;padding-bottom:16px;margin-bottom:24px}
+.camp-narrative{font:18px/1.95 var(--serif);color:var(--dew);max-width:36em;text-align:left;margin-bottom:24px}
+.campaign-mode .eyebrow{color:var(--rose);font-size:12px;letter-spacing:.08em}.campaign-mode .micro{font-size:12px;line-height:1.85;color:var(--mist)}
+.campaign-mode label,.campaign-mode summary{font-size:13px;color:var(--mist)}.campaign-mode summary{min-height:28px}.campaign-mode details p{font-size:13px;color:var(--mist);line-height:1.85}
+.campaign-mode input,.campaign-mode select{background:#141833a6;border-color:#8c86b460;color:var(--dew);font-size:14px;min-height:46px;border-radius:4px}.campaign-mode input::placeholder{color:#b3afcfaa}.campaign-mode input[type=checkbox]{min-height:0}
+.campaign-mode .primary{background:var(--gold);color:var(--deepnight);font-size:14px;border-radius:2px 10px 2px 10px;min-height:46px}.campaign-mode .primary:hover{filter:brightness(1.05)}
+.campaign-mode .quiet{color:var(--dew);border-color:#8c86b460}.campaign-mode .quiet:hover{background:#f6d58e15;border-color:var(--gold)}
+.campaign-mode button:disabled{cursor:not-allowed}.campaign-mode button:focus-visible,.campaign-mode input:focus-visible,.campaign-mode select:focus-visible,.campaign-mode summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.campaign-mode .text-button{color:var(--cyan);font-size:12px}.campaign-mode .speed-buttons button{color:var(--mist);border-color:#8c86b450;font-size:12px}.campaign-mode .speed-buttons button.active{background:#f6d58e20;border-color:#f6d58e80;color:var(--gold)}
+.camp-note,.camp-recap,.camp-trait{background:#8c86b410;color:var(--mist);font-size:13px;line-height:1.85;border-radius:0 8px 8px 0;border-left:2px solid #9fd3e070}
+.camp-choices{grid-template-columns:1fr;gap:12px}.camp-choice{background:#8c86b410;color:var(--dew);border:0;border-left:2px solid #8c86b4;border-radius:0 10px 10px 0;padding:16px 18px;transition:background .25s,border-color .25s,padding .25s}
+.camp-choice strong{font:17px/1.65 var(--serif);margin-bottom:5px}.camp-choice span{font-size:12px;line-height:1.8;color:var(--mist)}
+.camp-choice:hover,.camp-choice:focus-visible{background:linear-gradient(90deg,#f6d58e2e,transparent);border-left-color:var(--gold);padding-left:24px;translate:none}
+.camp-choice.risk{border-left-color:var(--rose)}.camp-choice.risk:hover{background:linear-gradient(90deg,#e8a0a630,transparent);border-left-color:var(--rose)}
+.camp-sidebar{padding:24px}.camp-sidebar h2{font-size:24px}.camp-sidebar .camp-soul{color:var(--gold);line-height:1.8}.camp-stat-list>div{border-color:var(--line)}.camp-stat-list span,.camp-level>span,.camp-level small,.camp-sidebar summary{font-size:12px}.camp-level strong{color:var(--gold)}
+.camp-history{max-width:740px;margin-top:24px}.camp-journal-entry p{color:var(--mist);font-size:13px}.camp-journal-entry time{font-size:12px;color:var(--cyan)}
+.camp-badge{background:radial-gradient(ellipse,#f6d58e18,transparent);border-color:#f6d58e45}.camp-badge>span{background:#f6d58e10;border-color:var(--gold);color:var(--gold);outline-color:#f6d58e40}.camp-badge small{color:var(--mist)}
+.camp-notice{background:#1e2447;border-color:var(--gold);color:var(--gold);font-size:14px}.camp-footer{color:#ded8ee;font-size:12px;text-shadow:0 1px 5px #141833}
+.campaign-mode .battle-section{padding:28px;margin-top:24px}.campaign-mode .battle-arena{background:radial-gradient(ellipse at 75% 10%,#e8a0a630,transparent 65%),linear-gradient(145deg,#252a54,#141833);border-color:#8c86b455}.campaign-mode .arena-floor{background:linear-gradient(0deg,#8c86b425,transparent)}
+.campaign-mode .battle-skill,.campaign-mode .battle-log,.campaign-mode .battle-outcome{background:#141833b0;border-color:var(--line);color:var(--dew)}.campaign-mode .battle-skill:hover:not(:disabled){background:#f6d58e18}.campaign-mode .battle-skill small,.campaign-mode .battle-hint{color:var(--cyan)}.campaign-mode .battle-skill em{color:var(--gold)}.campaign-mode .battle-outcome.defeat{border-color:var(--rose)}.campaign-mode .battle-log-line{border-color:var(--line)}.campaign-mode .battle-log-line time{color:var(--mist)}
+.campaign-mode .actor-portrait{background:linear-gradient(140deg,#8c86b420,#141833);border-color:#8c86b440}.campaign-mode .actor-name{color:var(--dew)}.campaign-mode .actor-subtitle{color:var(--mist)}.campaign-mode .actor-cast{background:#141833;border-color:var(--line)}
+.campaign-mode dialog{background:var(--predawn);color:var(--dew);border-color:#f6d58e70}.campaign-mode dialog::backdrop{background:#141833b0}.campaign-mode #toast{background:var(--predawn);color:var(--dew)}
+#campBody{animation:dawnRead .35s ease-out}@keyframes dawnRead{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(min-width:1000px){.campaign-layout:has(.camp-sidebar[hidden]){margin-top:60px}.camp-sidebar{margin-top:56px}}
+@media(max-width:950px){.campaign-heading{align-items:flex-start;gap:15px}.campaign-tools{justify-content:flex-start}.campaign-layout{grid-template-columns:minmax(0,1fr) 240px;gap:20px}.camp-story{padding:26px}.camp-story h1{font-size:26px}.dawn-hud p{font-size:21px}}
+@media(max-width:700px){.campaign-mode main{padding:0 16px}.campaign-root{padding-top:18px}.campaign-tools{gap:6px}.campaign-tools .speed-buttons{width:100%;margin-bottom:6px}.campaign-tools .quiet{padding:8px 10px}.campaign-heading{padding-bottom:16px}.dawn-hud{padding:28px 0 24px;align-items:flex-start;flex-direction:column;gap:12px}.dawn-progress{padding:7px 10px}.dawn-hud p{font-size:23px}.dawn-kicker{font-size:10px}.camp-steps{margin-bottom:18px}.camp-steps span{font-size:11px;padding:10px 3px}.campaign-layout{display:flex;flex-direction:column;gap:18px}.camp-story{padding:24px 20px;min-height:0}.camp-narrative{font-size:17px;line-height:1.95}.camp-story h1{font-size:26px}.camp-sidebar{margin-top:0}.camp-choice{padding:14px 16px}.camp-choice strong{font-size:16px}.camp-history{padding:20px}.campaign-mode .battle-section{padding:22px 16px}.dawn-sky{background-size:100% 540px;background-repeat:no-repeat;background-color:#1e2447}.dawn-city{top:225px;height:195px}.dawn-horizon{top:420px}.dawn-sun{width:190px;height:190px;top:calc(var(--sun-y) * .6);left:82%}.dawn-fog{inset:280px -20% 25%}.camp-footer{text-align:left;line-height:1.8}}
+@media(prefers-reduced-motion:reduce){.campaign-mode *,.campaign-mode *::before,.campaign-mode *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* 太阳只在天空层内显现，避免光球落到地面以下。 */
+.dawn-solar{position:absolute;inset:0 0 22%;overflow:hidden}
+.camp-choice:active{background:#f6d58e47;border-left-color:var(--gold)}
+@media(max-width:700px){.dawn-solar{inset:0 0 auto;height:420px}.dawn-sun{top:var(--sun-y)}}
+/* 浅亮晨光下，顶栏和地点仍保持稳定的阅读对比。 */
+.campaign-heading{background:#141833d9;padding:16px 18px;border:1px solid #8c86b430;border-radius:2px 14px 2px 14px}
+.dawn-hud>div:first-child{background:#141833c9;padding:12px 16px;border-left:1px solid #f6d58e60;border-radius:0 10px 10px 0}
+@media(max-width:700px){.campaign-heading{padding:14px 12px}.dawn-hud>div:first-child{padding:10px 12px}.campaign-heading .brand strong{font-size:19px}.campaign-heading .brand div>span{font-size:10px}}

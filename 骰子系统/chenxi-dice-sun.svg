@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100"><defs><radialGradient id="cxDiceSunArt" cx="50%" cy="45%" r="55%">
+      <stop offset="0" stop-color="#FFFDF0"/><stop offset=".45" stop-color="#FFE98A"/><stop offset="1" stop-color="#F6C533"/>
+    </radialGradient></defs>
+      <g stroke="#FFD84A" stroke-width="2.2" stroke-linecap="round" opacity=".95">
+        <line x1="0" y1="-33" x2="0" y2="-27"/><line x1="0" y1="33" x2="0" y2="27"/><line x1="-33" y1="0" x2="-27" y2="0"/><line x1="33" y1="0" x2="27" y2="0"/>
+        <line x1="-23.3" y1="-23.3" x2="-19.1" y2="-19.1"/><line x1="23.3" y1="23.3" x2="19.1" y2="19.1"/><line x1="23.3" y1="-23.3" x2="19.1" y2="-19.1"/><line x1="-23.3" y1="23.3" x2="-19.1" y2="19.1"/>
+      </g>
+      <circle r="22.5" fill="none" stroke="#F6D58E" stroke-width="1"/>
+      <circle r="19" fill="url(#cxDiceSunArt)" stroke="#B8892B" stroke-width=".8"/>
+    </svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;pointer-events:none">
+  <defs>
+    <radialGradient id="cxDiceJade" cx="30%" cy="24%" r="86%">
+      <stop offset="0" stop-color="#b6dbcb"/>
+      <stop offset=".28" stop-color="#4fa6a1"/>
+      <stop offset=".64" stop-color="#2f7f82"/>
+      <stop offset="1" stop-color="#1f5f63"/>
+    </radialGradient>
+    <linearGradient id="cxDiceGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff2ca"/>
+      <stop offset=".45" stop-color="#f6d58e"/>
+      <stop offset="1" stop-color="#b8892b"/>
+    </linearGradient>
+  </defs>
+</svg>
