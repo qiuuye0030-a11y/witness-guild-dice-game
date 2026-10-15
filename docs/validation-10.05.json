@@ -1,0 +1,88 @@
+{
+  "gameVersion": "10.05",
+  "combatRulesVersion": 13,
+  "snapshotVersion": 10,
+  "campaignSaveVersion": 9,
+  "battlePaired": {
+    "diceRolls": 4000,
+    "skillCases": 960,
+    "battles": 210,
+    "comparedFrames": 7126,
+    "allSnapshotsExactlyEqual": true
+  },
+  "campaignPaired": {
+    "journeys": 200,
+    "actions": 26971,
+    "pairedReloads": 1080,
+    "huntRefusalCalls": 1070,
+    "events": 168,
+    "chains": 10,
+    "allSnapshotsExactlyEqual": true
+  },
+  "simulation": {
+    "journeys": 1000,
+    "finalCrazyOrAbove": 80,
+    "finalDivine": 0,
+    "everSettledCrazy": 205,
+    "everSettledDivine": 8,
+    "battles": 420,
+    "wins": 220,
+    "groups": {
+      "low": {
+        "wins": 29,
+        "total": 140
+      },
+      "middle": {
+        "wins": 78,
+        "total": 140
+      },
+      "high": {
+        "wins": 113,
+        "total": 140
+      }
+    }
+  },
+  "ui": [
+    {
+      "theme": "经典深靛版",
+      "stage": "welcome",
+      "changedPixels": 0
+    },
+    {
+      "theme": "经典深靛版",
+      "stage": "arrival",
+      "changedPixels": 0
+    },
+    {
+      "theme": "经典深靛版",
+      "auxiliary2v2": true,
+      "oldAndNewBothFourCards": true,
+      "refreshKeepsFour": true,
+      "noExtraAttempt": true,
+      "noPageErrors": true
+    },
+    {
+      "theme": "晨曦朝阳版",
+      "stage": "welcome",
+      "changedPixels": 0
+    },
+    {
+      "theme": "晨曦朝阳版",
+      "stage": "arrival",
+      "changedPixels": 0
+    },
+    {
+      "theme": "晨曦朝阳版",
+      "auxiliary2v2": true,
+      "oldAndNewBothFourCards": true,
+      "refreshKeepsFour": true,
+      "noExtraAttempt": true,
+      "noPageErrors": true
+    }
+  ],
+  "frozenLocalFilesVerified": 221,
+  "standalonePackageVerified": true,
+  "independentProjectBuildMatches": true,
+  "privateSaveIncluded": false,
+  "remoteCiStatus": "not confirmed; pending successful push"
+}
