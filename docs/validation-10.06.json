@@ -47,6 +47,7 @@
   "independentProjectBuildMatches": true,
   "frozenV14Reference": "见证者公会_V14_完整交接版_2026-10-15: analysis_src, v14_work/src, v14_work/tests, v14_work/load.cjs, v14_work/results/ai-loss-diagnostics.json, audit_results",
   "privateSaveIncluded": false,
-  "verifiedCodeCommit": null,
-  "remoteCiStatus": "pending"
+  "verifiedCodeCommit": "4ecd35934573901cb6590b8993200fc3c157f3f6",
+  "remoteCiStatus": "success",
+  "remoteCiUrl": "https://github.com/qiuuye0030-a11y/witness-guild-dice-game/actions/runs/38754461067"
 }
