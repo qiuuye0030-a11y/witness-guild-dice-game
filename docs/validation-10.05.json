@@ -84,5 +84,7 @@
   "standalonePackageVerified": true,
   "independentProjectBuildMatches": true,
   "privateSaveIncluded": false,
-  "remoteCiStatus": "not confirmed; pending successful push"
+  "remoteCiStatus": "success",
+  "verifiedCodeCommit": "9ea990acc75e761a75a83abff89a3fac9c09a9cc",
+  "remoteCiUrl": "https://github.com/qiuuye0030-a11y/witness-guild-dice-game/actions/runs/38711079389"
 }
