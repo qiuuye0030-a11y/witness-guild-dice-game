@@ -1,0 +1,11 @@
+{
+  "modules": [
+    "core.js",
+    "quests.js",
+    "journey.js",
+    "compose.js"
+  ],
+  "publicMethods": 78,
+  "definitionsBefore": 96,
+  "liveDefinitions": 93
+}

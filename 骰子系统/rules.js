@@ -63,8 +63,8 @@
   }
   function controlEffect(Q,attacker,defender){
     const chance=clamp(.65+(attacker.P-defender.P)/600+(attacker.W-defender.W)/1000,.35,.85);
-    const base=Math.min(3,1+.5*Q),ratio=clamp((100+attacker.P)/(100+defender.P),.5,1.5);
-    return {chance:round2(chance*100),duration:round2(clamp(base*ratio,.5,4)),ratio:round2(ratio),immunity:4};
+    const base=1+.5*Q,ratio=(100+attacker.P)/(100+defender.P);
+    return {chance:round2(chance*100),duration:round2(Math.max(.01,base*ratio)),ratio:round2(ratio),immunity:4};
   }
   function band(years){if(!Number.isInteger(years)||years<10||years>100000)throw Error('魂环年限无效');return BAND_LIMITS.findIndex(n=>years<=n);}
   function pickCategory(style,roll){let n=0;return CATEGORIES[WEIGHTS[style].findIndex(w=>(n+=w)>=roll)];}

@@ -1,0 +1,25 @@
+{
+  "version": "10.05",
+  "combatRulesVersion": 13,
+  "modules": [
+    "../dice/engine.js",
+    "rules.js",
+    "examiners.js",
+    "core.js",
+    "control.js",
+    "forecast.js",
+    "configure.js",
+    "status.js",
+    "poison-ai.js",
+    "control-rules.js",
+    "../../skill-effects.js",
+    "attributes.js",
+    "permanent-effects.js",
+    "members.js",
+    "decision.js",
+    "compose.js"
+  ],
+  "publicMethods": 61,
+  "methodDefinitionsBefore": 97,
+  "liveDefinitions": 83
+}

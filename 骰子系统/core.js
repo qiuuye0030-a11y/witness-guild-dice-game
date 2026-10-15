@@ -1,3 +1,4 @@
+// Generated from systems/. Edit the corresponding module, then run _sync_systems.py.
 (function(root) {
   'use strict';
   const TIERS = [138,304,469,607,717,800,892,954,985,1000];

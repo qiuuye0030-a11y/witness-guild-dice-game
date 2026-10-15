@@ -1,0 +1,26 @@
+name: Build and regression checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Seeded baseline, rules and journey regression
+        run: npm test
+      - name: Build both standalone themes
+        run: npm run build
+      - name: Verify standalone packages
+        working-directory: 骰子系统
+        run: python -X utf8 verify-package-1005.py

@@ -19,3 +19,9 @@ Thumbs.db
 骰子系统/output/*
 !骰子系统/output/v12接入版本核对.json
 *.zip
+
+!骰子系统/output/v13接入版本核对.json
+排查记录_*/
+V14战斗系统优化_跨电脑交接_*/
+*.png
+*.jpg

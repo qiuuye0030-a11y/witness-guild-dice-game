@@ -6,3 +6,6 @@
 *.md text eol=lf
 *.css text eol=lf
 *.html text eol=lf
+
+# Frozen comparison source retains original whitespace.
+骰子系统/fixtures/** -whitespace

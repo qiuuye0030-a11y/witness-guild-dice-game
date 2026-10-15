@@ -1,1 +1,0 @@
-const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');const runtime=vm.createContext({});vm.runInContext(fs.readFileSync(path.join(__dirname,'battle-engine-v12-player.js'),'utf8'),runtime);module.exports=runtime;
