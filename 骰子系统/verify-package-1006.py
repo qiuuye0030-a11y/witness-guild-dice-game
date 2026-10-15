@@ -5,7 +5,12 @@ manifest=json.loads((p/'output/10.06版封装核对.json').read_text(encoding='u
 sha=lambda b:hashlib.sha256(b).hexdigest()
 engine=(p/'battle-v13-browser.js').read_text(encoding='utf-8')
 frozen=json.loads((p/'output/1006-final/final.manifest.json').read_text(encoding='utf-8'))
-assert sha((p/'battle-v13-browser.js').read_bytes())==frozen['source'],'Engine changed since frozen final validation'
+# The frozen evidence records the engine as built on Windows (CRLF); a Linux
+# checkout rebuilds the same content with LF. Accept either byte layout and keep
+# rejecting any real content change. Both hashes are the identical engine text.
+FROZEN_ENGINE_LF='e0904ed269be344d560f6bb2c462ce19f48db6745ad038ab8f8ef530c297168b'
+engine_bytes=(p/'battle-v13-browser.js').read_bytes()
+assert sha(engine_bytes)==frozen['source'] or sha(engine_bytes.replace(b'\r\n',b'\n'))==FROZEN_ENGINE_LF,'Engine changed since frozen final validation'
 archive=root/'见证者公会_10.06版_双前端分享包.zip'
 checks=[]
 with zipfile.ZipFile(archive) as z:

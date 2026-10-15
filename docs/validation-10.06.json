@@ -23,6 +23,16 @@
     "overallAdjudicated": 131,
     "timeouts": 0
   },
+  "engineProvenance": {
+    "frozenManifestSource": "dcbc55593a0f32cb3bb96a888fe78edce7b8a26f2731cb793f9b503794fa2572",
+    "windowsCrlfBuild": "dcbc55593a0f32cb3bb96a888fe78edce7b8a26f2731cb793f9b503794fa2572",
+    "linuxLfBuild": "e0904ed269be344d560f6bb2c462ce19f48db6745ad038ab8f8ef530c297168b",
+    "acceptedLayouts": 2
+  },
+  "portabilityNotes": [
+    "verify-package-1006.py accepts the frozen engine under either line-ending layout: the recorded Windows CRLF build, or the identical LF rebuild produced by a Linux checkout. Any content change still fails the check.",
+    "Rebuilt theme HTML on Linux carries LF instead of the CRLF used for the released files, so byte identity with the release assets is a Windows-side property; the editions block below records the released files."
+  ],
   "editions": {
     "经典深靛版": {
       "bytes": 11362180,
