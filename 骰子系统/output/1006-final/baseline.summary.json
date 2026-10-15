@@ -1,0 +1,7514 @@
+{
+  "schema": 1,
+  "mode": "baseline",
+  "label": "1006-final-frozen",
+  "partition": "holdout",
+  "status": "completed",
+  "stopReason": null,
+  "notForFinalWinRateConclusions": false,
+  "completed": 734,
+  "planned": 734,
+  "source": {
+    "battle-v14-mechanics.js": "e4230c29006a3b0c64b9efff480c87c236303381e1263b3859e923dcc4e5bd27",
+    "battle-v14-projection.js": "7ddad20de1f8493ddcafeae66996306e48c58bede294cd5cbe784c7bd9929e63",
+    "battle-v14-ai.js": "48cf5d5ce26b221bf46d1c235a802d2ad7d0b85c95317754cc82a37ea893c587",
+    "battle-v14-ui.js": "6905537426f66ca2631c100e3b85454ddfc6c8adc0fc7c277c31895ef6d629be",
+    "campaign-v14-compat.js": "8839b57830bd09c2546728cef212c41d96e6b2c0713c90d22aefc3aa3988d0de"
+  },
+  "execution": {
+    "workersStarted": 1,
+    "kind": "single-thread"
+  },
+  "performanceNote": "Battle and decision timings include instrumentation; parallel rows also include CPU/memory contention. Summed battle time is not elapsed batch time. Use the AI owner single-process microbenchmark for isolated latency.",
+  "protocol": [
+    "Campaign reuses complete stored growth outcomes and original levels; no rings, training, or attributes are regenerated or normalized.",
+    "Campaign admission uses engine-native level and damage advantages. Auxiliary player style triggers native 2v2. These rates are separate from ordinary campaign 1v1.",
+    "All 14 template members are tested in standard 41/51/61 round robins. Both sides of a pair use the same seed and are paired observations, not independent trials.",
+    "Campaign repeats and opponents share each character. The character is the cohort sampling cluster; battle counts do not equal independent character counts.",
+    "The team panel tests each support plus Li Yixing versus each listed opponent plus Li Yixing. It is a small representative panel, not a general ranking of supports.",
+    "Matched scenario keys and seeds are preserved across modes. RNG consumption can diverge after decisions differ; equal seeds are not identical per-action dice streams.",
+    "Reported final win rates retain native adjudication. Knockout-only, adjudicated, equal-ratio adjudicated, true draws, and 180-second outcomes are also counted separately.",
+    "No independent-binomial 95% confidence intervals are calculated. Development and held-out character partitions are disjoint.",
+    "Targeted mechanic regression fixtures are separate from these battle cohorts. The held-out partition must not be used for policy tuning.",
+    "Current frozen V14 is the baseline, not V13. New character indices start at offset 20 per style; previous development and holdout used 0..19."
+  ],
+  "suites": {
+    "exam-1v1": {
+      "games": 112,
+      "side0Wins": 25,
+      "side1Wins": 87,
+      "trueDraws": 0,
+      "adjudicated": 18,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "wallMs": 89392.64990000005,
+      "aiChoices": 2463,
+      "aiChoiceMs": 88397.69820000026,
+      "forecasts": {},
+      "meanBattleMs": 798.148659821429,
+      "meanChoiceMs": 35.89025505481131
+    },
+    "exam-2v2": {
+      "games": 28,
+      "side0Wins": 28,
+      "side1Wins": 0,
+      "trueDraws": 0,
+      "adjudicated": 3,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "wallMs": 280058.1246999999,
+      "aiChoices": 912,
+      "aiChoiceMs": 279234.82399999996,
+      "forecasts": {},
+      "meanBattleMs": 10002.075882142855,
+      "meanChoiceMs": 306.17853508771924
+    },
+    "robin-1v1": {
+      "games": 546,
+      "side0Wins": 269,
+      "side1Wins": 277,
+      "trueDraws": 0,
+      "adjudicated": 102,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "wallMs": 803296.9487999997,
+      "aiChoices": 8264,
+      "aiChoiceMs": 797069.6093999947,
+      "forecasts": {},
+      "meanBattleMs": 1471.2398329670323,
+      "meanChoiceMs": 96.45082398354243
+    },
+    "support-2v2": {
+      "games": 48,
+      "side0Wins": 25,
+      "side1Wins": 23,
+      "trueDraws": 0,
+      "adjudicated": 8,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "wallMs": 595266.4215999993,
+      "aiChoices": 1554,
+      "aiChoiceMs": 593625.5024000078,
+      "forecasts": {},
+      "meanBattleMs": 12401.383783333318,
+      "meanChoiceMs": 381.9983927927978
+    }
+  },
+  "members": [
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 5,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 5,
+      "mpRemaining": 4638,
+      "maxMP": 16994,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2738,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 5,
+          "gamesUsed": 4,
+          "usesPerGame": 0.8333333333333334,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 9,
+          "gamesUsed": 6,
+          "usesPerGame": 1.5,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 6,
+          "gamesUsed": 3,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.5
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 19,
+          "gamesUsed": 6,
+          "usesPerGame": 3.1666666666666665,
+          "gamesUsedRate": 1
+        },
+        "qinyan-6": {
+          "name": "晶棱雷阵",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.8333333333333334,
+      "decisiveWinRate": 0.8333333333333334,
+      "meanRemainingMP": 773,
+      "remainingMPRatio": 0.272919854066141,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 6
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 5,
+      "decisiveWins": 5,
+      "mpRemaining": 5893,
+      "maxMP": 14809,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 11,
+          "gamesUsed": 6,
+          "usesPerGame": 1.8333333333333333,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 3,
+          "gamesUsed": 2,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 16,
+          "gamesUsed": 6,
+          "usesPerGame": 2.6666666666666665,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-6": {
+          "name": "虹影·回缚",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 982.1666666666666,
+      "remainingMPRatio": 0.39793368897292186,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 6
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 6,
+      "mpRemaining": 5973,
+      "maxMP": 16179,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 7,
+          "gamesUsed": 5,
+          "usesPerGame": 1.1666666666666667,
+          "gamesUsedRate": 0.8333333333333334
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 6,
+          "gamesUsed": 6,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixing-6": {
+          "name": "绝刀·破势",
+          "uses": 18,
+          "gamesUsed": 6,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 995.5,
+      "remainingMPRatio": 0.3691822733172631,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 6
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 3,
+      "losses": 3,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 3,
+      "mpRemaining": 4576,
+      "maxMP": 15615,
+      "remainingMPOnLoss": 2390,
+      "lossMaxMP": 7770,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 30,
+          "gamesUsed": 6,
+          "usesPerGame": 5,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 12,
+          "gamesUsed": 5,
+          "usesPerGame": 2,
+          "gamesUsedRate": 0.8333333333333334
+        },
+        "anmu-6": {
+          "name": "蝎尾封脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 762.6666666666666,
+      "remainingMPRatio": 0.2930515529939161,
+      "meanRemainingMPOnLoss": 796.6666666666666,
+      "remainingMPRatioOnLoss": 0.3075933075933076,
+      "clusterCount": 6
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 3,
+      "losses": 3,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 3,
+      "decisiveWins": 1,
+      "mpRemaining": 609,
+      "maxMP": 14815,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 7371,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 10,
+          "gamesUsed": 6,
+          "usesPerGame": 1.6666666666666667,
+          "gamesUsedRate": 1
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 0.8333333333333334,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 23,
+          "gamesUsed": 6,
+          "usesPerGame": 3.8333333333333335,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 14,
+          "gamesUsed": 6,
+          "usesPerGame": 2.3333333333333335,
+          "gamesUsedRate": 1
+        },
+        "hash-6": {
+          "name": "晦光滞流",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.3333333333333333,
+      "meanRemainingMP": 101.5,
+      "remainingMPRatio": 0.041106986162672964,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 6
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 3,
+      "losses": 3,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 3,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 3,
+      "decisiveWins": 0,
+      "mpRemaining": 3283,
+      "maxMP": 15615,
+      "remainingMPOnLoss": 3155,
+      "lossMaxMP": 7770,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 39,
+          "gamesUsed": 6,
+          "usesPerGame": 6.5,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 30,
+          "gamesUsed": 5,
+          "usesPerGame": 5,
+          "gamesUsedRate": 0.8333333333333334
+        },
+        "yixiaobei-6": {
+          "name": "铃兰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 547.1666666666666,
+      "remainingMPRatio": 0.21024655779699009,
+      "meanRemainingMPOnLoss": 1051.6666666666667,
+      "remainingMPRatioOnLoss": 0.40604890604890603,
+      "clusterCount": 6
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 6,
+      "mpRemaining": 3061,
+      "maxMP": 14269,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 18,
+          "gamesUsed": 6,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 31,
+          "gamesUsed": 6,
+          "usesPerGame": 5.166666666666667,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-6": {
+          "name": "血夜",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.6666666666666666,
+          "gamesUsedRate": 0.6666666666666666
+        }
+      },
+      "focus": true,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 510.1666666666667,
+      "remainingMPRatio": 0.2145209895577826,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 6
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 5,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 5,
+      "decisiveWins": 4,
+      "mpRemaining": 4178,
+      "maxMP": 16179,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2609,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 14,
+          "gamesUsed": 4,
+          "usesPerGame": 2.3333333333333335,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 7,
+          "gamesUsed": 6,
+          "usesPerGame": 1.1666666666666667,
+          "gamesUsedRate": 1
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-6": {
+          "name": "冥邪剑法·归刃",
+          "uses": 17,
+          "gamesUsed": 6,
+          "usesPerGame": 2.8333333333333335,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.8333333333333334,
+      "decisiveWinRate": 0.8,
+      "meanRemainingMP": 696.3333333333334,
+      "remainingMPRatio": 0.2582359849187218,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 6
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 6,
+      "mpRemaining": 4875,
+      "maxMP": 16179,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 3,
+          "gamesUsed": 2,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 6,
+          "gamesUsed": 4,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 8,
+          "gamesUsed": 2,
+          "usesPerGame": 1.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "minghuan-6": {
+          "name": "凤龙穿岚",
+          "uses": 16,
+          "gamesUsed": 6,
+          "usesPerGame": 2.6666666666666665,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 812.5,
+      "remainingMPRatio": 0.3013165214166512,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 6
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 4,
+      "losses": 2,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 4,
+      "mpRemaining": 6137,
+      "maxMP": 15615,
+      "remainingMPOnLoss": 1519,
+      "lossMaxMP": 5030,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 12,
+          "gamesUsed": 6,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 6,
+          "gamesUsed": 5,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.8333333333333334
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-6": {
+          "name": "叠瓣毒潮",
+          "uses": 13,
+          "gamesUsed": 6,
+          "usesPerGame": 2.1666666666666665,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6666666666666666,
+      "decisiveWinRate": 0.6666666666666666,
+      "meanRemainingMP": 1022.8333333333334,
+      "remainingMPRatio": 0.3930195325008005,
+      "meanRemainingMPOnLoss": 759.5,
+      "remainingMPRatioOnLoss": 0.30198807157057656,
+      "clusterCount": 6
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 6,
+      "mpRemaining": 5537,
+      "maxMP": 16179,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 9,
+          "gamesUsed": 3,
+          "usesPerGame": 1.5,
+          "gamesUsedRate": 0.5
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 6,
+          "gamesUsed": 4,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.6666666666666666,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "qingling-6": {
+          "name": "鬼剑·裁魂",
+          "uses": 17,
+          "gamesUsed": 6,
+          "usesPerGame": 2.8333333333333335,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 922.8333333333334,
+      "remainingMPRatio": 0.34223375981210213,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 6
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 4,
+      "losses": 2,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 4,
+      "decisiveWins": 3,
+      "mpRemaining": 3916,
+      "maxMP": 16179,
+      "remainingMPOnLoss": 57,
+      "lossMaxMP": 5218,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 15,
+          "gamesUsed": 6,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 16,
+          "gamesUsed": 6,
+          "usesPerGame": 2.6666666666666665,
+          "gamesUsedRate": 1
+        },
+        "yanan-6": {
+          "name": "风铭回锋",
+          "uses": 5,
+          "gamesUsed": 3,
+          "usesPerGame": 0.8333333333333334,
+          "gamesUsedRate": 0.5
+        }
+      },
+      "focus": false,
+      "winRate": 0.6666666666666666,
+      "decisiveWinRate": 0.75,
+      "meanRemainingMP": 652.6666666666666,
+      "remainingMPRatio": 0.24204215340873972,
+      "meanRemainingMPOnLoss": 28.5,
+      "remainingMPRatioOnLoss": 0.01092372556535071,
+      "clusterCount": 6
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 4,
+      "losses": 2,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 3,
+      "decisiveWins": 3,
+      "mpRemaining": 2970,
+      "maxMP": 15613,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 5030,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 7,
+          "gamesUsed": 6,
+          "usesPerGame": 1.1666666666666667,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 11,
+          "gamesUsed": 6,
+          "usesPerGame": 1.8333333333333333,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.16666666666666666,
+          "gamesUsedRate": 0.16666666666666666
+        },
+        "xuejidong-6": {
+          "name": "冻气龙卷",
+          "uses": 16,
+          "gamesUsed": 6,
+          "usesPerGame": 2.6666666666666665,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6666666666666666,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 495,
+      "remainingMPRatio": 0.19022609363991547,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 6
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-6",
+      "n": 6,
+      "wins": 5,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 5,
+      "mpRemaining": 3913,
+      "maxMP": 15615,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2515,
+      "levels": [
+        61,
+        64,
+        65
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 8,
+          "gamesUsed": 4,
+          "usesPerGame": 1.3333333333333333,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 8,
+          "gamesUsed": 4,
+          "usesPerGame": 1.3333333333333333,
+          "gamesUsedRate": 0.6666666666666666
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.3333333333333333,
+          "gamesUsedRate": 0.3333333333333333
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-6": {
+          "name": "魂力飞弹·聚束",
+          "uses": 22,
+          "gamesUsed": 6,
+          "usesPerGame": 3.6666666666666665,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.8333333333333334,
+      "decisiveWinRate": 0.8333333333333334,
+      "meanRemainingMP": 652.1666666666666,
+      "remainingMPRatio": 0.2505923791226385,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 6
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 1331,
+      "maxMP": 4397,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 4,
+          "gamesUsed": 2,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 665.5,
+      "remainingMPRatio": 0.3027063907209461,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 1348,
+      "maxMP": 3838,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 674,
+      "remainingMPRatio": 0.3512245961438249,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 1,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 1,
+      "mpRemaining": 847,
+      "maxMP": 4193,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2190,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 9,
+          "gamesUsed": 2,
+          "usesPerGame": 4.5,
+          "gamesUsedRate": 1
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.5
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        }
+      },
+      "focus": false,
+      "winRate": 0.5,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 423.5,
+      "remainingMPRatio": 0.2020033388981636,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 2
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 1148,
+      "maxMP": 4054,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 8,
+          "gamesUsed": 2,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 574,
+      "remainingMPRatio": 0.2831771090281204,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 1,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 1,
+      "mpRemaining": 86,
+      "maxMP": 3840,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2001,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 3,
+          "gamesUsed": 2,
+          "usesPerGame": 1.5,
+          "gamesUsedRate": 1
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 4,
+          "gamesUsed": 2,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 8,
+          "gamesUsed": 2,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 43,
+      "remainingMPRatio": 0.022395833333333334,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 2
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 1,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 321,
+      "maxMP": 4052,
+      "remainingMPOnLoss": 321,
+      "lossMaxMP": 2111,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 14,
+          "gamesUsed": 2,
+          "usesPerGame": 7,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 7,
+          "gamesUsed": 2,
+          "usesPerGame": 3.5,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 160.5,
+      "remainingMPRatio": 0.07922013820335637,
+      "meanRemainingMPOnLoss": 321,
+      "remainingMPRatioOnLoss": 0.15206063477025106,
+      "clusterCount": 2
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 503,
+      "maxMP": 3692,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 9,
+          "gamesUsed": 2,
+          "usesPerGame": 4.5,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 9,
+          "gamesUsed": 2,
+          "usesPerGame": 4.5,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 251.5,
+      "remainingMPRatio": 0.13624052004333695,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 1,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 1,
+      "mpRemaining": 550,
+      "maxMP": 4193,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2190,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 8,
+          "gamesUsed": 2,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 275,
+      "remainingMPRatio": 0.13117099928452183,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 2
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 823,
+      "maxMP": 4193,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 8,
+          "gamesUsed": 2,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 411.5,
+      "remainingMPRatio": 0.19627951347483902,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 1855,
+      "maxMP": 4052,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 927.5,
+      "remainingMPRatio": 0.45779861796643634,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 1,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 1,
+      "mpRemaining": 451,
+      "maxMP": 4193,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2190,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 9,
+          "gamesUsed": 2,
+          "usesPerGame": 4.5,
+          "gamesUsedRate": 1
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 225.5,
+      "remainingMPRatio": 0.1075602194133079,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 2
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 2,
+      "decisiveWins": 2,
+      "mpRemaining": 512,
+      "maxMP": 4193,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 4,
+          "gamesUsed": 2,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 5,
+          "gamesUsed": 2,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 256,
+      "remainingMPRatio": 0.12210827569759122,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 2,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 1,
+      "mpRemaining": 167,
+      "maxMP": 4054,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 6,
+          "gamesUsed": 2,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 12,
+          "gamesUsed": 2,
+          "usesPerGame": 6,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        }
+      },
+      "focus": false,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 83.5,
+      "remainingMPRatio": 0.041193882585101135,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 2
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "campaign",
+      "layout": "exam-1v1",
+      "layer": "ring-5",
+      "n": 2,
+      "wins": 0,
+      "losses": 2,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 0,
+      "decisiveWins": 0,
+      "mpRemaining": 2,
+      "maxMP": 4052,
+      "remainingMPOnLoss": 2,
+      "lossMaxMP": 4052,
+      "levels": [
+        51,
+        54
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 11,
+          "gamesUsed": 2,
+          "usesPerGame": 5.5,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 12,
+          "gamesUsed": 2,
+          "usesPerGame": 6,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.5
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": null,
+      "meanRemainingMP": 1,
+      "remainingMPRatio": 0.0004935834155972359,
+      "meanRemainingMPOnLoss": 1,
+      "remainingMPRatioOnLoss": 0.0004935834155972359,
+      "clusterCount": 2
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1031,
+      "maxMP": 2233,
+      "remainingMPOnLoss": 1031,
+      "lossMaxMP": 2233,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1031,
+      "remainingMPRatio": 0.46171070309001344,
+      "meanRemainingMPOnLoss": 1031,
+      "remainingMPRatioOnLoss": 0.46171070309001344,
+      "clusterCount": 1
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 964,
+      "maxMP": 1950,
+      "remainingMPOnLoss": 964,
+      "lossMaxMP": 1950,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 964,
+      "remainingMPRatio": 0.49435897435897436,
+      "meanRemainingMPOnLoss": 964,
+      "remainingMPRatioOnLoss": 0.49435897435897436,
+      "clusterCount": 1
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 672,
+      "maxMP": 2125,
+      "remainingMPOnLoss": 672,
+      "lossMaxMP": 2125,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 672,
+      "remainingMPRatio": 0.31623529411764706,
+      "meanRemainingMPOnLoss": 672,
+      "remainingMPRatioOnLoss": 0.31623529411764706,
+      "clusterCount": 1
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 760,
+      "maxMP": 2054,
+      "remainingMPOnLoss": 760,
+      "lossMaxMP": 2054,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 760,
+      "remainingMPRatio": 0.37000973709834467,
+      "meanRemainingMPOnLoss": 760,
+      "remainingMPRatioOnLoss": 0.37000973709834467,
+      "clusterCount": 1
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 848,
+      "maxMP": 1950,
+      "remainingMPOnLoss": 848,
+      "lossMaxMP": 1950,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 848,
+      "remainingMPRatio": 0.4348717948717949,
+      "meanRemainingMPOnLoss": 848,
+      "remainingMPRatioOnLoss": 0.4348717948717949,
+      "clusterCount": 1
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 955,
+      "maxMP": 2054,
+      "remainingMPOnLoss": 955,
+      "lossMaxMP": 2054,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 955,
+      "remainingMPRatio": 0.46494644595910417,
+      "meanRemainingMPOnLoss": 955,
+      "remainingMPRatioOnLoss": 0.46494644595910417,
+      "clusterCount": 1
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1133,
+      "maxMP": 1874,
+      "remainingMPOnLoss": 1133,
+      "lossMaxMP": 1874,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1133,
+      "remainingMPRatio": 0.6045891141942369,
+      "meanRemainingMPOnLoss": 1133,
+      "remainingMPRatioOnLoss": 0.6045891141942369,
+      "clusterCount": 1
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 660,
+      "maxMP": 2125,
+      "remainingMPOnLoss": 660,
+      "lossMaxMP": 2125,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 660,
+      "remainingMPRatio": 0.31058823529411766,
+      "meanRemainingMPOnLoss": 660,
+      "remainingMPRatioOnLoss": 0.31058823529411766,
+      "clusterCount": 1
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 748,
+      "maxMP": 2125,
+      "remainingMPOnLoss": 748,
+      "lossMaxMP": 2125,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 748,
+      "remainingMPRatio": 0.352,
+      "meanRemainingMPOnLoss": 748,
+      "remainingMPRatioOnLoss": 0.352,
+      "clusterCount": 1
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 972,
+      "maxMP": 2054,
+      "remainingMPOnLoss": 972,
+      "lossMaxMP": 2054,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 972,
+      "remainingMPRatio": 0.47322297955209347,
+      "meanRemainingMPOnLoss": 972,
+      "remainingMPRatioOnLoss": 0.47322297955209347,
+      "clusterCount": 1
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 209,
+      "maxMP": 2125,
+      "remainingMPOnLoss": 209,
+      "lossMaxMP": 2125,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 209,
+      "remainingMPRatio": 0.09835294117647059,
+      "meanRemainingMPOnLoss": 209,
+      "remainingMPRatioOnLoss": 0.09835294117647059,
+      "clusterCount": 1
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 154,
+      "maxMP": 2125,
+      "remainingMPOnLoss": 154,
+      "lossMaxMP": 2125,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 154,
+      "remainingMPRatio": 0.07247058823529412,
+      "meanRemainingMPOnLoss": 154,
+      "remainingMPRatioOnLoss": 0.07247058823529412,
+      "clusterCount": 1
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 683,
+      "maxMP": 2053,
+      "remainingMPOnLoss": 683,
+      "lossMaxMP": 2053,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 683,
+      "remainingMPRatio": 0.3326838772528008,
+      "meanRemainingMPOnLoss": 683,
+      "remainingMPRatioOnLoss": 0.3326838772528008,
+      "clusterCount": 1
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-5",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 892,
+      "maxMP": 2054,
+      "remainingMPOnLoss": 892,
+      "lossMaxMP": 2054,
+      "levels": [
+        53
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 892,
+      "remainingMPRatio": 0.4342745861733204,
+      "meanRemainingMPOnLoss": 892,
+      "remainingMPRatioOnLoss": 0.4342745861733204,
+      "clusterCount": 1
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 925,
+      "maxMP": 2738,
+      "remainingMPOnLoss": 925,
+      "lossMaxMP": 2738,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "qinyan-6": {
+          "name": "晶棱雷阵",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 925,
+      "remainingMPRatio": 0.33783783783783783,
+      "meanRemainingMPOnLoss": 925,
+      "remainingMPRatioOnLoss": 0.33783783783783783,
+      "clusterCount": 1
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1106,
+      "maxMP": 2387,
+      "remainingMPOnLoss": 1106,
+      "lossMaxMP": 2387,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-6": {
+          "name": "虹影·回缚",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1106,
+      "remainingMPRatio": 0.4633431085043988,
+      "meanRemainingMPOnLoss": 1106,
+      "remainingMPRatioOnLoss": 0.4633431085043988,
+      "clusterCount": 1
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 380,
+      "maxMP": 2609,
+      "remainingMPOnLoss": 380,
+      "lossMaxMP": 2609,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixing-6": {
+          "name": "绝刀·破势",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 380,
+      "remainingMPRatio": 0.14564967420467612,
+      "meanRemainingMPOnLoss": 380,
+      "remainingMPRatioOnLoss": 0.14564967420467612,
+      "clusterCount": 1
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1307,
+      "maxMP": 2515,
+      "remainingMPOnLoss": 1307,
+      "lossMaxMP": 2515,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-6": {
+          "name": "蝎尾封脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1307,
+      "remainingMPRatio": 0.5196819085487078,
+      "meanRemainingMPOnLoss": 1307,
+      "remainingMPRatioOnLoss": 0.5196819085487078,
+      "clusterCount": 1
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 718,
+      "maxMP": 2388,
+      "remainingMPOnLoss": 718,
+      "lossMaxMP": 2388,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-6": {
+          "name": "晦光滞流",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 718,
+      "remainingMPRatio": 0.30067001675041877,
+      "meanRemainingMPOnLoss": 718,
+      "remainingMPRatioOnLoss": 0.30067001675041877,
+      "clusterCount": 1
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1614,
+      "maxMP": 2515,
+      "remainingMPOnLoss": 1614,
+      "lossMaxMP": 2515,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-6": {
+          "name": "铃兰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1614,
+      "remainingMPRatio": 0.6417495029821073,
+      "meanRemainingMPOnLoss": 1614,
+      "remainingMPRatioOnLoss": 0.6417495029821073,
+      "clusterCount": 1
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 0,
+      "decisiveWins": 0,
+      "mpRemaining": 77,
+      "maxMP": 2301,
+      "remainingMPOnLoss": 77,
+      "lossMaxMP": 2301,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 4,
+          "gamesUsed": 1,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-6": {
+          "name": "血夜",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": null,
+      "meanRemainingMP": 77,
+      "remainingMPRatio": 0.03346371142981312,
+      "meanRemainingMPOnLoss": 77,
+      "remainingMPRatioOnLoss": 0.03346371142981312,
+      "clusterCount": 1
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 0,
+      "decisiveWins": 0,
+      "mpRemaining": 0,
+      "maxMP": 2609,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2609,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-6": {
+          "name": "冥邪剑法·归刃",
+          "uses": 4,
+          "gamesUsed": 1,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": null,
+      "meanRemainingMP": 0,
+      "remainingMPRatio": 0,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 1
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 0,
+      "maxMP": 2609,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2609,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "minghuan-6": {
+          "name": "凤龙穿岚",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 0,
+      "remainingMPRatio": 0,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 1
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1398,
+      "maxMP": 2515,
+      "remainingMPOnLoss": 1398,
+      "lossMaxMP": 2515,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-6": {
+          "name": "叠瓣毒潮",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1398,
+      "remainingMPRatio": 0.5558648111332007,
+      "meanRemainingMPOnLoss": 1398,
+      "remainingMPRatioOnLoss": 0.5558648111332007,
+      "clusterCount": 1
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 0,
+      "decisiveWins": 0,
+      "mpRemaining": 0,
+      "maxMP": 2609,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2609,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "qingling-6": {
+          "name": "鬼剑·裁魂",
+          "uses": 4,
+          "gamesUsed": 1,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": null,
+      "meanRemainingMP": 0,
+      "remainingMPRatio": 0,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 1
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 37,
+      "maxMP": 2609,
+      "remainingMPOnLoss": 37,
+      "lossMaxMP": 2609,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 3,
+          "gamesUsed": 1,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "yanan-6": {
+          "name": "风铭回锋",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 37,
+      "remainingMPRatio": 0.014181678804139517,
+      "meanRemainingMPOnLoss": 37,
+      "remainingMPRatioOnLoss": 0.014181678804139517,
+      "clusterCount": 1
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 0,
+      "maxMP": 2515,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 2515,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 4,
+          "gamesUsed": 1,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-6": {
+          "name": "冻气龙卷",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 0,
+      "remainingMPRatio": 0,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 1
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "campaign",
+      "layout": "exam-2v2",
+      "layer": "ring-6",
+      "n": 1,
+      "wins": 0,
+      "losses": 1,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 1,
+      "decisiveWins": 0,
+      "mpRemaining": 1089,
+      "maxMP": 2515,
+      "remainingMPOnLoss": 1089,
+      "lossMaxMP": 2515,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-6": {
+          "name": "魂力飞弹·聚束",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 1,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1089,
+      "remainingMPRatio": 0.4330019880715706,
+      "meanRemainingMPOnLoss": 1089,
+      "remainingMPRatioOnLoss": 0.4330019880715706,
+      "clusterCount": 1
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 12,
+      "losses": 14,
+      "draws": 0,
+      "adjudicated": 13,
+      "adjudicatedWins": 3,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 13,
+      "decisiveWins": 9,
+      "mpRemaining": 2823,
+      "maxMP": 41366,
+      "remainingMPOnLoss": 742,
+      "lossMaxMP": 22274,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 62,
+          "gamesUsed": 26,
+          "usesPerGame": 2.3846153846153846,
+          "gamesUsedRate": 1
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 8,
+          "gamesUsed": 8,
+          "usesPerGame": 0.3076923076923077,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 94,
+          "gamesUsed": 26,
+          "usesPerGame": 3.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 24,
+          "gamesUsed": 16,
+          "usesPerGame": 0.9230769230769231,
+          "gamesUsedRate": 0.6153846153846154
+        }
+      },
+      "focus": false,
+      "winRate": 0.46153846153846156,
+      "decisiveWinRate": 0.6923076923076923,
+      "meanRemainingMP": 108.57692307692308,
+      "remainingMPRatio": 0.0682444519653822,
+      "meanRemainingMPOnLoss": 53,
+      "remainingMPRatioOnLoss": 0.03331238214959145,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 16,
+      "losses": 10,
+      "draws": 0,
+      "adjudicated": 14,
+      "adjudicatedWins": 8,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 12,
+      "decisiveWins": 8,
+      "mpRemaining": 4154,
+      "maxMP": 36010,
+      "remainingMPOnLoss": 440,
+      "lossMaxMP": 13850,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 118,
+          "gamesUsed": 26,
+          "usesPerGame": 4.538461538461538,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 24,
+          "gamesUsed": 20,
+          "usesPerGame": 0.9230769230769231,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 36,
+          "gamesUsed": 18,
+          "usesPerGame": 1.3846153846153846,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.6153846153846154,
+      "decisiveWinRate": 0.6666666666666666,
+      "meanRemainingMP": 159.76923076923077,
+      "remainingMPRatio": 0.11535684532074424,
+      "meanRemainingMPOnLoss": 44,
+      "remainingMPRatioOnLoss": 0.03176895306859206,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 19,
+      "losses": 7,
+      "draws": 0,
+      "adjudicated": 7,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 19,
+      "decisiveWins": 17,
+      "mpRemaining": 5742,
+      "maxMP": 39286,
+      "remainingMPOnLoss": 32,
+      "lossMaxMP": 10577,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 77,
+          "gamesUsed": 26,
+          "usesPerGame": 2.9615384615384617,
+          "gamesUsedRate": 1
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 30,
+          "gamesUsed": 20,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 24,
+          "gamesUsed": 14,
+          "usesPerGame": 0.9230769230769231,
+          "gamesUsedRate": 0.5384615384615384
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 70,
+          "gamesUsed": 26,
+          "usesPerGame": 2.6923076923076925,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.7307692307692307,
+      "decisiveWinRate": 0.8947368421052632,
+      "meanRemainingMP": 220.84615384615384,
+      "remainingMPRatio": 0.14615893702591254,
+      "meanRemainingMPOnLoss": 4.571428571428571,
+      "remainingMPRatioOnLoss": 0.003025432542308783,
+      "clusterCount": 13
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 24,
+      "decisiveWins": 16,
+      "mpRemaining": 9148,
+      "maxMP": 38012,
+      "remainingMPOnLoss": 2436,
+      "lossMaxMP": 11696,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 14,
+          "gamesUsed": 10,
+          "usesPerGame": 0.5384615384615384,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 100,
+          "gamesUsed": 26,
+          "usesPerGame": 3.8461538461538463,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 16,
+          "gamesUsed": 16,
+          "usesPerGame": 0.6153846153846154,
+          "gamesUsedRate": 0.6153846153846154
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        }
+      },
+      "focus": true,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.6666666666666666,
+      "meanRemainingMP": 351.84615384615387,
+      "remainingMPRatio": 0.24066084394401768,
+      "meanRemainingMPOnLoss": 304.5,
+      "remainingMPRatioOnLoss": 0.2082763337893297,
+      "clusterCount": 13
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 12,
+      "losses": 14,
+      "draws": 0,
+      "adjudicated": 10,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 16,
+      "decisiveWins": 8,
+      "mpRemaining": 2398,
+      "maxMP": 36010,
+      "remainingMPOnLoss": 578,
+      "lossMaxMP": 19390,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 22,
+          "gamesUsed": 18,
+          "usesPerGame": 0.8461538461538461,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 40,
+          "gamesUsed": 20,
+          "usesPerGame": 1.5384615384615385,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 74,
+          "gamesUsed": 26,
+          "usesPerGame": 2.8461538461538463,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.46153846153846156,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 92.23076923076923,
+      "remainingMPRatio": 0.06659261316301028,
+      "meanRemainingMPOnLoss": 41.285714285714285,
+      "remainingMPRatioOnLoss": 0.029809179989685405,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 2,
+      "losses": 24,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 2,
+      "mpRemaining": 13849,
+      "maxMP": 38012,
+      "remainingMPOnLoss": 13823,
+      "lossMaxMP": 35088,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 76,
+          "gamesUsed": 26,
+          "usesPerGame": 2.923076923076923,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 32,
+          "gamesUsed": 17,
+          "usesPerGame": 1.2307692307692308,
+          "gamesUsedRate": 0.6538461538461539
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.07692307692307693,
+      "decisiveWinRate": 0.07692307692307693,
+      "meanRemainingMP": 532.6538461538462,
+      "remainingMPRatio": 0.3643323161107019,
+      "meanRemainingMPOnLoss": 575.9583333333334,
+      "remainingMPRatioOnLoss": 0.39395234838121296,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 26,
+      "losses": 0,
+      "draws": 0,
+      "adjudicated": 14,
+      "adjudicatedWins": 14,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 12,
+      "decisiveWins": 12,
+      "mpRemaining": 3068,
+      "maxMP": 34866,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 0,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 94,
+          "gamesUsed": 26,
+          "usesPerGame": 3.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 90,
+          "gamesUsed": 26,
+          "usesPerGame": 3.4615384615384617,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 1,
+      "decisiveWinRate": 1,
+      "meanRemainingMP": 118,
+      "remainingMPRatio": 0.08799403430275914,
+      "meanRemainingMPOnLoss": null,
+      "remainingMPRatioOnLoss": null,
+      "clusterCount": 13
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 9,
+      "losses": 17,
+      "draws": 0,
+      "adjudicated": 11,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 15,
+      "decisiveWins": 5,
+      "mpRemaining": 2369,
+      "maxMP": 39286,
+      "remainingMPOnLoss": 594,
+      "lossMaxMP": 25687,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 51,
+          "gamesUsed": 24,
+          "usesPerGame": 1.9615384615384615,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 52,
+          "gamesUsed": 26,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 64,
+          "gamesUsed": 26,
+          "usesPerGame": 2.4615384615384617,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.34615384615384615,
+      "decisiveWinRate": 0.3333333333333333,
+      "meanRemainingMP": 91.11538461538461,
+      "remainingMPRatio": 0.06030137962632999,
+      "meanRemainingMPOnLoss": 34.94117647058823,
+      "remainingMPRatioOnLoss": 0.023124537703896914,
+      "clusterCount": 13
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 14,
+      "losses": 12,
+      "draws": 0,
+      "adjudicated": 10,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 16,
+      "decisiveWins": 10,
+      "mpRemaining": 3006,
+      "maxMP": 39286,
+      "remainingMPOnLoss": 108,
+      "lossMaxMP": 18132,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 22,
+          "gamesUsed": 18,
+          "usesPerGame": 0.8461538461538461,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 26,
+          "gamesUsed": 12,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.46153846153846156
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 86,
+          "gamesUsed": 26,
+          "usesPerGame": 3.3076923076923075,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 50,
+          "gamesUsed": 26,
+          "usesPerGame": 1.9230769230769231,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.5384615384615384,
+      "decisiveWinRate": 0.625,
+      "meanRemainingMP": 115.61538461538461,
+      "remainingMPRatio": 0.07651580715776612,
+      "meanRemainingMPOnLoss": 9,
+      "remainingMPRatioOnLoss": 0.005956320317670417,
+      "clusterCount": 13
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 14,
+      "losses": 12,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 14,
+      "mpRemaining": 14682,
+      "maxMP": 38012,
+      "remainingMPOnLoss": 6156,
+      "lossMaxMP": 17544,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 63,
+          "gamesUsed": 26,
+          "usesPerGame": 2.423076923076923,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 57,
+          "gamesUsed": 24,
+          "usesPerGame": 2.1923076923076925,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 7,
+          "gamesUsed": 7,
+          "usesPerGame": 0.2692307692307692,
+          "gamesUsedRate": 0.2692307692307692
+        }
+      },
+      "focus": false,
+      "winRate": 0.5384615384615384,
+      "decisiveWinRate": 0.5384615384615384,
+      "meanRemainingMP": 564.6923076923077,
+      "remainingMPRatio": 0.38624644848995054,
+      "meanRemainingMPOnLoss": 513,
+      "remainingMPRatioOnLoss": 0.3508891928864569,
+      "clusterCount": 13
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 11,
+      "losses": 15,
+      "draws": 0,
+      "adjudicated": 10,
+      "adjudicatedWins": 5,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 16,
+      "decisiveWins": 6,
+      "mpRemaining": 3070,
+      "maxMP": 39286,
+      "remainingMPOnLoss": 773,
+      "lossMaxMP": 22665,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 99,
+          "gamesUsed": 26,
+          "usesPerGame": 3.8076923076923075,
+          "gamesUsedRate": 1
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 50,
+          "gamesUsed": 26,
+          "usesPerGame": 1.9230769230769231,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.4230769230769231,
+      "decisiveWinRate": 0.375,
+      "meanRemainingMP": 118.07692307692308,
+      "remainingMPRatio": 0.07814488621900932,
+      "meanRemainingMPOnLoss": 51.53333333333333,
+      "remainingMPRatioOnLoss": 0.03410544893006839,
+      "clusterCount": 13
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 13,
+      "losses": 13,
+      "draws": 0,
+      "adjudicated": 16,
+      "adjudicatedWins": 7,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 10,
+      "decisiveWins": 6,
+      "mpRemaining": 2230,
+      "maxMP": 39286,
+      "remainingMPOnLoss": 830,
+      "lossMaxMP": 19643,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 104,
+          "gamesUsed": 26,
+          "usesPerGame": 4,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 83,
+          "gamesUsed": 26,
+          "usesPerGame": 3.1923076923076925,
+          "gamesUsedRate": 1
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.5,
+      "decisiveWinRate": 0.6,
+      "meanRemainingMP": 85.76923076923077,
+      "remainingMPRatio": 0.056763223540192434,
+      "meanRemainingMPOnLoss": 63.84615384615385,
+      "remainingMPRatioOnLoss": 0.042254238150995264,
+      "clusterCount": 13
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 16,
+      "losses": 10,
+      "draws": 0,
+      "adjudicated": 16,
+      "adjudicatedWins": 10,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 10,
+      "decisiveWins": 6,
+      "mpRemaining": 1770,
+      "maxMP": 37986,
+      "remainingMPOnLoss": 80,
+      "lossMaxMP": 14610,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 78,
+          "gamesUsed": 26,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 24,
+          "gamesUsed": 24,
+          "usesPerGame": 0.9230769230769231,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 78,
+          "gamesUsed": 26,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6153846153846154,
+      "decisiveWinRate": 0.6,
+      "meanRemainingMP": 68.07692307692308,
+      "remainingMPRatio": 0.04659611435792134,
+      "meanRemainingMPOnLoss": 8,
+      "remainingMPRatioOnLoss": 0.0054757015742642025,
+      "clusterCount": 13
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-41",
+      "n": 26,
+      "wins": 0,
+      "losses": 26,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 23,
+      "decisiveWins": 0,
+      "mpRemaining": 10748,
+      "maxMP": 38012,
+      "remainingMPOnLoss": 10748,
+      "lossMaxMP": 38012,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 17,
+          "gamesUsed": 13,
+          "usesPerGame": 0.6538461538461539,
+          "gamesUsedRate": 0.5
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 47,
+          "gamesUsed": 20,
+          "usesPerGame": 1.8076923076923077,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 84,
+          "gamesUsed": 26,
+          "usesPerGame": 3.230769230769231,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 413.38461538461536,
+      "remainingMPRatio": 0.2827528149005577,
+      "meanRemainingMPOnLoss": 413.38461538461536,
+      "remainingMPRatioOnLoss": 0.2827528149005577,
+      "clusterCount": 13
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 4,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 22,
+      "decisiveWins": 18,
+      "mpRemaining": 8890,
+      "maxMP": 54704,
+      "remainingMPOnLoss": 338,
+      "lossMaxMP": 16832,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 53,
+          "gamesUsed": 26,
+          "usesPerGame": 2.0384615384615383,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 6,
+          "gamesUsed": 4,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 71,
+          "gamesUsed": 26,
+          "usesPerGame": 2.730769230769231,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.8181818181818182,
+      "meanRemainingMP": 341.9230769230769,
+      "remainingMPRatio": 0.16251096811933313,
+      "meanRemainingMPOnLoss": 42.25,
+      "remainingMPRatioOnLoss": 0.020080798479087454,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 22,
+      "losses": 4,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 22,
+      "mpRemaining": 17270,
+      "maxMP": 47762,
+      "remainingMPOnLoss": 1340,
+      "lossMaxMP": 7348,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 46,
+          "gamesUsed": 26,
+          "usesPerGame": 1.7692307692307692,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 6,
+          "gamesUsed": 6,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.23076923076923078
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 12,
+          "gamesUsed": 10,
+          "usesPerGame": 0.46153846153846156,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 52,
+          "gamesUsed": 26,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.8461538461538461,
+      "decisiveWinRate": 0.8461538461538461,
+      "meanRemainingMP": 664.2307692307693,
+      "remainingMPRatio": 0.36158452326116997,
+      "meanRemainingMPOnLoss": 335,
+      "remainingMPRatioOnLoss": 0.1823625476320087,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 8,
+      "adjudicatedWins": 6,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 18,
+      "decisiveWins": 12,
+      "mpRemaining": 8426,
+      "maxMP": 52078,
+      "remainingMPOnLoss": 2431,
+      "lossMaxMP": 16024,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 82,
+          "gamesUsed": 26,
+          "usesPerGame": 3.1538461538461537,
+          "gamesUsedRate": 1
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 33,
+          "gamesUsed": 19,
+          "usesPerGame": 1.2692307692307692,
+          "gamesUsedRate": 0.7307692307692307
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 65,
+          "gamesUsed": 26,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        }
+      },
+      "focus": false,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.6666666666666666,
+      "meanRemainingMP": 324.0769230769231,
+      "remainingMPRatio": 0.16179576788663158,
+      "meanRemainingMPOnLoss": 303.875,
+      "remainingMPRatioOnLoss": 0.15170993509735398,
+      "clusterCount": 13
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 7,
+      "losses": 19,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 7,
+      "mpRemaining": 15795,
+      "maxMP": 50466,
+      "remainingMPOnLoss": 12000,
+      "lossMaxMP": 36879,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 5,
+          "gamesUsed": 5,
+          "usesPerGame": 0.19230769230769232,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 78,
+          "gamesUsed": 26,
+          "usesPerGame": 3,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 40,
+          "gamesUsed": 26,
+          "usesPerGame": 1.5384615384615385,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.2692307692307692,
+      "decisiveWinRate": 0.2692307692307692,
+      "meanRemainingMP": 607.5,
+      "remainingMPRatio": 0.31298299845440497,
+      "meanRemainingMPOnLoss": 631.578947368421,
+      "remainingMPRatioOnLoss": 0.3253884324412267,
+      "clusterCount": 13
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 16,
+      "losses": 10,
+      "draws": 0,
+      "adjudicated": 6,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 20,
+      "decisiveWins": 12,
+      "mpRemaining": 5382,
+      "maxMP": 47814,
+      "remainingMPOnLoss": 1004,
+      "lossMaxMP": 18390,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 10,
+          "gamesUsed": 10,
+          "usesPerGame": 0.38461538461538464,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 26,
+          "gamesUsed": 16,
+          "usesPerGame": 1,
+          "gamesUsedRate": 0.6153846153846154
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 82,
+          "gamesUsed": 26,
+          "usesPerGame": 3.1538461538461537,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 30,
+          "gamesUsed": 16,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 0.6153846153846154
+        }
+      },
+      "focus": true,
+      "winRate": 0.6153846153846154,
+      "decisiveWinRate": 0.6,
+      "meanRemainingMP": 207,
+      "remainingMPRatio": 0.11256117455138662,
+      "meanRemainingMPOnLoss": 100.4,
+      "remainingMPRatioOnLoss": 0.05459488852637303,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 1,
+      "losses": 25,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 23,
+      "decisiveWins": 0,
+      "mpRemaining": 18128,
+      "maxMP": 50466,
+      "remainingMPOnLoss": 18079,
+      "lossMaxMP": 48525,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 67,
+          "gamesUsed": 26,
+          "usesPerGame": 2.576923076923077,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 30,
+          "gamesUsed": 20,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 51,
+          "gamesUsed": 25,
+          "usesPerGame": 1.9615384615384615,
+          "gamesUsedRate": 0.9615384615384616
+        }
+      },
+      "focus": true,
+      "winRate": 0.038461538461538464,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 697.2307692307693,
+      "remainingMPRatio": 0.35921214282883523,
+      "meanRemainingMPOnLoss": 723.16,
+      "remainingMPRatioOnLoss": 0.37257083977331273,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 16,
+      "losses": 10,
+      "draws": 0,
+      "adjudicated": 12,
+      "adjudicatedWins": 6,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 14,
+      "decisiveWins": 10,
+      "mpRemaining": 8152,
+      "maxMP": 45994,
+      "remainingMPOnLoss": 2188,
+      "lossMaxMP": 17690,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 72,
+          "gamesUsed": 26,
+          "usesPerGame": 2.769230769230769,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 94,
+          "gamesUsed": 26,
+          "usesPerGame": 3.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.6153846153846154,
+      "decisiveWinRate": 0.7142857142857143,
+      "meanRemainingMP": 313.53846153846155,
+      "remainingMPRatio": 0.17724050963169108,
+      "meanRemainingMPOnLoss": 218.8,
+      "remainingMPRatioOnLoss": 0.1236856981345393,
+      "clusterCount": 13
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 7,
+      "losses": 19,
+      "draws": 0,
+      "adjudicated": 6,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 20,
+      "decisiveWins": 5,
+      "mpRemaining": 5253,
+      "maxMP": 52078,
+      "remainingMPOnLoss": 3106,
+      "lossMaxMP": 38057,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 9,
+          "gamesUsed": 9,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.34615384615384615
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 56,
+          "gamesUsed": 26,
+          "usesPerGame": 2.1538461538461537,
+          "gamesUsedRate": 1
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 83,
+          "gamesUsed": 26,
+          "usesPerGame": 3.1923076923076925,
+          "gamesUsedRate": 1
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.038461538461538464,
+          "gamesUsedRate": 0.038461538461538464
+        }
+      },
+      "focus": true,
+      "winRate": 0.2692307692307692,
+      "decisiveWinRate": 0.25,
+      "meanRemainingMP": 202.03846153846155,
+      "remainingMPRatio": 0.10086792887591689,
+      "meanRemainingMPOnLoss": 163.47368421052633,
+      "remainingMPRatioOnLoss": 0.08161442047455134,
+      "clusterCount": 13
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 14,
+      "losses": 12,
+      "draws": 0,
+      "adjudicated": 8,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 18,
+      "decisiveWins": 10,
+      "mpRemaining": 5544,
+      "maxMP": 52078,
+      "remainingMPOnLoss": 2418,
+      "lossMaxMP": 24036,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 8,
+          "gamesUsed": 8,
+          "usesPerGame": 0.3076923076923077,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 6,
+          "gamesUsed": 6,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.23076923076923078
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 90,
+          "gamesUsed": 26,
+          "usesPerGame": 3.4615384615384617,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 68,
+          "gamesUsed": 26,
+          "usesPerGame": 2.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        }
+      },
+      "focus": false,
+      "winRate": 0.5384615384615384,
+      "decisiveWinRate": 0.5555555555555556,
+      "meanRemainingMP": 213.23076923076923,
+      "remainingMPRatio": 0.10645570106378893,
+      "meanRemainingMPOnLoss": 201.5,
+      "remainingMPRatioOnLoss": 0.10059910134797803,
+      "clusterCount": 13
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 14,
+      "losses": 12,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 14,
+      "mpRemaining": 22372,
+      "maxMP": 50466,
+      "remainingMPOnLoss": 10071,
+      "lossMaxMP": 23292,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 53,
+          "gamesUsed": 26,
+          "usesPerGame": 2.0384615384615383,
+          "gamesUsedRate": 1
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 52,
+          "gamesUsed": 26,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.038461538461538464,
+          "gamesUsedRate": 0.038461538461538464
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 13,
+          "gamesUsed": 11,
+          "usesPerGame": 0.5,
+          "gamesUsedRate": 0.4230769230769231
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.5384615384615384,
+      "decisiveWinRate": 0.5384615384615384,
+      "meanRemainingMP": 860.4615384615385,
+      "remainingMPRatio": 0.44330836602861334,
+      "meanRemainingMPOnLoss": 839.25,
+      "remainingMPRatioOnLoss": 0.4323802163833076,
+      "clusterCount": 13
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 11,
+      "losses": 15,
+      "draws": 0,
+      "adjudicated": 8,
+      "adjudicatedWins": 4,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 18,
+      "decisiveWins": 7,
+      "mpRemaining": 5244,
+      "maxMP": 52078,
+      "remainingMPOnLoss": 1650,
+      "lossMaxMP": 30045,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 85,
+          "gamesUsed": 26,
+          "usesPerGame": 3.269230769230769,
+          "gamesUsedRate": 1
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 58,
+          "gamesUsed": 26,
+          "usesPerGame": 2.230769230769231,
+          "gamesUsedRate": 1
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 6,
+          "gamesUsed": 6,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.23076923076923078
+        }
+      },
+      "focus": false,
+      "winRate": 0.4230769230769231,
+      "decisiveWinRate": 0.3888888888888889,
+      "meanRemainingMP": 201.69230769230768,
+      "remainingMPRatio": 0.10069511117938477,
+      "meanRemainingMPOnLoss": 110,
+      "remainingMPRatioOnLoss": 0.05491762356465302,
+      "clusterCount": 13
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 22,
+      "losses": 4,
+      "draws": 0,
+      "adjudicated": 6,
+      "adjudicatedWins": 6,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 20,
+      "decisiveWins": 16,
+      "mpRemaining": 6408,
+      "maxMP": 52078,
+      "remainingMPOnLoss": 0,
+      "lossMaxMP": 8012,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 55,
+          "gamesUsed": 26,
+          "usesPerGame": 2.1153846153846154,
+          "gamesUsedRate": 1
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 28,
+          "gamesUsed": 20,
+          "usesPerGame": 1.0769230769230769,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 7,
+          "gamesUsed": 7,
+          "usesPerGame": 0.2692307692307692,
+          "gamesUsedRate": 0.2692307692307692
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 8,
+          "gamesUsed": 8,
+          "usesPerGame": 0.3076923076923077,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 56,
+          "gamesUsed": 26,
+          "usesPerGame": 2.1538461538461537,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.8461538461538461,
+      "decisiveWinRate": 0.8,
+      "meanRemainingMP": 246.46153846153845,
+      "remainingMPRatio": 0.12304619993087292,
+      "meanRemainingMPOnLoss": 0,
+      "remainingMPRatioOnLoss": 0,
+      "clusterCount": 13
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 15,
+      "losses": 11,
+      "draws": 0,
+      "adjudicated": 8,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 18,
+      "decisiveWins": 13,
+      "mpRemaining": 3918,
+      "maxMP": 50466,
+      "remainingMPOnLoss": 264,
+      "lossMaxMP": 21351,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 65,
+          "gamesUsed": 24,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 10,
+          "gamesUsed": 10,
+          "usesPerGame": 0.38461538461538464,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 103,
+          "gamesUsed": 26,
+          "usesPerGame": 3.9615384615384617,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        }
+      },
+      "focus": false,
+      "winRate": 0.5769230769230769,
+      "decisiveWinRate": 0.7222222222222222,
+      "meanRemainingMP": 150.69230769230768,
+      "remainingMPRatio": 0.07763642848650576,
+      "meanRemainingMPOnLoss": 24,
+      "remainingMPRatioOnLoss": 0.012364760432766615,
+      "clusterCount": 13
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-51",
+      "n": 26,
+      "wins": 1,
+      "losses": 25,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 25,
+      "decisiveWins": 1,
+      "mpRemaining": 18739,
+      "maxMP": 50466,
+      "remainingMPOnLoss": 18392,
+      "lossMaxMP": 48525,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 30,
+          "gamesUsed": 20,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 28,
+          "gamesUsed": 10,
+          "usesPerGame": 1.0769230769230769,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 68,
+          "gamesUsed": 26,
+          "usesPerGame": 2.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 5,
+          "gamesUsed": 5,
+          "usesPerGame": 0.19230769230769232,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 9,
+          "gamesUsed": 7,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.2692307692307692
+        }
+      },
+      "focus": true,
+      "winRate": 0.038461538461538464,
+      "decisiveWinRate": 0.04,
+      "meanRemainingMP": 720.7307692307693,
+      "remainingMPRatio": 0.37131930408591923,
+      "meanRemainingMPOnLoss": 735.68,
+      "remainingMPRatioOnLoss": 0.379021123132406,
+      "clusterCount": 13
+    },
+    {
+      "member": "qinyan",
+      "name": "秦衍",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 10,
+      "losses": 16,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 10,
+      "mpRemaining": 21612,
+      "maxMP": 71188,
+      "remainingMPOnLoss": 12920,
+      "lossMaxMP": 43808,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "qinyan-1": {
+          "name": "雷光",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "qinyan-2": {
+          "name": "极速",
+          "uses": 5,
+          "gamesUsed": 5,
+          "usesPerGame": 0.19230769230769232,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "qinyan-3": {
+          "name": "雷化·雷矢",
+          "uses": 36,
+          "gamesUsed": 26,
+          "usesPerGame": 1.3846153846153846,
+          "gamesUsedRate": 1
+        },
+        "qinyan-4": {
+          "name": "晶化",
+          "uses": 6,
+          "gamesUsed": 4,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "qinyan-5": {
+          "name": "雷矢·并爆",
+          "uses": 52,
+          "gamesUsed": 26,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "qinyan-6": {
+          "name": "晶棱雷阵",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.38461538461538464,
+      "decisiveWinRate": 0.38461538461538464,
+      "meanRemainingMP": 831.2307692307693,
+      "remainingMPRatio": 0.303590492779682,
+      "meanRemainingMPOnLoss": 807.5,
+      "remainingMPRatioOnLoss": 0.2949233016800584,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaowen",
+      "name": "晓雯",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 18,
+      "mpRemaining": 24090,
+      "maxMP": 62062,
+      "remainingMPOnLoss": 4058,
+      "lossMaxMP": 19096,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xiaowen-1": {
+          "name": "尘刃·锐",
+          "uses": 42,
+          "gamesUsed": 26,
+          "usesPerGame": 1.6153846153846154,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-2": {
+          "name": "尘刃·体振",
+          "uses": 8,
+          "gamesUsed": 8,
+          "usesPerGame": 0.3076923076923077,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "xiaowen-3": {
+          "name": "尘刃·尘镜",
+          "uses": 10,
+          "gamesUsed": 10,
+          "usesPerGame": 0.38461538461538464,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "xiaowen-4": {
+          "name": "拂刃·虹影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaowen-5": {
+          "name": "尘刃·凝锋",
+          "uses": 52,
+          "gamesUsed": 26,
+          "usesPerGame": 2,
+          "gamesUsedRate": 1
+        },
+        "xiaowen-6": {
+          "name": "虹影·回缚",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": false,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.6923076923076923,
+      "meanRemainingMP": 926.5384615384615,
+      "remainingMPRatio": 0.3881602268699043,
+      "meanRemainingMPOnLoss": 507.25,
+      "remainingMPRatioOnLoss": 0.2125052366987851,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixing",
+      "name": "李一行",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 18,
+      "mpRemaining": 21535,
+      "maxMP": 67834,
+      "remainingMPOnLoss": 2028,
+      "lossMaxMP": 20872,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yixing-1": {
+          "name": "苍龙破",
+          "uses": 12,
+          "gamesUsed": 11,
+          "usesPerGame": 0.46153846153846156,
+          "gamesUsedRate": 0.4230769230769231
+        },
+        "yixing-2": {
+          "name": "怒风旋",
+          "uses": 7,
+          "gamesUsed": 7,
+          "usesPerGame": 0.2692307692307692,
+          "gamesUsedRate": 0.2692307692307692
+        },
+        "yixing-3": {
+          "name": "玄重罡",
+          "uses": 9,
+          "gamesUsed": 7,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.2692307692307692
+        },
+        "yixing-4": {
+          "name": "霸刀斩",
+          "uses": 21,
+          "gamesUsed": 21,
+          "usesPerGame": 0.8076923076923077,
+          "gamesUsedRate": 0.8076923076923077
+        },
+        "yixing-5": {
+          "name": "霸意凝罡",
+          "uses": 9,
+          "gamesUsed": 5,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "yixing-6": {
+          "name": "绝刀·破势",
+          "uses": 55,
+          "gamesUsed": 26,
+          "usesPerGame": 2.1153846153846154,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.6923076923076923,
+      "meanRemainingMP": 828.2692307692307,
+      "remainingMPRatio": 0.3174661674086741,
+      "meanRemainingMPOnLoss": 253.5,
+      "remainingMPRatioOnLoss": 0.0971636642391721,
+      "clusterCount": 13
+    },
+    {
+      "member": "anmu",
+      "name": "暗牧",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 4,
+      "losses": 22,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 4,
+      "mpRemaining": 26226,
+      "maxMP": 65390,
+      "remainingMPOnLoss": 23430,
+      "lossMaxMP": 55330,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "anmu-1": {
+          "name": "麻痹毒素",
+          "uses": 4,
+          "gamesUsed": 2,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "anmu-2": {
+          "name": "腐蚀毒素",
+          "uses": 65,
+          "gamesUsed": 26,
+          "usesPerGame": 2.5,
+          "gamesUsedRate": 1
+        },
+        "anmu-3": {
+          "name": "激化毒素",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "anmu-4": {
+          "name": "亢奋毒素",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "anmu-5": {
+          "name": "引发毒素",
+          "uses": 34,
+          "gamesUsed": 24,
+          "usesPerGame": 1.3076923076923077,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "anmu-6": {
+          "name": "蝎尾封脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.15384615384615385,
+      "decisiveWinRate": 0.15384615384615385,
+      "meanRemainingMP": 1008.6923076923077,
+      "remainingMPRatio": 0.4010705000764643,
+      "meanRemainingMPOnLoss": 1065,
+      "remainingMPRatioOnLoss": 0.4234592445328032,
+      "clusterCount": 13
+    },
+    {
+      "member": "hash",
+      "name": "哈什",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 8,
+      "losses": 18,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 24,
+      "decisiveWins": 6,
+      "mpRemaining": 17082,
+      "maxMP": 62088,
+      "remainingMPOnLoss": 11638,
+      "lossMaxMP": 42984,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "hash-1": {
+          "name": "虚像投影",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "hash-2": {
+          "name": "虚空匿行",
+          "uses": 18,
+          "gamesUsed": 18,
+          "usesPerGame": 0.6923076923076923,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "hash-3": {
+          "name": "虚能爆裂",
+          "uses": 30,
+          "gamesUsed": 20,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "hash-4": {
+          "name": "虚实刻印",
+          "uses": 58,
+          "gamesUsed": 26,
+          "usesPerGame": 2.230769230769231,
+          "gamesUsedRate": 1
+        },
+        "hash-5": {
+          "name": "铭符折护",
+          "uses": 12,
+          "gamesUsed": 8,
+          "usesPerGame": 0.46153846153846156,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "hash-6": {
+          "name": "晦光滞流",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.3076923076923077,
+      "decisiveWinRate": 0.25,
+      "meanRemainingMP": 657,
+      "remainingMPRatio": 0.2751256281407035,
+      "meanRemainingMPOnLoss": 646.5555555555555,
+      "remainingMPRatioOnLoss": 0.27075190768658103,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 0,
+      "losses": 26,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 0,
+      "mpRemaining": 32939,
+      "maxMP": 65390,
+      "remainingMPOnLoss": 32939,
+      "lossMaxMP": 65390,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 33,
+          "gamesUsed": 21,
+          "usesPerGame": 1.2692307692307692,
+          "gamesUsedRate": 0.8076923076923077
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 35,
+          "gamesUsed": 19,
+          "usesPerGame": 1.3461538461538463,
+          "gamesUsedRate": 0.7307692307692307
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.038461538461538464,
+          "gamesUsedRate": 0.038461538461538464
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 40,
+          "gamesUsed": 20,
+          "usesPerGame": 1.5384615384615385,
+          "gamesUsedRate": 0.7692307692307693
+        },
+        "yixiaobei-6": {
+          "name": "铃兰花露",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1266.8846153846155,
+      "remainingMPRatio": 0.5037314574093898,
+      "meanRemainingMPOnLoss": 1266.8846153846155,
+      "remainingMPRatioOnLoss": 0.5037314574093898,
+      "clusterCount": 13
+    },
+    {
+      "member": "xiaweiyu",
+      "name": "夏维宇",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 20,
+      "losses": 6,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 20,
+      "mpRemaining": 14326,
+      "maxMP": 59826,
+      "remainingMPOnLoss": 2650,
+      "lossMaxMP": 13806,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xiaweiyu-1": {
+          "name": "血涌",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xiaweiyu-2": {
+          "name": "血噬",
+          "uses": 62,
+          "gamesUsed": 24,
+          "usesPerGame": 2.3846153846153846,
+          "gamesUsedRate": 0.9230769230769231
+        },
+        "xiaweiyu-3": {
+          "name": "血烟",
+          "uses": 4,
+          "gamesUsed": 4,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.15384615384615385
+        },
+        "xiaweiyu-4": {
+          "name": "血蝠",
+          "uses": 88,
+          "gamesUsed": 26,
+          "usesPerGame": 3.3846153846153846,
+          "gamesUsedRate": 1
+        },
+        "xiaweiyu-5": {
+          "name": "血锢",
+          "uses": 4,
+          "gamesUsed": 2,
+          "usesPerGame": 0.15384615384615385,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "xiaweiyu-6": {
+          "name": "血夜",
+          "uses": 20,
+          "gamesUsed": 20,
+          "usesPerGame": 0.7692307692307693,
+          "gamesUsedRate": 0.7692307692307693
+        }
+      },
+      "focus": true,
+      "winRate": 0.7692307692307693,
+      "decisiveWinRate": 0.7692307692307693,
+      "meanRemainingMP": 551,
+      "remainingMPRatio": 0.23946110386788352,
+      "meanRemainingMPOnLoss": 441.6666666666667,
+      "remainingMPRatioOnLoss": 0.19194553092858177,
+      "clusterCount": 13
+    },
+    {
+      "member": "quan",
+      "name": "瑔",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 21,
+      "losses": 5,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 21,
+      "mpRemaining": 19287,
+      "maxMP": 67834,
+      "remainingMPOnLoss": 1389,
+      "lossMaxMP": 13045,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "quan-1": {
+          "name": "冥邪斩",
+          "uses": 9,
+          "gamesUsed": 9,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.34615384615384615
+        },
+        "quan-2": {
+          "name": "半生浮屠",
+          "uses": 9,
+          "gamesUsed": 5,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "quan-3": {
+          "name": "冥邪剑法·七式",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "quan-4": {
+          "name": "冥邪剑法·终式",
+          "uses": 33,
+          "gamesUsed": 23,
+          "usesPerGame": 1.2692307692307692,
+          "gamesUsedRate": 0.8846153846153846
+        },
+        "quan-5": {
+          "name": "冥邪剑法·封式",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "quan-6": {
+          "name": "冥邪剑法·归刃",
+          "uses": 54,
+          "gamesUsed": 26,
+          "usesPerGame": 2.076923076923077,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.8076923076923077,
+      "decisiveWinRate": 0.8076923076923077,
+      "meanRemainingMP": 741.8076923076923,
+      "remainingMPRatio": 0.28432644396615264,
+      "meanRemainingMPOnLoss": 277.8,
+      "remainingMPRatioOnLoss": 0.10647757761594481,
+      "clusterCount": 13
+    },
+    {
+      "member": "minghuan",
+      "name": "明缓",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 18,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 2,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 24,
+      "decisiveWins": 16,
+      "mpRemaining": 16942,
+      "maxMP": 67834,
+      "remainingMPOnLoss": 2554,
+      "lossMaxMP": 20872,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "minghuan-1": {
+          "name": "风炮",
+          "uses": 9,
+          "gamesUsed": 7,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.2692307692307692
+        },
+        "minghuan-2": {
+          "name": "风罩",
+          "uses": 6,
+          "gamesUsed": 6,
+          "usesPerGame": 0.23076923076923078,
+          "gamesUsedRate": 0.23076923076923078
+        },
+        "minghuan-3": {
+          "name": "凤龙诀",
+          "uses": 30,
+          "gamesUsed": 26,
+          "usesPerGame": 1.1538461538461537,
+          "gamesUsedRate": 1
+        },
+        "minghuan-4": {
+          "name": "凤龙诀·风箭",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "minghuan-5": {
+          "name": "风脉回旋",
+          "uses": 9,
+          "gamesUsed": 5,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "minghuan-6": {
+          "name": "凤龙穿岚",
+          "uses": 57,
+          "gamesUsed": 26,
+          "usesPerGame": 2.1923076923076925,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.6923076923076923,
+      "decisiveWinRate": 0.6666666666666666,
+      "meanRemainingMP": 651.6153846153846,
+      "remainingMPRatio": 0.24975675914733025,
+      "meanRemainingMPOnLoss": 319.25,
+      "remainingMPRatioOnLoss": 0.12236489076274434,
+      "clusterCount": 13
+    },
+    {
+      "member": "linluoying",
+      "name": "林洛樱",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 15,
+      "losses": 11,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 15,
+      "mpRemaining": 32413,
+      "maxMP": 65390,
+      "remainingMPOnLoss": 10789,
+      "lossMaxMP": 27665,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "linluoying-1": {
+          "name": "毒瓣飞刃",
+          "uses": 20,
+          "gamesUsed": 19,
+          "usesPerGame": 0.7692307692307693,
+          "gamesUsedRate": 0.7307692307692307
+        },
+        "linluoying-2": {
+          "name": "重力花场",
+          "uses": 17,
+          "gamesUsed": 14,
+          "usesPerGame": 0.6538461538461539,
+          "gamesUsedRate": 0.5384615384615384
+        },
+        "linluoying-3": {
+          "name": "花息增幅",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-4": {
+          "name": "夹竹桃缚",
+          "uses": 27,
+          "gamesUsed": 14,
+          "usesPerGame": 1.0384615384615385,
+          "gamesUsedRate": 0.5384615384615384
+        },
+        "linluoying-5": {
+          "name": "桃毒蚀脉",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "linluoying-6": {
+          "name": "叠瓣毒潮",
+          "uses": 32,
+          "gamesUsed": 26,
+          "usesPerGame": 1.2307692307692308,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.5769230769230769,
+      "decisiveWinRate": 0.5769230769230769,
+      "meanRemainingMP": 1246.6538461538462,
+      "remainingMPRatio": 0.4956874139776724,
+      "meanRemainingMPOnLoss": 980.8181818181819,
+      "remainingMPRatioOnLoss": 0.38998734863546,
+      "clusterCount": 13
+    },
+    {
+      "member": "qingling",
+      "name": "清凌",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 21,
+      "losses": 5,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 21,
+      "mpRemaining": 23879,
+      "maxMP": 67834,
+      "remainingMPOnLoss": 1614,
+      "lossMaxMP": 13045,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "qingling-1": {
+          "name": "鬼之领域",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "qingling-2": {
+          "name": "死神沾染",
+          "uses": 7,
+          "gamesUsed": 5,
+          "usesPerGame": 0.2692307692307692,
+          "gamesUsedRate": 0.19230769230769232
+        },
+        "qingling-3": {
+          "name": "大千剑阵",
+          "uses": 21,
+          "gamesUsed": 16,
+          "usesPerGame": 0.8076923076923077,
+          "gamesUsedRate": 0.6153846153846154
+        },
+        "qingling-4": {
+          "name": "绝望审判",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "qingling-5": {
+          "name": "凤舞六幻",
+          "uses": 15,
+          "gamesUsed": 15,
+          "usesPerGame": 0.5769230769230769,
+          "gamesUsedRate": 0.5769230769230769
+        },
+        "qingling-6": {
+          "name": "鬼剑·裁魂",
+          "uses": 54,
+          "gamesUsed": 26,
+          "usesPerGame": 2.076923076923077,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.8076923076923077,
+      "decisiveWinRate": 0.8076923076923077,
+      "meanRemainingMP": 918.4230769230769,
+      "remainingMPRatio": 0.3520211103576378,
+      "meanRemainingMPOnLoss": 322.8,
+      "remainingMPRatioOnLoss": 0.12372556535070908,
+      "clusterCount": 13
+    },
+    {
+      "member": "yanan",
+      "name": "莫言安",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 11,
+      "losses": 15,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 24,
+      "decisiveWins": 11,
+      "mpRemaining": 10665,
+      "maxMP": 67834,
+      "remainingMPOnLoss": 4260,
+      "lossMaxMP": 39135,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yanan-1": {
+          "name": "断空",
+          "uses": 38,
+          "gamesUsed": 23,
+          "usesPerGame": 1.4615384615384615,
+          "gamesUsedRate": 0.8846153846153846
+        },
+        "yanan-2": {
+          "name": "回风叠絮",
+          "uses": 11,
+          "gamesUsed": 10,
+          "usesPerGame": 0.4230769230769231,
+          "gamesUsedRate": 0.38461538461538464
+        },
+        "yanan-3": {
+          "name": "逸仙剑体",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "yanan-4": {
+          "name": "不尘",
+          "uses": 8,
+          "gamesUsed": 8,
+          "usesPerGame": 0.3076923076923077,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "yanan-5": {
+          "name": "裂穹",
+          "uses": 54,
+          "gamesUsed": 26,
+          "usesPerGame": 2.076923076923077,
+          "gamesUsedRate": 1
+        },
+        "yanan-6": {
+          "name": "风铭回锋",
+          "uses": 25,
+          "gamesUsed": 17,
+          "usesPerGame": 0.9615384615384616,
+          "gamesUsedRate": 0.6538461538461539
+        }
+      },
+      "focus": false,
+      "winRate": 0.4230769230769231,
+      "decisiveWinRate": 0.4583333333333333,
+      "meanRemainingMP": 410.1923076923077,
+      "remainingMPRatio": 0.15722204204381285,
+      "meanRemainingMPOnLoss": 284,
+      "remainingMPRatioOnLoss": 0.10885396703717899,
+      "clusterCount": 13
+    },
+    {
+      "member": "xuejidong",
+      "name": "雪寂冬",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 12,
+      "losses": 14,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 24,
+      "decisiveWins": 12,
+      "mpRemaining": 8225,
+      "maxMP": 65390,
+      "remainingMPOnLoss": 3150,
+      "lossMaxMP": 35210,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "xuejidong-1": {
+          "name": "寒龙之身",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-2": {
+          "name": "寒影奔袭",
+          "uses": 29,
+          "gamesUsed": 18,
+          "usesPerGame": 1.1153846153846154,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "xuejidong-3": {
+          "name": "银翼刃锋",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.07692307692307693,
+          "gamesUsedRate": 0.07692307692307693
+        },
+        "xuejidong-4": {
+          "name": "冰极之怒",
+          "uses": 44,
+          "gamesUsed": 26,
+          "usesPerGame": 1.6923076923076923,
+          "gamesUsedRate": 1
+        },
+        "xuejidong-5": {
+          "name": "寒锋龙躯",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "xuejidong-6": {
+          "name": "冻气龙卷",
+          "uses": 54,
+          "gamesUsed": 26,
+          "usesPerGame": 2.076923076923077,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": false,
+      "winRate": 0.46153846153846156,
+      "decisiveWinRate": 0.5,
+      "meanRemainingMP": 316.34615384615387,
+      "remainingMPRatio": 0.1257837589845542,
+      "meanRemainingMPOnLoss": 225,
+      "remainingMPRatioOnLoss": 0.08946322067594434,
+      "clusterCount": 13
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "robin",
+      "layout": "robin-1v1",
+      "layer": "level-61",
+      "n": 26,
+      "wins": 6,
+      "losses": 20,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 26,
+      "decisiveWins": 6,
+      "mpRemaining": 26600,
+      "maxMP": 65390,
+      "remainingMPOnLoss": 19662,
+      "lossMaxMP": 50300,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 11,
+          "gamesUsed": 8,
+          "usesPerGame": 0.4230769230769231,
+          "gamesUsedRate": 0.3076923076923077
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 9,
+          "gamesUsed": 7,
+          "usesPerGame": 0.34615384615384615,
+          "gamesUsedRate": 0.2692307692307692
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 22,
+          "gamesUsed": 18,
+          "usesPerGame": 0.8461538461538461,
+          "gamesUsedRate": 0.6923076923076923
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.038461538461538464,
+          "gamesUsedRate": 0.038461538461538464
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 3,
+          "gamesUsed": 3,
+          "usesPerGame": 0.11538461538461539,
+          "gamesUsedRate": 0.11538461538461539
+        },
+        "yiqiran-6": {
+          "name": "魂力飞弹·聚束",
+          "uses": 51,
+          "gamesUsed": 26,
+          "usesPerGame": 1.9615384615384615,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.23076923076923078,
+      "decisiveWinRate": 0.23076923076923078,
+      "meanRemainingMP": 1023.0769230769231,
+      "remainingMPRatio": 0.40679002905643064,
+      "meanRemainingMPOnLoss": 983.1,
+      "remainingMPRatioOnLoss": 0.39089463220675946,
+      "clusterCount": 13
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-41",
+      "n": 8,
+      "wins": 0,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 1,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 7,
+      "decisiveWins": 0,
+      "mpRemaining": 6307,
+      "maxMP": 11696,
+      "remainingMPOnLoss": 6307,
+      "lossMaxMP": 11696,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 9,
+          "gamesUsed": 7,
+          "usesPerGame": 1.125,
+          "gamesUsedRate": 0.875
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 10,
+          "gamesUsed": 7,
+          "usesPerGame": 1.25,
+          "gamesUsedRate": 0.875
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.125,
+          "gamesUsedRate": 0.125
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 788.375,
+      "remainingMPRatio": 0.5392441860465116,
+      "meanRemainingMPOnLoss": 788.375,
+      "remainingMPRatioOnLoss": 0.5392441860465116,
+      "clusterCount": 4
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-41",
+      "n": 8,
+      "wins": 1,
+      "losses": 7,
+      "draws": 0,
+      "adjudicated": 3,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 5,
+      "decisiveWins": 1,
+      "mpRemaining": 5113,
+      "maxMP": 11696,
+      "remainingMPOnLoss": 4903,
+      "lossMaxMP": 10234,
+      "levels": [
+        41
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 6,
+          "gamesUsed": 5,
+          "usesPerGame": 0.75,
+          "gamesUsedRate": 0.625
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 19,
+          "gamesUsed": 8,
+          "usesPerGame": 2.375,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 14,
+          "gamesUsed": 8,
+          "usesPerGame": 1.75,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.125,
+      "decisiveWinRate": 0.2,
+      "meanRemainingMP": 639.125,
+      "remainingMPRatio": 0.4371580027359781,
+      "meanRemainingMPOnLoss": 700.4285714285714,
+      "remainingMPRatioOnLoss": 0.4790893101426617,
+      "clusterCount": 4
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-51",
+      "n": 8,
+      "wins": 0,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 0,
+      "mpRemaining": 9090,
+      "maxMP": 15528,
+      "remainingMPOnLoss": 9090,
+      "lossMaxMP": 15528,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.25,
+          "gamesUsedRate": 0.25
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 11,
+          "gamesUsed": 8,
+          "usesPerGame": 1.375,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.125,
+          "gamesUsedRate": 0.125
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 13,
+          "gamesUsed": 8,
+          "usesPerGame": 1.625,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1136.25,
+      "remainingMPRatio": 0.5853941267387944,
+      "meanRemainingMPOnLoss": 1136.25,
+      "remainingMPRatioOnLoss": 0.5853941267387944,
+      "clusterCount": 4
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-51",
+      "n": 8,
+      "wins": 0,
+      "losses": 8,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 8,
+      "decisiveWins": 0,
+      "mpRemaining": 8234,
+      "maxMP": 15528,
+      "remainingMPOnLoss": 8234,
+      "lossMaxMP": 15528,
+      "levels": [
+        51
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 11,
+          "gamesUsed": 8,
+          "usesPerGame": 1.375,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 12,
+          "gamesUsed": 8,
+          "usesPerGame": 1.5,
+          "gamesUsedRate": 1
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 7,
+          "gamesUsed": 7,
+          "usesPerGame": 0.875,
+          "gamesUsedRate": 0.875
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.25,
+          "gamesUsedRate": 0.25
+        }
+      },
+      "focus": true,
+      "winRate": 0,
+      "decisiveWinRate": 0,
+      "meanRemainingMP": 1029.25,
+      "remainingMPRatio": 0.53026790314271,
+      "meanRemainingMPOnLoss": 1029.25,
+      "remainingMPRatioOnLoss": 0.53026790314271,
+      "clusterCount": 4
+    },
+    {
+      "member": "yixiaobei",
+      "name": "伊筱蓓",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-61",
+      "n": 8,
+      "wins": 1,
+      "losses": 7,
+      "draws": 0,
+      "adjudicated": 0,
+      "adjudicatedWins": 0,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 8,
+      "decisiveWins": 1,
+      "mpRemaining": 13026,
+      "maxMP": 20120,
+      "remainingMPOnLoss": 11369,
+      "lossMaxMP": 17605,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yixiaobei-1": {
+          "name": "曼陀罗花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-2": {
+          "name": "玫瑰花露",
+          "uses": 10,
+          "gamesUsed": 7,
+          "usesPerGame": 1.25,
+          "gamesUsedRate": 0.875
+        },
+        "yixiaobei-3": {
+          "name": "罂粟花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-4": {
+          "name": "玫瑰花露·缠枝",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yixiaobei-5": {
+          "name": "栀子花露",
+          "uses": 10,
+          "gamesUsed": 8,
+          "usesPerGame": 1.25,
+          "gamesUsedRate": 1
+        },
+        "yixiaobei-6": {
+          "name": "铃兰花露",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        }
+      },
+      "focus": true,
+      "winRate": 0.125,
+      "decisiveWinRate": 0.125,
+      "meanRemainingMP": 1628.25,
+      "remainingMPRatio": 0.6474155069582505,
+      "meanRemainingMPOnLoss": 1624.142857142857,
+      "remainingMPRatioOnLoss": 0.645782448168134,
+      "clusterCount": 4
+    },
+    {
+      "member": "yiqiran",
+      "name": "伊其然",
+      "suite": "team",
+      "layout": "support-2v2",
+      "layer": "level-61",
+      "n": 8,
+      "wins": 3,
+      "losses": 5,
+      "draws": 0,
+      "adjudicated": 2,
+      "adjudicatedWins": 1,
+      "timeouts": 0,
+      "equalRatioAdjudications": 0,
+      "decisiveN": 6,
+      "decisiveWins": 2,
+      "mpRemaining": 8590,
+      "maxMP": 20120,
+      "remainingMPOnLoss": 5694,
+      "lossMaxMP": 12575,
+      "levels": [
+        61
+      ],
+      "skills": {
+        "yiqiran-1": {
+          "name": "魂力之手",
+          "uses": 11,
+          "gamesUsed": 7,
+          "usesPerGame": 1.375,
+          "gamesUsedRate": 0.875
+        },
+        "yiqiran-2": {
+          "name": "魂力护甲",
+          "uses": 0,
+          "gamesUsed": 0,
+          "usesPerGame": 0,
+          "gamesUsedRate": 0
+        },
+        "yiqiran-3": {
+          "name": "魂力飞弹",
+          "uses": 1,
+          "gamesUsed": 1,
+          "usesPerGame": 0.125,
+          "gamesUsedRate": 0.125
+        },
+        "yiqiran-4": {
+          "name": "羽落术",
+          "uses": 2,
+          "gamesUsed": 1,
+          "usesPerGame": 0.25,
+          "gamesUsedRate": 0.125
+        },
+        "yiqiran-5": {
+          "name": "魂力护甲·折膜",
+          "uses": 2,
+          "gamesUsed": 2,
+          "usesPerGame": 0.25,
+          "gamesUsedRate": 0.25
+        },
+        "yiqiran-6": {
+          "name": "魂力飞弹·聚束",
+          "uses": 13,
+          "gamesUsed": 8,
+          "usesPerGame": 1.625,
+          "gamesUsedRate": 1
+        }
+      },
+      "focus": true,
+      "winRate": 0.375,
+      "decisiveWinRate": 0.3333333333333333,
+      "meanRemainingMP": 1073.75,
+      "remainingMPRatio": 0.4269383697813121,
+      "meanRemainingMPOnLoss": 1138.8,
+      "remainingMPRatioOnLoss": 0.45280318091451294,
+      "clusterCount": 4
+    }
+  ],
+  "overallAdjudicated": 131
+}

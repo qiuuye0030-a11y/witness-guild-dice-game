@@ -8,7 +8,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,10 +17,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Seeded baseline, rules and journey regression
-        run: npm test
+      # The integration check reads the built themes, so build first.
       - name: Build both standalone themes
         run: npm run build
+      - name: Structure, hidden achievements, integration and frozen V14 paired checks
+        run: npm test
       - name: Verify standalone packages
         working-directory: 骰子系统
-        run: python -X utf8 verify-package-1005.py
+        run: python -X utf8 verify-package-1006.py

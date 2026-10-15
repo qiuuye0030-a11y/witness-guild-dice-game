@@ -1,7 +1,7 @@
 {
   "name": "witness-guild-dice-game",
   "private": true,
-  "description": "10.05 offline game, canonical V13 systems and frozen regression baseline",
+  "description": "10.06 offline game, canonical V14 systems and frozen regression baseline",
   "scripts": {
     "test": "node 骰子系统/tools/check.cjs",
     "build": "python -X utf8 骰子系统/_full_package.py"

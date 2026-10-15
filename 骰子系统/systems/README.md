@@ -1,40 +1,44 @@
-# 当前10.05的源码入口
+# 当前10.06源码入口
 
-这里是运行规则的编辑源。顶层的core.js、campaign.js、campaign-events.js、battle-engine-v13-player.js等为构建产物，保留原有浏览器/Node接口，不手工修改。
+以本目录作为运行规则编辑源，保留10.05已完成的模块化结构。V14有效修正已迁入现有模块，Battle与Campaign均只在compose.js装配一次。没有新增运行时逐层覆盖原型的补丁链。
 
-|目录|职责|
+|文件/目录|职责|
 |---|---|
-|dice/engine.js|带种子的随机数、骰点、记录；保留原骰序与拒绝采样|
-|events/legacy-events.json|旧存档兼容文本，不能当作当前事件池|
-|events/scenes.js|按事件类型生成境遇说明；当前168事件和10任务链仍编辑story-source-1003.json|
-|campaign/core.js|人物、成长、事件判定、奖励、猎魂的通用计算|
-|campaign/quests.js|任务链选择、预留、节点推进、连续篇章、终章奖励与旧存档校验|
-|campaign/journey.js|考核次数、四轮猎魂计月、入会日期、环节展示数据|
-|campaign/compose.js|唯一的Campaign公开方法表和静态校验入口|
-|battle/rules.js|战斗内派生属性、技能基础公式、魂力规则|
-|battle/examiners.js|14名会员的最终资料和六技；不再经历历史模板逐轮覆盖|
-|battle/core.js|角色/技能标准化、阵容、行动条、读条、资源与结算、通用AI候选评分|
-|battle/control.js|控制/旧减益类型的执行和估值、兼容配置接口|
-|battle/forecast.js|公开战场状态下的未来行动与资源收益估计|
-|battle/status.js|同源刷新、异源叠加、整场增幅和持续伤害|
-|battle/attributes.js|六维增减、有效属性、费用/读条、主动闪避、最终战斗快照|
-|battle/permanent-effects.js|减益整场持续的统一处理|
-|battle/members.js|血锢、血夜、分身、冰甲等会员机制，以及最终伤害计算|
-|battle/decision.js|唯一AI决策入口，按专属行动、通用行动、多维收益依次选择|
-|battle/compose.js|唯一Battle公开方法表，61个方法一次装配|
+|dice/engine.js|种子随机数、骰点与骰序|
+|events/legacy-events.json|旧存档兼容事件；不能当作当前事件池|
+|events/scenes.js|事件境遇说明；168事件与10任务链仍编辑顶层story-source-1003.json|
+|campaign/core.js|人物、成长、猎魂、奖励、V13/V14读档和真实败局记录|
+|campaign/quests.js|任务链、预留、连续篇章、终章奖励与兼容|
+|campaign/journey.js|考核次数、模式、猎魂计月、日历和旅程快照|
+|campaign/compose.js|唯一Campaign公开方法表|
+|battle/rules.js、examiners.js|基础规则与14名会员最终资料|
+|battle/core.js|角色、资源、行动、时钟与结算；构造器直接处理V14护盾初始化|
+|battle/control.js、control-rules.js|控制规则、效果执行及兼容配置|
+|battle/forecast.js|保留的公开行动序列辅助接口，不再承载旧AI评分策略|
+|battle/status.js、attributes.js、permanent-effects.js|同源刷新、属性、闪避、持续状态、快照|
+|battle/members.js|专属成员机制与共用行动逻辑|
+|battle/shields.js|独立护盾通道、来源分层、外层优先、一次性消耗及自身强化合法目标|
+|battle/projection.js|公开状态副本与真实结算预测，不读取未来随机数|
+|battle/unified-decision.js|唯一正式AI候选、评分与决策；保留冻结V14的18秒策略|
+|battle/compose.js|74个公开方法一次装配|
 
-两个manifest.json明确列出构建顺序。模块通过具名函数协作，保留this表示当前战斗/旅程；不再通过截取prototype方法、覆写方法、再覆写来更新规则。通用行动规划、资源扣除等仍可被多个机制调用，这是复用，不是保留失效实现。
+顶层achievements.js为成就档案与规则编辑源，campaign-creation.js记录初始潜力；campaign-ui.js、skill-text.js、battle-ui-v13.js及主题CSS为界面源。
 
-培养与战斗的派生属性公式在V13中原本存在差异。此次以行为不变为目标，分别保留，不能直接合并成一套公式。WitnessControlV9等旧接口名称为兼容外部入口而保留，不表示游戏降回旧规则。
+顶层core.js、campaign.js、campaign-events.js、battle-engine-v13-player.js、battle-v13-browser.js和battle.js由构建生成，不手改。部分文件名及WitnessControlV9/WitnessV13Rules接口名为兼容保留；实际战斗规则为14。培养与战斗原有的派生公式差异保持。
 
-## 修改与验证
+旧decision.js和poison-ai.js已退出运行源，完整旧文件保存在“历史完整游戏/10.05模块化源码_10.06开发前.zip”。现有模块通过具名函数复用必要的基础行动，不捕获原型旧方法叠加补丁。
+
+在“骰子系统”目录执行：
 
 ```text
 python _full_package.py
 node tools/check.cjs
-python verify-package-1005.py
+node tools/verify-campaign-1006.cjs
+python verify-package-1006.py
 ```
 
-以上命令在“骰子系统”目录运行。构建会先同步systems，再构建两个独立HTML。修改当前事件JSON后，先运行_sync_story_data.py。
+构建入口为_build_1006.py，先同步模块再输出两主题，不覆盖旧10.05成品。游戏10.06，完整存档格式9，战斗快照结构10，战斗规则14。
 
-对照代码在fixtures/v13-baseline，只供测试，不会进入游戏HTML。不要通过修改对照组让差异测试通过。新的玩法修改应另行说明预期差异；本轮游戏版本仍10.05、战斗V13、存档格式9。
+tools/check.cjs需要相邻的冻结V14参考目录；开发源码包包含所需参考。tools/migrate-1006.py、implement-1006-content.py等为一次性迁移记录，不是日常构建入口，不应重复运行。
+
+output/1006-final保留1468场最终对照证据；output/1006-strategy保留未上线策略候选与反事实研究。改动AI后应使用新实验目录与标签，不能复用旧结果说明新代码。

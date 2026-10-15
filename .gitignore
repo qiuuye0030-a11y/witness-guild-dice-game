@@ -21,6 +21,15 @@ Thumbs.db
 *.zip
 
 !骰子系统/output/v13接入版本核对.json
+
+# Frozen 10.06 validation evidence, kept so verify-package-1006.py can re-check.
+!骰子系统/output/1006-final/
+骰子系统/output/1006-final/*
+!骰子系统/output/1006-final/final.manifest.json
+!骰子系统/output/1006-final/final.summary.json
+!骰子系统/output/1006-final/baseline.manifest.json
+!骰子系统/output/1006-final/baseline.summary.json
+!骰子系统/output/1006-final/comparison.json
 排查记录_*/
 V14战斗系统优化_跨电脑交接_*/
 *.png

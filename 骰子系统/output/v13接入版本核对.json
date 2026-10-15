@@ -1,11 +1,11 @@
 {
-  "combatRulesVersion": 13,
+  "combatRulesVersion": 14,
   "playerRulesVersion": 2,
   "tacticsRulesVersion": 1005,
   "snapshotVersion": 10,
-  "baseV12Sha256": "939892e8535cdf9dd4fb5decda9d57e755c8ab2ad0801903bb0019be062fc1e9",
-  "adaptedSha256": "cd915ac1e289001d34fcd0797ceae6fbf02474fdebf51c9354f3bcee3d0bdcd8",
-  "source": "canonical systems/battle modules; V13 behavior unchanged",
+  "baseV12Sha256": "cd091daa539e44645a1d898e4d8930c877bc567f3e391c5bfd4a149298240dc8",
+  "adaptedSha256": "80b386f028e4899e60bb49134f7071dbf2bcb2a1d0871d8ec69edf7e12dc380f",
+  "source": "canonical systems/battle modules; V14 canonical modular implementation",
   "modules": [
     "../dice/engine.js",
     "rules.js",
@@ -15,13 +15,14 @@
     "forecast.js",
     "configure.js",
     "status.js",
-    "poison-ai.js",
     "control-rules.js",
     "../../skill-effects.js",
     "attributes.js",
     "permanent-effects.js",
     "members.js",
-    "decision.js",
+    "shields.js",
+    "projection.js",
+    "unified-decision.js",
     "compose.js"
   ]
 }

@@ -18,10 +18,13 @@ wrapper='''(function(host){
   host.WitnessControlV9=globalThis.WitnessControlV9;
   host.WitnessStackRules=globalThis.WitnessStackRules;
   host.WitnessTacticsV10=globalThis.WitnessTacticsV10;
+  host.WitnessMechanicsV14=globalThis.WitnessMechanicsV14;
+  host.WitnessProjectionV14=globalThis.WitnessProjectionV14;
+  host.WitnessAIV14=globalThis.WitnessAIV14;
 })(window);
 '''
 (p/'battle-v13-browser.js').write_text(wrapper,encoding='utf-8')
 (p/'battle.js').write_text("if(typeof module!=='undefined'&&module.exports){module.exports=require('./v13-runtime.cjs').WitnessBattle;}else{\n"+wrapper+'\n}\n',encoding='utf-8')
-meta={'combatRulesVersion':13,'playerRulesVersion':2,'tacticsRulesVersion':1005,'snapshotVersion':10,'baseV12Sha256':hashlib.sha256((p/'fixtures/v12-player-baseline.js').read_bytes()).hexdigest(),'adaptedSha256':hashlib.sha256(f.read_bytes()).hexdigest(),'source':'canonical systems/battle modules; V13 behavior unchanged','modules':manifest['modules']}
+meta={'combatRulesVersion':14,'playerRulesVersion':2,'tacticsRulesVersion':1005,'snapshotVersion':10,'baseV12Sha256':hashlib.sha256((p/'fixtures/v12-player-baseline.js').read_bytes()).hexdigest(),'adaptedSha256':hashlib.sha256(f.read_bytes()).hexdigest(),'source':'canonical systems/battle modules; V14 canonical modular implementation','modules':manifest['modules']}
 (p/'output/v13接入版本核对.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf-8')
 print('v13 shared engine synchronized')

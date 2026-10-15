@@ -36,7 +36,7 @@ function runtime(unit){
   }
 
   class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,seed='battle',snapshot=null,difficulty='standard'}){
-      if(snapshot){if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||snapshot.combatRulesVersion!==13)throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};return;}
+      if(snapshot){if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);return;}
       const t=templates.find(t=>t.id===enemyId)||templates[0];
       if(playerTemplateId){const chosen=templates.find(t=>t.id===playerTemplateId);if(!chosen)throw Error('角色卡不存在');const l=Math.max(41,Math.min(99,Math.round(testLevel)));soul={name:chosen.weapon};character={level:l,style:chosen.style,rings:[]};}
       soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level;character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
@@ -51,7 +51,7 @@ function runtime(unit){
       this.addLog('斗魂台开启。对手按当前等级切磋；HP或精神护持归零即退场；魂力耗尽不自动失败。同速同时准备时按种子投骰决定顺序。');
       if(difficulty==='admission')this.addLog('入会考核：考官通常低5级但保留所在魂环阶段，伤害为标准的90%，双方行动后均回气0.3秒；按环数开放，最多六技。');
       this.addLog('行动滚轴：敏捷积累行动机会，完成后依次获得回合；实际等级参战，考核降级不会跨越魂环阶段。');
-      this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
+      ShieldActions.initialize(this);this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
     } }
   root.WitnessBattle={Battle,templateUnit,playerUnit,fxFor,templates};
 
@@ -274,7 +274,7 @@ function runtime(unit){
       this.addLog(`${t.name}${mind?'精神护持':'生命'} +${(mind?t.sh:t.hp)-before}`,{type:'heal',target:t.id,fx:'restore'});
     };
 
-  const scheduleAI=function(autoPlayer=false){
+  const scheduleAI=function(autoPlayer=false){this.expireShields();
       if(this.result)return;
       for(let i=0;i<this.units.length;i++){
         this.selectActor();const u=this.unit(this.activeId);
@@ -284,118 +284,14 @@ function runtime(unit){
       }
     };
 
-  const aiChoice=function(u){
-      const allies=this.units.filter(t=>t.team===u.team&&this.alive(t));
-      const foes=this.units.filter(t=>t.team!==u.team&&this.alive(t));if(!foes.length)return null;
-      if(u.bonusAttack){const target=foes.slice().sort((a,b)=>a.hp/a.model.derived.HP-b.hp/b.model.derived.HP||a.id.localeCompare(b.id))[0];return this.actionReason(u,'attack')?{action:'skipBonus',target:u.id}:{action:'attack',target:target.id};}
-      const valid=u.skills.filter(s=>!s.aiDisabled&&!s.effects?.length&&!this.actionReason(u,s.id));
-      const a=this.effective(u),choices=[];
-      const add=(action,target,score)=>{score=this.compactActionScore?this.compactActionScore(u,target,action,score):score;choices.push({action,target:target.id,score:this.darkActionScore?this.darkActionScore(u,target,action,score):score});};
-      const ratio=(t,channel)=>channel==='精神'?t.sh/t.model.derived.SH:t.hp/t.model.derived.HP;
-      const damage=(s,t)=>{
-        const channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
-        const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-        let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
-        if(s?.secondaryFactor)raw+=1.2*s.Q*power*s.secondaryFactor;
-        if(this.value(u,'coldAura'))raw+=a.SA*this.value(u,'coldAura')*(s?.secondaryFactor?2:1);
-        if((s?.category==='持续伤害'||s?.damageMode==='periodic'))raw*=1+this.value(u,'dotBoost');
-        if(s?.rageSpend)raw*=1+.15*Math.min(3,u.rage);
-        if(s?.detonate)raw+=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*d.ticks,0)*(100+this.effective(t).DEF)/100;
-        return this.damageValue(u,t,raw,channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
-      };
-      const horizon=3; // Value over a few future actions, with a resource opportunity cost.
-      if(!this.actionReason(u,'attack'))for(const t of foes)add('attack',t,damage(null,t)*.90/(u.model.derived.HP)*100-this.basicCost(u)/u.model.derived.baseMP*12+8*(1-ratio(t,'生命')));
-      for(const s of valid){
-        const friendly=['强化','防御','治疗','回蓝'].includes(s.category);
-        for(const t of friendly?allies:foes){
-          if(!this.targetOptions(u,s.id).some(x=>x.id===t.id))continue;
-          const cost=this.cost(u,s)/u.model.derived.baseMP*12;
-          let score=-Infinity;
-          if(['攻击','持续伤害'].includes(s.category)){
-            if(s.detonate&&!t.dots.some(d=>d.source===u.id))continue;
-            if((s.category==='持续伤害'||s?.damageMode==='periodic')&&t.dots.some(d=>d.key===u.id+'-'+s.id))continue;
-            score=damage(s,t)/u.model.derived.HP*100-cost;
-            if(s.detonate)score+=12;
-            if((s.category==='持续伤害'||s?.damageMode==='periodic'))score*=.85;
-            if(damage(s,t)>=t[s.channel==='精神'?'sh':'hp']+(s.channel==='精神'?t.shieldSH:t.shieldHP))score+=60;
-          }
-          if(s.category==='强化'){
-            const fields={attackBoost:s.buff??0,agility:s.agility||0,evasion:s.evasion||0,dotBoost:s.dotBuff||0,controlWard:s.controlWard?1:0,coldAura:s.coldOnHit||0};
-            if(!s.evasion&&!s.dotBuff&&s.buff===undefined)fields.attackBoost=.12*s.Q;
-            let improvement=0;
-            for(const [type,v]of Object.entries(fields))improvement+=this.buffImprovement(t,type,v,s,u)*(type==='evasion'?100:type==='agility'?40:type==='controlWard'?5:60);
-            if(!improvement)continue;
-            if(s.dotBuff&&!foes.some(f=>f.dots.some(d=>d.source===u.id))&&!valid.some(x=>(x.category==='持续伤害'||x?.damageMode==='periodic')))continue;
-            if(s.burstActions){improvement*=.55;if(s.evasion&&ratio(t,'生命')>.65)improvement*=.55;}
-            score=improvement*(s.burstActions?1:horizon*.65)-cost;
-            if(this.resourceConfig.selfBuffBonus&&t.id===u.id&&u.mp>=this.cost(u,s)+this.basicCost(u))score+=Math.max(...foes.map(f=>damage(null,f)))*.9/u.model.derived.HP*100-this.basicCost(u)/u.model.derived.baseMP*12;
-            if(s.burstActions&&s.evasion&&ratio(t,'生命')<.65&&foes.some(f=>f.cast?.target===t.id||f.progress>.7))score+=40;
-            // Poison activation when a poison is already present must precede another setup.
-            if(s.dotBuff&&foes.some(f=>f.dots.some(d=>d.source===u.id)))score+=18;
-          }
-          if(s.category==='控制'&&(!s.effectVariant||this.controlRules?.ai==='legacy')){
-            if(t.immuneUntil>this.now||this.value(t,'controlWard'))continue;
-            const willInterrupt=t.cast&&t.cast.end>this.now+this.castTime(u,s)*(s.castMultiplier||1)*1000;
-            const effect=R.controlEffect(s.Q,a,this.effective(t));
-            const duration=Math.min(4,(s.baseControl||effect.duration)*effect.ratio);
-            const enemyHit=t.skills.filter(x=>['攻击','持续伤害'].includes(x.category));
-            const enemyPower=this.effective(t);
-            const estimate=x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?enemyPower.PA:x.mindPower?enemyPower.MA:enemyPower.SA)*(x.factor??1),x.channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
-            const blocked=willInterrupt&&t.cast.skill?estimate(t.cast.skill):0;
-            const typical=enemyHit.length?Math.max(...enemyHit.map(estimate)):0;
-            const window=(duration+t.progress/Math.max(.06,this.actionRate(t)))/(1/this.actionRate(t)+1.5);
-            score=effect.chance/100*(blocked+typical*Math.min(.65,window))/u.model.derived.HP*100-cost;
-            if(s.chipFactor)score+=s.chipFactor*s.Q*a.MA/u.model.derived.HP*100;
-            if(s.dispel&&t.shieldHP)score+=20;
-          }
-          if(s.category==='减益'&&(!s.effectVariant||this.controlRules?.ai==='legacy')){
-            const type=s.channel==='精神'?'mindDown':'defDown';
-            const source=this.statusSource(u,s),defGain=this.statusGain(t,type,.1*s.Q,source),slowGain=this.statusGain(t,'slow',s.slow||0,source),costGain=this.statusGain(t,'costUp',s.costUp||0,source);
-            if(!defGain&&!slowGain&&!costGain)continue;
-            const remaining=Math.min(3,Math.max(0,t.hp/t.model.derived.HP*3));
-            score=(slowGain*22+costGain*18+defGain*15)*remaining-cost;
-            if(this.resourceConfig.domainAI&&s.fieldEvasion){
-              const ownAttack=Math.max(0,...u.skills.filter(x=>['攻击','持续伤害'].includes(x.category)&&!x.detonate).map(x=>damage(x,t)));
-              const ta=this.effective(t),pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
-              const enemyAttack=Math.max(0,...t.skills.filter(x=>['攻击','持续伤害'].includes(x.category)).map(x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?ta.PA:x.mindPower?ta.MA:ta.SA)*(x.factor??1),x.channel,pre)));
-              const horizon=Math.min(2,(s.duration||6)/(1/this.actionRate(u)+1.2));
-              const defense=ta.DEF*130/Math.max(20,t.model.benchmark);
-              const offenseGain=ownAttack*defGain*defense/(100+defense)*Math.min(1,horizon);
-              const defenseGain=enemyAttack*((s.fieldEvasion||0)+(s.slow||0)*.5)*horizon;
-              score=(offenseGain+defenseGain)/u.model.derived.HP*100-cost;
-            }
-
-          }
-          if(s.effectVariant&&this.controlRules?.ai!=='legacy')score=this.scoreControlVariant(u,t,s);
-          if(s.category==='防御'){
-            if((s.channel==='精神'?t.shieldSH:t.shieldHP)>0||t.guard>0)continue;
-            // A shield on the wrong damage channel has no immediate survival value.
-            const threatened=foes.some(f=>f.skills.some(x=>['攻击','持续伤害'].includes(x.category)&&(x.channel==='精神')===(s.channel==='精神'))||(!f.soul.spirit_specialist&&s.channel!=='精神'));
-            if(!threatened)continue;
-            score=(ratio(t,s.channel)<.45?36:ratio(t,s.channel)<.8?18:5)-cost;
-            if(t.cast)score+=4;
-          }
-          if(s.category==='治疗'){
-            const missing=1-ratio(t,s.channel);if(missing<.12)continue;
-            score=missing*65-cost;
-          }
-          if(s.category==='回蓝'&&t.mp<t.model.derived.MP*.3)score=20-cost;
-          if(Number.isFinite(score))add(s.id,t,score);
-        }
-      }
-      if(u.sh<u.model.derived.SH*.35&&u.calmUses<1&&u.mp>=Math.ceil(u.model.derived.baseMP*.08))add('calm',u,35);
-      choices.sort((x,y)=>y.score-x.score||x.action.localeCompare(y.action)||x.target.localeCompare(y.target));
-      return choices[0]||{action:'wait',target:u.id};
-    };
-
-  const nextTime=function(){
+  const nextTime=function(){this.expireShields();
       this.refreshExhaustion();const times=[180000];
       for(const u of this.units)if(this.alive(u)&&u.exhaustTick>this.now)times.push(u.exhaustTick);
       for(const u of this.units){if(this.alive(u)&&!u.cast&&u.id!==this.activeId&&u.progress<1&&!this.value(u,'control')&&u.readyAt<=this.now)times.push(this.now+Math.max(1,Math.ceil((1-u.progress)/this.actionRate(u)*1000)));if(u.cast)times.push(u.cast.end);if(u.readyAt>this.now)times.push(u.readyAt);for(const s of u.statuses)if(s.until>this.now)times.push(s.until);for(const d of u.dots)if(d.next>this.now)times.push(d.next);if(u.shieldUntil>this.now)times.push(u.shieldUntil);}
       return Math.min(...times.filter(t=>t>this.now));
     };
 
-  const tick=function(targetTime,autoPlayer=false){
+  const tick=function(targetTime,autoPlayer=false){this.expireShields();
       if(this.result)return;this.scheduleAI(autoPlayer);const until=Math.min(targetTime,180000);
       let safety=0;
       while(!this.result&&this.now<until&&safety++<5000){
@@ -429,7 +325,7 @@ function runtime(unit){
         if(!this.result)this.scheduleAI(autoPlayer);
       }
       if(safety>=5000)throw Error('时间轴推进异常');
-      if(!this.result&&this.now>=180000)this.finishByTime();
+      if(!this.result&&this.now>=180000)this.finishByTime();this.expireShields();
     };
 
   const hasOffense=function(u){
@@ -466,5 +362,5 @@ function runtime(unit){
 
   const surrender=function(){this.result={winner:1,reason:'认输',time:this.now};this.addLog('你选择结束这场切磋。');};
 
-  return {methods:{unit,alive,status,trait,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,aiChoice,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
+  return {methods:{unit,alive,status,trait,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
 })(globalThis);

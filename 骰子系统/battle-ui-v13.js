@@ -52,7 +52,7 @@
     actionButtons.clear();$('basicActions').replaceChildren();$('battleSkillButtons').replaceChildren();
     for(const [id,name]of Object.entries(basic)){const b=el('button',name,'quiet');b.type='button';b.onclick=()=>action(id);$('basicActions').append(b);actionButtons.set(id,b);}
     for(const s of battle.unit('player').skills){const b=el('button',undefined,'battle-skill');b.type='button';const summary=el('small',WitnessSkillText.describe(s,{battle,unit:battle.unit('player')}));b.append(el('strong',s.name),summary);b._summary=summary;b.onclick=()=>action(s.id);const cooldown=el('em');b.append(cooldown);b._cooldown=cooldown;$('battleSkillButtons').append(b);actionButtons.set(s.id,b);}
-    $('battleTarget').replaceChildren();for(const u of battle.units)$('battleTarget').append(new Option((u.team?'敌方 · ':'我方 · ')+u.name,u.id));$('battleTarget').value='enemy';$('battleTarget').disabled=false;
+    $('battleTarget').replaceChildren();for(const u of battle.units)$('battleTarget').append(new Option((u.team?'敌方 · ':'我方 · ')+u.name,u.id));$('battleTarget').value='enemy';$('battleTarget').disabled=false;$('battleTarget').onchange=()=>update();
   }
   function displayFX(event){
     if(speed===0||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -74,9 +74,8 @@
       else{c.castText.textContent=!battle.alive(u)?'已退场':battle.value(u,'control')?'受控':u.readyAt>battle.now?'回气中':'等待行动';c.castFill.style.width='0%';}
       const badges=[];const add=(key,name,tip,bad=false)=>badges.push({key,name,tip,bad});
       for(const [key,name]of [['attackBoost','攻击增幅'],['agility','敏捷提升'],['evasion','闪避'],['defDown','削防'],['mindDown','精神削弱'],['control','受控'],['fatigue','疲劳'],['dotBoost','毒素激化'],['slow','减速'],['costUp','消耗增加'],['agilityDown','敏捷降低'],['damageDown','伤害降低'],['accuracyDown','命中率降低']]){const statuses=battle.status(u,key);if(statuses.length){const st=statuses.reduce((a,b)=>b.value>a.value?b:a),percent=Math.round(Math.min(battle.stackCap(key),battle.value(u,key))*100),details=statuses.map(s=>(s.from?s.from+'·':'')+(s.label||name)+' '+Math.round(s.value*100)+'%／'+(s.actionsRemaining!==undefined?s.actionsRemaining+'动作':s.until>=180001?'整场':Math.max(0,(s.until-battle.now)/1000).toFixed(1)+'秒')+(s.hitsRemaining!==undefined?'／'+s.hitsRemaining+'次攻击':'')).join('；');add(key,name+(key==='control'?'':percent+'%'),`${name}：${key==='control'?'无法行动':percent+'%'}，剩余 ${st.until>=180001?'整场':Math.max(0,(st.until-battle.now)/1000).toFixed(1)+' 秒'}${st.hitsRemaining!==undefined?'；剩余'+st.hitsRemaining+'次攻击':''}；来源：${details}`,['defDown','mindDown','control','fatigue','slow','costUp','agilityDown','damageDown','accuracyDown'].includes(key));}}
-      if(u.shieldHP)add('shieldHP','护盾 '+u.shieldHP,'抵挡生命伤害；剩余 '+Math.max(0,(u.shieldUntil-battle.now)/1000).toFixed(1)+' 秒');
-      if(u.shieldSH)add('shieldSH','精神盾 '+u.shieldSH,'抵挡精神伤害；剩余 '+Math.max(0,(u.shieldUntil-battle.now)/1000).toFixed(1)+' 秒');
-      if(u.guard)add('guard','一次格挡 '+Math.round(u.guard*100)+'%','下一次生命攻击减伤，随后消失');
+      for(const badge of WitnessUIV14.shieldBadges(battle,u))add(badge.key,badge.name,badge.tip,badge.bad);
+      // Each guard belongs to its own shield layer and is displayed above.
       if(u.immuneUntil>battle.now)add('immune','免控','免疫控制，剩余 '+((u.immuneUntil-battle.now)/1000).toFixed(1)+' 秒');
       if(u.rage)add('rage','霸气 '+u.rage,'霸刀斩消耗最多3层提高威力');
       if(battle.value(u,'activeDodge'))add('activeDodge','主动闪避',`消耗${battle.dodgeCost(u)}点魂力；仅回避直接生命攻击与持续伤害的施加，不清除已附着伤害。`);

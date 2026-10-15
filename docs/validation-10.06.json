@@ -1,0 +1,42 @@
+{
+  "gameVersion": "10.06",
+  "combatRulesVersion": 14,
+  "snapshotVersion": 10,
+  "campaignSaveVersion": 9,
+  "v14MigrationPaired": {
+    "games": 42,
+    "snapshots": 1791,
+    "allSnapshotsExactlyEqual": true
+  },
+  "hiddenAchievements": {
+    "definitions": 8,
+    "boundaryChecks": 11,
+    "spoilerNotesIncluded": false
+  },
+  "finalFrozenComparison": {
+    "mode": "final",
+    "label": "1006-final-frozen",
+    "status": "completed",
+    "casesPerVersion": 734,
+    "total": 1468,
+    "differences": 0,
+    "overallAdjudicated": 131,
+    "timeouts": 0
+  },
+  "editions": {
+    "经典深靛版": {
+      "bytes": 11362180,
+      "sha256": "6126bd16bea538f731347a10b8f14701da3ee025a56ed4ca7550f594ab748b88"
+    },
+    "晨曦朝阳版": {
+      "bytes": 11395323,
+      "sha256": "98c797f5996aade36ca54f2cb58a2f70b7ab411f5eb10ae6a53db5cc78eadbfb"
+    }
+  },
+  "standalonePackageVerified": true,
+  "independentProjectBuildMatches": true,
+  "frozenV14Reference": "见证者公会_V14_完整交接版_2026-10-15: analysis_src, v14_work/src, v14_work/tests, v14_work/load.cjs, v14_work/results/ai-loss-diagnostics.json, audit_results",
+  "privateSaveIncluded": false,
+  "verifiedCodeCommit": null,
+  "remoteCiStatus": "pending"
+}

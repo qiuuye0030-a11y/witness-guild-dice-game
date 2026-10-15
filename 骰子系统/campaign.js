@@ -69,7 +69,7 @@ const upgrade=function(){
       const s=this.state,c=s.character;if(!c)return;this.ensureStoryState();
       c.talent=copy(Creation.TALENTS[(c.talent?.rank||1)-1]);if(!c.identity.originRank)c.identity.originRank=3;
       if(!s.growthPlan){const remaining=Math.max(1,c.time.quarters-s.completed);s.growthPlan={target:41,baseXP:Math.ceil(Math.max(50,(Math.max(0,41-c.level)*100-s.xp)/remaining)*100)/100,createdAt:s.completed};}
-      if(s.phase==='battle'&&s.battleSnapshot&&(s.battleSnapshot.tacticsRulesVersion!==1005||s.battleSnapshot.playerRulesVersion!==2||s.battleSnapshot.version!==10||s.battleSnapshot.combatRulesVersion!==13||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;s.result=null;s.resultHandled=false;s.phase='arrival';}
+      if(s.phase==='battle'&&s.battleSnapshot&&(s.battleSnapshot.tacticsRulesVersion!==1005||s.battleSnapshot.playerRulesVersion!==2||s.battleSnapshot.version!==10||![13,14].includes(s.battleSnapshot.combatRulesVersion)||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;s.result=null;s.resultHandled=false;s.phase='arrival';}
       if(s.hunt&&!s.hunt.stage){const h=s.hunt;if(h.result){h.stage='result';h.plan=h.result.plan||'balanced';h.quality=h.result.quality||50;h.low=h.high=h.years=h.result.years;}else h.stage='plan';h.initial=false;}if(s.version<3&&s.hunt){const h=s.hunt;h.selectedCategory='random';h.location='forest';h.attempt=1;h.legacyFloor=true;h.absorbed=!!h.result;}if(s.version<4){if(s.pending)s.pending.legacyEvent=true;s.eventHistory={};s.failureStreak=0;}c.luck=c.luck||5;c.eventFlags=c.eventFlags||{};c.bones=c.bones||[];c.boneInventory=c.boneInventory||[];c.mutations=c.mutations||[];s.eventHistory=s.eventHistory||{};c.charm=c.charm||5;c.fatigue=c.fatigue||0;this.freezeFortune();s.hiddenRolls=s.hiddenRolls||[];if(s.pending){s.pending.bias=s.pending.bias||10;s.pending.receipts=s.pending.receipts||[];}s.version=8;
     };
 
@@ -515,7 +515,9 @@ const battleOptions=function(enemyId,difficulty='admission',withSupport=false){
 
 const observeBattle=function(battle){
       const s=this.state;if(s.phase!=='battle')return false;s.battleSnapshot=battle.snapshot();
-      if(battle.result&&!s.resultHandled){s.resultHandled=true;s.result=copy(battle.result);
+      if(battle.result&&!s.resultHandled){
+        if(battle.result.winner!==0){s.examDefeats||=[];const attempt=s.battleOptions?.examAttempt||s.attempts;if(!s.examDefeats.includes(attempt))s.examDefeats.push(attempt);}
+        s.resultHandled=true;s.result=copy(battle.result);
         if(battle.result.winner===0){s.phase='ending';s.journal.push({type:'ending',date:copy(s.date),title:'见证者会徽',text:`转正战结束，${s.character.name}得到正式登记。会徽与终端递到手中：欢迎回家。`,level:s.character.level});return true;}
         return true;
       }return false;
@@ -761,7 +763,7 @@ const openStoryEvent=function(selected,training,options){
 
 const settleQuest=function(p){const before=p.questId;performsettleQuestCore.call(this,p);if(p.questId){const chain=chains.find(c=>c.id===p.questId),node=chain?.nodes.find(n=>n.eventId===this.event().id);p.castIntroductions={...(p.castIntroductions||{}),...(node?.castIntroductions||{})};if(!before)p.questStarted=true;}};
 
-const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'10.05'};};
+const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'10.06'};};
 
 const static_validate=function(s,catalog){performvalidateCore(s,catalog);if(s.exam){const e=s.exam,max=e.mode==='member'?11:6;if(!['normal','member'].includes(e.mode)||!Number.isInteger(e.starts)||e.starts<0||e.starts>max||e.opponent!==null&&typeof e.opponent!=='string'||e.badEnding&&(s.phase!=='ending'||e.starts!==max||s.result?.winner===0))throw Error('考核机会存档无效');}if(s.huntDelayMonths!==undefined&&(!Number.isInteger(s.huntDelayMonths)||s.huntDelayMonths<0||s.huntDelayMonths>1000))throw Error('猎魂月份无效');if(s.hunt?.budgetStart!==undefined&&(!Number.isInteger(s.hunt.budgetStart)||s.hunt.budgetStart<1||s.hunt.budgetStart>(s.hunt.attempt||1)))throw Error('猎魂回合无效');return true;};
 return {methods:{ensure1002,setPlayMode,examStatus,assignExaminer,battleOptions,observeBattle,retry,returnArrival,refresh,monthsToAdmission,forceAdmission,elapsedMonths,startQuarter,finishQuarter,continueProgress,huntRound,abandonHunt,questStage,openStoryEvent,settleQuest,snapshot,static_validate}};

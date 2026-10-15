@@ -108,7 +108,7 @@
     character(){
       if(!this.done())throw Error('请完成开局投骰');const v=this.state.results;
       const time={month:v.month,age:v.age,span:v.span,rawSpan:v.span,birthYear:6102-v.age,startYear:6102-v.span,startAge:v.age-v.span,quarters:this.state.timeSchema===2?24:v.span*4,...(this.state.timeSchema===2?{timelineMode:'stages',awakeningAge:6}: {})};
-      return {name:this.state.generatedName,level:v.level,initialLevel:v.level,soulId:v.soulId,style:v.style,release:v.release,luck:v.luck,charm:v.charm,initialLuck:v.luck,initialCharm:v.charm,talent:copy(TALENTS[v.talent-1]),identity:{gender:v.gender,nationality:v.nationality,personality:v.personality,family:ORIGINS[v.originRank-1],originRank:v.originRank,origin:v.region,appearance:v.appearance,motivation:v.motivation,keepsake:v.keepsake},time,deviations:R.KEYS.map(k=>v[k]),wDeviation:v.W,growth:Object.fromEntries([...R.KEYS,'W'].map(k=>[k,0])),rings:[]};
+      return {name:this.state.generatedName,level:v.level,initialLevel:v.level,initialPotential:v.tier,soulId:v.soulId,style:v.style,release:v.release,luck:v.luck,charm:v.charm,initialLuck:v.luck,initialCharm:v.charm,talent:copy(TALENTS[v.talent-1]),identity:{gender:v.gender,nationality:v.nationality,personality:v.personality,family:ORIGINS[v.originRank-1],originRank:v.originRank,origin:v.region,appearance:v.appearance,motivation:v.motivation,keepsake:v.keepsake},time,deviations:R.KEYS.map(k=>v[k]),wDeviation:v.W,growth:Object.fromEntries([...R.KEYS,'W'].map(k=>[k,0])),rings:[]};
     }
     snapshot(){this.state.rngState=this.rng.state;return copy(this.state);}
     static validate(s,catalog){

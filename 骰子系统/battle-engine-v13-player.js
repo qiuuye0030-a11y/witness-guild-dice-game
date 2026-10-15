@@ -1305,7 +1305,7 @@ function runtime(unit){
   }
 
   class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,seed='battle',snapshot=null,difficulty='standard'}){
-      if(snapshot){if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||snapshot.combatRulesVersion!==13)throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};return;}
+      if(snapshot){if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);return;}
       const t=templates.find(t=>t.id===enemyId)||templates[0];
       if(playerTemplateId){const chosen=templates.find(t=>t.id===playerTemplateId);if(!chosen)throw Error('角色卡不存在');const l=Math.max(41,Math.min(99,Math.round(testLevel)));soul={name:chosen.weapon};character={level:l,style:chosen.style,rings:[]};}
       soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level;character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
@@ -1320,7 +1320,7 @@ function runtime(unit){
       this.addLog('斗魂台开启。对手按当前等级切磋；HP或精神护持归零即退场；魂力耗尽不自动失败。同速同时准备时按种子投骰决定顺序。');
       if(difficulty==='admission')this.addLog('入会考核：考官通常低5级但保留所在魂环阶段，伤害为标准的90%，双方行动后均回气0.3秒；按环数开放，最多六技。');
       this.addLog('行动滚轴：敏捷积累行动机会，完成后依次获得回合；实际等级参战，考核降级不会跨越魂环阶段。');
-      this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
+      ShieldActions.initialize(this);this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
     } }
   root.WitnessBattle={Battle,templateUnit,playerUnit,fxFor,templates};
 
@@ -1543,7 +1543,7 @@ function runtime(unit){
       this.addLog(`${t.name}${mind?'精神护持':'生命'} +${(mind?t.sh:t.hp)-before}`,{type:'heal',target:t.id,fx:'restore'});
     };
 
-  const scheduleAI=function(autoPlayer=false){
+  const scheduleAI=function(autoPlayer=false){this.expireShields();
       if(this.result)return;
       for(let i=0;i<this.units.length;i++){
         this.selectActor();const u=this.unit(this.activeId);
@@ -1553,118 +1553,14 @@ function runtime(unit){
       }
     };
 
-  const aiChoice=function(u){
-      const allies=this.units.filter(t=>t.team===u.team&&this.alive(t));
-      const foes=this.units.filter(t=>t.team!==u.team&&this.alive(t));if(!foes.length)return null;
-      if(u.bonusAttack){const target=foes.slice().sort((a,b)=>a.hp/a.model.derived.HP-b.hp/b.model.derived.HP||a.id.localeCompare(b.id))[0];return this.actionReason(u,'attack')?{action:'skipBonus',target:u.id}:{action:'attack',target:target.id};}
-      const valid=u.skills.filter(s=>!s.aiDisabled&&!s.effects?.length&&!this.actionReason(u,s.id));
-      const a=this.effective(u),choices=[];
-      const add=(action,target,score)=>{score=this.compactActionScore?this.compactActionScore(u,target,action,score):score;choices.push({action,target:target.id,score:this.darkActionScore?this.darkActionScore(u,target,action,score):score});};
-      const ratio=(t,channel)=>channel==='精神'?t.sh/t.model.derived.SH:t.hp/t.model.derived.HP;
-      const damage=(s,t)=>{
-        const channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
-        const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-        let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
-        if(s?.secondaryFactor)raw+=1.2*s.Q*power*s.secondaryFactor;
-        if(this.value(u,'coldAura'))raw+=a.SA*this.value(u,'coldAura')*(s?.secondaryFactor?2:1);
-        if((s?.category==='持续伤害'||s?.damageMode==='periodic'))raw*=1+this.value(u,'dotBoost');
-        if(s?.rageSpend)raw*=1+.15*Math.min(3,u.rage);
-        if(s?.detonate)raw+=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*d.ticks,0)*(100+this.effective(t).DEF)/100;
-        return this.damageValue(u,t,raw,channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
-      };
-      const horizon=3; // Value over a few future actions, with a resource opportunity cost.
-      if(!this.actionReason(u,'attack'))for(const t of foes)add('attack',t,damage(null,t)*.90/(u.model.derived.HP)*100-this.basicCost(u)/u.model.derived.baseMP*12+8*(1-ratio(t,'生命')));
-      for(const s of valid){
-        const friendly=['强化','防御','治疗','回蓝'].includes(s.category);
-        for(const t of friendly?allies:foes){
-          if(!this.targetOptions(u,s.id).some(x=>x.id===t.id))continue;
-          const cost=this.cost(u,s)/u.model.derived.baseMP*12;
-          let score=-Infinity;
-          if(['攻击','持续伤害'].includes(s.category)){
-            if(s.detonate&&!t.dots.some(d=>d.source===u.id))continue;
-            if((s.category==='持续伤害'||s?.damageMode==='periodic')&&t.dots.some(d=>d.key===u.id+'-'+s.id))continue;
-            score=damage(s,t)/u.model.derived.HP*100-cost;
-            if(s.detonate)score+=12;
-            if((s.category==='持续伤害'||s?.damageMode==='periodic'))score*=.85;
-            if(damage(s,t)>=t[s.channel==='精神'?'sh':'hp']+(s.channel==='精神'?t.shieldSH:t.shieldHP))score+=60;
-          }
-          if(s.category==='强化'){
-            const fields={attackBoost:s.buff??0,agility:s.agility||0,evasion:s.evasion||0,dotBoost:s.dotBuff||0,controlWard:s.controlWard?1:0,coldAura:s.coldOnHit||0};
-            if(!s.evasion&&!s.dotBuff&&s.buff===undefined)fields.attackBoost=.12*s.Q;
-            let improvement=0;
-            for(const [type,v]of Object.entries(fields))improvement+=this.buffImprovement(t,type,v,s,u)*(type==='evasion'?100:type==='agility'?40:type==='controlWard'?5:60);
-            if(!improvement)continue;
-            if(s.dotBuff&&!foes.some(f=>f.dots.some(d=>d.source===u.id))&&!valid.some(x=>(x.category==='持续伤害'||x?.damageMode==='periodic')))continue;
-            if(s.burstActions){improvement*=.55;if(s.evasion&&ratio(t,'生命')>.65)improvement*=.55;}
-            score=improvement*(s.burstActions?1:horizon*.65)-cost;
-            if(this.resourceConfig.selfBuffBonus&&t.id===u.id&&u.mp>=this.cost(u,s)+this.basicCost(u))score+=Math.max(...foes.map(f=>damage(null,f)))*.9/u.model.derived.HP*100-this.basicCost(u)/u.model.derived.baseMP*12;
-            if(s.burstActions&&s.evasion&&ratio(t,'生命')<.65&&foes.some(f=>f.cast?.target===t.id||f.progress>.7))score+=40;
-            // Poison activation when a poison is already present must precede another setup.
-            if(s.dotBuff&&foes.some(f=>f.dots.some(d=>d.source===u.id)))score+=18;
-          }
-          if(s.category==='控制'&&(!s.effectVariant||this.controlRules?.ai==='legacy')){
-            if(t.immuneUntil>this.now||this.value(t,'controlWard'))continue;
-            const willInterrupt=t.cast&&t.cast.end>this.now+this.castTime(u,s)*(s.castMultiplier||1)*1000;
-            const effect=R.controlEffect(s.Q,a,this.effective(t));
-            const duration=Math.min(4,(s.baseControl||effect.duration)*effect.ratio);
-            const enemyHit=t.skills.filter(x=>['攻击','持续伤害'].includes(x.category));
-            const enemyPower=this.effective(t);
-            const estimate=x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?enemyPower.PA:x.mindPower?enemyPower.MA:enemyPower.SA)*(x.factor??1),x.channel,Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)])));
-            const blocked=willInterrupt&&t.cast.skill?estimate(t.cast.skill):0;
-            const typical=enemyHit.length?Math.max(...enemyHit.map(estimate)):0;
-            const window=(duration+t.progress/Math.max(.06,this.actionRate(t)))/(1/this.actionRate(t)+1.5);
-            score=effect.chance/100*(blocked+typical*Math.min(.65,window))/u.model.derived.HP*100-cost;
-            if(s.chipFactor)score+=s.chipFactor*s.Q*a.MA/u.model.derived.HP*100;
-            if(s.dispel&&t.shieldHP)score+=20;
-          }
-          if(s.category==='减益'&&(!s.effectVariant||this.controlRules?.ai==='legacy')){
-            const type=s.channel==='精神'?'mindDown':'defDown';
-            const source=this.statusSource(u,s),defGain=this.statusGain(t,type,.1*s.Q,source),slowGain=this.statusGain(t,'slow',s.slow||0,source),costGain=this.statusGain(t,'costUp',s.costUp||0,source);
-            if(!defGain&&!slowGain&&!costGain)continue;
-            const remaining=Math.min(3,Math.max(0,t.hp/t.model.derived.HP*3));
-            score=(slowGain*22+costGain*18+defGain*15)*remaining-cost;
-            if(this.resourceConfig.domainAI&&s.fieldEvasion){
-              const ownAttack=Math.max(0,...u.skills.filter(x=>['攻击','持续伤害'].includes(x.category)&&!x.detonate).map(x=>damage(x,t)));
-              const ta=this.effective(t),pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
-              const enemyAttack=Math.max(0,...t.skills.filter(x=>['攻击','持续伤害'].includes(x.category)).map(x=>this.damageValue(t,u,((x.category==='持续伤害'||x?.damageMode==='periodic')?1.4:1.2)*x.Q*(x.channel==='物理'?ta.PA:x.mindPower?ta.MA:ta.SA)*(x.factor??1),x.channel,pre)));
-              const horizon=Math.min(2,(s.duration||6)/(1/this.actionRate(u)+1.2));
-              const defense=ta.DEF*130/Math.max(20,t.model.benchmark);
-              const offenseGain=ownAttack*defGain*defense/(100+defense)*Math.min(1,horizon);
-              const defenseGain=enemyAttack*((s.fieldEvasion||0)+(s.slow||0)*.5)*horizon;
-              score=(offenseGain+defenseGain)/u.model.derived.HP*100-cost;
-            }
-
-          }
-          if(s.effectVariant&&this.controlRules?.ai!=='legacy')score=this.scoreControlVariant(u,t,s);
-          if(s.category==='防御'){
-            if((s.channel==='精神'?t.shieldSH:t.shieldHP)>0||t.guard>0)continue;
-            // A shield on the wrong damage channel has no immediate survival value.
-            const threatened=foes.some(f=>f.skills.some(x=>['攻击','持续伤害'].includes(x.category)&&(x.channel==='精神')===(s.channel==='精神'))||(!f.soul.spirit_specialist&&s.channel!=='精神'));
-            if(!threatened)continue;
-            score=(ratio(t,s.channel)<.45?36:ratio(t,s.channel)<.8?18:5)-cost;
-            if(t.cast)score+=4;
-          }
-          if(s.category==='治疗'){
-            const missing=1-ratio(t,s.channel);if(missing<.12)continue;
-            score=missing*65-cost;
-          }
-          if(s.category==='回蓝'&&t.mp<t.model.derived.MP*.3)score=20-cost;
-          if(Number.isFinite(score))add(s.id,t,score);
-        }
-      }
-      if(u.sh<u.model.derived.SH*.35&&u.calmUses<1&&u.mp>=Math.ceil(u.model.derived.baseMP*.08))add('calm',u,35);
-      choices.sort((x,y)=>y.score-x.score||x.action.localeCompare(y.action)||x.target.localeCompare(y.target));
-      return choices[0]||{action:'wait',target:u.id};
-    };
-
-  const nextTime=function(){
+  const nextTime=function(){this.expireShields();
       this.refreshExhaustion();const times=[180000];
       for(const u of this.units)if(this.alive(u)&&u.exhaustTick>this.now)times.push(u.exhaustTick);
       for(const u of this.units){if(this.alive(u)&&!u.cast&&u.id!==this.activeId&&u.progress<1&&!this.value(u,'control')&&u.readyAt<=this.now)times.push(this.now+Math.max(1,Math.ceil((1-u.progress)/this.actionRate(u)*1000)));if(u.cast)times.push(u.cast.end);if(u.readyAt>this.now)times.push(u.readyAt);for(const s of u.statuses)if(s.until>this.now)times.push(s.until);for(const d of u.dots)if(d.next>this.now)times.push(d.next);if(u.shieldUntil>this.now)times.push(u.shieldUntil);}
       return Math.min(...times.filter(t=>t>this.now));
     };
 
-  const tick=function(targetTime,autoPlayer=false){
+  const tick=function(targetTime,autoPlayer=false){this.expireShields();
       if(this.result)return;this.scheduleAI(autoPlayer);const until=Math.min(targetTime,180000);
       let safety=0;
       while(!this.result&&this.now<until&&safety++<5000){
@@ -1698,7 +1594,7 @@ function runtime(unit){
         if(!this.result)this.scheduleAI(autoPlayer);
       }
       if(safety>=5000)throw Error('时间轴推进异常');
-      if(!this.result&&this.now>=180000)this.finishByTime();
+      if(!this.result&&this.now>=180000)this.finishByTime();this.expireShields();
     };
 
   const hasOffense=function(u){
@@ -1735,7 +1631,7 @@ function runtime(unit){
 
   const surrender=function(){this.result={winner:1,reason:'认输',time:this.now};this.addLog('你选择结束这场切磋。');};
 
-  return {methods:{unit,alive,status,trait,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,aiChoice,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
+  return {methods:{unit,alive,status,trait,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
 })(globalThis);
 
 // ControlActions: live V13 behavior; composed once by systems/battle/compose.js.
@@ -1908,32 +1804,6 @@ const attack=s=>!s||['攻击','持续伤害'].includes(s.category);
 const channel=(u,s)=>s?.channel||(u.soul.spirit_specialist?'精神':'物理');
 const pool=(u,ch)=>ch==='精神'?'sh':'hp';
 const maximum=(u,ch)=>u.model.derived[ch==='精神'?'SH':'HP'];
-  const scoreUnderlyingControl=ControlActions.methods.scoreControlVariant;
-  const compactEnabled=function(u){
-    return u.style==='控制'&&u.skills.some(s=>s.effectVariant)&&['timing','budget','compact'].includes(this.controlRules?.ai);
-  };
-
-  const aiStrike=function(u,t,s,at=0,defense=null){
-    const ch=channel(u,s),a=this.effective(u),pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
-    const power=s?.mindPower?a.MA:ch==='精神'?a.MA:ch==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
-    let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
-    const trait=this.trait(u),dot=(s?.category==='持续伤害'||s?.damageMode==='periodic');
-    if(!s)raw*=trait==='heavy'?1.12:trait==='swift'?.96:['guard','ghost'].includes(trait)?.94:1;
-    if(dot)raw*=(1+this.value(u,'dotBoost'))*(trait==='poison'?1.14:1);
-    if(s?.category==='攻击')raw*=trait==='poison'?.95:trait==='fire'&&ch==='能量'?1.1:1;
-    if(s?.rageSpend)raw*=1+.15*Math.min(3,u.rage);
-    if(defense)pre[t.id][defense.type]=t.model.derived[defense.type]*(1-defense.value);
-    if(s?.penetration)pre[t.id].DEF*=1-s.penetration;
-    let damage=this.damageValue(u,t,raw,ch,pre);
-    if(s?.secondaryFactor)damage+=this.damageValue(u,t,1.2*s.Q*power*s.secondaryFactor,s.secondaryChannel||ch,pre);
-    if(s?.detonate)damage+=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*d.ticks,0);
-    const hit=this.hitChance(u,t,ch),cost=s?this.cost(u,s):this.basicCost(u);
-    const cast=s?this.castTime(u,s)*(s.castMultiplier||1):(1.5+(trait==='heavy'?.15:0))*(trait==='swift'?.88:1)*(1+this.value(u,'slow'));
-    const shield=ch==='精神'?t.shieldSH:t.shieldHP,special=ch!=='精神'&&this.value(t,'soulArmor')>0;
-    const incoming=Math.max(0,damage*(ch!=='精神'&&t.guard?1-t.guard:1)-shield);
-    const absorbed=Math.min(incoming*Math.min(.7,this.resourceConfig.absorb+(special?.15:0)),t.mp/(this.resourceConfig.mpPerDamage*(special?.75:1)));
-    return {s,ch,cost,cast,hit,damage:damage*hit,health:(incoming-absorbed)*hit,at,dot};
-  };
 
   const aiAvailable=function(u,s,at,mp){
     return attack(s)&&(!s||!s.aiDisabled&&this.cooldownUntil(u,s)<=this.now+at*1000&&(!s.maxUses||(u.uses[s.id]||0)<s.maxUses)&&(!s.rageSpend||u.rage>0))&&mp>=(s?this.cost(u,s):this.basicCost(u));
@@ -1969,81 +1839,7 @@ const maximum=(u,ch)=>u.model.derived[ch==='精神'?'SH':'HP'];
     return damage/maximum(t,hit.ch)*100*(damage>=hp?3:hp<maximum(t,hit.ch)*.35?1.6:1);
   };
 
-  const scoreControlVariant=function(u,t,s){
-    if(!this.compactEnabled(u))return scoreUnderlyingControl.call(this,u,t,s);
-    const kind=s.effectVariant,v=root.WitnessControlV9.variants[kind];
-    const cast=this.castTime(u,s)*(s.castMultiplier||1),cost=this.cost(u,s),mode=this.controlRules.ai;
-    const reserve=mode==='timing'?1:1+2*Math.pow(1-u.mp/u.model.derived.MP,2);
-    const penalty=cost/u.model.derived.baseMP*12*reserve;
-    const chance=Math.round(R.controlEffect(s.Q,this.effective(u),this.effective(t)).chance)/100;
-    const cycle=.3+1/this.actionRate(u),after=cast+cycle;
-    const target=t.cast?this.unit(t.cast.target)||u:u;
-    const incoming=this.aiSequence(t,target,cast+20),danger=incoming.filter(x=>x.at>=cast);
-    let value=0;
-    if(s.category==='控制'){
-      if(t.immuneUntil>this.now||this.value(t,'controlWard'))return -Infinity;
-      const e=this.controlNumbers(u,t,s),interrupt=t.cast&&t.cast.end>this.now+cast*1000;
-      if(kind==='interrupt'&&!interrupt&&t.progress<.8)return -Infinity;
-      if(interrupt){
-        const paid=incoming.find(x=>x.paid);
-        value=paid?this.aiThreatValue(t,target,paid):4;
-      }
-      const window=e.duration+Math.max(0,t.progress-.4)/this.actionRate(t);
-      const threatened=danger.filter(x=>x.at<cast+window&&!x.paid);
-      const follow=this.aiSequence(u,t,cast+window,after,u.mp-cost);
-      const dots=t.dots.filter(d=>d.source===u.id&&d.next<this.now+(cast+window)*1000);
-      const canFinish=['物理','精神'].some(ch=>follow.filter(x=>(x.ch==='精神')===(ch==='精神')).reduce((n,x)=>n+x.health,0)>=t[pool(t,ch)])||dots.some(d=>d.damage*d.ticks>=t[pool(t,d.channel)]);
-      // A delay matters most when it prevents imminent defeat or enables a finish.
-      const urgent=threatened.some(x=>this.aiThreatValue(t,target,x)>35);
-      value+=threatened.reduce((n,x)=>n+this.aiThreatValue(t,target,x),0)*(canFinish||urgent?.65:.12);
-      return e.chance/100*value-penalty;
-    }
-    const type=v.status||(s.channel==='精神'?'mindDown':'defDown');
-    const current=this.value(t,type),next=this.stackedNext(t,type,v.value,this.statusSource(u,s));
-    if(next<=current+1e-9)return -Infinity;
-    if(kind==='breach'||kind==='corrosion'){
-      const duration=kind==='breach'?this.controlRules.burstSeconds:35;
-      const defense={type:s.channel==='精神'?'MDEF':'DEF',value:next};
-      const follow=this.aiSequence(u,t,cast+duration,after,u.mp-cost);
-      for(const hit of follow){
-        if((hit.ch==='精神')!==(s.channel==='精神'))continue;
-        const enhanced=this.aiStrike(u,t,hit.s,hit.at,defense);
-        value+=Math.max(0,enhanced.damage-hit.damage)/u.model.derived.HP*100;
-      }
-    }else{
-      const covered=danger.filter(x=>x.at<cast+(v.duration||20));
-      for(const [i,hit] of covered.entries()){
-        const reduction=kind==='weaken'?(next-current)/(1-current):kind==='slow'?1-Math.sqrt((1-next)/(1-current)):i<2?Math.min(next-current,Math.max(0,hit.hit-.05))/Math.max(.05,hit.hit):0;
-        value+=this.aiThreatValue(t,target,hit)*reduction;
-      }
-      if(kind==='weaken')for(const ally of this.units.filter(x=>x.team===u.team&&this.alive(x)))for(const dot of ally.dots.filter(d=>d.source===t.id))value+=dot.damage*dot.ticks*(next-current)/maximum(ally,dot.channel)*100;
-    }
-    if(mode!=='timing'&&u.mp-cost<this.basicCost(u)&&!t.dots.some(d=>d.source===u.id)&&!this.units.some(x=>x.team===u.team&&x.id!==u.id&&this.hasOffense(x)))value*=.15;
-    return chance*value-penalty;
-  };
-
-  const compactActionScore=function(u,t,action,score){
-    if(!this.compactEnabled(u)||this.controlRules.ai==='timing')return score;
-    const s=u.skills.find(x=>x.id===action);
-    if(this.controlRules.ai==='compact'&&s?.category==='防御'&&!t.dots.length&&!this.units.some(x=>x.team!==u.team&&this.alive(x)&&(this.hasOffense(x)||x.cast&&attack(x.cast.skill)&&x.cast.action!=='wait')))return -Infinity;
-    if(action!=='attack'&&(!s||!attack(s)))return score;
-    const hit=this.aiStrike(u,t,s),hp=t[pool(t,hit.ch)];
-    const remaining=Math.max(0,u.mp-hit.cost),efficiency=hit.damage/Math.max(1,hit.cost);
-    const budget=1+2*Math.pow(1-u.mp/u.model.derived.MP,2);
-    let value=hit.damage/u.model.derived.HP*100-hit.cost/u.model.derived.baseMP*12*budget;
-    value+=efficiency*4*(1-u.mp/u.model.derived.MP);
-    if(!hit.dot&&hit.health>=hp)value+=60;
-    if(hit.dot)value*=.85;
-    if(this.controlRules.ai==='compact'){
-      const next=this.aiSequence(u,t,20,hit.cast+.3+1/this.actionRate(u),remaining,null,s);
-      const same=next.filter(x=>(x.ch==='精神')===(hit.ch==='精神')).slice(0,2);
-      const followDamage=same.reduce((n,x)=>n+x.health,0);
-      if(hit.health+followDamage>=hp)value+=12;
-    }
-    return value;
-  };
-root.WitnessCompactAI={version:10};
-  return {methods:{compactEnabled,aiStrike,aiAvailable,aiSequence,aiThreatValue,scoreControlVariant,compactActionScore}};
+  return {methods:{aiAvailable,aiSequence,aiThreatValue}};
 })(globalThis);
 
 WitnessControlV9.setConfig({ai:"compact"});
@@ -2096,49 +1892,6 @@ const caps={};
   };
 root.WitnessStackRules={version:13,numeric:[...numeric],caps};
   return {methods:{statusSource,stackCap,value,stackedNext,statusGain,buffImprovement,setStatus,setBuff,dotDamage}};
-})(globalThis);
-
-// PoisonStrategy: live V13 behavior; composed once by systems/battle/compose.js.
-const PoisonStrategy=(function(root){
-'use strict';
-
-  const darkActionScore=function(u,t,action,score){
-    if(u.templateId!=='anmu')return score;
-    const s=u.skills.find(x=>x.id===action),foes=this.units.filter(x=>x.team!==u.team&&this.alive(x));
-    const poison=u.skills.find(x=>(x.category==='持续伤害'||x?.damageMode==='periodic'));
-    const readyPoison=poison&&!this.actionReason(u,poison.id);
-    const dots=foes.flatMap(f=>f.dots.filter(d=>d.source===u.id).map(d=>({f,d})));
-    const penalty=cost=>cost/u.model.derived.baseMP*12;
-    if(action==='attack'||s?.category==='攻击'){
-      const hit=this.aiStrike(u,t,s);
-      if(s?.detonate){
-        const land=this.now+hit.cast*1000,own=t.dots.filter(d=>d.source===u.id);
-        const stored=own.reduce((n,d)=>n+this.dotDamage(d)*d.ticks,0);
-        const later=own.reduce((n,d)=>n+Array.from({length:d.ticks},(_,i)=>d.next+i*3000).filter(at=>at>land).length*this.dotDamage(d),0);
-        const damage=Math.max(0,hit.damage-(stored-later)*hit.hit),health=hit.health*damage/Math.max(1,hit.damage);
-        return health>=t.hp?80:(damage-later*hit.hit*.75)/u.model.derived.HP*100-penalty(hit.cost);
-      }
-      return hit.health>=t[hit.ch==='精神'?'sh':'hp']?Math.max(score,80):score;
-    }
-    if((s?.category==='持续伤害'||s?.damageMode==='periodic')){
-      const hit=this.aiStrike(u,t,s),basic=this.aiStrike(u,t,null),cycle=basic.cast+.3+1/this.actionRate(u);
-      const existing=t.dots.reduce((n,d)=>n+this.dotDamage(d)/3,0);
-      const life=t.hp/Math.max(1,basic.health/cycle+existing),ticks=Math.max(1,Math.min(3,Math.floor(life/3)));
-      return hit.damage*(ticks/3)*.85/u.model.derived.HP*100-penalty(hit.cost);
-    }
-    if(s?.category!=='强化')return score;
-    if(s.dotBuff&&t.id!==u.id)return -Infinity;
-    if(!dots.length&&readyPoison)return -Infinity;
-    if(s.dotBuff){
-      const cast=this.castTime(u,s)*(s.castMultiplier||1),land=this.now+cast*1000;
-      const remaining=dots.reduce((n,{d})=>n+Array.from({length:d.ticks},(_,i)=>d.next+i*3000).filter(at=>at>land).length*this.dotDamage(d),0);
-      const future=poison&&u.mp>=this.cost(u,s)+this.cost(u,poison);
-      if(!remaining&&!future)return -Infinity;
-    }
-    return score;
-  };
-
-  return {methods:{darkActionScore}};
 })(globalThis);
 
 (function(root){
@@ -2223,7 +1976,7 @@ const config={coefficient:.40,bonus:.35,cap:.90,costFraction:.02,duration:4};
 
   const makeSkill=args=>SE.make(buildUnderlyingSkill,args);
 
-  const snapshot=function(){return {version:10,soulControlVersion:11,combatRulesVersion:13,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1005,dodgeConfig:{...config,...this.dodgeConfig}};};
+  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:14,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1005,dodgeConfig:{...config,...this.dodgeConfig}};};
 
   const dodgeCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*(this.dodgeConfig||config).costFraction));};
 
@@ -2410,26 +2163,855 @@ root.WitnessCombatV13.specialMembers=true;
   return {methods:{controlNumbers,gainRage,damageValue,applyDamage,targetOptions,actionReason,command,hit,plan,tryControl}};
 })(globalThis);
 
-// One AI decision entry: member actions, legal actions, then multi-stat value.
-const BattleDecision=(function(root){
-const R=root.WitnessRules;
-const aiChoice=function(u){
-    if(u.phantoms&&!u.bonusAttack){const foes=this.units.filter(x=>x.team!==u.team&&this.alive(x));if(!this.actionReason(u,'phantomSwap')&&u.hp/u.model.derived.HP<.35&&foes.some(x=>x.cast?.target===u.id))return {action:'phantomSwap',target:u.id,score:100};if(u.phantoms>1&&u.actions<6&&!this.actionReason(u,'phantomSacrifice'))return {action:'phantomSacrifice',target:u.id,score:30};}
+const ShieldActions=(function(root){
+  const copy = value => JSON.parse(JSON.stringify(value));
+  const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const channelName = channel => channel === '精神' ? '精神' : '生命';
+  const selfOnly = skill => !!(skill && (skill.phantomDance || skill.iceArmor));
 
-    const original=u.skills;let choice;try{u.skills=original.filter(s=>!s.effects?.length);this._valuingAI=true;try{choice=BattleCore.methods.aiChoice.call(this,u);}finally{this._valuingAI=false;}}finally{u.skills=original;}if(u.bonusAttack)return choice;
-    let best=choice,bestScore=Number.isFinite(choice?.score)?choice.score:0;
-    for(const s of u.skills.filter(s=>s.effects?.length&&!this.actionReason(u,s.id))){for(const t of this.targetOptions(u,s.id)){
-      let gain=0;for(const e of s.effects){const type=(s.category==='强化'?'statUp':'statDown')+e.key,source=this.statusSource(u,s),current=this.status(t,type).filter(x=>x.source!==source).reduce((n,x)=>n+x.value,0),own=this.status(t,type).find(x=>x.source===source)?.value||0;gain+=Math.max(0,current+e.value-(current+own))*(e.key==='A'?65:e.key==='C'?45:70);}
-      let score=gain*(s.category==='减益'?.65:1)-this.cost(u,s)/u.model.derived.baseMP*12;if(s.category==='减益')score*=R.controlEffect(s.Q,this.effective(u),this.effective(t)).chance/100;
-      if(score>bestScore){best={action:s.id,target:t.id,score};bestScore=score;}
-    }}return best;
+  // V13 has no source information for shields. Preserve at most one legacy layer
+  // per channel until its original deadline; never reimport an initialized unit.
+  function legacyLayers(unit, now) {
+    const until = number(unit.shieldUntil);
+    if (until <= now) return [];
+    const layers = [];
+    const lifeAmount = Math.max(0, number(unit.shieldHP));
+    const mindAmount = Math.max(0, number(unit.shieldSH));
+    if (lifeAmount > 0 || number(unit.guard) > 0) layers.push({
+      source: 'legacy:' + unit.id + ':life', casterId: null, skillId: null,
+      label: '原战报生命防护', channel: '生命', amount: lifeAmount,
+      guard: Math.max(0, number(unit.guard)), oneHit: !!unit.oneHit,
+      until, rageOnBreak: !!unit.rageOnBreak, order: 0, legacy: true
+    });
+    if (mindAmount > 0) layers.push({
+      source: 'legacy:' + unit.id + ':mental', casterId: null, skillId: null,
+      label: '原战报精神防护', channel: '精神', amount: mindAmount,
+      guard: 0, oneHit: false, until, rageOnBreak: false, order: 0, legacy: true
+    });
+    return layers;
+  }
+  function readLayers(unit, now) {
+    const source = Array.isArray(unit.shieldLayers) ? unit.shieldLayers : legacyLayers(unit, now);
+    return source.filter(layer => number(layer.until) > now &&
+      (number(layer.amount) > 0 || number(layer.guard) > 0)).map(layer => ({
+        ...layer, channel: channelName(layer.channel),
+        amount: Math.max(0, number(layer.amount)), guard: Math.max(0, number(layer.guard)),
+        order: number(layer.order), until: number(layer.until),
+        oneHit: !!layer.oneHit, rageOnBreak: !!layer.rageOnBreak
+      }));
+  }
+  function syncLegacy(unit, now) {
+    const layers = unit.shieldLayers || [];
+    const active = layers.filter(layer => layer.until > now);
+    const life = active.filter(layer => layer.channel === '生命').sort((a, b) => b.order - a.order);
+    const mental = active.filter(layer => layer.channel === '精神');
+    unit.shieldHP = life.reduce((sum, layer) => sum + layer.amount, 0);
+    unit.shieldSH = mental.reduce((sum, layer) => sum + layer.amount, 0);
+    // The earliest deadline keeps the existing time scheduler correct. Layer-aware
+    // UI can use shieldLayersFor() to display each independent expiration.
+    unit.shieldUntil = active.length ? Math.min(...active.map(layer => layer.until)) : 0;
+    unit.guard = Math.max(0, ...life.map(layer => layer.guard));
+    unit.oneHit = !!life[0]?.oneHit;
+    unit.rageOnBreak = !!life[0]?.rageOnBreak;
+  }
+
+  const shieldLayersFor = function (unit, channel) {
+    return readLayers(unit, this.now).filter(layer => channel === undefined ||
+      layer.channel === channelName(channel)).sort((a, b) => b.order - a.order);
   };
-return {methods:{aiChoice}};
+  const expireShields = function (unit) {
+    for (const target of unit ? [unit] : this.units || []) {
+      target.shieldLayers = readLayers(target, this.now);
+      syncLegacy(target, this.now);
+    }
+  };
+  const addShieldLayer = function (target, spec) {
+    this.expireShields(target);
+    const channel = channelName(spec.channel);
+    const source = String(spec.source || ('system:' + channel));
+    const highestOrder = Math.max(0, ...this.units.flatMap(unit =>
+      (unit.shieldLayers || []).map(layer => number(layer.order))));
+    this.shieldLayerSequence = Math.max(number(this.shieldLayerSequence), highestOrder) + 1;
+    const layer = {
+      source, casterId: spec.casterId || null, skillId: spec.skillId || null,
+      label: spec.label || '防护', channel,
+      amount: Math.max(0, Math.round(number(spec.amount))),
+      guard: Math.max(0, Math.min(1, number(spec.guard))),
+      oneHit: !!spec.oneHit, until: number(spec.until, this.now + 8000),
+      rageOnBreak: !!spec.rageOnBreak, order: this.shieldLayerSequence
+    };
+    target.shieldLayers = target.shieldLayers.filter(old =>
+      old.channel !== channel || old.source !== source);
+    if (layer.until > this.now && (layer.amount > 0 || layer.guard > 0)) target.shieldLayers.push(layer);
+    syncLegacy(target, this.now);
+    return { ...layer };
+  };
+
+  // Pure preview: damage has already passed damageValue() (ordinary defense,
+  // admission scaling and V13 ice-armour snapshot). Do not apply those twice.
+  const previewShieldDamage = function (target, damage, channel, source) {
+    const all = readLayers(target, this.now);
+    const kind = channelName(channel);
+    const layers = all.filter(layer => layer.channel === kind).sort((a, b) => b.order - a.order);
+    let incoming = Math.max(0, number(damage));
+    const reduction = source ? this.value(source, 'damageDown') : 0;
+    if (reduction && incoming > 0) incoming = Math.max(1, Math.round(incoming * (1 - reduction)));
+    if (source && this.trait(source) === 'annihilation' && layers.some(layer => layer.amount > 0)) {
+      incoming = Math.round(incoming * 1.3);
+    }
+    const beforeShields = incoming;
+    let blocked = 0, guardBlocked = 0, rageTriggers = 0;
+    const consumed = new Set();
+    const hits = [];
+    for (const layer of layers) {
+      if (incoming <= 0) break; // Untouched inner layers keep one-hit eligibility.
+      const before = incoming;
+      let guardAmount = 0;
+      if (layer.guard > 0) {
+        const reduced = Math.max(0, Math.round(incoming * (1 - layer.guard)));
+        guardAmount = incoming - reduced;
+        guardBlocked += guardAmount;
+        incoming = reduced;
+        layer.guard = 0;
+      }
+      const absorbed = Math.min(layer.amount, incoming);
+      layer.amount -= absorbed;
+      incoming -= absorbed;
+      blocked += absorbed;
+      const removed = layer.oneHit || (layer.amount <= 0 && layer.guard <= 0);
+      if (removed) {
+        consumed.add(layer);
+        if (layer.rageOnBreak) rageTriggers++;
+      }
+      hits.push({ source: layer.source, label: layer.label, incoming: before,
+        blocked: absorbed, guardBlocked: guardAmount, removed, remaining: removed ? 0 : layer.amount });
+    }
+    return {
+      beforeShields, afterShields: incoming, blocked, guardBlocked, rageTriggers, hits,
+      nextLayers: all.filter(layer => !consumed.has(layer) && (layer.amount > 0 || layer.guard > 0))
+    };
+  };
+  const previewProtection = function (target, damage, channel, source) {
+    const shield = this.previewShieldDamage(target, damage, channel, source);
+    const special = channel !== '精神' && this.value(target, 'soulArmor') > 0;
+    const fraction = Math.min(.70, this.resourceConfig.absorb + (special ? .15 : 0));
+    const unitCost = this.resourceConfig.mpPerDamage * (special ? .75 : 1);
+    const absorbed = Math.min(Math.floor(shield.afterShields * fraction),
+      Math.floor(Math.max(0, target.mp) / unitCost));
+    const mpCost = Math.ceil(absorbed * unitCost);
+    return { ...shield, absorbed, mpCost, healthDamage: shield.afterShields - absorbed };
+  };
+
+  const dispelShieldLayers = function (target, fraction, channel = '生命') {
+    this.expireShields(target);
+    const selected = target.shieldLayers.filter(layer => layer.channel === channelName(channel))
+      .sort((a, b) => b.order - a.order);
+    const multiplier = 1 - Math.max(0, Math.min(1, number(fraction)));
+    const before = selected.reduce((sum, layer) => sum + layer.amount, 0);
+    const expected = Math.round(before * multiplier);
+    let assigned = 0;
+    for (const layer of selected) {
+      layer._dispelFraction = layer.amount * multiplier - Math.floor(layer.amount * multiplier);
+      layer.amount = Math.floor(layer.amount * multiplier);
+      assigned += layer.amount;
+    }
+    // Preserve the old aggregate rounding exactly, with deterministic remainder
+    // assignment to the largest fractional share (outer layer breaks ties).
+    const remainderOrder = [...selected].sort((a, b) =>
+      b._dispelFraction - a._dispelFraction || b.order - a.order);
+    for (let i = 0; i < expected - assigned; i++) remainderOrder[i % remainderOrder.length].amount++;
+    for (const layer of selected) delete layer._dispelFraction;
+    target.shieldLayers = target.shieldLayers.filter(layer => layer.amount > 0 || layer.guard > 0);
+    syncLegacy(target, this.now);
+    return before - expected;
+  };
+
+  const oldTargets = MemberActions.methods.targetOptions;
+  const targetOptions = function (unit, action) {
+    const skill = unit?.skills.find(item => item.id === action);
+    return selfOnly(skill) ? (this.alive(unit) ? [unit] : []) : oldTargets.call(this, unit, action);
+  };
+  const oldCommand = MemberActions.methods.command;
+  const command = function (id, action, targetId) {
+    const unit = this.unit(id), skill = unit?.skills.find(item => item.id === action);
+    if (!this.result && selfOnly(skill) && targetId !== undefined && targetId !== null && targetId !== id) {
+      return '该魂技仅能对自身施放';
+    }
+    return oldCommand.call(this, id, action, targetId);
+  };
+  const oldPlan = MemberActions.methods.plan;
+  const plan = function (unit, cast, pre) {
+    this.expireShields();
+    const skill = cast.skill;
+    // Restored V13 in-flight shape casts follow the now-explicit self target.
+    if (selfOnly(skill) && cast.target !== unit.id) cast = { ...cast, target: unit.id };
+    const target = this.unit(cast.target);
+    if (skill?.category === '防御') {
+      const result = { u: unit, t: target, cast, s: skill, damage: 0, heal: 0,
+        channel: skill.channel, effects: [] };
+      if (!target || !this.alive(target)) return result;
+      const mental = skill.channel === '精神';
+      let amount = skill.guard ? 0 : Math.round(.45 * (skill.Q || 1) *
+        (mental ? pre[unit.id].MA : pre[unit.id].SA));
+      const trait = this.trait(unit);
+      if (trait === 'guard' && !mental) amount = Math.round(amount * 1.16);
+      if (trait === 'water' && !mental) amount = Math.round(amount * 1.12);
+      if (trait === 'ghost' && mental) amount = Math.round(amount * 1.16);
+      result.effects.push(() => this.addShieldLayer(target, {
+        source: this.statusSource(unit, skill), casterId: unit.id, skillId: skill.id,
+        label: skill.name, channel: mental ? '精神' : '生命', amount,
+        guard: skill.guard || 0, oneHit: !!skill.oneHit,
+        rageOnBreak: !!skill.rageOnBreak, until: this.now + 8000
+      }));
+      return result;
+    }
+    if (skill?.category === '控制' && skill.dispel) {
+      const safeCast = { ...cast, skill: { ...skill, dispel: 0 } };
+      const result = oldPlan.call(this, unit, safeCast, pre);
+      result.s = skill;
+      result.cast = cast;
+      if (target && this.alive(target)) result.effects.unshift(() => {
+        const amount = this.dispelShieldLayers(target, skill.dispel, '生命');
+        if (amount) this.addLog(target.name + '的生命护盾削减' + amount,
+          { type: 'dispel', actor: unit.id, target: target.id, amount, fx: skill.fx });
+      });
+      return result;
+    }
+    return oldPlan.call(this, unit, cast, pre);
+  };
+
+  // Same V13 resource/health semantics, with only shield traversal replaced.
+  // Keep damageDown, blood marks, life trait healing and resource event payloads.
+  const applyDamage = function (target, damage, channel, source, fx) {
+    if (!damage || !this.alive(target)) return;
+    this.expireShields(target);
+    const beforeHP = target.hp;
+    const mind = channel === '精神';
+    const beforeProtection = mind ? target.sh : target.hp;
+    const outcome = this.previewProtection(target, damage, channel, source);
+    target.shieldLayers = outcome.nextLayers;
+    syncLegacy(target, this.now);
+    for (let i = 0; i < outcome.rageTriggers; i++) this.gainRage(target, 1);
+    target.mp -= outcome.mpCost;
+    const incoming = outcome.healthDamage;
+    if (mind) target.sh = Math.max(0, target.sh - incoming);
+    else if (target.release === '召唤') {
+      if (target.petAlive) {
+        target.petHP = Math.max(0, target.petHP - incoming);
+        if (target.petHP === 0) {
+          target.petAlive = false;
+          target.cast = null;
+          this.endTurn(target, false);
+          target.readyAt = Math.max(target.readyAt, this.now + 2000);
+          this.addLog(target.name + '的召唤体败退，停顿2秒。');
+        }
+      } else target.bodyHP = Math.max(0, target.bodyHP - incoming);
+      target.hp = target.bodyHP + target.petHP;
+    } else target.hp = Math.max(0, target.hp - incoming);
+    if (outcome.mpCost) this.addLog(target.name + '受击同时结算：' +
+      (mind ? '精神护持' : '生命') + ' −' + (beforeProtection - (mind ? target.sh : target.hp)) +
+      '，魂力 −' + outcome.mpCost, {
+        type: 'armor', target: target.id, actor: source?.id,
+        paid: outcome.mpCost, absorbed: outcome.absorbed,
+        healthLost: beforeProtection - (mind ? target.sh : target.hp),
+        remainingDamage: incoming, channel
+      });
+    this.addLog(target.name + (mind ? '精神护持' : '生命') + ' −' + incoming +
+      (outcome.blocked ? '（盾挡' + outcome.blocked + '）' : ''), {
+        type: 'damage', actor: source?.id, target: target.id, fx,
+        amount: incoming, channel, shieldBlocked: outcome.blocked,
+        guardBlocked: outcome.guardBlocked, shieldLayersHit: outcome.hits
+      });
+    if (!mind && target.style === '辅助' && !target.firstHit &&
+        this.trait(target) === 'life' && target.hp > 0) {
+      target.firstHit = true;
+      this.heal(target, Math.round(target.model.derived.HP * .03), '生命');
+    }
+    if (source?.soul.name === '血君' && target.hp < beforeHP) {
+      target.bloodMarks ||= [];
+      if (!target.bloodMarks.includes(source.id)) target.bloodMarks.push(source.id);
+    }
+  };
+
+
+  function initialize(battle) {
+    battle.combatRulesVersion=14; battle.v14ShieldVersion=1;
+    battle.expireShields();
+    battle.shieldLayerSequence=Math.max(number(battle.shieldLayerSequence),0,...battle.units.flatMap(u=>u.shieldLayers.map(l=>number(l.order))));
+    for(const unit of battle.units){
+      if(selfOnly(unit.cast?.skill))unit.cast.target=unit.id;
+      for(const skill of unit.skills)if(selfOnly(skill))skill.target='仅自身';
+    }
+  }
+  root.WitnessMechanicsV14={version:14,shieldVersion:1,rules:'outer-first; same-caster-skill-refresh; independent-channels; legacy-layer-expires',channelName,selfOnly};
+  root.WitnessBattle.mechanicsVersion=14;
+return {initialize,methods:{shieldLayersFor,expireShields,addShieldLayer,previewShieldDamage,previewProtection,dispelShieldLayers,targetOptions,command,plan,applyDamage}};
+})(globalThis);
+
+const BattleProjection=(function(root){
+  'use strict';
+  const B=root.WitnessBattle, R=root.WitnessRules;
+  const base={plan:ShieldActions.methods.plan,hit:MemberActions.methods.hit,tryControl:MemberActions.methods.tryControl,applyDamage:ShieldActions.methods.applyDamage,heal:BattleCore.methods.heal};
+  const fields=['hp','sh','mp','petHP','bodyHP','shieldHP','shieldSH'];
+  const copy=x=>x===undefined?undefined:JSON.parse(JSON.stringify(x));
+  const empty=()=>Object.fromEntries(fields.map(k=>[k,0]));
+  const totals=u=>Object.fromEntries(fields.map(k=>[k,Number(u?.[k])||0]));
+  const difference=(a,b)=>Object.fromEntries(fields.map(k=>[k,(a[k]||0)-(b[k]||0)]));
+  const add=(a,b,w=1)=>{for(const k of fields)a[k]+=(b[k]||0)*w;return a;};
+  const threshold=n=>Math.max(0,Math.min(100,Math.round(n)));
+  const isAttack=s=>!s||s.category==='攻击'||s.category==='持续伤害'||s.damageMode==='periodic';
+  const periodic=s=>!!s&&(s.category==='持续伤害'||s.damageMode==='periodic');
+  const channel=(u,s)=>s?.channel||(u.soul.spirit_specialist?'精神':'物理');
+
+  // Only immutable character definitions are shared. All combat resources,
+  // status records, shield layers, cooldowns and casts belong to the fork.
+  const forkProjectionState=function(){
+    const out=Object.create(Object.getPrototypeOf(this));
+    for(const [key,value] of Object.entries(this)){
+      if(['units','rng','rngState','seed','log','events'].includes(key)||key.startsWith('_')||typeof value==='function')continue;
+      out[key]=value&&typeof value==='object'?copy(value):value;
+    }
+    out.units=this.units.map(u=>{
+      const v={};for(const [key,value] of Object.entries(u))v[key]=['model','soul','skills'].includes(key)?value:(value&&typeof value==='object'?copy(value):value);return v;
+    });
+    out.events=[];out.log=[];out.seed='public-projection';out._valuingAI=false;
+    out.scheduleAI=function(){};
+    // No seed or future state from the real random generator is copied.
+    out.rng={die(){throw Error('Projection randomness requires an explicit branch');}};
+    return out;
+  };
+
+  function dotEvents(b,dots,targetId,weight){
+    return dots.flatMap(d=>Array.from({length:Math.max(0,d.ticks)},(_,i)=>({
+      time:d.next+i*3000,at:(d.next+i*3000-b.now)/1000,
+      channel:d.channel,damage:d.damage,weight,targetId,sourceId:d.source,key:d.key
+    })));
+  }
+  function changedDots(b,before,after){
+    const events=[];
+    for(const t of b.units){
+      const old=before[t.id]||[],next=after[t.id]||[];
+      const keys=new Set([...old,...next].map(d=>d.key));
+      for(const key of keys){const a=old.find(d=>d.key===key),z=next.find(d=>d.key===key);
+        if(JSON.stringify(a)===JSON.stringify(z))continue;
+        if(a)events.push(...dotEvents(b,[a],t.id,-1));if(z)events.push(...dotEvents(b,[z],t.id,1));
+      }
+    }
+    return events;
+  }
+
+  function run(source,actorId,targetId,action,options,rollPath,explicit){
+    const b=source.forkProjectionState(),origin=source.now;
+    const effectiveCache=new WeakMap(),effective=AttributeActions.methods.effective;
+    b.effective=function(unit){
+      const previous=effectiveCache.get(unit);
+      if(previous&&previous.now===this.now&&previous.statuses===unit.statuses&&previous.model===unit.model)return previous.value;
+      const value=effective.call(this,unit);effectiveCache.set(unit,{now:this.now,statuses:unit.statuses,model:unit.model,value});return value;
+    };
+    const finish=result=>{delete b.effective;return result;};
+    let rolls=0,rollLimit=null,context=null,marker=null,candidate=null,plans=[],plansAt=-1,queue=null,healQueue=null,damageDepth=0;
+    const capture={immediate:empty(),actorEffects:empty(),packets:[],futureEvents:[],beforeEffects:null,beforeDotBoost:null,afterDotBoost:null,afterEffects:null,resourcesBefore:null};
+    b.rng={die(sides){
+      if(sides!==100)throw Error('Unsupported projection die d'+sides);
+      let limit=rollLimit;
+      if(limit===null&&context?.s){limit=threshold(R.controlEffect(context.s.Q,context.pre[context.u.id],context.pre[context.t.id]).chance);}
+      if(limit===null)throw Error('Missing public probability for projection die');
+      const index=rolls++;
+      if(index<rollPath.length){const value=rollPath[index];if(!Number.isInteger(value)||value<1||value>100)throw Error('Projection rolls must be integers from 1 to 100');return value;}
+      if(explicit)throw Error('Not enough explicit projection rolls');
+      const choices=[];if(limit>0)choices.push({roll:1,probability:limit/100});if(limit<100)choices.push({roll:limit+1,probability:(100-limit)/100});
+      throw {projectionBranch:true,choices};
+    }};
+    b.hit=function(u,t,ch,bonus=0){
+      const previous=rollLimit;
+      // These overrides still consume the real hit call and accuracy counters,
+      // but the underlying d100 result cannot change the public outcome.
+      rollLimit=(ch!=='精神'&&this.value(t,'phantomSwapReady')&&!this.value(t,'control'))||this.value(u,'bloodFirstStrike')?100:threshold(this.hitChance(u,t,ch,bonus)*100);
+      try{return base.hit.call(this,u,t,ch,bonus);}finally{rollLimit=previous;}
+    };
+    b.tryControl=function(u,t,s,duration){
+      const previous=rollLimit;
+      rollLimit=threshold(s?.controlChance===undefined?this.controlNumbers(u,t,s).chance:s.controlChance);
+      try{return base.tryControl.call(this,u,t,s,duration);}finally{rollLimit=previous;}
+    };
+    b.plan=function(u,cast,pre){
+      const previous=context;context={u,t:this.unit(cast.target),s:cast.skill,pre};let plan;
+      try{plan=base.plan.call(this,u,cast,pre);}finally{context=previous;}
+      if(plansAt!==this.now){plans=[];queue=null;healQueue=null;plansAt=this.now;}
+      plans.push(plan);
+      if(cast===marker){candidate=plan;capture.resourcesBefore=totals(plan.t);}
+      const original=plan.effects||[];
+      plan.effects=original.map(effect=>()=>{
+        const prior=context;context={u,t:plan.t,s:cast.skill,pre};
+        const before=cast===marker?totals(plan.t):null,own=cast===marker?totals(u):null;
+        if(cast===marker&&!capture.beforeEffects){capture.beforeEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.beforeDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
+        try{effect();}finally{context=prior;}
+        if(cast===marker){add(capture.immediate,difference(before,totals(plan.t)));add(capture.actorEffects,difference(own,totals(u)));capture.afterEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.afterDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
+      });
+      return plan;
+    };
+    b.applyDamage=function(t,amount,ch,from,fx){
+      let entry=null;
+      if(plansAt===this.now){
+        if(!queue)queue=[...plans.filter(x=>x.damage&&x.t).map(x=>({plan:x,amount:x.damage,ch:x.channel})),...plans.flatMap(x=>(x.extraDamage||[]).filter(d=>x.t).map(d=>({plan:x,amount:d.amount,ch:d.channel})))];
+        const next=queue[0];
+        if(next&&next.plan.t===t&&next.plan.u===from&&next.amount===amount&&next.ch===ch)entry=queue.shift();
+      }
+      const before=totals(t),alive=this.alive(t);
+      let nominal=amount;const reduction=from?this.value(from,'damageDown'):0;if(reduction&&amount>0)nominal=Math.max(1,Math.round(amount*(1-reduction)));
+      damageDepth++;try{base.applyDamage.call(this,t,amount,ch,from,fx);}finally{damageDepth--;}
+      if(entry?.plan===candidate){const loss=difference(before,totals(t));add(capture.immediate,loss);capture.packets.push({channel:ch,raw:amount,damage:nominal,...loss,knockout:alive&&!this.alive(t)});}
+    };
+    b.heal=function(t,amount,ch){
+      let owner=null;
+      if(!damageDepth&&plansAt===this.now){if(!healQueue)healQueue=plans.filter(p=>p.heal&&p.t);const next=healQueue[0];if(next?.t===t&&next.heal===amount&&next.channel===ch)owner=healQueue.shift();}
+      const before=totals(t);base.heal.call(this,t,amount,ch);if(owner===candidate)add(capture.immediate,difference(before,totals(t)));
+    };
+    let u=b.unit(actorId),t=b.unit(targetId),s=typeof action==='object'?action:u.skills.find(x=>x.id===action)||null;
+    if(options.advanceOnly){
+      b.tick(Math.min(180000,origin+Math.round(Math.max(0,Number(options.at)||0)*1000)),true);
+      return finish({state:b,actor:u,target:t,immediate:empty(),actorEffects:empty(),packets:[],futureDOT:{events:[],damage:0},hit:true,success:true,resolved:true,cost:0,cast:0,knockout:false,rollsUsed:rolls,completionTime:b.now});
+    }
+    const actionId=typeof action==='object'?action.id:action||'attack';
+    let cost=0,castSeconds=0,reason='';
+    if(options.paid){
+      if(!u.cast||u.cast.target!==targetId||u.cast.action!==actionId)return {invalid:'No matching paid cast'};
+      marker=u.cast;castSeconds=Math.max(0,(marker.end-b.now)/1000);s=marker.skill;
+    }else{
+      const at=Math.max(0,Number(options.at)||0);
+      if(at)b.tick(Math.min(180000,origin+Math.round(at*1000)),true);
+      if(b.result||!b.alive(u)||!b.alive(t))return {invalid:'Battle or participant finished before action'};
+      if(u.cast)return {invalid:'Actor still casting at requested start'};
+      // The caller supplies an action opportunity, never a future hidden choice.
+      b.activeId=u.id;u.progress=1;u.readyAt=Math.min(u.readyAt,b.now);
+      if(options.defense){const d=options.defense;const type=d.type==='MDEF'?'mindDown':'defDown';t.statuses=t.statuses.filter(x=>x.type!==type);b.setStatus(t,type,d.value,180.001,{source:'projection-defense'});}
+      reason=b.actionReason(u,actionId);
+      if(reason)return {invalid:reason};
+      if(!b.targetOptions(u,actionId).some(x=>x.id===targetId))return {invalid:'Illegal target'};
+      const mp=u.mp;
+      reason=b.command(u.id,actionId,targetId);if(reason)return {invalid:reason};
+      cost=mp-u.mp;marker=u.cast;
+      if(marker)castSeconds=(marker.end-b.now)/1000;
+      else return finish({state:b,actor:u,target:t,immediate:empty(),actorEffects:empty(),packets:[],futureDOT:{events:[],damage:0},hit:true,success:true,resolved:true,cost,cast:0,knockout:false,rollsUsed:rolls});
+    }
+    const end=marker.end;b.tick(end,true);
+    const hit=candidate?.hit?!!candidate.hit.success:!!candidate;
+    const events=capture.beforeEffects?changedDots(b,capture.beforeEffects,capture.afterEffects):[];
+    const statusEvents=b.events.filter(e=>e.time===end&&e.actor===u.id&&e.target===t.id&&['status','control','resist'].includes(e.type));
+    const resisted=statusEvents.some(e=>e.type==='resist');
+    const controlApplied=statusEvents.some(e=>e.type==='control');
+    const success=s?.category==='控制'?controlApplied:!resisted&&hit;
+    return finish({state:b,actor:u,target:t,immediate:capture.immediate,actorEffects:capture.actorEffects,packets:capture.packets,
+      futureDOT:{events,damage:events.reduce((n,e)=>n+e.damage*e.weight,0),beforeDots:capture.beforeEffects,afterDots:capture.afterEffects,beforeDotBoost:capture.beforeDotBoost,afterDotBoost:capture.afterDotBoost},hit,success,resolved:!!candidate,cost,cast:castSeconds,
+      knockout:capture.packets.some(x=>x.knockout)&&!b.alive(t),rollsUsed:rolls,completionTime:end});
+  }
+
+  const forecastAction=function(u,t,action='attack',options={}){
+    if(!u||!t)throw Error('forecastAction requires actor and target');
+    if(action===null)action='attack';
+    let s=typeof action==='object'?action:u.skills.find(x=>x.id===action)||null;
+    const ch=channel(u,s),queue=[{rolls:options.rolls||[],probability:1}],branches=[];
+    while(queue.length){
+      const task=queue.pop();
+      try{const branch=run(this,u.id,t.id,action,options,task.rolls,!!options.rolls);branches.push({...branch,probability:task.probability});}
+      catch(error){if(!error?.projectionBranch)throw error;for(const choice of error.choices)queue.push({rolls:[...task.rolls,choice.roll],probability:task.probability*choice.probability});}
+      if(queue.length+branches.length>4096)throw Error('Projection exceeded 4096 exact public branches');
+    }
+    const immediate=empty(),conditional=empty(),actorEffects=empty();let hitProbability=0,successProbability=0,knockoutProbability=0,cost=0,cast=0,damage=0;
+    const futureDOT={damage:0,hp:0,sh:0,events:[]};
+    for(const br of branches){
+      if(br.invalid)continue;
+      const w=br.probability;add(immediate,br.immediate,w);add(actorEffects,br.actorEffects,w);
+      if(br.hit){hitProbability+=w;add(conditional,br.immediate,w);}
+      if(br.success)successProbability+=w;if(br.knockout)knockoutProbability+=w;
+      cost+=br.cost*w;cast+=br.cast*w;damage+=br.packets.reduce((n,x)=>n+x.damage,0)*w;
+      futureDOT.damage+=br.futureDOT.damage*w;
+      for(const e of br.futureDOT.events){futureDOT.events.push({...e,probability:w});futureDOT[e.channel==='精神'?'sh':'hp']+=e.damage*e.weight*w;}
+    }
+    if(hitProbability)for(const k of fields)conditional[k]=Math.round(conditional[k]/hitProbability*1e10)/1e10;
+    immediate.knockoutProbability=knockoutProbability;
+    return {s,ch,dot:periodic(s),valid:branches.some(x=>!x.invalid),invalidReasons:[...new Set(branches.filter(x=>x.invalid).map(x=>x.invalid))],
+      cost,cast,at:Math.max(0,Number(options.at)||0),hitProbability,successProbability,knockoutProbability,
+      immediate,conditional,actorEffects,futureDOT,branches,damage,
+      // Future DOT is deliberately excluded from immediate health and knockout.
+      health:immediate[ch==='精神'?'sh':'hp'],hit:hitProbability};
+  };
+  const aiStrike=function(u,t,s,at=0,defense=null){
+    const paid=!!u.cast&&u.cast.target===t.id&&u.cast.action===(s?.id||'attack')&&Math.abs(at-(u.cast.end-this.now)/1000)<.001;
+    const result=this.forecastAction(u,t,s||'attack',{at:paid?0:at,defense,paid});
+    return {...result,damage:result.damage+result.futureDOT.damage,instantDamage:result.damage,s,at};
+  };
+  const forecastAdvance=function(at=0,options={}){const u=this.units[0];return this.forecastAction(u,u,'wait',{...options,at,advanceOnly:true});};
+  function dotTimeline(branch,before,options){
+    const b=branch.state.forkProjectionState(),events=[];
+    if(b.result)return events;
+    if(before){
+      for(const u of b.units){
+        // Reverse this candidate's edits only. Other plans in the same release
+        // batch may have added their own DOT or amplifier after this candidate.
+        const oldDots=branch.futureDOT.beforeDots?.[u.id]||[],nextDots=branch.futureDOT.afterDots?.[u.id]||[];
+        const keys=new Set([...oldDots,...nextDots].map(d=>d.key)),changed=new Set();
+        for(const key of keys){const old=oldDots.find(d=>d.key===key),next=nextDots.find(d=>d.key===key);if(JSON.stringify(old)!==JSON.stringify(next))changed.add(key);}
+        u.dots=u.dots.filter(d=>!changed.has(d.key));
+        for(let i=0;i<oldDots.length;i++)if(changed.has(oldDots[i].key)){
+          const following=oldDots.slice(i+1).find(d=>u.dots.some(x=>x.key===d.key));
+          const previous=oldDots.slice(0,i).reverse().find(d=>u.dots.some(x=>x.key===d.key));
+          const index=following?u.dots.findIndex(d=>d.key===following.key):previous?u.dots.findIndex(d=>d.key===previous.key)+1:0;
+          u.dots.splice(index,0,copy(oldDots[i]));
+        }
+        const oldBoost=branch.futureDOT.beforeDotBoost?.[u.id]||[],nextBoost=branch.futureDOT.afterDotBoost?.[u.id]||[];
+        const sources=new Set([...oldBoost,...nextBoost].map(s=>s.source));
+        for(const source of sources){const old=oldBoost.find(s=>s.source===source),next=nextBoost.find(s=>s.source===source);if(JSON.stringify(old)===JSON.stringify(next))continue;u.statuses=u.statuses.filter(s=>s.type!=='dotBoost'||s.source!==source);if(old)u.statuses.push(copy(old));}
+      }
+    }
+    // This continuation deliberately contains only registered DOT and expiry.
+    // New choices and already-casting attacks are outside this bounded heuristic.
+    for(const u of b.units)u.cast=null;
+    b.activeId=null;
+    const last=Math.max(b.now,...b.units.flatMap(u=>u.dots.map(d=>d.next+Math.max(0,d.ticks-1)*3000)));
+    const until=Math.min(180000,last,options.until??Infinity,b.now+Math.max(0,options.horizon??18)*1000);
+    let safety=0;
+    while(!b.result&&b.now<until&&safety++<2000){
+      const times=[until];
+      for(const u of b.units){for(const s of u.statuses)if(s.until>b.now)times.push(s.until);for(const d of u.dots)if(d.ticks>0&&d.next>b.now)times.push(d.next);if(u.shieldUntil>b.now)times.push(u.shieldUntil);}
+      b.now=Math.min(...times);
+      for(const u of b.units){
+        for(const s of u.statuses)if(s.until<=b.now&&s.fatigue)b.setStatus(u,'fatigue',.1,6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
+        u.statuses=u.statuses.filter(s=>s.until>b.now);b.expireShields?.(u);
+        for(const d of u.dots)d.damage=b.dotDamage(d);
+        for(const d of u.dots)if(d.next<=b.now&&d.ticks>0){
+          const old=totals(u);b.applyDotDamage(u,d);events.push({time:b.now,targetId:u.id,channel:d.channel,sourceId:d.source,...difference(old,totals(u))});d.ticks--;d.next+=3000;
+        }
+        u.dots=u.dots.filter(d=>d.ticks>0);
+      }
+      b.checkResult();
+    }
+    return events;
+  }
+  const forecastFutureDOT=function(forecast,options={}){
+    const aggregate=empty(),byTarget={},eventMap=new Map();
+    for(const branch of forecast.branches||[]){
+      if(branch.invalid||!branch.state||!branch.futureDOT?.events?.length)continue;
+      for(const before of [false,true])for(const e of dotTimeline(branch,before,options)){
+        const weight=(before?-1:1)*branch.probability,key=e.time+'|'+e.targetId;
+        if(!byTarget[e.targetId])byTarget[e.targetId]=empty();
+        add(aggregate,e,weight);add(byTarget[e.targetId],e,weight);
+        if(!eventMap.has(key))eventMap.set(key,{time:e.time,targetId:e.targetId,...empty()});add(eventMap.get(key),e,weight);
+      }
+    }
+    return {...aggregate,byTarget,events:[...eventMap.values()].sort((a,b)=>a.time-b.time||a.targetId.localeCompare(b.targetId)),futureOnly:true,assumption:'Registered DOT and expiry only; no future attacks or new actions'};
+  };
+  const forecastExistingDOT=function(options={}){
+    const aggregate=empty(),byTarget={},events=dotTimeline({state:this},false,options);
+    for(const event of events){if(!byTarget[event.targetId])byTarget[event.targetId]=empty();add(aggregate,event);add(byTarget[event.targetId],event);}
+    return {...aggregate,byTarget,events,futureOnly:true,assumption:'Registered DOT and expiry only; no future attacks or new actions'};
+  };
+  const forecastDamage=function(u,t,s){const out=this.forecastAction(u,t,s||'attack');return out.damage+out.futureDOT.damage;};
+  root.WitnessProjectionV14={version:14,exactPublicBranches:true,preservedRules:['iceArmorSnapshot','swapV13','bloodDomainV13','manaDrainOnHit']};
+return {methods:{forkProjectionState,forecastAction,aiStrike,forecastAdvance,forecastFutureDOT,forecastExistingDOT,forecastDamage}};
+})(globalThis);
+
+const UnifiedDecision=(function(root){
+  'use strict';
+  const B=root.WitnessBattle;
+  const periodic=s=>!!s&&(s.category==='持续伤害'||s.damageMode==='periodic');
+  const offensive=s=>!s||s.category==='攻击'||s.category==='持续伤害'||periodic(s);
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+  const actionId=s=>s?.id||'attack';
+  const maximum=(u,ch)=>Math.max(1,u.model.derived[ch==='精神'?'SH':'HP']);
+  const probabilityBranches=f=>(f.branches||[]).filter(b=>!b.invalid&&b.state&&b.probability>0);
+  const mainBranch=f=>probabilityBranches(f).sort((a,b)=>b.probability-a.probability)[0];
+  const statusSignature=u=>JSON.stringify([u.statuses,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.rage,u.rageTotal,u.mp,u.bonusAttack]);
+  function directionSignature(b,u,offense){
+    const e=b.effective(u),excluded=offense?new Set(['evasion','iceArmor','soulArmor','phantomSwapReady','statUpD','statDownD']):new Set(['coldAura','dotBoost','damageDown','accuracyDown','phantomPierce','bloodFirstStrike','buff','slow','costUp','statUpB','statDownB','statUpS','statDownS','statUpC','statDownC']);
+    const statuses=u.statuses.filter(s=>!excluded.has(s.type));
+    return JSON.stringify(offense?[e.PA,e.SA,e.MA,e.A,e.C,e.P,e.costReduction,e.castReduction,statuses,u.mp,u.rage,u.rageTotal,u.bonusAttack,u.cast,u.petAlive]:[e.DEF,e.MDEF,e.A,e.P,statuses,u.hp,u.sh,u.mp,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.petHP,u.bodyHP]);
+  }
+  function nextOpportunity(b,u,forceNext=false){
+    const rate=Math.max(.06,b.actionRate(u)),recovery=Math.max(0,(u.readyAt-b.now)/1000);
+    const control=Math.max(0,...b.status(u,'control').map(s=>(s.until-b.now)/1000));
+    if(u.bonusAttack)return Math.max(recovery,control);
+    if(u.cast)return Math.max(0,(u.cast.end-b.now)/1000)+.3+1/rate;
+    if(forceNext)return Math.max(recovery,control)+1/rate;
+    if(u.id===b.activeId&&!control&&recovery===0)return 0;
+    return Math.max(recovery,control)+Math.max(0,1-u.progress)/rate;
+  }
+  function futureLegal(b,u,t,s,at){
+    if(!b.alive(u)||!b.alive(t))return false;
+    if(u.bonusAttack&&s)return false;
+    if(!s)return u.mp>=b.basicCost(u);
+    if(s.aiDisabled||u.release==='召唤'&&!u.petAlive||b.cost(u,s)>u.mp)return false;
+    if(b.cooldownUntil(u,s)>b.now+at*1000)return false;
+    if(s.maxUses&&(u.uses[s.id]||0)>=s.maxUses||s.rageSpend&&u.rage<1)return false;
+    if(s.detonate&&!t.dots.some(d=>d.source===u.id&&d.ticks>0))return false;
+    if(periodic(s)&&t.dots.some(d=>d.key===u.id+'-'+s.id&&d.next+(d.ticks-1)*3000>b.now+at*1000))return false;
+    return b.targetOptions(u,s.id).some(v=>v.id===t.id);
+  }
+  function rawPriority(b,u,s){
+    const a=b.effective(u),ch=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
+    const power=s?.mindPower?a.MA:ch==='精神'?a.MA:ch==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
+    const damage=s?(periodic(s)?1.4:1.2)*s.Q*power*((s.factor??1)+(s.secondaryFactor||0)):.45*power;
+    const cost=s?b.cost(u,s):b.basicCost(u),cast=s?b.castTime(u,s)*(s.castMultiplier||1):1.5;
+    return damage/Math.pow(Math.max(1,cost),.25)/(cast+.3+1/b.actionRate(u));
+  }
+  function ctxFor(b,u){return {root:b,actor:u,cache:new WeakMap(),dots:new WeakMap(),advance:new Map(),potential:new WeakMap(),lives:new Map(),forecastCalls:0,horizon:Math.min(18,Math.max(0,(180000-b.now)/1000))};}
+  function cachedForecast(ctx,b,u,t,action,options={}){
+    let cache=ctx.cache.get(b);if(!cache){cache=new Map();ctx.cache.set(b,cache);}
+    const key=[u.id,t.id,typeof action==='object'?action.id:action,Math.round((options.at||0)*1000),!!options.paid].join('|');
+    if(!cache.has(key)){ctx.forecastCalls++;cache.set(key,b.forecastAction(u,t,action,options));}
+    return cache.get(key);
+  }
+  function rawValue(f,t){
+    const im=f.immediate||{};
+    return 100*((im.hp||0)/maximum(t,'物理')+(im.sh||0)/maximum(t,'精神'))+8*(im.mp||0)/Math.max(1,t.model.derived.baseMP);
+  }
+  function dotValue(ctx,f,t,horizon,delay=0){
+    let value=0;
+    for(const event of protectedDOT(ctx,f).events||[]){
+      if(event.targetId!==t.id)continue;
+      const at=Math.max(0,(event.time-ctx.root.now)/1000),remaining=Math.max(0,horizon-delay);
+      // A delayed event is never part of immediate knockout. Its value is limited
+      // by the target's current estimated survival time and the public clock.
+      if(at>ctx.horizon+.001)continue;
+      const survival=at<=remaining?1:Math.max(0,1-(at-remaining)/3);
+      value+=rawValue({immediate:event},t)*survival/(1+at/30);
+    }
+    return value;
+  }
+  function protectedDOT(ctx,f){
+    if(!f.futureDOT?.events?.length)return {events:[],hp:0,sh:0};
+    if(!ctx.dots.has(f))ctx.dots.set(f,ctx.root.forecastFutureDOT(f,{until:ctx.root.now+ctx.horizon*1000}));
+    return ctx.dots.get(f);
+  }
+  function costPenalty(b,u,cost){
+    const fraction=clamp(u.mp/Math.max(1,u.model.derived.MP),0,1),scarcity=1+1.5*(1-fraction)*(1-fraction);
+    return cost/Math.max(1,u.model.derived.baseMP)*12*scarcity;
+  }
+  function bestOffense(ctx,b,u,t,at=0,horizon=18){
+    const legal=[null,...u.skills.filter(offensive)].filter(s=>futureLegal(b,u,t,s,at));
+    // All immediate candidates are scored exactly by aiCandidates. This small
+    // shortlist is only the bounded continuation heuristic, never a legality gate.
+    const ranked=legal.sort((a,z)=>rawPriority(b,u,z)-rawPriority(b,u,a));
+    const options=ranked.slice(0,1);
+    let best=null;
+    for(const s of options){
+      const f=cachedForecast(ctx,b,u,t,s||'attack',{at});if(!f.valid||at+f.cast>horizon+.001)continue;
+      const gross=rawValue(f,t)+dotValue(ctx,f,t,horizon,at),utility=gross-costPenalty(b,u,f.cost)*.4;
+      if(!best||utility>best.utility)best={forecast:f,gross,utility,skill:s};
+    }
+    return best;
+  }
+  function survivalHorizon(ctx,t){
+    if(ctx.lives.has(t.id))return ctx.lives.get(t.id);
+    const b=ctx.root,unit=b.unit(t.id)||t;
+    let hpRate=0,shRate=0;
+    for(const foe of b.units.filter(v=>v.team!==unit.team&&b.alive(v))){
+      const at=nextOpportunity(b,foe),best=bestOffense(ctx,b,foe,unit,at,ctx.horizon);
+      if(best){const f=best.forecast,dot=protectedDOT(ctx,f).byTarget?.[unit.id]||{},cycle=Math.max(1,f.cast+.3+1/b.actionRate(foe));hpRate+=((f.immediate.hp||0)+Math.max(0,dot.hp||0)*.65)/cycle;shRate+=((f.immediate.sh||0)+Math.max(0,dot.sh||0)*.65)/cycle;}
+    }
+    if(unit.dots.length){
+      // Existing DOT is not raw damage either. Reuse the real protected DOT
+      // clock for one tick window, without counting an unrelated paid cast.
+      const window=Math.min(3,ctx.horizon);
+      if(window>0){
+        if(!ctx.existingDOT)ctx.existingDOT=b.forecastExistingDOT({horizon:window});
+        const known=ctx.existingDOT.byTarget[unit.id]||{};
+        hpRate+=Math.max(0,known.hp||0)/window;shRate+=Math.max(0,known.sh||0)/window;
+      }
+    }
+    const life=Math.min(ctx.horizon,hpRate>0?unit.hp/hpRate:Infinity,shRate>0?unit.sh/shRate:Infinity);
+    const result=clamp(Number.isFinite(life)?life:ctx.horizon,Math.min(2,ctx.horizon),ctx.horizon);ctx.lives.set(t.id,result);return result;
+  }
+  function pairPotential(ctx,b,actorId,targetId,horizon,forceNextId){
+    let cache=ctx.potential.get(b);if(!cache){cache=new Map();ctx.potential.set(b,cache);}
+    const key=[actorId,targetId,Math.round(horizon*10),forceNextId||''].join('|');if(cache.has(key))return cache.get(key);
+    let state=b,u=state.unit(actorId),t=state.unit(targetId),value=0,elapsed=0;
+    if(!u||!t||!state.alive(u)||!state.alive(t)){cache.set(key,0);return 0;}
+    // A paid cast remains a threat even when its caster now has no mana.
+    if(u.cast){
+      if(u.cast.target===t.id&&(u.cast.action==='attack'||offensive(u.cast.skill))){
+        const f=cachedForecast(ctx,state,u,t,u.cast.skill||u.cast.action,{paid:true});
+        if(f.valid&&f.cast<=horizon){value+=rawValue(f,t)+dotValue(ctx,f,t,horizon);const branch=mainBranch(f);if(branch){elapsed+=f.cast;state=branch.state;u=state.unit(actorId);t=state.unit(targetId);}}
+      }else {
+        const duration=Math.max(0,(u.cast.end-state.now)/1000),advanced=mainBranch(state.forecastAdvance(duration));
+        if(!advanced){cache.set(key,value);return value;}
+        elapsed+=duration;state=advanced.state;u=state.unit(actorId);t=state.unit(targetId);
+      }
+    }
+    let normalActions=0;
+    for(let n=0;n<2&&normalActions<1&&elapsed<horizon;n++){
+      if(!state.alive(u)||!state.alive(t))break;
+      const isBonus=!!u.bonusAttack;
+      const at=nextOpportunity(state,u,n===0&&u.id===forceNextId&&!u.bonusAttack);
+      const best=bestOffense(ctx,state,u,t,at,horizon-elapsed);if(!best)break;
+      const f=best.forecast;
+      // Only one normal continuation: actual future legality includes resource,
+      // cooldown, use and time limits. Do not turn this into a multi-turn tree.
+      const manaSlots=f.cost>0?Math.floor(u.mp/f.cost):2;
+      const useSlots=best.skill?.maxUses?best.skill.maxUses-(u.uses[best.skill.id]||0):2;
+      // Current shields, one-hit guards and action-limited buffs may be consumed
+      // by this action. Never multiply its protected outcome into a second hit.
+      const slots=isBonus?1:Math.max(0,Math.min(1,manaSlots,useSlots));
+      value+=best.gross*slots/(1+elapsed/30);
+      const branch=mainBranch(f);if(!branch)break;
+      elapsed+=at+f.cast;state=branch.state;u=state.unit(actorId);t=state.unit(targetId);
+      if(!isBonus)normalActions++;
+    }
+    cache.set(key,value);return value;
+  }
+  function advanceBaseline(ctx,seconds){
+    const key=Math.round(seconds*1000);if(!ctx.advance.has(key))ctx.advance.set(key,ctx.root.forecastAdvance(seconds));return ctx.advance.get(key);
+  }
+  function weakest(b,targets,actor){
+    const mental=actor.soul.spirit_specialist;
+    return targets.slice().sort((a,z)=>(mental?a.sh/maximum(a,'精神'):a.hp/maximum(a,'物理'))-(mental?z.sh/maximum(z,'精神'):z.hp/maximum(z,'物理'))||a.id.localeCompare(z.id))[0];
+  }
+  function effectPotential(ctx,forecast,u,t){
+    const duration=forecast.cast||0;
+    const baseline=mainBranch(advanceBaseline(ctx,duration));if(!baseline)return 0;
+    // Compare effects after the same action opportunity and payment. Otherwise
+    // the unused baseline cooldown falsely makes a new DOT look like lost damage.
+    const representative=mainBranch(forecast),pre=baseline.state.forkProjectionState(),payer=pre.unit(u.id);
+    if(payer&&representative){
+      payer.mp=Math.max(0,payer.mp-forecast.cost);
+      payer.cooldowns={...representative.actor.cooldowns};payer.uses={...representative.actor.uses};
+      payer.manaGiftUses=representative.actor.manaGiftUses;payer.calmUses=representative.actor.calmUses;
+      // End the same action without granting its effects or bonus attack.
+      const selfBonus=ctx.root.resourceConfig.selfBuffBonus&&forecast.s?.category==='强化'&&t.id===u.id;
+      pre.endTurn(payer,!selfBonus);payer.bonusAttack=false;
+    }
+    const allies=pre.units.filter(v=>v.team===u.team&&pre.alive(v)),foes=pre.units.filter(v=>v.team!==u.team&&pre.alive(v));
+    const pairs=[];
+    for(const a of allies){const target=t.team!==u.team?pre.unit(t.id):weakest(pre,foes,a);if(target)pairs.push({a:a.id,t:target.id,sign:1});}
+    for(const foe of foes){
+      const castTarget=foe.cast?pre.unit(foe.cast.target):null;
+      const target=castTarget?.team===u.team?castTarget:t.team===u.team?pre.unit(t.id):weakest(pre,allies,foe);
+      if(target)pairs.push({a:foe.id,t:target.id,sign:-1});
+    }
+    let result=0;
+    for(const branch of probabilityBranches(forecast)){
+      const post=branch.state,changed=new Set();
+      for(const before of pre.units){const after=post.unit(before.id);if(after&&statusSignature(before)!==statusSignature(after))changed.add(before.id);}
+      // Known casts/DOT may have been prevented or interrupted during this cast.
+      // Attribute that difference once, excluding this action's own direct hit/heal.
+      const healthValue=(loss,unit)=>100*((loss.hp||0)/maximum(unit,'物理')+(loss.sh||0)/maximum(unit,'精神'));
+      let gain=0;
+      for(const before of pre.units){const after=post.unit(before.id);if(after)gain+=(before.team===u.team?1:-1)*healthValue({hp:after.hp-before.hp,sh:after.sh-before.sh},before);}
+      gain-=(t.team===u.team?-1:1)*healthValue(branch.immediate||{},t);
+      if(t.id!==u.id)gain+=healthValue(branch.actorEffects||{},u);
+      if(!changed.size){result+=branch.probability*gain;continue;}
+      for(const pair of pairs){
+        if(!changed.has(pair.a)&&!changed.has(pair.t))continue;
+        // A purely offensive change does not change damage arriving at its
+        // owner; a pure shield change does not change the owner's outgoing hit.
+        // Unknown status types remain in both signatures conservatively.
+        const beforeActor=pre.unit(pair.a),afterActor=post.unit(pair.a),beforeTarget=pre.unit(pair.t),afterTarget=post.unit(pair.t);
+        if(!afterActor||!afterTarget)continue;
+        if(directionSignature(pre,beforeActor,true)===directionSignature(post,afterActor,true)&&directionSignature(pre,beforeTarget,false)===directionSignature(post,afterTarget,false))continue;
+        const target=pre.unit(pair.t);const horizon=Math.max(0,Math.min(ctx.horizon-duration,survivalHorizon(ctx,target)));
+        if(horizon<.25)continue;
+        const before=pairPotential(ctx,pre,pair.a,pair.t,horizon,u.id),after=pairPotential(ctx,post,pair.a,pair.t,horizon,u.id);
+        gain+=(after-before)*pair.sign;
+      }
+      result+=branch.probability*gain;
+    }
+    return result;
+  }
+  function hasMechanics(s,action){return !s?['defend','defendSH','dodge','calm','tune','phantomSwap','phantomSacrifice'].includes(action):!offensive(s)||!!(s.slow||s.corrode||s.costUp||s.controlOnHit||s.rageGain||s.rageSpend||s.detonate);}
+  function scoreCandidate(ctx,u,t,action){
+    const b=ctx.root,s=u.skills.find(v=>v.id===action)||null,f=cachedForecast(ctx,b,u,t,s||action);
+    if(!f.valid)return null;
+    const friendly=t.team===u.team;
+    let immediate=(friendly?-1:1)*rawValue(f,t);
+    // Returned actorEffects excludes the paid casting cost. Count restoration to
+    // the caster once (the target already contains it for self-targeted actions).
+    if(t.id!==u.id)immediate-=rawValue({immediate:f.actorEffects||{}},u);
+    // Effects may change existing DOT on a different unit (for example a
+    // self-targeted poison amplifier), so evaluate every affected target.
+    let future=0;
+    for(const id of new Set((f.futureDOT?.events||[]).map(event=>event.targetId))){
+      const affected=b.unit(id);if(affected)future+=(affected.team===u.team?-1:1)*dotValue(ctx,f,affected,survivalHorizon(ctx,affected));
+    }
+    const knockout=friendly?0:45*(f.immediate.knockoutProbability||0);
+    let effects=hasMechanics(s,action)?effectPotential(ctx,f,u,t):0;
+    if(!Number.isFinite(effects))effects=0;
+    // effectPotential already follows the real bonusAttack state and its paid
+    // basic attack. Do not award that same opportunity a second time here.
+    const bonus=0;
+    // Phantom sacrifice creates a real new buff; it no longer pre-empts all other
+    // actions just because the fight is early. Swap is valued by the same threat window.
+    // Breaking a shield only matters if a following affordable attack can arrive
+    // before it expires. Cap credit by actual packets, not a one-hit layer's size.
+    let shieldPressure=0;
+    if(!friendly&&u.mp-f.cost>=b.basicCost(u)){
+      const until=Math.max(t.shieldUntil||0,...(t.shieldLayers||[]).map(layer=>layer.until||0));
+      if(until>b.now+(f.cast+.3+1/b.actionRate(u))*1000){
+        const raw=probabilityBranches(f).reduce((n,br)=>n+br.probability*(br.packets||[]).reduce((v,packet)=>v+(packet.raw||0),0),0);
+        shieldPressure=.2*100*(Math.min(Math.max(0,f.immediate.shieldHP||0),raw)/maximum(t,'物理')+Math.min(Math.max(0,f.immediate.shieldSH||0),raw)/maximum(t,'精神'));
+      }
+    }
+    const cost=costPenalty(b,u,f.cost),score=immediate+future+knockout+effects+bonus+shieldPressure-cost;
+    if(!(action==='attack'||s&&offensive(s))&&immediate+future+effects+bonus<=.0001)return null;
+    return {action,target:t.id,score,detail:{immediate,futureDOT:future,knockout,effects,bonus,shieldPressure,cost,paidMP:f.cost,hitProbability:f.hitProbability,successProbability:f.successProbability,category:periodic(s)?'持续伤害':s?.category||action}};
+  }
+  const aiCandidates=function(u){
+    if(!u||!this.alive(u))return [];
+    const ctx=ctxFor(this,u),candidates=[];
+    const actions=u.bonusAttack?['attack']:['attack',...u.skills.filter(s=>!s.aiDisabled).map(s=>s.id),'defend','defendSH','dodge','calm','tune','phantomSwap','phantomSacrifice'];
+    for(const action of [...new Set(actions)]){
+      if(this.actionReason(u,action))continue;
+      const skill=u.skills.find(s=>s.id===action);if(skill?.aiDisabled)continue;
+      for(const target of this.targetOptions(u,action)){
+        if(skill?.detonate&&!target.dots.some(d=>d.source===u.id))continue;
+        if(periodic(skill)&&target.dots.some(d=>d.key===u.id+'-'+skill.id&&d.next+(d.ticks-1)*3000>this.now+this.castTime(u,skill)*(skill.castMultiplier||1)*1000))continue;
+        const candidate=scoreCandidate(ctx,u,target,action);if(candidate)candidates.push(candidate);
+      }
+    }
+    candidates.sort((a,b)=>b.score-a.score||a.action.localeCompare(b.action)||a.target.localeCompare(b.target));
+    this._lastAIv14={actor:u.id,forecasts:ctx.forecastCalls,candidates:candidates.map(c=>({...c,detail:{...c.detail}}))};
+    return candidates;
+  };
+  const aiChoice=function(u){
+    const candidates=this.aiCandidates(u),best=candidates[0];
+    if(best)return {action:best.action,target:best.target,score:best.score};
+    return u?.bonusAttack?{action:'skipBonus',target:u.id}:{action:'wait',target:u?.id};
+  };
+  const aiScore=function(u,t,action){
+    const s=u?.skills.find(v=>v.id===action);
+    if(!u||!t||s?.aiDisabled||this.actionReason(u,action)||!this.targetOptions(u,action).some(v=>v.id===t.id))return null;
+    return scoreCandidate(ctxFor(this,u),u,t,action);
+  };
+  // Compatibility entry points use the same explicit legality and cost logic.
+  // In particular, normalized periodic attacks reach the periodic scorer first.
+  const darkActionScore=function(u,t,action,oldScore){
+    const s=u.skills.find(v=>v.id===action);if(s?.aiDisabled)return -Infinity;
+    if(u.templateId!=='anmu')return oldScore;
+    if(periodic(s))return this.aiScore(u,t,action)?.score??-Infinity;
+    return oldScore;
+  };
+  const compactActionScore=function(u,t,action){return this.aiScore(u,t,action)?.score??-Infinity;};
+  const scoreControlVariant=function(u,t,s){return this.aiScore(u,t,s.id)?.score??-Infinity;};
+  const compactEnabled=function(){return true;};
+  root.WitnessAIV14={version:14,unifiedCandidates:true,usesProjection:true,policy:'bounded-public-state-utility',notes:'Exact immediate public branches; bounded, resource-aware continuation heuristic. No future RNG is read.'};
+return {methods:{aiCandidates,aiChoice,aiScore,darkActionScore,compactActionScore,scoreControlVariant,compactEnabled}};
 })(globalThis);
 
 // The single public Battle API. Helpers retain lexical state without prototype patches.
 (function(root){
   const methods={
+    aiScore:UnifiedDecision.methods.aiScore,
+    aiCandidates:UnifiedDecision.methods.aiCandidates,
+    forecastExistingDOT:BattleProjection.methods.forecastExistingDOT,
+    forecastFutureDOT:BattleProjection.methods.forecastFutureDOT,
+    forecastAdvance:BattleProjection.methods.forecastAdvance,
+    forecastAction:BattleProjection.methods.forecastAction,
+    forkProjectionState:BattleProjection.methods.forkProjectionState,
+    dispelShieldLayers:ShieldActions.methods.dispelShieldLayers,
+    previewProtection:ShieldActions.methods.previewProtection,
+    previewShieldDamage:ShieldActions.methods.previewShieldDamage,
+    addShieldLayer:ShieldActions.methods.addShieldLayer,
+    expireShields:ShieldActions.methods.expireShields,
+    shieldLayersFor:ShieldActions.methods.shieldLayersFor,
     snapshot:AttributeActions.methods.snapshot,
     unit:BattleCore.methods.unit,
     alive:BattleCore.methods.alive,
@@ -2441,7 +3023,7 @@ return {methods:{aiChoice}};
     refreshExhaustion:BattleCore.methods.refreshExhaustion,
     cost:AttributeActions.methods.cost,
     castTime:AttributeActions.methods.castTime,
-    targetOptions:MemberActions.methods.targetOptions,
+    targetOptions:ShieldActions.methods.targetOptions,
     canAct:BattleCore.methods.canAct,
     actionRate:BattleCore.methods.actionRate,
     advanceGauge:BattleCore.methods.advanceGauge,
@@ -2450,18 +3032,18 @@ return {methods:{aiChoice}};
     cooldownKey:BattleCore.methods.cooldownKey,
     cooldownUntil:BattleCore.methods.cooldownUntil,
     actionReason:MemberActions.methods.actionReason,
-    command:MemberActions.methods.command,
+    command:ShieldActions.methods.command,
     addLog:BattleCore.methods.addLog,
     setStatus:AttributeActions.methods.setStatus,
     setBuff:StatusActions.methods.setBuff,
     hit:MemberActions.methods.hit,
     damageValue:MemberActions.methods.damageValue,
-    plan:MemberActions.methods.plan,
+    plan:ShieldActions.methods.plan,
     tryControl:MemberActions.methods.tryControl,
-    applyDamage:MemberActions.methods.applyDamage,
+    applyDamage:ShieldActions.methods.applyDamage,
     heal:BattleCore.methods.heal,
     scheduleAI:BattleCore.methods.scheduleAI,
-    aiChoice:BattleDecision.methods.aiChoice,
+    aiChoice:UnifiedDecision.methods.aiChoice,
     nextTime:BattleCore.methods.nextTime,
     tick:BattleCore.methods.tick,
     hasOffense:BattleCore.methods.hasOffense,
@@ -2471,21 +3053,21 @@ return {methods:{aiChoice}};
     surrender:BattleCore.methods.surrender,
     hitChance:AttributeActions.methods.hitChance,
     controlNumbers:MemberActions.methods.controlNumbers,
-    forecastDamage:ControlActions.methods.forecastDamage,
-    scoreControlVariant:ActionForecast.methods.scoreControlVariant,
-    compactEnabled:ActionForecast.methods.compactEnabled,
-    aiStrike:ActionForecast.methods.aiStrike,
+    forecastDamage:BattleProjection.methods.forecastDamage,
+    scoreControlVariant:UnifiedDecision.methods.scoreControlVariant,
+    compactEnabled:UnifiedDecision.methods.compactEnabled,
+    aiStrike:BattleProjection.methods.aiStrike,
     aiAvailable:ActionForecast.methods.aiAvailable,
     aiSequence:ActionForecast.methods.aiSequence,
     aiThreatValue:ActionForecast.methods.aiThreatValue,
-    compactActionScore:ActionForecast.methods.compactActionScore,
+    compactActionScore:UnifiedDecision.methods.compactActionScore,
     statusSource:StatusActions.methods.statusSource,
     stackCap:StatusActions.methods.stackCap,
     stackedNext:StatusActions.methods.stackedNext,
     statusGain:StatusActions.methods.statusGain,
     buffImprovement:StatusActions.methods.buffImprovement,
     dotDamage:StatusActions.methods.dotDamage,
-    darkActionScore:PoisonStrategy.methods.darkActionScore,
+    darkActionScore:UnifiedDecision.methods.darkActionScore,
     dodgeCost:AttributeActions.methods.dodgeCost,
     dotNature:AttributeActions.methods.dotNature,
     dotLabel:AttributeActions.methods.dotLabel,

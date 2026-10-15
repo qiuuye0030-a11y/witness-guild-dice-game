@@ -20,7 +20,7 @@ const config={coefficient:.40,bonus:.35,cap:.90,costFraction:.02,duration:4};
 
   const makeSkill=args=>SE.make(buildUnderlyingSkill,args);
 
-  const snapshot=function(){return {version:10,soulControlVersion:11,combatRulesVersion:13,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1005,dodgeConfig:{...config,...this.dodgeConfig}};};
+  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:14,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1005,dodgeConfig:{...config,...this.dodgeConfig}};};
 
   const dodgeCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*(this.dodgeConfig||config).costFraction));};
 

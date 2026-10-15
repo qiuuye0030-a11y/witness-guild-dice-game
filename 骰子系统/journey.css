@@ -79,3 +79,18 @@
 .chenxi-mode dialog.journey-sponsor-dialog{background:#fff9df;color:#214c50;border-color:#b89447}
 .chenxi-mode .journey-sponsor-dialog label{color:#214c50}
 .chenxi-mode .journey-sponsor-dialog .quiet{background:#fffce8;color:#214c50;border-color:#819e8d}
+
+/* 10.06: a quiet, text-first guild commendation. Hidden until earned. */
+.achievement-witness{padding:0;width:min(500px,calc(100vw - 32px));max-height:calc(100dvh - 36px);overflow:auto;border:1px solid #b49b61;border-radius:14px;background:#171b31;color:#f4eddb;box-shadow:0 24px 90px #0008}
+.achievement-witness::backdrop{background:#080b18bd;backdrop-filter:blur(4px)}
+.achievement-witness-card{padding:34px 28px;text-align:center;border:1px solid #b49b614a;margin:8px;border-radius:8px;animation:witness-arrive .35s ease-out}
+.achievement-witness .eyebrow{letter-spacing:.16em;color:#d6be83;font-size:12px}
+.achievement-seal{display:inline-grid;place-items:center;width:64px;height:64px;margin:12px 0;border:1px solid #c9ab68;border-radius:50%;font-family:serif;letter-spacing:.2em;color:#efdcae;background:#c9ab6810}
+.achievement-witness h2{font-family:serif;font-size:32px;letter-spacing:.14em;line-height:1.5;margin:10px 0 18px}
+.achievement-story{font-family:serif;line-height:1.95;color:inherit;opacity:.9}
+.achievement-condition{border-top:1px solid #b49b6140;padding-top:20px;font-size:14px;line-height:1.85;opacity:.8}
+.achievement-person{margin-top:24px;font-size:14px}.achievement-witness button{margin-top:20px;min-height:44px;width:100%}
+.chenxi-mode .achievement-witness{background:#fff8e9;color:#423d30;border-color:#ad8b49}.chenxi-mode .achievement-witness .eyebrow,.chenxi-mode .achievement-seal{color:#896529}
+@keyframes witness-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.achievement-witness-card{animation:none}}
+@media(max-width:420px){.achievement-witness-card{padding:24px 18px}.achievement-witness h2{font-size:28px}}
