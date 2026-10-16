@@ -1,0 +1,19 @@
+--- 
++++ 
+@@ -234,7 +234,7 @@
+     for(const ring of character.rings){
+       const card=node('article',undefined,'ring-card');card.append(node('h3',`第${ring.index}环 · ${ring.years}年 · ${ring.band}`));
+       if(ring.guarantee)card.append(node('p',ring.guarantee,'micro'));
+-      for(const skill of ring.skills){const s=node('div',undefined,'skill-card');s.append(node('strong',skill.name),node('p',skill.effect),node('small',`${skill.category}型 · ${skill.channel} · ${skill.target} · ${skill.cost}MP · 读条${skill.cast}秒 · 冷却${skill.cooldown}秒`));if(skill.category==='控制'){const target={P:R.benchmark(character.level).base,W:R.benchmark(character.level).stability},compare=R.controlEffect(skill.Q,character.stats.stats,target);s.append(node('p',`对同等级未修正基准人物（P${target.P}）的对照：成功率${compare.chance}%，持续${compare.duration}秒；实际战斗按对手精神力结算。`,'micro'));}card.append(s);}ringList.append(card);
++      for(const skill of ring.skills){const s=node('div',undefined,'skill-card');s.append(node('strong',skill.name),node('p',skill.effect),node('small',`${skill.category}型 · ${skill.channel} · ${skill.target} · ${skill.previewCost??skill.cost}MP · 读条${skill.previewCast??skill.cast}秒 · 冷却${skill.cooldown}秒`));if(skill.category==='控制'){const target={P:R.benchmark(character.level).base,W:R.benchmark(character.level).stability},compare=R.controlEffect(skill.Q,character.stats.stats,target);s.append(node('p',`对同等级未修正基准人物（P${target.P}）的对照：成功率${compare.chance}%，持续${compare.duration}秒；实际战斗按对手精神力结算。`,'micro'));}card.append(s);}ringList.append(card);
+     }
+   }
+   function modelEmpty(c){return c.rings.length===0;}
+@@ -257,6 +257,7 @@
+     if(!Array.isArray(character.rings))character.rings=[];
+     const soul=soulOf();if(character.stats&&soul)character.stats=R.buildStats({...character,soul});else character.stats=null;
+     if(!character.stats)character.rings=[];
++    else for(const ring of character.rings)ring.skills=ring.skills.map((skill,i)=>({...R.makeSkill({soul,style:character.style,stats:character.stats,index:ring.index,years:ring.years,category:skill.category,effectVariant:skill.effectVariant,attackSubtype:skill.attackSubtype,generationVersion:skill.generationVersion,damageMode:skill.damageMode||(skill.category==='持续伤害'?'periodic':'direct'),variant:i,effects:skill.effects,effectSeed:skill.effectSeed}),name:skill.name}));
+   }catch{character={name:'',level:20,rings:[]};}
+   window.WitnessCharacter={get:()=>JSON.parse(JSON.stringify(character)),seed:()=>seed,changeAllowed:()=>!pending};
+   sync();switchView(view);renderHistory();renderCharacter();renderStandards();if(history.length)showResult(history.at(-1));save();

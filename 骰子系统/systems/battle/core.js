@@ -7,25 +7,28 @@ const templates=typeof module!=='undefined'&&module.exports?require('./校准模
 const clamp=(v,l,h)=>Math.max(l,Math.min(h,v));
 const copy=o=>JSON.parse(JSON.stringify(o));
 function fxFor(soul){const el=soul.elements||[];if(soul.spirit_specialist)return 'mind';if(el.includes('雷'))return 'lightning';if(el.includes('冰'))return 'ice';if(el.includes('毒'))return 'poison';if(el.includes('火'))return 'fire';if(el.includes('木'))return 'petal';if(el.includes('风'))return 'wind';if(soul.main_kind==='器'&&soul.subkind==='战斗')return 'slash';return 'wave';}
-function normalizeSkill(skill){if(skill.category==='持续伤害')skill={...skill,category:'攻击',damageMode:'periodic'};if(skill.category==='减益')skill={...skill,effect:String(skill.effect||'').replace(/持续\d+(?:\.\d+)?秒/g,'持续整场')};return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
+function normalizeSkill(skill){if(skill.category==='持续伤害')skill={...skill,category:'攻击',damageMode:'periodic'};if(skill.category==='减益'&&skill.statusLifetime!=='timed')skill={...skill,effect:String(skill.effect||'').replace(/持续\d+(?:\.\d+)?秒/g,'持续整场')};return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
 function playerUnit(character,soul){soul=copy(soul);
     if(!character.stats)throw Error('先生成角色基础能力');
     const model=R.buildStats({...character,soul});
-    const skills=(character.rings||[]).flatMap(r=>r.skills.map(s=>({...R.makeSkill({soul,style:character.style,stats:model,index:r.index,years:r.years,category:s.category,damageMode:s.damageMode||((s.category==='持续伤害'||s?.damageMode==='periodic')?'periodic':'direct'),effectVariant:s.effectVariant,effects:s.effects,effectSeed:s.effectSeed}),...(!['控制','减益'].includes(s.category)?{name:s.name}:{})}))).map(s=>normalizeSkill({...s,fx:fxFor(soul)}));
+    const skills=(character.rings||[]).flatMap(r=>r.skills.map(s=>({...R.makeSkill({soul,style:character.style,stats:model,index:r.index,years:r.years,category:s.category,damageMode:s.damageMode||((s.category==='持续伤害'||s?.damageMode==='periodic')?'periodic':'direct'),attackSubtype:s.attackSubtype,generationVersion:s.generationVersion,effectVariant:s.effectVariant,effects:s.effects,effectSeed:s.effectSeed}),...(!['控制','减益'].includes(s.category)?{name:s.name}:{})}))).map(s=>normalizeSkill({...s,fx:fxFor(soul)}));
     return {id:'player',name:character.name||'你的见证者',team:0,soul:copy(soul),style:character.style,release:character.release,level:character.level,model,skills,portrait:null,source:'玩家人设'};
   }
 function templateUnit(template,level,id,team){
-    const soul={id:'npc-'+template.id,name:template.weapon,tier:7,main_kind:template.kind,subkind:template.subkind,style:template.style,attribute:template.attribute,elements:[],spirit_specialist:!!template.mental,combat_profile:{trait:template.trait,trait_name:'模板特征',description:''}};
+    const soul={id:'npc-'+template.id,name:template.weapon,tier:7,main_kind:template.kind,subkind:template.subkind,style:template.style,attribute:template.attribute,elements:[],spirit_specialist:!!template.mental};
+    if(template.id==='hash'){soul.basicChannel='能量';soul.basicMindPower=true;}
     const release=template.kind==='兽'?'附体':'召出';
     const raw=R.buildStats({level,soul,style:template.style,release}),average=R.KEYS.reduce((n,k)=>n+raw.stats[k],0)/6;
-    const growth=Object.fromEntries(R.KEYS.map(k=>[k,R.round2(raw.stats[k]*(1.28*raw.benchmark/average-1))]));
+    const growth=Object.fromEntries(R.KEYS.map(k=>[k,R.round2(raw.stats[k]*((template.statRatio||1.28)*raw.benchmark/average-1))]));
     const model=R.buildStats({level,soul,style:template.style,release,growth});
     const count=R.benchmark(level).rings;
-    const skills=template.skills.slice(0,Math.min(6,R.benchmark(level).rings)).map((t,i)=>{
+    const skills=template.skills.slice(0,Math.min(template.skillLimit||6,R.benchmark(level).rings)).map((t,i)=>{
       const years=Math.max(10,Math.floor(R.CAPS[i]*.6));
       const base=R.makeSkill({soul,style:template.style,stats:model,index:i+1,years,category:t.category,npcTemplate:true});
       const skill=normalizeSkill({...base,...t,id:template.id+'-'+(i+1),effect:t.description});skill.cost=R.skillBudget(model,skill);skill.cooldown=skill.cd??skill.cooldown;delete skill.cd;return skill;
     });
+    for(const main of [...skills])for(const sub of main.subActions||[]){const base={...main,...sub,id:main.id+'-variant',ring:main.ring,sourceKind:'variant'};delete base.subActions;skills.push(normalizeSkill(base));}
+    if(template.id==='qinyan'&&count>=5)skills.push({id:'qinyan-repair',name:'半能量修补',sourceKind:'form',category:'治疗',channel:'生命',selfOnly:true,modernEffect:'uranusRepair',cost:Math.ceil(model.derived.baseMP*.08),cast:1,cooldown:8,Q:1,fx:'lightning',effect:'仅乌拉诺斯内可用，支付魂力修补非致命伤势，不可复活。'});
     return {id,name:template.name,team,soul,style:template.style,release,level,model,skills,portrait:template.portrait,source:template.source,note:template.note,templateId:template.id};
   }
 function runtime(unit){
@@ -35,23 +38,26 @@ function runtime(unit){
     return u;
   }
 
-  class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,seed='battle',snapshot=null,difficulty='standard'}){
-      if(snapshot){if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);return;}
+  class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,traitsEnabled=true,seed='battle',snapshot=null,difficulty='standard',challengeId=null,postGameChallenge=false,challengeSessionId=null,enemyLevelOverride=null}){
+      if(snapshot){if(![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('不支持的战斗规则');if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.mechanicsFixVersion=snapshot.mechanicsFixVersion||0;this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);ChallengeBattle.restore(this);MechanicsFix.restore(this,snapshot);if(!this.result&&snapshot.modernVersion!==1100){for(const u of this.units){const template=templates.find(t=>t.id===u.templateId);if(!template||u.guildmaster)continue;u.skills=templateUnit(template,u.level,u.id,u.team).skills;if(u.templateId==='hash'){u.soul.basicChannel='能量';u.soul.basicMindPower=true;}if(u.cast?.skill){const current=u.skills.find(s=>s.id===u.cast.skill.id);if(current)u.cast.skill=copy(current);}}this.addLog('已同步v11会员技能；既有资源与已支付费用保留。',{type:'rulesMigration',gameVersion:'v11'});}this.initializeSoulTraits();return;}
       const t=templates.find(t=>t.id===enemyId)||templates[0];
       if(playerTemplateId){const chosen=templates.find(t=>t.id===playerTemplateId);if(!chosen)throw Error('角色卡不存在');const l=Math.max(41,Math.min(99,Math.round(testLevel)));soul={name:chosen.weapon};character={level:l,style:chosen.style,rings:[]};}
-      soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level;character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
+      soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=enemyLevelOverride??(difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level);character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
       const count=R.benchmark(level).rings;
       // 玩家使用已经获得的全部魂环与魂技；考官按实际环数开放，最多六技。
       const units=[playerTemplateId?templateUnit(templates.find(t=>t.id===playerTemplateId),level,'player',0):playerUnit(character,soul),templateUnit(t,enemyLevel,'enemy',1)];
       const support=templates.find(t=>t.support),fighter=templates.find(t=>t.id==='yixing');
-      if(character.style==='辅助'&&!duel)units.push(templateUnit(fighter,level,'ally',0),templateUnit(support,enemyLevel,'enemySupport',1));
-      else if(withSupport)units.push(templateUnit(support,level,'ally',0),templateUnit(support,enemyLevel,'enemySupport',1));
-      this.resourceConfig=R.getResourceConfig();this.activeId=null;this.queueSequence=0;this.units=units.map(runtime);this.difficulty=difficulty;this.seed=String(seed);this.rng=new D.DiceEngine(this.seed);this.now=0;this.result=null;this.log=[];this.events=[];this.turn=0;
+      if(!duel&&(character.style==='辅助'||t.style==='辅助'||withSupport)){
+        const allyTemplate=character.style==='辅助'?fighter:support;
+        const enemyPartner=t.style==='辅助'?fighter:support;
+        units.push(templateUnit(allyTemplate,level,'ally',0),templateUnit(enemyPartner,enemyLevel,'enemySupport',1));
+      }
+      this.traitsEnabled=traitsEnabled;this.resourceConfig=R.getResourceConfig();this.activeId=null;this.queueSequence=0;this.units=units.map(runtime);this.difficulty=difficulty;this.postGameChallenge=postGameChallenge;this.challengeSessionId=challengeSessionId;this.seed=String(seed);this.rng=new D.DiceEngine(this.seed);this.now=0;this.result=null;this.log=[];this.events=[];this.turn=0;
       for(const u of this.units)u.tiePriority=this.rng.die(100000);
       this.addLog('斗魂台开启。对手按当前等级切磋；HP或精神护持归零即退场；魂力耗尽不自动失败。同速同时准备时按种子投骰决定顺序。');
       if(difficulty==='admission')this.addLog('入会考核：考官通常低5级但保留所在魂环阶段，伤害为标准的90%，双方行动后均回气0.3秒；按环数开放，最多六技。');
       this.addLog('行动滚轴：敏捷积累行动机会，完成后依次获得回合；实际等级参战，考核降级不会跨越魂环阶段。');
-      ShieldActions.initialize(this);this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
+      ShieldActions.initialize(this);if(challengeId)ChallengeBattle.initialize(this,challengeId);this.initializeSoulTraits();this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
     } }
   root.WitnessBattle={Battle,templateUnit,playerUnit,fxFor,templates};
 
@@ -64,7 +70,7 @@ function runtime(unit){
 
 
 
-  const trait=function(u){return u.soul.combat_profile?.trait||'focus';};
+
 
   const basicCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*this.resourceConfig.basicFraction));};
 
@@ -73,18 +79,12 @@ function runtime(unit){
   const cost=function(u,s){
       let cost=s.costPercent?Math.max(s.cost,Math.ceil(u.model.derived.baseMP*s.costPercent*(1-u.model.derived.costReduction/100))):s.cost;
       cost*=1+this.value(u,'costUp');
-      const trait=this.trait(u);
-      if(trait==='frugal'&&['强化','防御','治疗','回蓝'].includes(s.category))cost*=.88;
-      if(trait==='focus'&&['控制','减益'].includes(s.category))cost*=.9;
-      if(trait==='water'&&s.category==='减益')cost*=.92;
-      if(trait==='fire'&&s.category==='攻击'&&s.channel==='能量')cost*=1.08;
-      if(trait==='thunder'&&s.category==='攻击')cost*=1.05;
+      
       return Math.max(1,Math.ceil(cost));
     };
 
   const castTime=function(u,s){
       let time=s.castFixed??(s.cast+(s.castExtra||0));
-      if(this.trait(u)==='thunder'&&s.category==='攻击')time*=.9;
       time*=1+this.value(u,'slow');return Math.max(.5,time);
     };
 
@@ -107,10 +107,10 @@ function runtime(unit){
       for(const s of u.statuses)if(completed&&s.actionsRemaining!==undefined)s.actionsRemaining--;
       const expired=u.statuses.filter(s=>s.actionsRemaining!==undefined&&s.actionsRemaining<=0);
       u.statuses=u.statuses.filter(s=>s.actionsRemaining===undefined||s.actionsRemaining>0);
-      for(const s of expired.filter(s=>s.fatigue))this.setStatus(u,'fatigue',.1,6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
+      for(const s of expired.filter(s=>s.fatigue))this.setStatus(u,'fatigue',s.fatigueValue??.1,s.fatigueSeconds??6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
       u.progress=0;u.queuedAt=null;if(completed)u.actions++;u.readyAt=this.now+300;if(this.activeId===u.id)this.activeId=null;};
 
-  const cooldownKey=function(u,s){return u.soul.name==='九心海棠'?'海棠治疗':s.years===100000?'ring-'+s.ring:s.id;};
+  const cooldownKey=function(u,s){if(s.sharedCooldown)return s.sharedCooldown;return u.soul.name==='九心海棠'?'海棠治疗':s.years===100000?'ring-'+s.ring:s.id;};
 
   const cooldownUntil=function(u,s){return u.cooldowns[this.cooldownKey(u,s)]||0;};
 
@@ -141,7 +141,7 @@ function runtime(unit){
       const bonus=action==='attack'&&!!u.bonusAttack;u.bonusAttack=false;
       let duration,skill=null;
       if(action==='wait')duration=.5;
-      else if(action==='attack'){u.mp-=this.basicCost(u);duration=1.5;if(this.trait(u)==='heavy')duration+=.15;if(this.trait(u)==='swift')duration*=.88;}
+      else if(action==='attack'){u.mp-=this.basicCost(u);duration=1.5;}
       else if(['defend','defendSH'].includes(action))duration=.75;
       else if(action==='tune'){duration=3;u.tuneUses++;}
       else if(action==='calm'){duration=3;u.calmUses++;u.mp-=Math.ceil(u.model.derived.baseMP*.08);}
@@ -168,26 +168,25 @@ function runtime(unit){
       if(['defend','defendSH'].includes(cast.action)){p.effects.push(()=>this.setStatus(u,cast.action==='defendSH'?'defendSH':'defendHP',1,3));return p;}
       if(cast.action==='tune'){p.effects.push(()=>{u.mp=Math.min(u.model.derived.MP,u.mp+Math.round(u.model.derived.baseMP*.08));this.addLog(u.name+'调息恢复魂力',{type:'restore',actor:u.id,target:u.id,fx:'restore'});});return p;}
       if(cast.action==='calm'){p.heal=Math.round(u.model.derived.SH*.08);p.channel='精神';return p;}
-      const cat=s?.damageMode==='periodic'?'持续伤害':s?.category||'攻击',channel=s?.channel||(u.soul.spirit_specialist?'精神':'物理');p.channel=channel;
-      const power=s?.mindPower?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA,Q=s?.Q||1;
+      const cat=s?.damageMode==='periodic'?'持续伤害':s?.category||'攻击',channel=s?.channel||u.soul.basicChannel||(u.soul.spirit_specialist?'精神':'物理');p.channel=channel;
+      const power=s?.attackSubtype==='pursuit'?a.A*s.agilityCoefficient:(s?.mindPower||!s&&u.soul.basicMindPower)?a.MA:channel==='精神'?a.MA:channel==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA,Q=s?.Q||1;
       if(cat==='攻击'||cat==='持续伤害'){
         const hit=this.hit(u,t,channel);p.hit=hit;
         if(!hit.success){this.addLog(`${u.name}的${s?.name||'普攻'}未命中（d100=${hit.roll}，阈值${hit.chance}）`,{type:'miss',actor:u.id,target:t.id,fx:'miss'});return p;}
         let raw=s?(cat==='持续伤害'?1:1.2)*Q*power*(s.factor??1):.45*power;
-        const trait=this.trait(u);if(!s&&trait==='heavy')raw*=1.12;if(!s&&trait==='swift')raw*=.96;if(!s&&['guard','ghost'].includes(trait))raw*=.94;
-        if(s&&cat==='攻击'&&trait==='fire'&&channel==='能量')raw*=1.1;
-        if(cat==='持续伤害'&&trait==='poison')raw*=1.14;if(cat==='攻击'&&trait==='poison')raw*=.95;
+        
         if(cat==='持续伤害')raw*=1.4;
         if(cast.rage)raw*=1+.15*cast.rage;
         if(cat==='持续伤害'){
-          const tick=this.damageValue(u,t,raw/3,channel,pre),key=u.id+'-'+s.id;
-          p.effects.push(()=>{t.dots=t.dots.filter(d=>d.key!==key);t.dots.push({key,source:u.id,channel,baseDamage:tick,damage:Math.round(tick*(1+this.value(u,'dotBoost'))),next:this.now+3000,ticks:3,fx:s.fx,damageNature:this.dotNature(u,s)});this.addLog(t.name+'受到持续伤害状态',{type:'status',actor:u.id,target:t.id,fx:s.fx});});
-        }else p.damage=this.damageValue(u,t,raw,channel,s?.penetration?{...pre,[t.id]:{...pre[t.id],DEF:pre[t.id].DEF*(1-s.penetration)}}:pre);
+          const tick=this.damageValue(u,t,raw/(s.dotTicks||3),channel,pre),key=u.id+'-'+s.id;
+          p.effects.push(()=>{t.dots=t.dots.filter(d=>d.key!==key);t.dots.push({key,source:u.id,channel,baseDamage:tick,damageMultiplier:1,damage:Math.round(tick*(1+this.value(u,'dotBoost'))),next:this.now+(s.dotFirstMs||3000),rawPerTick:raw/(s.dotTicks||3),ticks:s.dotTicks||3,fx:s.fx,damageNature:this.dotNature(u,s)});this.addLog(t.name+'受到持续伤害状态',{type:'status',actor:u.id,target:t.id,fx:s.fx});});
+        }else if(s?.attackSubtype!=='multi')p.damage=this.damageValue(u,t,raw,channel,s?.penetration?{...pre,[t.id]:{...pre[t.id],DEF:pre[t.id].DEF*(1-s.penetration)}}:pre);
         p.extraDamage=[];
+        if(s?.attackSubtype==='multi'){const eachRaw=raw/3;p.damage=0;for(let n=0;n<3;n++)p.extraDamage.push({amount:this.damageValue(u,t,eachRaw,channel,pre),channel});}
         if(s?.secondaryFactor)p.extraDamage.push({amount:this.damageValue(u,t,1.2*Q*power*s.secondaryFactor,s.secondaryChannel||channel,pre),channel:s.secondaryChannel||channel});
         const cold=this.value(u,'coldAura');
         if(cold){const hits=s?.secondaryFactor?2:1;p.extraDamage.push({amount:this.damageValue(u,t,a.SA*cold*hits,'能量',pre),channel:'能量'});}
-        if(s?.detonate){const dots=t.dots.filter(d=>d.source===u.id);p.damage+=dots.reduce((sum,d)=>sum+d.damage*d.ticks,0);p.effects.push(()=>t.dots=t.dots.filter(d=>d.source!==u.id));}
+        if(s?.detonate){const dots=t.dots.filter(d=>d.source===u.id);p.damage+=dots.reduce((sum,d)=>sum+this.dotDamage(d,t)*Math.max(0,d.ticks),0);p.effects.push(()=>t.dots=t.dots.filter(d=>d.source!==u.id));}
         if(s?.rageGain)p.effects.push(()=>this.gainRage(u,s.rageGain));
         if(s?.slow)p.effects.push(()=>this.setStatus(t,'slow',s.slow,s.duration||2,{source:this.statusSource(u,s),label:s.name,from:u.name}));
         if(s?.manaDrain)p.effects.push(()=>{t.mp=Math.max(0,t.mp-Math.round(t.model.derived.baseMP*s.manaDrain));if(s.manaReturn&&(u.manaReturnUses||0)<2){u.manaReturnUses=(u.manaReturnUses||0)+1;u.mp=Math.min(u.model.derived.MP,u.mp+Math.round(u.model.derived.baseMP*Math.min(.02,s.manaReturn)));}});
@@ -209,18 +208,17 @@ function runtime(unit){
       }
       if(cat==='防御')p.effects.push(()=>{
         const mental=channel==='精神';let shield=s.guard?0:Math.round(.45*Q*(mental?a.MA:a.SA));
-        if(this.trait(u)==='guard'&&!mental)shield=Math.round(shield*1.16);if(this.trait(u)==='water'&&!mental)shield=Math.round(shield*1.12);if(this.trait(u)==='ghost'&&mental)shield=Math.round(shield*1.16);
         if(mental)t.shieldSH=Math.max(t.shieldSH,shield);else t.shieldHP=Math.max(t.shieldHP,shield);
         t.shieldUntil=this.now+8000;t.oneHit=!!s.oneHit;t.guard=s.guard||0;t.rageOnBreak=!!s.rageOnBreak;
       });
-      if(cat==='治疗'){p.channel=channel==='精神'?'精神':'生命';p.heal=Math.round(.4*Q*(p.channel==='精神'?a.MA:a.SA));if(this.trait(u)==='healing')p.heal=Math.round(p.heal*1.15);if(this.trait(u)==='life'&&p.channel!=='精神')p.heal=Math.round(p.heal*1.12);}
+      if(cat==='治疗'){p.channel=channel==='精神'?'精神':'生命';p.heal=Math.round(.4*Q*(p.channel==='精神'?a.MA:a.SA));}
       if(cat==='回蓝')p.effects.push(()=>t.mp=Math.min(t.model.derived.MP,t.mp+Math.round(25+10*Q)));
       if(cat==='控制'&&s.chipFactor){p.damage=this.damageValue(u,t,1.2*Q*a.MA*s.chipFactor,channel,pre);}
       if(cat==='控制')p.effects.push(()=>{if(s.dispel)t.shieldHP=Math.round(t.shieldHP*(1-s.dispel));this.tryControl(u,t,s,s.baseControl);});
       if(s?.fieldEvasion)p.effects.push(()=>this.setStatus(u,'evasion',s.fieldEvasion,s.duration||9,{source:this.statusSource(u,s),label:s.name,from:u.name}));
       if(cat==='减益'&&s.slow)p.effects.push(()=>this.setStatus(t,'slow',s.slow,s.duration||8,{source:this.statusSource(u,s),label:s.name,from:u.name}));
       if(cat==='减益'&&s.costUp)p.effects.push(()=>this.setStatus(t,'costUp',s.costUp,s.duration||8,{source:this.statusSource(u,s),label:s.name,from:u.name}));
-      if(cat==='减益')p.effects.push(()=>{const effect=R.controlEffect(Q,pre[u.id],pre[t.id]),roll=this.rng.die(100);if(roll<=Math.round(effect.chance))this.setStatus(t,channel==='精神'?'mindDown':'defDown',.1*Q,6,{source:this.statusSource(u,s),label:s.name,from:u.name});this.addLog(`${u.name}减益判定${roll} / ${effect.chance}%`,{type:'status',actor:u.id,target:t.id,fx:s.fx});});
+      if(cat==='减益'&&s.genericDefDown!==false)p.effects.push(()=>{const effect=R.controlEffect(Q,pre[u.id],pre[t.id]),roll=this.rng.die(100);if(roll<=Math.round(effect.chance))this.setStatus(t,channel==='精神'?'mindDown':'defDown',.1*Q,6,{source:this.statusSource(u,s),label:s.name,from:u.name});this.addLog(`${u.name}减益判定${roll} / ${effect.chance}%`,{type:'status',actor:u.id,target:t.id,fx:s.fx});});
       return p;
     };
 
@@ -228,8 +226,6 @@ function runtime(unit){
       if(!this.alive(t))return;if(t.immuneUntil>this.now||this.value(t,'controlWard')){this.addLog(t.name+'处于控制免疫期');return;}
       const effect=R.controlEffect(s.Q,this.effective(u),this.effective(t));
       if(baseControl!==undefined)effect.duration=R.round2(Math.max(.01,baseControl*effect.ratio));
-      if(this.trait(u)==='binding')effect.duration=effect.duration+.2;
-      if(this.trait(u)==='ice')effect.chance=Math.min(85,effect.chance+6);
       const roll=this.rng.die(100);
       if(roll>Math.round(effect.chance)){this.addLog(`${t.name}抵抗控制（d100=${roll}，阈值${effect.chance}%）`,{type:'resist',actor:u.id,target:t.id,fx:'mind'});return;}
       t.progress=Math.min(t.progress,.4);t.queuedAt=null;const ms=Math.round(effect.duration*1000);this.setStatus(t,'control',1,effect.duration);t.immuneUntil=this.now+ms+4000;
@@ -239,14 +235,13 @@ function runtime(unit){
 
   const applyDamage=function(t,damage,channel,source,fx){
       if(!damage||!this.alive(t))return;
-      const mind=channel==='精神',trait=source?this.trait(source):'';
+      const mind=channel==='精神';
       const shieldKey=mind?'shieldSH':'shieldHP';let incoming=damage;
-      if(trait==='annihilation'&&t[shieldKey]>0)incoming=Math.round(incoming*1.3);
       if(!mind&&t.guard){incoming=Math.round(incoming*(1-t.guard));t.guard=0;}
       const blocked=Math.min(t[shieldKey],incoming);t[shieldKey]-=blocked;incoming-=blocked;
       const special=!mind&&this.value(t,'soulArmor')>0;
-      const fraction=Math.min(.70,this.resourceConfig.absorb+(special?.15:0));
-      const unitCost=this.resourceConfig.mpPerDamage*(special?.75:1);
+      const fraction=Math.min(.70,special?this.value(t,'soulArmor'):this.resourceConfig.absorb);
+      const unitCost=special?.3:this.resourceConfig.mpPerDamage;
       const absorbed=Math.min(Math.floor(incoming*fraction),Math.floor(t.mp/unitCost));
       const paid=Math.ceil(absorbed*unitCost);
       const beforeProtection=mind?t.sh:t.hp;
@@ -262,7 +257,7 @@ function runtime(unit){
       }else t.hp=Math.max(0,t.hp-incoming);
       if(paid)this.addLog(t.name+'受击同时结算：'+(mind?'精神护持':'生命')+' −'+(beforeProtection-(mind?t.sh:t.hp))+'，魂力 −'+paid,{type:'armor',target:t.id,actor:source?.id,paid,absorbed,healthLost:beforeProtection-(mind?t.sh:t.hp),remainingDamage:incoming,channel});
       this.addLog(`${t.name}${mind?'精神护持':'生命'} −${incoming}${blocked?'（盾挡'+blocked+'）':''}`,{type:'damage',actor:source?.id,target:t.id,fx,amount:incoming,channel});
-      if(!mind&&t.style==='辅助'&&!t.firstHit&&this.trait(t)==='life'&&t.hp>0){t.firstHit=true;this.heal(t,Math.round(t.model.derived.HP*.03),'生命');}
+      
     };
 
   const heal=function(t,amount,channel){
@@ -298,7 +293,7 @@ function runtime(unit){
         if(!autoPlayer&&this.canAct(this.unit('player')))break;
         const next=this.nextTime();if(next>until){this.advanceGauge(until-this.now);this.now=until;break;}this.advanceGauge(next-this.now);this.now=next;
         for(const u of this.units){
-          for(const s of u.statuses)if(s.until<=this.now&&s.fatigue)this.setStatus(u,'fatigue',.1,6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
+          for(const s of u.statuses)if(s.until<=this.now&&s.fatigue)this.setStatus(u,'fatigue',s.fatigueValue??.1,s.fatigueSeconds??6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
           u.statuses=u.statuses.filter(s=>s.until>this.now);
           if(u.shieldUntil&&u.shieldUntil<=this.now){u.shieldHP=0;u.shieldSH=0;u.guard=0;u.oneHit=false;u.shieldUntil=0;}
           for(const dot of u.dots)dot.damage=this.dotDamage(dot);
@@ -310,10 +305,13 @@ function runtime(unit){
         const pre=Object.fromEntries(this.units.map(u=>[u.id,this.effective(u)])),plans=completed.map(({u,cast})=>this.plan(u,cast,pre));
         for(const {u,cast}of completed)this.endTurn(u,!(this.resourceConfig.selfBuffBonus&&cast.skill?.category==='强化'&&cast.target===u.id));
         // Damage sources remain distinct; all precomputed attacks resolve before the result check.
-        for(const p of plans)if(p.damage&&p.t)this.applyDamage(p.t,p.damage,p.channel,p.u,p.s?.fx||fxFor(p.u.soul));
-        for(const p of plans)for(const d of p.extraDamage||[])if(p.t)this.applyDamage(p.t,d.amount,d.channel,p.u,p.s?.fx||fxFor(p.u.soul));
+        for(const p of plans)if(p.damage&&p.t){this._packetSkill=p.s;this.applyDamage(p.t,p.damage,p.channel,p.u,p.s?.fx||fxFor(p.u.soul));}
+        for(const p of plans)for(const d of p.extraDamage||[])if(p.t&&this.alive(p.t)){this._packetSkill=p.s;this.applyDamage(p.t,d.amount,d.channel,p.u,p.s?.fx||fxFor(p.u.soul));}this._packetSkill=null;
         for(const p of plans)if(p.heal&&p.t)this.heal(p.t,p.heal,p.channel);
         for(const p of plans)for(const effect of p.effects)effect();
+        this.refreshDotDamage();
+        for(const {u,cast}of completed)this.onActionComplete(u,cast);
+        for(const u of this.units)this.onResourceChange(u);
         for(const p of plans)if(p.s||p.cast.action==='attack')this.addLog(`${p.u.name}释放${p.s?.name||'普攻'}`,{type:'release',actor:p.u.id,target:p.t?.id,fx:p.s?.fx||fxFor(p.u.soul),label:p.s?.name||'普攻'});
         this.checkResult();
         if(!this.result&&this.resourceConfig.selfBuffBonus)for(const {u,cast}of completed){
@@ -329,7 +327,7 @@ function runtime(unit){
     };
 
   const hasOffense=function(u){
-      return this.alive(u)&&(u.mp>=this.basicCost(u)||u.skills.some(s=>['攻击','持续伤害'].includes(s.category)&&u.mp>=this.cost(u,s)&&(!s.maxUses||(u.uses[s.id]||0)<s.maxUses)&&(!s.rageSpend||u.rage>=1)&&(!s.detonate||this.units.some(t=>t.team!==u.team&&t.dots.some(d=>d.source===u.id)))));
+      return this.alive(u)&&(!!u.guildmaster||u.mp>=this.basicCost(u)||u.skills.some(s=>['攻击','持续伤害'].includes(s.category)&&u.mp>=this.cost(u,s)&&(!s.maxUses||(u.uses[s.id]||0)<s.maxUses)&&(!s.rageSpend||u.rage>=1)&&(!s.detonate||this.units.some(t=>t.team!==u.team&&t.dots.some(d=>d.source===u.id)))));
     };
 
   const resolveDraw=function(originalReason){
@@ -342,7 +340,7 @@ function runtime(unit){
       this.addLog(`平局加判：我方剩余生命${(ratios[0]*100).toFixed(2)}%（${hp[0]}/${maxHP[0]}），对方${(ratios[1]*100).toFixed(2)}%（${hp[1]}/${maxHP[1]}）。`+(equal?'比例相同，判主角获胜。':winner===0?'我方比例更高，判主角获胜。':'对方比例更高，判主角落败，可原局重试。'));
     };
 
-  const checkResult=function(){
+  const checkResult=function(){for(const u of this.units)this.onResourceChange(u);
       for(const u of this.units)if(!u.fallen&&(u.sh<=0||(u.release==='召唤'?u.bodyHP<=0:u.hp<=0))){u.fallen=true;u.cast=null;this.addLog(u.name+'失去战斗能力，保护阵接住了他／她。',{type:'fall',target:u.id,fx:'wave'});}
       if(this.units.filter(u=>this.alive(u)).length>=2&&!this.units.some(u=>this.hasOffense(u))&&!this.units.some(u=>u.dots.length||u.cast&&u.cast.action!=='wait')){
         this.doubleEmptySince??=this.now;
@@ -350,7 +348,7 @@ function runtime(unit){
       }else this.doubleEmptySince=null;
       const a=this.units.some(u=>u.team===0&&this.alive(u)),b=this.units.some(u=>u.team===1&&this.alive(u));
       if(!a&&!b){this.resolveDraw('双方同时退场');return;}
-      if(!a||!b){this.result={winner:a?0:b?1:null,reason:'退场',time:this.now};this.addLog(a?'转正战胜利。人事部为你登记，交付会徽与终端。':b?'本次切磋未通过，可以重试同一场转正战。':'双方同时退场，平局。');}
+      if(!a||!b){this.result={winner:a?0:b?1:null,reason:'退场',time:this.now};this.addLog(this.postGameChallenge?(a?'追加挑战胜利。原会徽与旅程结局保留。':'追加挑战落败。失败机会由挑战区结算。'):a?'转正战胜利。人事部为你登记，交付会徽与终端。':b?'本次切磋未通过，可以重试同一场转正战。':'双方同时退场，平局。');}
     };
 
   const finishByTime=function(){
@@ -362,5 +360,5 @@ function runtime(unit){
 
   const surrender=function(){this.result={winner:1,reason:'认输',time:this.now};this.addLog('你选择结束这场切磋。');};
 
-  return {methods:{unit,alive,status,trait,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
+  return {methods:{unit,alive,status,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
 })(globalThis);

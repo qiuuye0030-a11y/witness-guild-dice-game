@@ -91,9 +91,6 @@ const ShieldActions=(function(root){
     let incoming = Math.max(0, number(damage));
     const reduction = source ? this.value(source, 'damageDown') : 0;
     if (reduction && incoming > 0) incoming = Math.max(1, Math.round(incoming * (1 - reduction)));
-    if (source && this.trait(source) === 'annihilation' && layers.some(layer => layer.amount > 0)) {
-      incoming = Math.round(incoming * 1.3);
-    }
     const beforeShields = incoming;
     let blocked = 0, guardBlocked = 0, rageTriggers = 0;
     const consumed = new Set();
@@ -129,8 +126,8 @@ const ShieldActions=(function(root){
   const previewProtection = function (target, damage, channel, source) {
     const shield = this.previewShieldDamage(target, damage, channel, source);
     const special = channel !== '精神' && this.value(target, 'soulArmor') > 0;
-    const fraction = Math.min(.70, this.resourceConfig.absorb + (special ? .15 : 0));
-    const unitCost = this.resourceConfig.mpPerDamage * (special ? .75 : 1);
+    const fraction = Math.min(.70, special ? this.value(target, 'soulArmor') : this.resourceConfig.absorb);
+    const unitCost = special ? .3 : this.resourceConfig.mpPerDamage;
     const absorbed = Math.min(Math.floor(shield.afterShields * fraction),
       Math.floor(Math.max(0, target.mp) / unitCost));
     const mpCost = Math.ceil(absorbed * unitCost);
@@ -188,15 +185,12 @@ const ShieldActions=(function(root){
       const mental = skill.channel === '精神';
       let amount = skill.guard ? 0 : Math.round(.45 * (skill.Q || 1) *
         (mental ? pre[unit.id].MA : pre[unit.id].SA));
-      const trait = this.trait(unit);
-      if (trait === 'guard' && !mental) amount = Math.round(amount * 1.16);
-      if (trait === 'water' && !mental) amount = Math.round(amount * 1.12);
-      if (trait === 'ghost' && mental) amount = Math.round(amount * 1.16);
+      amount=Math.round(amount*(skill.shieldMultiplier||1));
       result.effects.push(() => this.addShieldLayer(target, {
         source: this.statusSource(unit, skill), casterId: unit.id, skillId: skill.id,
         label: skill.name, channel: mental ? '精神' : '生命', amount,
         guard: skill.guard || 0, oneHit: !!skill.oneHit,
-        rageOnBreak: !!skill.rageOnBreak, until: this.now + 8000
+        rageOnBreak: !!skill.rageOnBreak, until: this.now + (skill.shieldDuration||8)*1000
       }));
       return result;
     }
@@ -257,11 +251,6 @@ const ShieldActions=(function(root){
         amount: incoming, channel, shieldBlocked: outcome.blocked,
         guardBlocked: outcome.guardBlocked, shieldLayersHit: outcome.hits
       });
-    if (!mind && target.style === '辅助' && !target.firstHit &&
-        this.trait(target) === 'life' && target.hp > 0) {
-      target.firstHit = true;
-      this.heal(target, Math.round(target.model.derived.HP * .03), '生命');
-    }
     if (source?.soul.name === '血君' && target.hp < beforeHP) {
       target.bloodMarks ||= [];
       if (!target.bloodMarks.includes(source.id)) target.bloodMarks.push(source.id);

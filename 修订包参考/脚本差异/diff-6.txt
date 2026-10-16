@@ -1,0 +1,256 @@
+--- 
++++ 
+@@ -626,7 +626,8 @@
+         "category": "减益",
+         "fx": "petal",
+         "baseControl": 1.5,
+-        "description": "将玫瑰牵制拆出缠枝，短时削防并减速18%。",
++        "description": "将玫瑰牵制拆出缠枝，减速18%，并判定削防；两项效果均持续8秒，同来源再次施放刷新时限。",
++        "statusLifetime": "timed",
+         "slow": 0.18,
+         "duration": 8
+       },
+@@ -1093,6 +1094,8 @@
+         "costUp": 0,
+         "duration": 9,
+         "fieldEvasion": 0.12,
++        "statusLifetime": "timed",
++        "genericDefDown": false,
+         "fx": "wind",
+         "description": "张开无尘领域，近身斥退和飞行道具阻力改编为9秒减速18%，自身感知获得12个百分点闪避，持续9秒；范围与距离在当前斗魂模型中不单独计算。"
+       },
+@@ -1541,7 +1544,7 @@
+ const clamp=(v,l,h)=>Math.max(l,Math.min(h,v));
+ const copy=o=>JSON.parse(JSON.stringify(o));
+ function fxFor(soul){const el=soul.elements||[];if(soul.spirit_specialist)return 'mind';if(el.includes('雷'))return 'lightning';if(el.includes('冰'))return 'ice';if(el.includes('毒'))return 'poison';if(el.includes('火'))return 'fire';if(el.includes('木'))return 'petal';if(el.includes('风'))return 'wind';if(soul.main_kind==='器'&&soul.subkind==='战斗')return 'slash';return 'wave';}
+-function normalizeSkill(skill){if(skill.category==='持续伤害')skill={...skill,category:'攻击',damageMode:'periodic'};if(skill.category==='减益')skill={...skill,effect:String(skill.effect||'').replace(/持续\d+(?:\.\d+)?秒/g,'持续整场')};return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
++function normalizeSkill(skill){if(skill.category==='持续伤害')skill={...skill,category:'攻击',damageMode:'periodic'};if(skill.category==='减益'&&skill.statusLifetime!=='timed')skill={...skill,effect:String(skill.effect||'').replace(/持续\d+(?:\.\d+)?秒/g,'持续整场')};return {...copy(skill),damageNature:skill.damageNature||(skill.fx==='poison'||/毒/.test(skill.name+' '+(skill.description||''))?'poison':'residual'),id:skill.id||`${skill.ring}-${skill.name}`,fx:skill.fx||'wave'};}
+ function playerUnit(character,soul){soul=copy(soul);
+     if(!character.stats)throw Error('先生成角色基础能力');
+     const model=R.buildStats({...character,soul});
+@@ -1572,7 +1575,7 @@
+   }
+ 
+   class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,seed='battle',snapshot=null,difficulty='standard',challengeId=null,postGameChallenge=false,challengeSessionId=null,enemyLevelOverride=null}){
+-      if(snapshot){if(![13,14,15,16].includes(snapshot.combatRulesVersion))throw Error('不支持的战斗规则');if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14,15,16].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);ChallengeBattle.restore(this);return;}
++      if(snapshot){if(![13,14,15,16].includes(snapshot.combatRulesVersion))throw Error('不支持的战斗规则');if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14,15,16].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.mechanicsFixVersion=snapshot.mechanicsFixVersion||0;this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);ChallengeBattle.restore(this);MechanicsFix.restore(this,snapshot);return;}
+       const t=templates.find(t=>t.id===enemyId)||templates[0];
+       if(playerTemplateId){const chosen=templates.find(t=>t.id===playerTemplateId);if(!chosen)throw Error('角色卡不存在');const l=Math.max(41,Math.min(99,Math.round(testLevel)));soul={name:chosen.weapon};character={level:l,style:chosen.style,rings:[]};}
+       soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=enemyLevelOverride??(difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level);character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
+@@ -1717,14 +1720,14 @@
+         if(cast.rage)raw*=1+.15*cast.rage;
+         if(cat==='持续伤害'){
+           const tick=this.damageValue(u,t,raw/(s.dotTicks||3),channel,pre),key=u.id+'-'+s.id;
+-          p.effects.push(()=>{t.dots=t.dots.filter(d=>d.key!==key);t.dots.push({key,source:u.id,channel,baseDamage:tick,damage:Math.round(tick*(1+this.value(u,'dotBoost'))),next:this.now+(s.dotFirstMs||3000),rawPerTick:raw/(s.dotTicks||3),ticks:s.dotTicks||3,fx:s.fx,damageNature:this.dotNature(u,s)});this.addLog(t.name+'受到持续伤害状态',{type:'status',actor:u.id,target:t.id,fx:s.fx});});
++          p.effects.push(()=>{t.dots=t.dots.filter(d=>d.key!==key);t.dots.push({key,source:u.id,channel,baseDamage:tick,damageMultiplier:1,damage:Math.round(tick*(1+this.value(u,'dotBoost'))),next:this.now+(s.dotFirstMs||3000),rawPerTick:raw/(s.dotTicks||3),ticks:s.dotTicks||3,fx:s.fx,damageNature:this.dotNature(u,s)});this.addLog(t.name+'受到持续伤害状态',{type:'status',actor:u.id,target:t.id,fx:s.fx});});
+         }else if(s?.attackSubtype!=='multi')p.damage=this.damageValue(u,t,raw,channel,s?.penetration?{...pre,[t.id]:{...pre[t.id],DEF:pre[t.id].DEF*(1-s.penetration)}}:pre);
+         p.extraDamage=[];
+         if(s?.attackSubtype==='multi'){const eachRaw=raw/3;p.damage=0;for(let n=0;n<3;n++)p.extraDamage.push({amount:this.damageValue(u,t,eachRaw,channel,pre),channel});}
+         if(s?.secondaryFactor)p.extraDamage.push({amount:this.damageValue(u,t,1.2*Q*power*s.secondaryFactor,s.secondaryChannel||channel,pre),channel:s.secondaryChannel||channel});
+         const cold=this.value(u,'coldAura');
+         if(cold){const hits=s?.secondaryFactor?2:1;p.extraDamage.push({amount:this.damageValue(u,t,a.SA*cold*hits,'能量',pre),channel:'能量'});}
+-        if(s?.detonate){const dots=t.dots.filter(d=>d.source===u.id);p.damage+=dots.reduce((sum,d)=>sum+d.damage*d.ticks,0);p.effects.push(()=>t.dots=t.dots.filter(d=>d.source!==u.id));}
++        if(s?.detonate){const dots=t.dots.filter(d=>d.source===u.id);p.damage+=dots.reduce((sum,d)=>sum+this.dotDamage(d,t)*Math.max(0,d.ticks),0);p.effects.push(()=>t.dots=t.dots.filter(d=>d.source!==u.id));}
+         if(s?.rageGain)p.effects.push(()=>this.gainRage(u,s.rageGain));
+         if(s?.slow)p.effects.push(()=>this.setStatus(t,'slow',s.slow,s.duration||2,{source:this.statusSource(u,s),label:s.name,from:u.name}));
+         if(s?.manaDrain)p.effects.push(()=>{t.mp=Math.max(0,t.mp-Math.round(t.model.derived.baseMP*s.manaDrain));if(s.manaReturn&&(u.manaReturnUses||0)<2){u.manaReturnUses=(u.manaReturnUses||0)+1;u.mp=Math.min(u.model.derived.MP,u.mp+Math.round(u.model.derived.baseMP*Math.min(.02,s.manaReturn)));}});
+@@ -1757,7 +1760,7 @@
+       if(s?.fieldEvasion)p.effects.push(()=>this.setStatus(u,'evasion',s.fieldEvasion,s.duration||9,{source:this.statusSource(u,s),label:s.name,from:u.name}));
+       if(cat==='减益'&&s.slow)p.effects.push(()=>this.setStatus(t,'slow',s.slow,s.duration||8,{source:this.statusSource(u,s),label:s.name,from:u.name}));
+       if(cat==='减益'&&s.costUp)p.effects.push(()=>this.setStatus(t,'costUp',s.costUp,s.duration||8,{source:this.statusSource(u,s),label:s.name,from:u.name}));
+-      if(cat==='减益')p.effects.push(()=>{const effect=R.controlEffect(Q,pre[u.id],pre[t.id]),roll=this.rng.die(100);if(roll<=Math.round(effect.chance))this.setStatus(t,channel==='精神'?'mindDown':'defDown',.1*Q,6,{source:this.statusSource(u,s),label:s.name,from:u.name});this.addLog(`${u.name}减益判定${roll} / ${effect.chance}%`,{type:'status',actor:u.id,target:t.id,fx:s.fx});});
++      if(cat==='减益'&&s.genericDefDown!==false)p.effects.push(()=>{const effect=R.controlEffect(Q,pre[u.id],pre[t.id]),roll=this.rng.die(100);if(roll<=Math.round(effect.chance))this.setStatus(t,channel==='精神'?'mindDown':'defDown',.1*Q,6,{source:this.statusSource(u,s),label:s.name,from:u.name});this.addLog(`${u.name}减益判定${roll} / ${effect.chance}%`,{type:'status',actor:u.id,target:t.id,fx:s.fx});});
+       return p;
+     };
+ 
+@@ -1782,8 +1785,8 @@
+       if(!mind&&t.guard){incoming=Math.round(incoming*(1-t.guard));t.guard=0;}
+       const blocked=Math.min(t[shieldKey],incoming);t[shieldKey]-=blocked;incoming-=blocked;
+       const special=!mind&&this.value(t,'soulArmor')>0;
+-      const fraction=Math.min(.70,this.resourceConfig.absorb+(special?.15:0));
+-      const unitCost=this.resourceConfig.mpPerDamage*(special?.75:1);
++      const fraction=Math.min(.70,special?this.value(t,'soulArmor'):this.resourceConfig.absorb);
++      const unitCost=special?.3:this.resourceConfig.mpPerDamage;
+       const absorbed=Math.min(Math.floor(incoming*fraction),Math.floor(t.mp/unitCost));
+       const paid=Math.ceil(absorbed*unitCost);
+       const beforeProtection=mind?t.sh:t.hp;
+@@ -1851,6 +1854,7 @@
+         for(const p of plans)for(const d of p.extraDamage||[])if(p.t&&this.alive(p.t)){this._packetSkill=p.s;this.applyDamage(p.t,d.amount,d.channel,p.u,p.s?.fx||fxFor(p.u.soul));}this._packetSkill=null;
+         for(const p of plans)if(p.heal&&p.t)this.heal(p.t,p.heal,p.channel);
+         for(const p of plans)for(const effect of p.effects)effect();
++        this.refreshDotDamage();
+         for(const {u,cast}of completed)this.onActionComplete(u,cast);
+         for(const u of this.units)this.onResourceChange(u);
+         for(const p of plans)if(p.s||p.cast.action==='attack')this.addLog(`${p.u.name}释放${p.s?.name||'普攻'}`,{type:'release',actor:p.u.id,target:p.t?.id,fx:p.s?.fx||fxFor(p.u.soul),label:p.s?.name||'普攻'});
+@@ -2040,7 +2044,7 @@
+       if(s.effectVariant==='interrupt'&&!willInterrupt&&t.progress<.8)return -Infinity;
+       const blocked=willInterrupt?(t.cast.skill&&['攻击','持续伤害'].includes(t.cast.skill.category)?this.forecastDamage(t,u,t.cast.skill):enemy*.65):0;
+       const delay=e.duration+Math.max(0,t.progress-.4)/this.actionRate(t);
+-      const dotValue=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*Math.min(d.ticks,e.duration/3),0);
++      const dotValue=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+this.dotDamage(d,t)*Math.min(d.ticks,e.duration/3),0);
+       return e.chance/100*(blocked+enemy*Math.min(1.6,delay/enemyCycle)+dotValue*.25)*scale-cost;
+     }
+     const v=variants[s.effectVariant],type=v.status||(s.channel==='精神'?'mindDown':'defDown');
+@@ -2156,12 +2160,24 @@
+     u.statuses.push({type,value,until:180001,actionsRemaining,...extra,source});
+   };
+ 
+-  const dotDamage=function(dot){
++  // A DOT stores pre-defence power and persistent cast modifiers. Recalculate
++  // the tick against current defences; damage is only a display cache.
++  const dotDamage=function(dot,target){
+     const owner=this.unit(dot.source);
+-    return dot.baseDamage===undefined?dot.damage:Math.max(1,Math.round(dot.baseDamage*(1+(owner?this.value(owner,'dotBoost'):0))));
+-  };
++    if(!owner||!Number.isFinite(dot.rawPerTick))return dot.baseDamage===undefined?dot.damage:Math.max(1,Math.round(dot.baseDamage*(1+(owner?this.value(owner,'dotBoost'):0))));
++    target=target||this.units.find(u=>u.dots.includes(dot));
++    if(!target)return dot.damage;
++    const previous={periodic:this._periodic,spec:this._damageSpec,quiet:this._dotPreview};
++    this._periodic=true;this._dotPreview=true;this._damageSpec={fx:dot.fx,damageMode:'direct'};
++    try{
++      const pre=Object.fromEntries(this.units.map(u=>[u.id,this.effective(u)]));
++      const amount=this.damageValue(owner,target,dot.rawPerTick*(1+this.value(owner,'dotBoost')),dot.channel,pre);
++      return Math.max(1,Math.round(amount*(dot.damageMultiplier??1)));
++    }finally{this._periodic=previous.periodic;this._damageSpec=previous.spec;this._dotPreview=previous.quiet;}
++  };
++  const refreshDotDamage=function(){for(const target of this.units)for(const dot of target.dots)dot.damage=this.dotDamage(dot,target);};
+ root.WitnessStackRules={version:13,numeric:[...numeric],caps};
+-  return {methods:{statusSource,stackCap,value,stackedNext,statusGain,buffImprovement,setStatus,setBuff,dotDamage}};
++  return {methods:{statusSource,stackCap,value,stackedNext,statusGain,buffImprovement,setStatus,setBuff,dotDamage,refreshDotDamage}};
+ })(globalThis);
+ 
+ (function(root){
+@@ -2261,7 +2277,7 @@
+ 
+   const makeSkill=args=>SE.make(buildUnderlyingSkill,args);
+ 
+-  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:16,modernVersion:1008,challengeId:this.challengeId||null,postGameChallenge:!!this.postGameChallenge,challengeSessionId:this.challengeSessionId||null,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1007,dodgeConfig:{...config,...this.dodgeConfig}};};
++  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:16,modernVersion:1008,mechanicsFixVersion:this.mechanicsFixVersion??1,challengeId:this.challengeId||null,postGameChallenge:!!this.postGameChallenge,challengeSessionId:this.challengeSessionId||null,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1007,dodgeConfig:{...config,...this.dodgeConfig}};};
+ 
+   const dodgeCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*(this.dodgeConfig||config).costFraction));};
+ 
+@@ -2340,6 +2356,10 @@
+   const planUnderlyingAction=AttributeActions.methods.plan;
+   const plan=function(u,cast,pre){
+     const plan=planUnderlyingAction.call(this,u,cast,pre);if(cast.skill?.category!=='减益')return plan;
++    if(cast.skill.statusLifetime==='timed'){
++      plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.appliedAt=this.now;status.until=this.now+Math.round(cast.skill.duration*1000);delete status.hitsRemaining;delete status.actionsRemaining;}});
++      return plan;
++    }
+     plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.until=180001;delete status.hitsRemaining;delete status.actionsRemaining;}});
+     return plan;
+   };
+@@ -2429,7 +2449,7 @@
+     });
+     if(first&&plan.hit?.success){
+       plan.damage=Math.round(plan.damage*1.35);for(const extra of plan.extraDamage||[])extra.amount=Math.round(extra.amount*1.35);const beforeDots=new Set(t.dots);
+-      plan.effects.push(()=>{for(const dot of t.dots)if(!beforeDots.has(dot)&&dot.source===u.id){dot.baseDamage=Math.round(dot.baseDamage*1.35);dot.damage=this.dotDamage(dot);}u.statuses=u.statuses.filter(x=>x.type!=='bloodFirstStrike');this.tryControl(u,t,{...s,Q:s?.Q||1,controlChance:50},1);});
++      plan.effects.push(()=>{for(const dot of t.dots)if(!beforeDots.has(dot)&&dot.source===u.id){dot.baseDamage=Math.round(dot.baseDamage*1.35);if(Number.isFinite(dot.rawPerTick))dot.damageMultiplier=(dot.damageMultiplier??1)*1.35;dot.damage=this.dotDamage(dot,t);}u.statuses=u.statuses.filter(x=>x.type!=='bloodFirstStrike');this.tryControl(u,t,{...s,Q:s?.Q||1,controlChance:50},1);});
+     }
+     return plan;
+   };
+@@ -2579,8 +2599,8 @@
+   const previewProtection = function (target, damage, channel, source) {
+     const shield = this.previewShieldDamage(target, damage, channel, source);
+     const special = channel !== '精神' && this.value(target, 'soulArmor') > 0;
+-    const fraction = Math.min(.70, this.resourceConfig.absorb + (special ? .15 : 0));
+-    const unitCost = this.resourceConfig.mpPerDamage * (special ? .75 : 1);
++    const fraction = Math.min(.70, special ? this.value(target, 'soulArmor') : this.resourceConfig.absorb);
++    const unitCost = special ? .3 : this.resourceConfig.mpPerDamage;
+     const absorbed = Math.min(Math.floor(shield.afterShields * fraction),
+       Math.floor(Math.max(0, target.mp) / unitCost));
+     const mpCost = Math.ceil(absorbed * unitCost);
+@@ -2784,7 +2804,7 @@
+   const reduced=raw*Math.max(.20,remain);
+   const crown=this.value(u,'iceCrown')&&s?.fx==='ice'?1.10:1;
+   const n=MemberActions.methods.damageValue.call(this,u,t,reduced*crown,channel,pre);
+-  if(remain<1)this.addLog(t.name+'防御前免伤：原伤'+Math.round(raw)+' → '+Math.round(reduced)+'，防御后'+n+'。',{type:'preReduction',actor:u.id,target:t.id,raw,reduced,damage:n});
++  if(remain<1&&!this._dotPreview)this.addLog(t.name+'防御前免伤：原伤'+Math.round(raw)+' → '+Math.round(reduced)+'，防御后'+n+'。',{type:'preReduction',actor:u.id,target:t.id,raw,reduced,damage:n});
+   return n;
+ }
+ function tryControl(u,t,s,duration){
+@@ -2831,11 +2851,9 @@
+   this.onResourceChange(t);
+ }
+ function applyDotDamage(t,d){
+-  if(!d.rawPerTick)return AttributeActions.methods.applyDotDamage.call(this,t,d);
+   const u=this.unit(d.source);if(!u)return;
+-  const pre=Object.fromEntries(this.units.map(v=>[v.id,this.effective(v)]));this._periodic=true;
+-  const previous=this._damageSpec;this._damageSpec={fx:d.fx,damageMode:'direct'};
+-  try{const amount=this.damageValue(u,t,d.rawPerTick*(1+this.value(u,'dotBoost')),d.channel,pre);this.applyDamage(t,amount,d.channel,u,d.fx);this.addLog(t.name+'受到'+(d.damageNature==='poison'?'毒伤':'冻伤/残伤')+'一跳。',{type:'dotTick',actor:u.id,target:t.id,amount});}finally{this._periodic=false;this._damageSpec=previous;}
++  const previous=this._periodic;this._periodic=true;
++  try{const amount=this.dotDamage(d,t);d.damage=amount;this.applyDamage(t,amount,d.channel,u,d.fx);this.addLog(t.name+'受到'+(d.damageNature==='poison'?'毒伤':'冻伤/残伤')+'一跳。',{type:'dotTick',actor:u.id,target:t.id,amount});}finally{this._periodic=previous;}
+ }
+ function onActionComplete(u,cast){
+   if(!cast.eventId)cast.eventId=u.id+':'+(++state(u).sequence);
+@@ -2843,6 +2861,54 @@
+ }
+ function onResourceChange(u){ChallengeBattle.resourceChange(this,u);}
+ return {initialize,methods:{effective,cost,castTime,actionRate,targetOptions,actionReason,command,damageValue,tryControl,plan,applyDamage,applyDotDamage,onActionComplete,onResourceChange}};
++})(globalThis);
++
++// Migrate only ongoing battles. Completed reports remain historical records.
++const MechanicsFix=(function(root){
++  function restore(b,snapshot){
++    if(snapshot.mechanicsFixVersion===1||b.result)return;
++    const B=root.WitnessBattle,targets=new Set(['yanan-3','yanan-4','yixiaobei-4']);
++    let missingTiming=false;
++    for(const u of b.units){
++      const template=B.templates.find(t=>t.id===u.templateId);
++      if(template&&u.skills.some(s=>targets.has(s.id))){
++        const canonical=B.templateUnit(template,u.level,u.id,u.team).skills;
++        u.skills=u.skills.map(s=>targets.has(s.id)?canonical.find(x=>x.id===s.id)||s:s);
++        if(targets.has(u.cast?.skill?.id))u.cast.skill=JSON.parse(JSON.stringify(u.skills.find(s=>s.id===u.cast.skill.id)));
++      }
++      for(const s of u.skills.filter(s=>s.statusLifetime==='timed')){
++        const source=b.statusSource(u,s);
++        for(const target of b.units){
++          target.statuses=target.statuses.filter(st=>!(st.source===source&&s.genericDefDown===false&&['defDown','mindDown'].includes(st.type)));
++          for(const st of target.statuses.filter(st=>st.source===source)){
++            const release=[...b.log].reverse().find(e=>{
++              if(e.type!=='release'||e.actor!==u.id||e.label!==s.name||!(e.target===target.id||target.id===u.id&&st.type==='evasion'))return false;
++              if(!['defDown','mindDown'].includes(st.type))return true;
++              return b.log.some(check=>{const roll=String(check.text||'').match(/减益判定(\d+) \/ (\d+(?:\.\d+)?)%/);return check.time===e.time&&check.actor===u.id&&check.target===target.id&&roll&&Number(roll[1])<=Math.round(Number(roll[2]));});
++            });
++            if(release){st.until=release.time+s.duration*1000;st.appliedAt=release.time;}
++            else {st.until=b.now;missingTiming=true;}
++            delete st.hitsRemaining;delete st.actionsRemaining;
++          }
++          target.statuses=target.statuses.filter(st=>st.until>b.now);
++        }
++      }
++      // Old saves recorded boosted baseDamage but not the first-strike flag.
++      // Identify the surviving DOT from its release and the first attack after
++      // the one-time blood domain activation, instead of guessing from defence.
++      const releases=b.log.filter(e=>e.type==='release'&&e.actor===u.id);
++      const domain=releases.findIndex(e=>u.skills.some(s=>s.name===e.label&&s.bloodDomain));
++      const first=domain<0?null:releases.slice(domain+1).find(e=>e.label==='普攻'||u.skills.some(s=>s.name===e.label&&['攻击','持续伤害'].includes(s.category)));
++      for(const target of b.units)for(const dot of target.dots.filter(d=>d.source===u.id&&d.damageMultiplier===undefined)){
++        const skill=u.skills.find(s=>dot.key===u.id+'-'+s.id);
++        const appliedAt=skill?dot.next-(skill.dotFirstMs||3000)-((skill.dotTicks||3)-dot.ticks)*3000:null;
++        dot.damageMultiplier=first&&skill&&first.label===skill.name&&first.time===appliedAt?1.35:1;
++      }
++    }
++    b.refreshDotDamage();b.mechanicsFixVersion=1;
++    b.addLog('已同步持续伤害、短时状态与逸仙剑体修复规则。'+(missingTiming?'部分旧短时状态缺少释放时间记录，已解除。':''),{type:'rulesMigration',mechanicsFixVersion:1});
++  }
++  return {restore};
+ })(globalThis);
+ 
+ const BattleProjection=(function(root){
+@@ -2943,6 +3009,7 @@
+         const before=cast===marker?totals(plan.t):null,own=cast===marker?totals(u):null;
+         if(cast===marker&&!capture.beforeEffects){capture.beforeEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.beforeDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
+         try{effect();}finally{context=prior;}
++        b.refreshDotDamage();
+         if(cast===marker){add(capture.immediate,difference(before,totals(plan.t)));add(capture.actorEffects,difference(own,totals(u)));capture.afterEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.afterDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
+       });
+       return plan;
+@@ -3467,6 +3534,7 @@
+     statusGain:StatusActions.methods.statusGain,
+     buffImprovement:StatusActions.methods.buffImprovement,
+     dotDamage:StatusActions.methods.dotDamage,
++    refreshDotDamage:StatusActions.methods.refreshDotDamage,
+     darkActionScore:UnifiedDecision.methods.darkActionScore,
+     dodgeCost:AttributeActions.methods.dodgeCost,
+     dotNature:AttributeActions.methods.dotNature,

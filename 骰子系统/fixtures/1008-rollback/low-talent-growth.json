@@ -1,0 +1,749 @@
+{
+  "format": "witness-complete-game",
+  "version": 9,
+  "gameVersion": "10.08",
+  "speed": 0,
+  "state": {
+    "version": 9,
+    "seed": "rollback-browser-low-talent-growth",
+    "rngState": 3457786258,
+    "phase": "growth",
+    "draft": {
+      "version": 2,
+      "attributeSchema": 2,
+      "timeSchema": 2,
+      "seed": "rollback-browser-low-talent-growth",
+      "rngState": 3457786258,
+      "cursor": 25,
+      "results": {
+        "month": 7,
+        "age": 20,
+        "span": 14,
+        "originRank": 3,
+        "charm": 8,
+        "luck": 8,
+        "talent": 4,
+        "tier": 10,
+        "soulKind": "特殊",
+        "soulAttribute": "火 / 光",
+        "soulId": "T10-03",
+        "style": "强攻",
+        "release": "投影附体",
+        "gender": "女",
+        "nationality": "斗灵邦联",
+        "region": "救济院",
+        "personality": "直率",
+        "appearance": "整齐长发与手工饰物",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一条手编绳",
+        "level": 5,
+        "B": 1,
+        "S": -8,
+        "C": 2,
+        "D": 6,
+        "A": -6,
+        "P": 10,
+        "W": -8
+      },
+      "rolls": [
+        {
+          "key": "month",
+          "label": "入会季节",
+          "sides": 4,
+          "face": 3,
+          "value": 7,
+          "text": "6102年7月",
+          "quarter": 0
+        },
+        {
+          "key": "age",
+          "label": "入会年龄",
+          "sides": 25,
+          "face": 5,
+          "value": 20,
+          "text": "20岁",
+          "quarter": 0
+        },
+        {
+          "key": "originRank",
+          "label": "出身",
+          "sides": 10,
+          "face": 3,
+          "value": 3,
+          "text": "3档 · 城镇平民家庭",
+          "quarter": 0
+        },
+        {
+          "key": "charm",
+          "label": "魅力",
+          "sides": 10,
+          "face": 8,
+          "value": 8,
+          "text": "8档魅力 · 倾城之姿!!!",
+          "quarter": 0
+        },
+        {
+          "key": "luck",
+          "label": "气运",
+          "sides": 10,
+          "face": 8,
+          "value": 8,
+          "text": "8档气运 · 鸿运当头!!!",
+          "quarter": 0
+        },
+        {
+          "key": "talent",
+          "label": "成长天赋",
+          "sides": 10,
+          "face": 4,
+          "value": 4,
+          "text": "4档 · 稳健之资",
+          "quarter": 0
+        },
+        {
+          "key": "soulKind",
+          "label": "武魂种类",
+          "sides": 4,
+          "face": 2,
+          "value": "特殊",
+          "text": "特殊",
+          "quarter": 0
+        },
+        {
+          "key": "soulAttribute",
+          "label": "武魂属性",
+          "sides": 6,
+          "face": 1,
+          "value": "火 / 光",
+          "text": "火 / 光",
+          "quarter": 0
+        },
+        {
+          "key": "gender",
+          "label": "性别",
+          "sides": 3,
+          "face": 2,
+          "value": "女",
+          "text": "女",
+          "quarter": 0
+        },
+        {
+          "key": "nationality",
+          "label": "国籍",
+          "sides": 5,
+          "face": 3,
+          "value": "斗灵邦联",
+          "text": "斗灵邦联",
+          "quarter": 0
+        },
+        {
+          "key": "region",
+          "label": "成长地点",
+          "sides": 8,
+          "face": 8,
+          "value": "救济院",
+          "text": "救济院",
+          "quarter": 0
+        },
+        {
+          "key": "personality",
+          "label": "性格",
+          "sides": 8,
+          "face": 2,
+          "value": "直率",
+          "text": "直率",
+          "quarter": 0
+        },
+        {
+          "key": "appearance",
+          "label": "外形",
+          "sides": 8,
+          "face": 8,
+          "value": "整齐长发与手工饰物",
+          "text": "整齐长发与手工饰物",
+          "quarter": 0
+        },
+        {
+          "key": "motivation",
+          "label": "入会动机",
+          "sides": 6,
+          "face": 6,
+          "value": "结识可以并肩同行的人",
+          "text": "结识可以并肩同行的人",
+          "quarter": 0
+        },
+        {
+          "key": "keepsake",
+          "label": "随身纪念物",
+          "sides": 8,
+          "face": 5,
+          "value": "一条手编绳",
+          "text": "一条手编绳",
+          "quarter": 0
+        },
+        {
+          "key": "B",
+          "label": "肉体强度偏差",
+          "sides": 21,
+          "face": 12,
+          "value": 1,
+          "text": "+1% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "S",
+          "label": "魂力强度偏差",
+          "sides": 21,
+          "face": 3,
+          "value": -8,
+          "text": "-8% · 尚待雕琢",
+          "quarter": 0
+        },
+        {
+          "key": "C",
+          "label": "魂力操纵偏差",
+          "sides": 21,
+          "face": 13,
+          "value": 2,
+          "text": "+2% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "D",
+          "label": "防御素质偏差",
+          "sides": 21,
+          "face": 17,
+          "value": 6,
+          "text": "+6% · 非凡之资!!",
+          "quarter": 0
+        },
+        {
+          "key": "A",
+          "label": "敏捷偏差",
+          "sides": 21,
+          "face": 5,
+          "value": -6,
+          "text": "-6% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "P",
+          "label": "精神力偏差",
+          "sides": 21,
+          "face": 21,
+          "value": 10,
+          "text": "+10% · 天纵之才!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "W",
+          "label": "精神稳定偏差",
+          "sides": 21,
+          "face": 3,
+          "value": -8,
+          "text": "-8",
+          "quarter": 0
+        }
+      ],
+      "hiddenRolls": [
+        {
+          "label": "姓名 · 姓氏",
+          "sides": 70,
+          "face": 2
+        },
+        {
+          "label": "姓名 · 组合方式",
+          "sides": 100,
+          "face": 40
+        },
+        {
+          "label": "姓名 · 首字",
+          "sides": 121,
+          "face": 84
+        },
+        {
+          "label": "姓名 · 次字",
+          "sides": 120,
+          "face": 111
+        },
+        {
+          "label": "武魂觉醒",
+          "sides": 1,
+          "face": 1
+        }
+      ],
+      "options": {
+        "name": "",
+        "gender": "随机",
+        "tier": 10,
+        "level": 5
+      },
+      "generatedName": "秦泽辰"
+    },
+    "character": {
+      "name": "秦泽辰",
+      "level": 5,
+      "initialLevel": 5,
+      "initialPotential": 10,
+      "soulId": "T10-01",
+      "style": "强攻",
+      "release": "附体",
+      "luck": 5,
+      "charm": 5,
+      "initialLuck": 5,
+      "initialCharm": 5,
+      "talent": {
+        "rank": 4,
+        "label": "4档 · 稳健之资",
+        "xpMultiplier": 0.59,
+        "attributeMultiplier": 1.12
+      },
+      "identity": {
+        "gender": "女",
+        "nationality": "斗灵邦联",
+        "personality": "直率",
+        "family": "城镇平民家庭",
+        "originRank": 5,
+        "origin": "集镇",
+        "appearance": "整齐长发与手工饰物",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一条手编绳"
+      },
+      "time": {
+        "month": 1,
+        "age": 28,
+        "span": 22,
+        "rawSpan": 22,
+        "birthYear": 6074,
+        "startYear": 6080,
+        "startAge": 6,
+        "quarters": 24,
+        "timelineMode": "stages",
+        "awakeningAge": 6
+      },
+      "deviations": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "wDeviation": 0,
+      "growth": {
+        "B": 0,
+        "S": 0,
+        "C": 0,
+        "D": 0,
+        "A": 0,
+        "P": 0,
+        "W": 0
+      },
+      "rings": [],
+      "eventFlags": {},
+      "bones": [],
+      "boneInventory": [],
+      "mutations": [],
+      "fatigue": 0,
+      "stats": {
+        "level": 5,
+        "rings": 0,
+        "benchmark": 28,
+        "stats": {
+          "B": 49,
+          "S": 40,
+          "C": 32,
+          "D": 36,
+          "A": 35,
+          "P": 27,
+          "W": 50
+        },
+        "derived": {
+          "HP": 563,
+          "MP": 260,
+          "SH": 436,
+          "PA": 51.85,
+          "SA": 44,
+          "MA": 31.6,
+          "DEF": 37.8,
+          "MDEF": 38.5,
+          "costReduction": 0,
+          "castReduction": 5.33,
+          "controlGrowth": 1.14
+        },
+        "breakdown": {
+          "B": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 20,
+            "shape": 8,
+            "mental": 0,
+            "weapon": 7,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 49
+          },
+          "S": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 10,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 40
+          },
+          "C": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 0,
+            "shape": -8,
+            "mental": 0,
+            "weapon": -4,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 32
+          },
+          "D": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 36
+          },
+          "A": {
+            "base": 28,
+            "grade": 1.3,
+            "style": -10,
+            "shape": 6,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 35
+          },
+          "P": {
+            "base": 28,
+            "grade": 1.3,
+            "style": -20,
+            "shape": -6,
+            "mental": 0,
+            "weapon": 1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 27
+          },
+          "W": {
+            "base": 50,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 50
+          }
+        }
+      }
+    },
+    "rolls": [
+      {
+        "key": "month",
+        "label": "入会季节",
+        "sides": 4,
+        "face": 3,
+        "value": 7,
+        "text": "6102年7月",
+        "quarter": 0
+      },
+      {
+        "key": "age",
+        "label": "入会年龄",
+        "sides": 25,
+        "face": 5,
+        "value": 20,
+        "text": "20岁",
+        "quarter": 0
+      },
+      {
+        "key": "originRank",
+        "label": "出身",
+        "sides": 10,
+        "face": 3,
+        "value": 3,
+        "text": "3档 · 城镇平民家庭",
+        "quarter": 0
+      },
+      {
+        "key": "charm",
+        "label": "魅力",
+        "sides": 10,
+        "face": 8,
+        "value": 8,
+        "text": "8档魅力 · 倾城之姿!!!",
+        "quarter": 0
+      },
+      {
+        "key": "luck",
+        "label": "气运",
+        "sides": 10,
+        "face": 8,
+        "value": 8,
+        "text": "8档气运 · 鸿运当头!!!",
+        "quarter": 0
+      },
+      {
+        "key": "talent",
+        "label": "成长天赋",
+        "sides": 10,
+        "face": 4,
+        "value": 4,
+        "text": "4档 · 稳健之资",
+        "quarter": 0
+      },
+      {
+        "key": "soulKind",
+        "label": "武魂种类",
+        "sides": 4,
+        "face": 2,
+        "value": "特殊",
+        "text": "特殊",
+        "quarter": 0
+      },
+      {
+        "key": "soulAttribute",
+        "label": "武魂属性",
+        "sides": 6,
+        "face": 1,
+        "value": "火 / 光",
+        "text": "火 / 光",
+        "quarter": 0
+      },
+      {
+        "key": "gender",
+        "label": "性别",
+        "sides": 3,
+        "face": 2,
+        "value": "女",
+        "text": "女",
+        "quarter": 0
+      },
+      {
+        "key": "nationality",
+        "label": "国籍",
+        "sides": 5,
+        "face": 3,
+        "value": "斗灵邦联",
+        "text": "斗灵邦联",
+        "quarter": 0
+      },
+      {
+        "key": "region",
+        "label": "成长地点",
+        "sides": 8,
+        "face": 8,
+        "value": "救济院",
+        "text": "救济院",
+        "quarter": 0
+      },
+      {
+        "key": "personality",
+        "label": "性格",
+        "sides": 8,
+        "face": 2,
+        "value": "直率",
+        "text": "直率",
+        "quarter": 0
+      },
+      {
+        "key": "appearance",
+        "label": "外形",
+        "sides": 8,
+        "face": 8,
+        "value": "整齐长发与手工饰物",
+        "text": "整齐长发与手工饰物",
+        "quarter": 0
+      },
+      {
+        "key": "motivation",
+        "label": "入会动机",
+        "sides": 6,
+        "face": 6,
+        "value": "结识可以并肩同行的人",
+        "text": "结识可以并肩同行的人",
+        "quarter": 0
+      },
+      {
+        "key": "keepsake",
+        "label": "随身纪念物",
+        "sides": 8,
+        "face": 5,
+        "value": "一条手编绳",
+        "text": "一条手编绳",
+        "quarter": 0
+      },
+      {
+        "key": "B",
+        "label": "肉体强度偏差",
+        "sides": 21,
+        "face": 12,
+        "value": 1,
+        "text": "+1% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "S",
+        "label": "魂力强度偏差",
+        "sides": 21,
+        "face": 3,
+        "value": -8,
+        "text": "-8% · 尚待雕琢",
+        "quarter": 0
+      },
+      {
+        "key": "C",
+        "label": "魂力操纵偏差",
+        "sides": 21,
+        "face": 13,
+        "value": 2,
+        "text": "+2% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "D",
+        "label": "防御素质偏差",
+        "sides": 21,
+        "face": 17,
+        "value": 6,
+        "text": "+6% · 非凡之资!!",
+        "quarter": 0
+      },
+      {
+        "key": "A",
+        "label": "敏捷偏差",
+        "sides": 21,
+        "face": 5,
+        "value": -6,
+        "text": "-6% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "P",
+        "label": "精神力偏差",
+        "sides": 21,
+        "face": 21,
+        "value": 10,
+        "text": "+10% · 天纵之才!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "W",
+        "label": "精神稳定偏差",
+        "sides": 21,
+        "face": 3,
+        "value": -8,
+        "text": "-8",
+        "quarter": 0
+      }
+    ],
+    "hiddenRolls": [
+      {
+        "label": "姓名 · 姓氏",
+        "sides": 70,
+        "face": 2
+      },
+      {
+        "label": "姓名 · 组合方式",
+        "sides": 100,
+        "face": 40
+      },
+      {
+        "label": "姓名 · 首字",
+        "sides": 121,
+        "face": 84
+      },
+      {
+        "label": "姓名 · 次字",
+        "sides": 120,
+        "face": 111
+      },
+      {
+        "label": "武魂觉醒",
+        "sides": 1,
+        "face": 1
+      }
+    ],
+    "journal": [
+      {
+        "type": "origin",
+        "date": {
+          "year": 6080,
+          "month": 1,
+          "age": 6
+        },
+        "title": "出发前",
+        "text": "秦泽辰从集镇出发，城镇平民家庭的经历与4档 · 稳健之资一起成为起点。随身带着一条手编绳，想要结识可以并肩同行的人。",
+        "level": 5
+      }
+    ],
+    "completed": 0,
+    "xp": 0,
+    "prep": 0,
+    "lastEvent": null,
+    "pending": null,
+    "hunt": null,
+    "battleSnapshot": null,
+    "battleOptions": null,
+    "result": null,
+    "attempts": 0,
+    "resultHandled": false,
+    "date": {
+      "year": 6080,
+      "month": 1,
+      "age": 6
+    },
+    "characterId": "character-cf41dbb2-9e21-4ed9-bc29-1717e7bbc59a",
+    "source": "test",
+    "awakeningPending": false,
+    "storyRulesVersion": 1001,
+    "quests": {
+      "version": 1,
+      "active": null,
+      "records": {}
+    },
+    "growthPlan": {
+      "target": 41,
+      "baseXP": 200,
+      "createdAt": 0,
+      "cultivationVersion": 10081
+    },
+    "eventHistory": {},
+    "exam": {
+      "mode": "normal",
+      "starts": 0,
+      "opponent": null
+    },
+    "huntDelayMonths": 0,
+    "journeyRulesVersion": 1002,
+    "cultivationMigration": {
+      "version": 10081,
+      "atPeriod": 0,
+      "previousBaseXP": 150,
+      "earnedLevel": 5,
+      "earnedXP": 0
+    },
+    "cultivationRulesVersion": 10081,
+    "gameVersion": "10.08",
+    "promotionState": {
+      "version": 1,
+      "highestRatingIndex": 1,
+      "acknowledged": {}
+    },
+    "promotions": []
+  }
+}

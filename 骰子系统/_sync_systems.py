@@ -13,4 +13,7 @@ literal=json.dumps(legacy,ensure_ascii=False,separators=(',',':')).replace('</',
 legacyjs="// Generated compatibility data for old saves.\n(function(root){const events="+literal+";if(typeof module!=='undefined'&&module.exports)module.exports=events;else root.WitnessLegacyEvents=events;})(typeof globalThis==='undefined'?this:globalThis);\n"
 (p/'systems/events/legacy-data.js').write_text(legacyjs,encoding='utf-8')
 (p/'campaign-events.js').write_text(header+legacyjs+'\n'+(p/'systems/events/scenes.js').read_text(encoding='utf-8'),encoding='utf-8')
-print('Dice, event catalog and campaign entry files synchronized.')
+# Campaign and battle share the same calculation object in the browser.
+rules=(p/'systems/battle/rules.js').read_text(encoding='utf-8')
+(p/'rules.js').write_text("if(typeof module==='object'&&module.exports){module.exports=require('./v13-runtime.cjs').WitnessRules;}else{\n"+rules+"\n}\n",encoding='utf-8')
+print('Dice, events, campaign and unified calculation entry synchronized.')

@@ -40,10 +40,22 @@ const caps={};
     u.statuses.push({type,value,until:180001,actionsRemaining,...extra,source});
   };
 
-  const dotDamage=function(dot){
+  // A DOT stores pre-defence power and persistent cast modifiers. Recalculate
+  // the tick against current defences; damage is only a display cache.
+  const dotDamage=function(dot,target){
     const owner=this.unit(dot.source);
-    return dot.baseDamage===undefined?dot.damage:Math.max(1,Math.round(dot.baseDamage*(1+(owner?this.value(owner,'dotBoost'):0))));
+    if(!owner||!Number.isFinite(dot.rawPerTick))return dot.baseDamage===undefined?dot.damage:Math.max(1,Math.round(dot.baseDamage*(1+(owner?this.value(owner,'dotBoost'):0))));
+    target=target||this.units.find(u=>u.dots.includes(dot));
+    if(!target)return dot.damage;
+    const previous={periodic:this._periodic,spec:this._damageSpec,quiet:this._dotPreview};
+    this._periodic=true;this._dotPreview=true;this._damageSpec={fx:dot.fx,damageMode:'direct'};
+    try{
+      const pre=Object.fromEntries(this.units.map(u=>[u.id,this.effective(u)]));
+      const amount=this.damageValue(owner,target,dot.rawPerTick*(1+this.value(owner,'dotBoost')),dot.channel,pre);
+      return Math.max(1,Math.round(amount*(dot.damageMultiplier??1)));
+    }finally{this._periodic=previous.periodic;this._damageSpec=previous.spec;this._dotPreview=previous.quiet;}
   };
+  const refreshDotDamage=function(){for(const target of this.units)for(const dot of target.dots)dot.damage=this.dotDamage(dot,target);};
 root.WitnessStackRules={version:13,numeric:[...numeric],caps};
-  return {methods:{statusSource,stackCap,value,stackedNext,statusGain,buffImprovement,setStatus,setBuff,dotDamage}};
+  return {methods:{statusSource,stackCap,value,stackedNext,statusGain,buffImprovement,setStatus,setBuff,dotDamage,refreshDotDamage}};
 })(globalThis);

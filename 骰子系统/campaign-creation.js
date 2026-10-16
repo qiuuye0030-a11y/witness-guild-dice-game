@@ -5,7 +5,15 @@
   const copy=x=>JSON.parse(JSON.stringify(x));
   const ORIGINS=['父母双亡的孤儿','贫寒农户家庭','城镇平民家庭','工匠或商户家庭','普通魂师家庭','地方魂师世家','宗门成员家庭','魂斗罗的门人或亲属','封号斗罗门下','封号斗罗亲属'];
   const TALENT_NAMES=['厚积之始','勤修可成','根基初显','稳健之资','良材可琢','出类拔萃!','非凡之资!!','惊才绝艳!!!','绝世之资!!!!','天纵之才!!!!!'];
-  const TALENTS=Array.from({length:10},(_,i)=>({rank:i+1,label:(i+1)+'档 · '+TALENT_NAMES[i],xpMultiplier:R.round2(1+.06*i),attributeMultiplier:R.round2(1+.04*i)}));
+  const CULTIVATION={version:10081,journeyXP:4800,eventMultiplier:.15,initialRetention:.25,talent:[.50,.53,.56,.59,1.12,1.17,1.21,1.24,1.27,1.53],weapon:[.875,.89,.90,.91,.92,.94,.96,.98,1,1.15]};
+  const TALENTS=Array.from({length:10},(_,i)=>({rank:i+1,label:(i+1)+'档 · '+TALENT_NAMES[i],xpMultiplier:CULTIVATION.talent[i],attributeMultiplier:R.round2(1+.04*i)}));
+  function cultivationRates({rank,tier,initialLevel=5,stages=24}){
+    const count=Math.max(1,stages),base=CULTIVATION.journeyXP/count,weapon=CULTIVATION.weapon[tier-1],talent=CULTIVATION.talent[rank-1];
+    // Keep a quarter of the innate-level advantage; avoid multiplying the old
+    // catch-up-to-41 allowance by all growth bonuses.
+    const initialOffset=(1-CULTIVATION.initialRetention)*(Math.max(1,Math.min(10,initialLevel))-5)*100/count;
+    return {base:R.round2(base),weapon,talent,initialOffset:R.round2(initialOffset),xp:R.round2(Math.max(0,base*weapon*talent-initialOffset)),attribute:TALENTS[rank-1].attributeMultiplier,version:CULTIVATION.version};
+  }
   function aptitude(v){return v<=-7?'尚待雕琢':v<=-3?'稍显薄弱':v<=2?'根基平稳':v<=5?'出类拔萃!':v<=7?'非凡之资!!':v<=9?'惊才绝艳!!!':'天纵之才!!!!';}
   function aptitudeSummary(v){if(v.every(x=>x===10))return '此等天资，竟然真的存在!!!!!';if(v.every(x=>x>=8))return '万中无一!!!!';if(v.every(x=>x>=5))return '六维俱佳!!!';if(v.filter(x=>x>=8).length>=2)return '双璧生辉!!';return '';}
   const CHARM_WORDS=['内敛含蓄','朴实无华','平易近人','清秀可亲','温润如玉','风姿出众','顾盼生辉','倾城之姿','绝代风华','举世无双'];
@@ -84,11 +92,11 @@
       if(key==='originRank'){options=ORIGINS;note='出身成为故事的起点，也影响与家门有关的机缘。';}
       if(key==='charm')note='魅力1—10档，影响交往、协商与被理解的机会，不替代你的能力。';
       if(key==='luck')note='气运1—10档，影响机缘；低气运也会遇到善意与突破。';
-      if(key==='talent')note='1—10档，修炼收益×1.00—1.54，能力训练收益×1.00—1.36。';
+      if(key==='talent')note='1—10档，修炼系数×0.50—1.53；武魂系数另计，天赋是主要修炼因素。能力训练收益×1.00—1.36。';
       if(key==='tier'){sides=1000;note='先决定武魂潜力，再决定种类。低潜力直接迎来觉醒，高潜力还将投取属性。';}
       if(key==='soulKind'){options=[...new Set(this.catalog.filter(x=>x.tier===v.tier).map(x=>x.main_kind))];note=v.tier<=3?'武魂种类落定后，将直接暗骰决定你的武魂。':'先落定种类，随后投取武魂属性，具体武魂由暗骰揭晓。';}
       if(key==='soulAttribute'){options=[...new Set(this.catalog.filter(x=>x.tier===v.tier&&x.main_kind===v.soulKind).map(attributeKey))];note='属性落定后，觉醒将自行完成。不提前展示具体武魂候选。';}
-      if(key==='level'){sides=this.state.timeSchema===2?10:40;note=this.state.timeSchema===2?'6岁觉醒，投取1—10级先天魂力；随后通过成长与猎魂达到入会条件。':'骰面−1：初始0—39级，随后靠季度成长达到41级入会条件。';}
+      if(key==='level'){sides=this.state.timeSchema===2?10:40;note=this.state.timeSchema===2?'6岁觉醒，投取1—10级先天魂力；随后通过成长与猎魂达到入会条件。':'骰面−1：初始0—39级，随后靠季度成长与猎魂，按日期抵达公会参加考核。';}
       if([...R.KEYS,'W'].includes(key)){sides=21;note=key==='W'?'骰面−11：稳定偏差−10至＋10点。':'骰面−11：该项先天偏差−10%至＋10%。';}
       if(options)sides=options.length;return {key,label,group,sides,note,options,number:this.state.cursor+1,total:STEPS.length};
     }
@@ -126,5 +134,5 @@
       if(s.version===2&&s.attributeSchema===2&&v.soulAttribute!==undefined&&!catalog.some(x=>x.tier===v.tier&&x.main_kind===v.soulKind&&attributeKey(x)===v.soulAttribute))throw Error('武魂属性无效');
     }
   }
-  const api={CHARM_WORDS,LUCK_WORDS,fortuneDescription,Draft,ORIGINS,TALENTS,STEPS,SURNAMES,GIVEN_NAMES,GIVEN_CHARS,ATTRIBUTE_ORDER,soulAttributes,attributeKey,allowedName,aptitude,aptitudeSummary};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessCreation=api;
+  const api={CULTIVATION,cultivationRates,CHARM_WORDS,LUCK_WORDS,fortuneDescription,Draft,ORIGINS,TALENTS,STEPS,SURNAMES,GIVEN_NAMES,GIVEN_CHARS,ATTRIBUTE_ORDER,soulAttributes,attributeKey,allowedName,aptitude,aptitudeSummary};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessCreation=api;
 })(typeof globalThis==='undefined'?this:globalThis);

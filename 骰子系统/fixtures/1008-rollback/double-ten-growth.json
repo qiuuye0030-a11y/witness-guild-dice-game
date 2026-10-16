@@ -1,0 +1,749 @@
+{
+  "format": "witness-complete-game",
+  "version": 9,
+  "gameVersion": "10.08",
+  "speed": 0,
+  "state": {
+    "version": 9,
+    "seed": "rollback-browser-double-ten-growth",
+    "rngState": 47729830,
+    "phase": "growth",
+    "draft": {
+      "version": 2,
+      "attributeSchema": 2,
+      "timeSchema": 2,
+      "seed": "rollback-browser-double-ten-growth",
+      "rngState": 47729830,
+      "cursor": 25,
+      "results": {
+        "month": 4,
+        "age": 38,
+        "span": 32,
+        "originRank": 5,
+        "charm": 4,
+        "luck": 10,
+        "talent": 6,
+        "tier": 10,
+        "soulKind": "器",
+        "soulAttribute": "再生 / 生命",
+        "soulId": "X10-器-2216",
+        "style": "强攻",
+        "release": "召出",
+        "gender": "女",
+        "nationality": "星罗",
+        "region": "地方学院",
+        "personality": "坚韧",
+        "appearance": "浅色头发与宽松长衣",
+        "motivation": "记录大陆上的所见所闻",
+        "keepsake": "一张手绘路线图",
+        "level": 5,
+        "B": 9,
+        "S": 5,
+        "C": -6,
+        "D": -5,
+        "A": 3,
+        "P": 7,
+        "W": -7
+      },
+      "rolls": [
+        {
+          "key": "month",
+          "label": "入会季节",
+          "sides": 4,
+          "face": 2,
+          "value": 4,
+          "text": "6102年4月",
+          "quarter": 0
+        },
+        {
+          "key": "age",
+          "label": "入会年龄",
+          "sides": 25,
+          "face": 23,
+          "value": 38,
+          "text": "38岁",
+          "quarter": 0
+        },
+        {
+          "key": "originRank",
+          "label": "出身",
+          "sides": 10,
+          "face": 5,
+          "value": 5,
+          "text": "5档 · 普通魂师家庭",
+          "quarter": 0
+        },
+        {
+          "key": "charm",
+          "label": "魅力",
+          "sides": 10,
+          "face": 4,
+          "value": 4,
+          "text": "4档魅力 · 清秀可亲",
+          "quarter": 0
+        },
+        {
+          "key": "luck",
+          "label": "气运",
+          "sides": 10,
+          "face": 10,
+          "value": 10,
+          "text": "10档气运 · 天命所钟!!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "talent",
+          "label": "成长天赋",
+          "sides": 10,
+          "face": 6,
+          "value": 6,
+          "text": "6档 · 出类拔萃!",
+          "quarter": 0
+        },
+        {
+          "key": "soulKind",
+          "label": "武魂种类",
+          "sides": 4,
+          "face": 4,
+          "value": "器",
+          "text": "器",
+          "quarter": 0
+        },
+        {
+          "key": "soulAttribute",
+          "label": "武魂属性",
+          "sides": 89,
+          "face": 87,
+          "value": "再生 / 生命",
+          "text": "再生 / 生命",
+          "quarter": 0
+        },
+        {
+          "key": "gender",
+          "label": "性别",
+          "sides": 3,
+          "face": 2,
+          "value": "女",
+          "text": "女",
+          "quarter": 0
+        },
+        {
+          "key": "nationality",
+          "label": "国籍",
+          "sides": 5,
+          "face": 1,
+          "value": "星罗",
+          "text": "星罗",
+          "quarter": 0
+        },
+        {
+          "key": "region",
+          "label": "成长地点",
+          "sides": 8,
+          "face": 5,
+          "value": "地方学院",
+          "text": "地方学院",
+          "quarter": 0
+        },
+        {
+          "key": "personality",
+          "label": "性格",
+          "sides": 8,
+          "face": 4,
+          "value": "坚韧",
+          "text": "坚韧",
+          "quarter": 0
+        },
+        {
+          "key": "appearance",
+          "label": "外形",
+          "sides": 8,
+          "face": 6,
+          "value": "浅色头发与宽松长衣",
+          "text": "浅色头发与宽松长衣",
+          "quarter": 0
+        },
+        {
+          "key": "motivation",
+          "label": "入会动机",
+          "sides": 6,
+          "face": 4,
+          "value": "记录大陆上的所见所闻",
+          "text": "记录大陆上的所见所闻",
+          "quarter": 0
+        },
+        {
+          "key": "keepsake",
+          "label": "随身纪念物",
+          "sides": 8,
+          "face": 6,
+          "value": "一张手绘路线图",
+          "text": "一张手绘路线图",
+          "quarter": 0
+        },
+        {
+          "key": "B",
+          "label": "肉体强度偏差",
+          "sides": 21,
+          "face": 20,
+          "value": 9,
+          "text": "+9% · 惊才绝艳!!!",
+          "quarter": 0
+        },
+        {
+          "key": "S",
+          "label": "魂力强度偏差",
+          "sides": 21,
+          "face": 16,
+          "value": 5,
+          "text": "+5% · 出类拔萃!",
+          "quarter": 0
+        },
+        {
+          "key": "C",
+          "label": "魂力操纵偏差",
+          "sides": 21,
+          "face": 5,
+          "value": -6,
+          "text": "-6% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "D",
+          "label": "防御素质偏差",
+          "sides": 21,
+          "face": 6,
+          "value": -5,
+          "text": "-5% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "A",
+          "label": "敏捷偏差",
+          "sides": 21,
+          "face": 14,
+          "value": 3,
+          "text": "+3% · 出类拔萃!",
+          "quarter": 0
+        },
+        {
+          "key": "P",
+          "label": "精神力偏差",
+          "sides": 21,
+          "face": 18,
+          "value": 7,
+          "text": "+7% · 非凡之资!!",
+          "quarter": 0
+        },
+        {
+          "key": "W",
+          "label": "精神稳定偏差",
+          "sides": 21,
+          "face": 4,
+          "value": -7,
+          "text": "-7",
+          "quarter": 0
+        }
+      ],
+      "hiddenRolls": [
+        {
+          "label": "姓名 · 姓氏",
+          "sides": 70,
+          "face": 42
+        },
+        {
+          "label": "姓名 · 组合方式",
+          "sides": 100,
+          "face": 48
+        },
+        {
+          "label": "姓名 · 首字",
+          "sides": 121,
+          "face": 54
+        },
+        {
+          "label": "姓名 · 次字",
+          "sides": 120,
+          "face": 29
+        },
+        {
+          "label": "武魂觉醒",
+          "sides": 1,
+          "face": 1
+        }
+      ],
+      "options": {
+        "name": "",
+        "gender": "随机",
+        "tier": 10,
+        "level": 5
+      },
+      "generatedName": "洛临书"
+    },
+    "character": {
+      "name": "洛临书",
+      "level": 5,
+      "initialLevel": 5,
+      "initialPotential": 10,
+      "soulId": "T10-01",
+      "style": "强攻",
+      "release": "附体",
+      "luck": 5,
+      "charm": 5,
+      "initialLuck": 5,
+      "initialCharm": 5,
+      "talent": {
+        "rank": 10,
+        "label": "10档 · 天纵之才!!!!!",
+        "xpMultiplier": 1.53,
+        "attributeMultiplier": 1.36
+      },
+      "identity": {
+        "gender": "女",
+        "nationality": "星罗",
+        "personality": "坚韧",
+        "family": "普通魂师家庭",
+        "originRank": 5,
+        "origin": "集镇",
+        "appearance": "浅色头发与宽松长衣",
+        "motivation": "记录大陆上的所见所闻",
+        "keepsake": "一张手绘路线图"
+      },
+      "time": {
+        "month": 1,
+        "age": 28,
+        "span": 22,
+        "rawSpan": 22,
+        "birthYear": 6074,
+        "startYear": 6080,
+        "startAge": 6,
+        "quarters": 24,
+        "timelineMode": "stages",
+        "awakeningAge": 6
+      },
+      "deviations": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "wDeviation": 0,
+      "growth": {
+        "B": 0,
+        "S": 0,
+        "C": 0,
+        "D": 0,
+        "A": 0,
+        "P": 0,
+        "W": 0
+      },
+      "rings": [],
+      "eventFlags": {},
+      "bones": [],
+      "boneInventory": [],
+      "mutations": [],
+      "fatigue": 0,
+      "stats": {
+        "level": 5,
+        "rings": 0,
+        "benchmark": 28,
+        "stats": {
+          "B": 49,
+          "S": 40,
+          "C": 32,
+          "D": 36,
+          "A": 35,
+          "P": 27,
+          "W": 50
+        },
+        "derived": {
+          "HP": 563,
+          "MP": 260,
+          "SH": 436,
+          "PA": 51.85,
+          "SA": 44,
+          "MA": 31.6,
+          "DEF": 37.8,
+          "MDEF": 38.5,
+          "costReduction": 0,
+          "castReduction": 5.33,
+          "controlGrowth": 1.14
+        },
+        "breakdown": {
+          "B": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 20,
+            "shape": 8,
+            "mental": 0,
+            "weapon": 7,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 49
+          },
+          "S": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 10,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 40
+          },
+          "C": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 0,
+            "shape": -8,
+            "mental": 0,
+            "weapon": -4,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 32
+          },
+          "D": {
+            "base": 28,
+            "grade": 1.3,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 36
+          },
+          "A": {
+            "base": 28,
+            "grade": 1.3,
+            "style": -10,
+            "shape": 6,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 35
+          },
+          "P": {
+            "base": 28,
+            "grade": 1.3,
+            "style": -20,
+            "shape": -6,
+            "mental": 0,
+            "weapon": 1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 27
+          },
+          "W": {
+            "base": 50,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 50
+          }
+        }
+      }
+    },
+    "rolls": [
+      {
+        "key": "month",
+        "label": "入会季节",
+        "sides": 4,
+        "face": 2,
+        "value": 4,
+        "text": "6102年4月",
+        "quarter": 0
+      },
+      {
+        "key": "age",
+        "label": "入会年龄",
+        "sides": 25,
+        "face": 23,
+        "value": 38,
+        "text": "38岁",
+        "quarter": 0
+      },
+      {
+        "key": "originRank",
+        "label": "出身",
+        "sides": 10,
+        "face": 5,
+        "value": 5,
+        "text": "5档 · 普通魂师家庭",
+        "quarter": 0
+      },
+      {
+        "key": "charm",
+        "label": "魅力",
+        "sides": 10,
+        "face": 4,
+        "value": 4,
+        "text": "4档魅力 · 清秀可亲",
+        "quarter": 0
+      },
+      {
+        "key": "luck",
+        "label": "气运",
+        "sides": 10,
+        "face": 10,
+        "value": 10,
+        "text": "10档气运 · 天命所钟!!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "talent",
+        "label": "成长天赋",
+        "sides": 10,
+        "face": 6,
+        "value": 6,
+        "text": "6档 · 出类拔萃!",
+        "quarter": 0
+      },
+      {
+        "key": "soulKind",
+        "label": "武魂种类",
+        "sides": 4,
+        "face": 4,
+        "value": "器",
+        "text": "器",
+        "quarter": 0
+      },
+      {
+        "key": "soulAttribute",
+        "label": "武魂属性",
+        "sides": 89,
+        "face": 87,
+        "value": "再生 / 生命",
+        "text": "再生 / 生命",
+        "quarter": 0
+      },
+      {
+        "key": "gender",
+        "label": "性别",
+        "sides": 3,
+        "face": 2,
+        "value": "女",
+        "text": "女",
+        "quarter": 0
+      },
+      {
+        "key": "nationality",
+        "label": "国籍",
+        "sides": 5,
+        "face": 1,
+        "value": "星罗",
+        "text": "星罗",
+        "quarter": 0
+      },
+      {
+        "key": "region",
+        "label": "成长地点",
+        "sides": 8,
+        "face": 5,
+        "value": "地方学院",
+        "text": "地方学院",
+        "quarter": 0
+      },
+      {
+        "key": "personality",
+        "label": "性格",
+        "sides": 8,
+        "face": 4,
+        "value": "坚韧",
+        "text": "坚韧",
+        "quarter": 0
+      },
+      {
+        "key": "appearance",
+        "label": "外形",
+        "sides": 8,
+        "face": 6,
+        "value": "浅色头发与宽松长衣",
+        "text": "浅色头发与宽松长衣",
+        "quarter": 0
+      },
+      {
+        "key": "motivation",
+        "label": "入会动机",
+        "sides": 6,
+        "face": 4,
+        "value": "记录大陆上的所见所闻",
+        "text": "记录大陆上的所见所闻",
+        "quarter": 0
+      },
+      {
+        "key": "keepsake",
+        "label": "随身纪念物",
+        "sides": 8,
+        "face": 6,
+        "value": "一张手绘路线图",
+        "text": "一张手绘路线图",
+        "quarter": 0
+      },
+      {
+        "key": "B",
+        "label": "肉体强度偏差",
+        "sides": 21,
+        "face": 20,
+        "value": 9,
+        "text": "+9% · 惊才绝艳!!!",
+        "quarter": 0
+      },
+      {
+        "key": "S",
+        "label": "魂力强度偏差",
+        "sides": 21,
+        "face": 16,
+        "value": 5,
+        "text": "+5% · 出类拔萃!",
+        "quarter": 0
+      },
+      {
+        "key": "C",
+        "label": "魂力操纵偏差",
+        "sides": 21,
+        "face": 5,
+        "value": -6,
+        "text": "-6% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "D",
+        "label": "防御素质偏差",
+        "sides": 21,
+        "face": 6,
+        "value": -5,
+        "text": "-5% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "A",
+        "label": "敏捷偏差",
+        "sides": 21,
+        "face": 14,
+        "value": 3,
+        "text": "+3% · 出类拔萃!",
+        "quarter": 0
+      },
+      {
+        "key": "P",
+        "label": "精神力偏差",
+        "sides": 21,
+        "face": 18,
+        "value": 7,
+        "text": "+7% · 非凡之资!!",
+        "quarter": 0
+      },
+      {
+        "key": "W",
+        "label": "精神稳定偏差",
+        "sides": 21,
+        "face": 4,
+        "value": -7,
+        "text": "-7",
+        "quarter": 0
+      }
+    ],
+    "hiddenRolls": [
+      {
+        "label": "姓名 · 姓氏",
+        "sides": 70,
+        "face": 42
+      },
+      {
+        "label": "姓名 · 组合方式",
+        "sides": 100,
+        "face": 48
+      },
+      {
+        "label": "姓名 · 首字",
+        "sides": 121,
+        "face": 54
+      },
+      {
+        "label": "姓名 · 次字",
+        "sides": 120,
+        "face": 29
+      },
+      {
+        "label": "武魂觉醒",
+        "sides": 1,
+        "face": 1
+      }
+    ],
+    "journal": [
+      {
+        "type": "origin",
+        "date": {
+          "year": 6080,
+          "month": 1,
+          "age": 6
+        },
+        "title": "出发前",
+        "text": "洛临书从集镇出发，普通魂师家庭的经历与10档 · 天纵之才!!!!!一起成为起点。随身带着一张手绘路线图，想要记录大陆上的所见所闻。",
+        "level": 5
+      }
+    ],
+    "completed": 0,
+    "xp": 0,
+    "prep": 0,
+    "lastEvent": null,
+    "pending": null,
+    "hunt": null,
+    "battleSnapshot": null,
+    "battleOptions": null,
+    "result": null,
+    "attempts": 0,
+    "resultHandled": false,
+    "date": {
+      "year": 6080,
+      "month": 1,
+      "age": 6
+    },
+    "characterId": "character-9101d90e-b707-40f7-a340-6389155a1939",
+    "source": "test",
+    "awakeningPending": false,
+    "storyRulesVersion": 1001,
+    "quests": {
+      "version": 1,
+      "active": null,
+      "records": {}
+    },
+    "growthPlan": {
+      "target": 41,
+      "baseXP": 200,
+      "createdAt": 0,
+      "cultivationVersion": 10081
+    },
+    "eventHistory": {},
+    "exam": {
+      "mode": "normal",
+      "starts": 0,
+      "opponent": null
+    },
+    "huntDelayMonths": 0,
+    "journeyRulesVersion": 1002,
+    "cultivationMigration": {
+      "version": 10081,
+      "atPeriod": 0,
+      "previousBaseXP": 150,
+      "earnedLevel": 5,
+      "earnedXP": 0
+    },
+    "cultivationRulesVersion": 10081,
+    "gameVersion": "10.08",
+    "promotionState": {
+      "version": 1,
+      "highestRatingIndex": 1,
+      "acknowledged": {}
+    },
+    "promotions": []
+  }
+}

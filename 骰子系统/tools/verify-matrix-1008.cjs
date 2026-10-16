@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto'),x=require('./runtime-1008.cjs').load();
+const p=path.resolve(__dirname,'..'),dir=path.join(p,'output/1008/数值回调验算');
+const files=['matrix-fixed-random-32.json','matrix-fixed-xpExpected-32.json','matrix-natural-random-32.json','matrix-fixed-random-8-initial1-favored.json','matrix-fixed-random-8-initial10-favored.json'];
+let count=0;const groups=[];
+for(const file of files){const d=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8'));assert.deepEqual(d.configuration,JSON.parse(JSON.stringify(x.WitnessCreation.CULTIVATION)),file+' coefficients');assert.equal(d.cells.length,100);assert.equal(new Set(d.cells.map(c=>c.rank+':'+c.tier)).size,100);for(const c of d.cells){assert.equal(c.rows.length,d.N);const mean=c.rows.reduce((n,r)=>n+r.level,0)/d.N;assert(Math.abs(mean-c.mean)<.001);for(const r of c.rows){assert(Number.isInteger(r.level)&&r.level>=1&&r.level<=99);assert(r.level<90||c.rank===10&&r.finalPotential===10);if(c.rank<5)assert(r.rings<=4);if(c.rank===5)assert(r.rings>=5&&r.rings<=6);if(d.mode==='fixed')assert.equal(r.finalPotential,c.tier);}count+=c.rows.length;}
+ const top=d.cells.find(c=>c.rank===10&&c.tier===10),nine=d.cells.find(c=>c.rank===10&&c.tier===9);if(d.N===32){assert(top.mean>=90&&top.mean<=93);assert(nine.mean>=78&&nine.mean<=83);for(const c of d.cells.filter(c=>c.rank===5))assert(c.mean>=51&&c.mean<=70);}
+ groups.push({file,journeys:d.journeys,topMean:top.mean,nineMean:nine.mean,lowMax:Math.max(...d.cells.filter(c=>c.rank<5).flatMap(c=>c.rows.map(r=>r.level))),fifthMin:Math.min(...d.cells.filter(c=>c.rank===5).flatMap(c=>c.rows.map(r=>r.level))),fifthMax:Math.max(...d.cells.filter(c=>c.rank===5).flatMap(c=>c.rows.map(r=>r.level)))});
+}
+assert.equal(count,11200);
+const report={passed:true,configuration:x.WitnessCreation.CULTIVATION,cellsPerGroup:100,completeJourneys:count,groups,sourceHashes:Object.fromEntries(['campaign-creation.js','systems/campaign/core.js','systems/campaign/modern.js'].map(f=>[f,crypto.createHash('sha256').update(fs.readFileSync(path.join(p,f))).digest('hex')]))};fs.writeFileSync(path.join(dir,'矩阵验收.json'),JSON.stringify(report,null,2));console.log('PASS all 100 cells in each of five groups;',count,'complete journeys');

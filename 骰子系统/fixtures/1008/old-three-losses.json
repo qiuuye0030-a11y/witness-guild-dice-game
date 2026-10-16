@@ -1,0 +1,2222 @@
+{
+  "format": "witness-complete-game",
+  "version": 9,
+  "gameVersion": "10.08",
+  "speed": 0,
+  "state": {
+    "version": 9,
+    "seed": "browser-achievement",
+    "rngState": 589680778,
+    "phase": "ending",
+    "draft": {
+      "version": 2,
+      "attributeSchema": 2,
+      "timeSchema": 2,
+      "seed": "browser-achievement",
+      "rngState": 149668699,
+      "cursor": 25,
+      "results": {
+        "month": 7,
+        "age": 22,
+        "span": 16,
+        "originRank": 5,
+        "charm": 1,
+        "luck": 10,
+        "talent": 5,
+        "tier": 7,
+        "soulKind": "器",
+        "soulAttribute": "音波 / 生命",
+        "soulId": "X07-器-1968",
+        "style": "强攻",
+        "release": "召出",
+        "gender": "男",
+        "nationality": "天魂",
+        "region": "乡村",
+        "personality": "坚韧",
+        "appearance": "长发与轻便外衣",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一张手绘路线图",
+        "level": 61,
+        "B": 2,
+        "S": -5,
+        "C": 0,
+        "D": -3,
+        "A": 9,
+        "P": -10,
+        "W": -8
+      },
+      "rolls": [
+        {
+          "key": "month",
+          "label": "入会季节",
+          "sides": 4,
+          "face": 3,
+          "value": 7,
+          "text": "6102年7月",
+          "quarter": 0
+        },
+        {
+          "key": "age",
+          "label": "入会年龄",
+          "sides": 25,
+          "face": 7,
+          "value": 22,
+          "text": "22岁",
+          "quarter": 0
+        },
+        {
+          "key": "originRank",
+          "label": "出身",
+          "sides": 10,
+          "face": 5,
+          "value": 5,
+          "text": "5档 · 普通魂师家庭",
+          "quarter": 0
+        },
+        {
+          "key": "charm",
+          "label": "魅力",
+          "sides": 10,
+          "face": 1,
+          "value": 1,
+          "text": "1档魅力 · 内敛含蓄",
+          "quarter": 0
+        },
+        {
+          "key": "luck",
+          "label": "气运",
+          "sides": 10,
+          "face": 10,
+          "value": 10,
+          "text": "10档气运 · 天命所钟!!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "talent",
+          "label": "成长天赋",
+          "sides": 10,
+          "face": 5,
+          "value": 5,
+          "text": "5档 · 良材可琢",
+          "quarter": 0
+        },
+        {
+          "key": "soulKind",
+          "label": "武魂种类",
+          "sides": 4,
+          "face": 1,
+          "value": "器",
+          "text": "器",
+          "quarter": 0
+        },
+        {
+          "key": "soulAttribute",
+          "label": "武魂属性",
+          "sides": 88,
+          "face": 69,
+          "value": "音波 / 生命",
+          "text": "音波 / 生命",
+          "quarter": 0
+        },
+        {
+          "key": "gender",
+          "label": "性别",
+          "sides": 3,
+          "face": 1,
+          "value": "男",
+          "text": "男",
+          "quarter": 0
+        },
+        {
+          "key": "nationality",
+          "label": "国籍",
+          "sides": 5,
+          "face": 2,
+          "value": "天魂",
+          "text": "天魂",
+          "quarter": 0
+        },
+        {
+          "key": "region",
+          "label": "成长地点",
+          "sides": 8,
+          "face": 1,
+          "value": "乡村",
+          "text": "乡村",
+          "quarter": 0
+        },
+        {
+          "key": "personality",
+          "label": "性格",
+          "sides": 8,
+          "face": 4,
+          "value": "坚韧",
+          "text": "坚韧",
+          "quarter": 0
+        },
+        {
+          "key": "appearance",
+          "label": "外形",
+          "sides": 8,
+          "face": 2,
+          "value": "长发与轻便外衣",
+          "text": "长发与轻便外衣",
+          "quarter": 0
+        },
+        {
+          "key": "motivation",
+          "label": "入会动机",
+          "sides": 6,
+          "face": 6,
+          "value": "结识可以并肩同行的人",
+          "text": "结识可以并肩同行的人",
+          "quarter": 0
+        },
+        {
+          "key": "keepsake",
+          "label": "随身纪念物",
+          "sides": 8,
+          "face": 6,
+          "value": "一张手绘路线图",
+          "text": "一张手绘路线图",
+          "quarter": 0
+        },
+        {
+          "key": "B",
+          "label": "肉体强度偏差",
+          "sides": 21,
+          "face": 13,
+          "value": 2,
+          "text": "+2% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "S",
+          "label": "魂力强度偏差",
+          "sides": 21,
+          "face": 6,
+          "value": -5,
+          "text": "-5% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "C",
+          "label": "魂力操纵偏差",
+          "sides": 21,
+          "face": 11,
+          "value": 0,
+          "text": "+0% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "D",
+          "label": "防御素质偏差",
+          "sides": 21,
+          "face": 8,
+          "value": -3,
+          "text": "-3% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "A",
+          "label": "敏捷偏差",
+          "sides": 21,
+          "face": 20,
+          "value": 9,
+          "text": "+9% · 惊才绝艳!!!",
+          "quarter": 0
+        },
+        {
+          "key": "P",
+          "label": "精神力偏差",
+          "sides": 21,
+          "face": 1,
+          "value": -10,
+          "text": "-10% · 尚待雕琢",
+          "quarter": 0
+        },
+        {
+          "key": "W",
+          "label": "精神稳定偏差",
+          "sides": 21,
+          "face": 3,
+          "value": -8,
+          "text": "-8",
+          "quarter": 0
+        }
+      ],
+      "hiddenRolls": [
+        {
+          "label": "武魂觉醒",
+          "sides": 1,
+          "face": 1
+        }
+      ],
+      "options": {
+        "name": "验收角色",
+        "gender": "随机",
+        "tier": 7,
+        "level": 61
+      },
+      "generatedName": "验收角色"
+    },
+    "character": {
+      "name": "10.08旧档额度核验",
+      "level": 61,
+      "initialLevel": 61,
+      "initialPotential": 2,
+      "soulId": "X07-器-1968",
+      "style": "强攻",
+      "release": "召出",
+      "luck": 10,
+      "charm": 1,
+      "initialLuck": 10,
+      "initialCharm": 1,
+      "talent": {
+        "rank": 5,
+        "label": "5档 · 良材可琢",
+        "xpMultiplier": 1.4,
+        "attributeMultiplier": 1.16
+      },
+      "identity": {
+        "gender": "男",
+        "nationality": "天魂",
+        "personality": "坚韧",
+        "family": "普通魂师家庭",
+        "originRank": 5,
+        "origin": "乡村",
+        "appearance": "长发与轻便外衣",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一张手绘路线图"
+      },
+      "time": {
+        "month": 7,
+        "age": 22,
+        "span": 16,
+        "rawSpan": 16,
+        "birthYear": 6080,
+        "startYear": 6086,
+        "startAge": 6,
+        "quarters": 24,
+        "timelineMode": "stages",
+        "awakeningAge": 6
+      },
+      "deviations": [
+        2,
+        -5,
+        0,
+        -3,
+        9,
+        -10
+      ],
+      "wDeviation": -8,
+      "growth": {
+        "B": 0,
+        "S": 0,
+        "C": 0,
+        "D": 0,
+        "A": 0,
+        "P": 0,
+        "W": 0
+      },
+      "rings": [
+        {
+          "index": 1,
+          "years": 360,
+          "cap": 423,
+          "quality": 69,
+          "plan": "balanced",
+          "band": "百年",
+          "q": 1.35,
+          "skills": [
+            {
+              "name": "鸣生相镜·击",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理原始伤害 922；命中后按防御力减伤",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 144,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 1,
+              "years": 360,
+              "effectSeed": "browser-achievement|1|0",
+              "damageMode": "direct",
+              "attackSubtype": "direct",
+              "generationVersion": 1006
+            }
+          ],
+          "guarantee": "初次攻击魂技保底",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        },
+        {
+          "index": 2,
+          "years": 362,
+          "cap": 764,
+          "quality": 24,
+          "plan": "balanced",
+          "band": "百年",
+          "q": 1.35,
+          "skills": [
+            {
+              "name": "鸣生相镜·击",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理原始伤害 922；命中后按防御力减伤",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 144,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 2,
+              "years": 362,
+              "effectSeed": "browser-achievement|2|0",
+              "damageMode": "direct",
+              "attackSubtype": "direct",
+              "generationVersion": 1006
+            }
+          ],
+          "guarantee": "",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        },
+        {
+          "index": 3,
+          "years": 1442,
+          "cap": 1760,
+          "quality": 70,
+          "plan": "balanced",
+          "band": "千年",
+          "q": 1.8,
+          "skills": [
+            {
+              "name": "鸣生相镜·禁锢·缚",
+              "category": "控制",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 224,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.17,
+              "cooldown": 10,
+              "ring": 3,
+              "years": 1442,
+              "effectVariant": "bind",
+              "baseControl": 9.77,
+              "effectRulesVersion": 13
+            }
+          ],
+          "guarantee": "",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        },
+        {
+          "index": 4,
+          "years": 2372,
+          "cap": 5000,
+          "quality": 34,
+          "plan": "balanced",
+          "band": "千年",
+          "q": 1.8,
+          "skills": [
+            {
+              "name": "鸣生相镜·禁锢·缚",
+              "category": "控制",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 224,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.17,
+              "cooldown": 10,
+              "ring": 4,
+              "years": 2372,
+              "effectVariant": "bind",
+              "baseControl": 9.77,
+              "effectRulesVersion": 13
+            }
+          ],
+          "guarantee": "",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        },
+        {
+          "index": 5,
+          "years": 7653,
+          "cap": 12000,
+          "quality": 49,
+          "plan": "balanced",
+          "band": "千年",
+          "q": 2.25,
+          "skills": [
+            {
+              "name": "鸣生相镜·多维削弱",
+              "category": "减益",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "防御素质降低30.74%、精神力降低30.74%；共享一次精神判定，持续整场，同源不叠加",
+              "q": 2.25,
+              "K": 1.9,
+              "Q": 4.27,
+              "cost": 339,
+              "costFraction": 0.22,
+              "highest": false,
+              "cast": 1.24,
+              "cooldown": 8,
+              "ring": 5,
+              "years": 7653,
+              "effects": [
+                {
+                  "key": "D",
+                  "value": 0.3074
+                },
+                {
+                  "key": "P",
+                  "value": 0.3074
+                }
+              ],
+              "effectCount": 2,
+              "effectSeed": "browser-achievement|5|0",
+              "effectRulesVersion": 13,
+              "buff": 0
+            }
+          ],
+          "guarantee": "",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        },
+        {
+          "index": 6,
+          "years": 1121,
+          "cap": 20000,
+          "quality": 7,
+          "plan": "balanced",
+          "band": "千年",
+          "q": 1.8,
+          "skills": [
+            {
+              "name": "鸣生相镜·灼痕",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理总原始伤害 1431，分3次每3秒一跳，同技能不叠层",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 506,
+              "costFraction": 0.34,
+              "highest": true,
+              "cast": 1.17,
+              "cooldown": 14,
+              "ring": 6,
+              "years": 1121,
+              "damageNature": "residual",
+              "effectSeed": "browser-achievement|6|0",
+              "damageMode": "periodic",
+              "attackSubtype": "periodic",
+              "generationVersion": 1006
+            }
+          ],
+          "guarantee": "",
+          "acquiredAt": {
+            "year": 6102,
+            "month": 7,
+            "age": 22
+          }
+        }
+      ],
+      "eventFlags": {},
+      "bones": [],
+      "boneInventory": [],
+      "mutations": [],
+      "fatigue": 0,
+      "stats": {
+        "level": 61,
+        "rings": 6,
+        "benchmark": 230,
+        "stats": {
+          "B": 339,
+          "S": 274,
+          "C": 252,
+          "D": 237,
+          "A": 258,
+          "P": 172,
+          "W": 60
+        },
+        "derived": {
+          "HP": 2593,
+          "MP": 1430,
+          "SH": 1596,
+          "PA": 298.85,
+          "SA": 242.9,
+          "MA": 147.6,
+          "DEF": 196.3,
+          "MDEF": 114,
+          "costReduction": 2.25,
+          "castReduction": 25,
+          "controlGrowth": 1.86
+        },
+        "breakdown": {
+          "B": {
+            "base": 230,
+            "grade": 1.12,
+            "style": 20,
+            "shape": 4,
+            "mental": 0,
+            "weapon": 5,
+            "deviation": 2,
+            "growth": 0,
+            "generated": 339
+          },
+          "S": {
+            "base": 230,
+            "grade": 1.12,
+            "style": 10,
+            "shape": 4,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": -5,
+            "growth": 0,
+            "generated": 274
+          },
+          "C": {
+            "base": 230,
+            "grade": 1.12,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 252
+          },
+          "D": {
+            "base": 230,
+            "grade": 1.12,
+            "style": 0,
+            "shape": -4,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": -3,
+            "growth": 0,
+            "generated": 237
+          },
+          "A": {
+            "base": 230,
+            "grade": 1.12,
+            "style": -10,
+            "shape": 0,
+            "mental": 0,
+            "weapon": 2,
+            "deviation": 9,
+            "growth": 0,
+            "generated": 258
+          },
+          "P": {
+            "base": 230,
+            "grade": 1.12,
+            "style": -20,
+            "shape": -4,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": -10,
+            "growth": 0,
+            "generated": 172
+          },
+          "W": {
+            "base": 68,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "deviation": -8,
+            "growth": 0,
+            "generated": 60
+          }
+        }
+      }
+    },
+    "rolls": [
+      {
+        "key": "month",
+        "label": "入会季节",
+        "sides": 4,
+        "face": 3,
+        "value": 7,
+        "text": "6102年7月",
+        "quarter": 0
+      },
+      {
+        "key": "age",
+        "label": "入会年龄",
+        "sides": 25,
+        "face": 7,
+        "value": 22,
+        "text": "22岁",
+        "quarter": 0
+      },
+      {
+        "key": "originRank",
+        "label": "出身",
+        "sides": 10,
+        "face": 5,
+        "value": 5,
+        "text": "5档 · 普通魂师家庭",
+        "quarter": 0
+      },
+      {
+        "key": "charm",
+        "label": "魅力",
+        "sides": 10,
+        "face": 1,
+        "value": 1,
+        "text": "1档魅力 · 内敛含蓄",
+        "quarter": 0
+      },
+      {
+        "key": "luck",
+        "label": "气运",
+        "sides": 10,
+        "face": 10,
+        "value": 10,
+        "text": "10档气运 · 天命所钟!!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "talent",
+        "label": "成长天赋",
+        "sides": 10,
+        "face": 5,
+        "value": 5,
+        "text": "5档 · 良材可琢",
+        "quarter": 0
+      },
+      {
+        "key": "soulKind",
+        "label": "武魂种类",
+        "sides": 4,
+        "face": 1,
+        "value": "器",
+        "text": "器",
+        "quarter": 0
+      },
+      {
+        "key": "soulAttribute",
+        "label": "武魂属性",
+        "sides": 88,
+        "face": 69,
+        "value": "音波 / 生命",
+        "text": "音波 / 生命",
+        "quarter": 0
+      },
+      {
+        "key": "gender",
+        "label": "性别",
+        "sides": 3,
+        "face": 1,
+        "value": "男",
+        "text": "男",
+        "quarter": 0
+      },
+      {
+        "key": "nationality",
+        "label": "国籍",
+        "sides": 5,
+        "face": 2,
+        "value": "天魂",
+        "text": "天魂",
+        "quarter": 0
+      },
+      {
+        "key": "region",
+        "label": "成长地点",
+        "sides": 8,
+        "face": 1,
+        "value": "乡村",
+        "text": "乡村",
+        "quarter": 0
+      },
+      {
+        "key": "personality",
+        "label": "性格",
+        "sides": 8,
+        "face": 4,
+        "value": "坚韧",
+        "text": "坚韧",
+        "quarter": 0
+      },
+      {
+        "key": "appearance",
+        "label": "外形",
+        "sides": 8,
+        "face": 2,
+        "value": "长发与轻便外衣",
+        "text": "长发与轻便外衣",
+        "quarter": 0
+      },
+      {
+        "key": "motivation",
+        "label": "入会动机",
+        "sides": 6,
+        "face": 6,
+        "value": "结识可以并肩同行的人",
+        "text": "结识可以并肩同行的人",
+        "quarter": 0
+      },
+      {
+        "key": "keepsake",
+        "label": "随身纪念物",
+        "sides": 8,
+        "face": 6,
+        "value": "一张手绘路线图",
+        "text": "一张手绘路线图",
+        "quarter": 0
+      },
+      {
+        "key": "B",
+        "label": "肉体强度偏差",
+        "sides": 21,
+        "face": 13,
+        "value": 2,
+        "text": "+2% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "S",
+        "label": "魂力强度偏差",
+        "sides": 21,
+        "face": 6,
+        "value": -5,
+        "text": "-5% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "C",
+        "label": "魂力操纵偏差",
+        "sides": 21,
+        "face": 11,
+        "value": 0,
+        "text": "+0% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "D",
+        "label": "防御素质偏差",
+        "sides": 21,
+        "face": 8,
+        "value": -3,
+        "text": "-3% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "A",
+        "label": "敏捷偏差",
+        "sides": 21,
+        "face": 20,
+        "value": 9,
+        "text": "+9% · 惊才绝艳!!!",
+        "quarter": 0
+      },
+      {
+        "key": "P",
+        "label": "精神力偏差",
+        "sides": 21,
+        "face": 1,
+        "value": -10,
+        "text": "-10% · 尚待雕琢",
+        "quarter": 0
+      },
+      {
+        "key": "W",
+        "label": "精神稳定偏差",
+        "sides": 21,
+        "face": 3,
+        "value": -8,
+        "text": "-8",
+        "quarter": 0
+      },
+      {
+        "label": "第1环年限质量",
+        "sides": 100,
+        "face": 69,
+        "quarter": 24
+      },
+      {
+        "label": "第1环年限区间",
+        "sides": 82,
+        "face": 61,
+        "quarter": 24
+      },
+      {
+        "label": "第1环魂技类别",
+        "sides": 100,
+        "face": 49,
+        "quarter": 24
+      },
+      {
+        "label": "第2环年限质量",
+        "sides": 100,
+        "face": 24,
+        "quarter": 24
+      },
+      {
+        "label": "第2环年限区间",
+        "sides": 226,
+        "face": 51,
+        "quarter": 24
+      },
+      {
+        "label": "第2环魂技类别",
+        "sides": 100,
+        "face": 27,
+        "quarter": 24
+      },
+      {
+        "label": "第3环年限质量",
+        "sides": 100,
+        "face": 70,
+        "quarter": 24
+      },
+      {
+        "label": "第3环年限区间",
+        "sides": 332,
+        "face": 180,
+        "quarter": 24
+      },
+      {
+        "label": "第3环魂技类别",
+        "sides": 100,
+        "face": 84,
+        "quarter": 24
+      },
+      {
+        "label": "第4环年限质量",
+        "sides": 100,
+        "face": 34,
+        "quarter": 24
+      },
+      {
+        "label": "第4环年限区间",
+        "sides": 1470,
+        "face": 312,
+        "quarter": 24
+      },
+      {
+        "label": "第4环魂技类别",
+        "sides": 100,
+        "face": 81,
+        "quarter": 24
+      },
+      {
+        "label": "第5环年限质量",
+        "sides": 100,
+        "face": 49,
+        "quarter": 24
+      },
+      {
+        "label": "第5环年限区间",
+        "sides": 3299,
+        "face": 2253,
+        "quarter": 24
+      },
+      {
+        "label": "第5环魂技类别",
+        "sides": 100,
+        "face": 78,
+        "quarter": 24
+      },
+      {
+        "label": "第6环年限质量",
+        "sides": 100,
+        "face": 7,
+        "quarter": 24
+      },
+      {
+        "label": "第6环年限区间",
+        "sides": 7601,
+        "face": 122,
+        "quarter": 24
+      },
+      {
+        "label": "第6环魂技类别",
+        "sides": 100,
+        "face": 99,
+        "quarter": 24
+      }
+    ],
+    "hiddenRolls": [
+      {
+        "label": "武魂觉醒",
+        "sides": 1,
+        "face": 1
+      },
+      {
+        "sides": 14,
+        "face": 12,
+        "label": "转正考核 · 抽取会员",
+        "quarter": 24
+      }
+    ],
+    "journal": [
+      {
+        "type": "arrival",
+        "date": {
+          "year": 6102,
+          "month": 7,
+          "age": 22
+        },
+        "title": "考核日期已到",
+        "text": "浏览器验收夹具"
+      },
+      {
+        "type": "ending",
+        "date": {
+          "year": 6102,
+          "month": 7,
+          "age": 22
+        },
+        "title": "见证者会徽",
+        "text": "转正战结束，验收角色得到正式登记。会徽与终端递到手中：欢迎回家。",
+        "level": 61
+      }
+    ],
+    "completed": 24,
+    "xp": 0,
+    "prep": 0,
+    "lastEvent": null,
+    "pending": null,
+    "hunt": null,
+    "battleSnapshot": {
+      "v14ShieldVersion": 1,
+      "shieldLayerSequence": 0,
+      "version": 10,
+      "soulControlVersion": 11,
+      "combatRulesVersion": 14,
+      "playerRulesVersion": 2,
+      "drawRulesVersion": 2,
+      "resourceConfig": {
+        "multiplier": 1.5,
+        "absorb": 0.25,
+        "mpPerDamage": 1,
+        "basicFraction": 0.06,
+        "selfBuffBonus": true,
+        "domainAI": true
+      },
+      "doubleEmptySince": null,
+      "activeId": null,
+      "queueSequence": 0,
+      "units": [
+        {
+          "id": "player",
+          "name": "验收角色",
+          "team": 0,
+          "soul": {
+            "id": "X07-器-1968",
+            "tier": 7,
+            "name": "鸣生相镜",
+            "kind": "器·战斗",
+            "attribute": "复合·音波/生命",
+            "style": "强攻/控制",
+            "release": "召出",
+            "feature": "与音波、生命相合；凝成器形，以结构与纹路引导魂力。特殊力量随潜力由局部反应逐渐成长，不改写既定骰果。",
+            "source": "本作原创·属性补足",
+            "main_kind": "器",
+            "subkind": "战斗",
+            "attribute_category": "复合",
+            "elements": [],
+            "mechanisms": [
+              "音波",
+              "生命"
+            ],
+            "ordinary_no_attribute": false,
+            "spirit_specialist": false,
+            "release_options": [
+              "召出"
+            ],
+            "attribute_coefficient": 1.12,
+            "quality_coefficient": 1.9,
+            "balance": [
+              5,
+              -2,
+              -2,
+              -1,
+              2,
+              -2
+            ],
+            "combat_profile": {
+              "family": "life",
+              "trait_name": "生息",
+              "trait": "life",
+              "description": "生命回复提高12%，每战首次受伤回复最大生命的3%"
+            }
+          },
+          "style": "强攻",
+          "release": "召出",
+          "level": 61,
+          "model": {
+            "level": 61,
+            "rings": 6,
+            "benchmark": 230,
+            "stats": {
+              "B": 339,
+              "S": 274,
+              "C": 252,
+              "D": 237,
+              "A": 258,
+              "P": 172,
+              "W": 60
+            },
+            "derived": {
+              "HP": 2593,
+              "baseMP": 1430,
+              "MP": 2145,
+              "SH": 1596,
+              "PA": 298.85,
+              "SA": 242.9,
+              "MA": 147.6,
+              "DEF": 196.3,
+              "MDEF": 114,
+              "costReduction": 15.2,
+              "castReduction": 25.2,
+              "controlGrowth": 1.86
+            },
+            "breakdown": {
+              "B": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 20,
+                "shape": 4,
+                "mental": 0,
+                "weapon": 5,
+                "deviation": 2,
+                "growth": 0,
+                "generated": 339
+              },
+              "S": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 10,
+                "shape": 4,
+                "mental": 0,
+                "weapon": -2,
+                "deviation": -5,
+                "growth": 0,
+                "generated": 274
+              },
+              "C": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 0,
+                "shape": 0,
+                "mental": 0,
+                "weapon": -2,
+                "deviation": 0,
+                "growth": 0,
+                "generated": 252
+              },
+              "D": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 0,
+                "shape": -4,
+                "mental": 0,
+                "weapon": -1,
+                "deviation": -3,
+                "growth": 0,
+                "generated": 237
+              },
+              "A": {
+                "base": 230,
+                "grade": 1.12,
+                "style": -10,
+                "shape": 0,
+                "mental": 0,
+                "weapon": 2,
+                "deviation": 9,
+                "growth": 0,
+                "generated": 258
+              },
+              "P": {
+                "base": 230,
+                "grade": 1.12,
+                "style": -20,
+                "shape": -4,
+                "mental": 0,
+                "weapon": -2,
+                "deviation": -10,
+                "growth": 0,
+                "generated": 172
+              },
+              "W": {
+                "base": 68,
+                "grade": 1,
+                "style": 0,
+                "shape": 0,
+                "mental": 0,
+                "deviation": -8,
+                "growth": 0,
+                "generated": 60
+              }
+            }
+          },
+          "skills": [
+            {
+              "name": "鸣生相镜·击",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理原始伤害 922；命中后按防御力减伤",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 149,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 1,
+              "years": 360,
+              "damageMode": "direct",
+              "fx": "slash",
+              "damageNature": "residual",
+              "id": "1-鸣生相镜·击"
+            },
+            {
+              "name": "鸣生相镜·击",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理原始伤害 922；命中后按防御力减伤",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 149,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 2,
+              "years": 362,
+              "damageMode": "direct",
+              "fx": "slash",
+              "damageNature": "residual",
+              "id": "2-鸣生相镜·击"
+            },
+            {
+              "name": "鸣生相镜·禁锢·缚",
+              "category": "控制",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 112,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.17,
+              "cooldown": 10,
+              "ring": 3,
+              "years": 1442,
+              "effectVariant": "bind",
+              "baseControl": 9.77,
+              "effectRulesVersion": 13,
+              "fx": "slash",
+              "damageNature": "residual",
+              "id": "3-鸣生相镜·禁锢·缚"
+            },
+            {
+              "name": "鸣生相镜·禁锢·缚",
+              "category": "控制",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 112,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.17,
+              "cooldown": 10,
+              "ring": 4,
+              "years": 2372,
+              "effectVariant": "bind",
+              "baseControl": 9.77,
+              "effectRulesVersion": 13,
+              "fx": "slash",
+              "damageNature": "residual",
+              "id": "4-鸣生相镜·禁锢·缚"
+            },
+            {
+              "name": "鸣生相镜·多维削弱",
+              "category": "减益",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "防御素质降低30.74%、精神力降低30.74%；共享一次精神判定，持续整场，同源不叠加",
+              "q": 2.25,
+              "K": 1.9,
+              "Q": 4.27,
+              "cost": 104,
+              "costFraction": 0.22,
+              "highest": false,
+              "cast": 1.23,
+              "cooldown": 8,
+              "ring": 5,
+              "years": 7653,
+              "effectDuration": 12,
+              "effects": [
+                {
+                  "key": "D",
+                  "value": 0.3074
+                },
+                {
+                  "key": "P",
+                  "value": 0.3074
+                }
+              ],
+              "effectCount": 2,
+              "effectSeed": "browser-achievement|5|0",
+              "effectRulesVersion": 13,
+              "buff": 0,
+              "fx": "slash",
+              "damageNature": "residual",
+              "id": "5-鸣生相镜·多维削弱"
+            },
+            {
+              "name": "鸣生相镜·灼痕",
+              "category": "攻击",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "物理总原始伤害 1431，分3次每3秒一跳，同技能不叠层",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 200,
+              "costFraction": 0.34,
+              "highest": true,
+              "cast": 1.17,
+              "cooldown": 14,
+              "ring": 6,
+              "years": 1121,
+              "damageNature": "residual",
+              "damageMode": "periodic",
+              "fx": "slash",
+              "id": "6-鸣生相镜·灼痕"
+            }
+          ],
+          "portrait": null,
+          "source": "玩家人设",
+          "progress": 0,
+          "queuedAt": null,
+          "queueOrder": 0,
+          "actions": 0,
+          "hp": 100,
+          "mp": 2145,
+          "sh": 1596,
+          "cast": null,
+          "readyAt": 0,
+          "cooldowns": {},
+          "uses": {},
+          "statuses": [],
+          "dots": [],
+          "shieldHP": 0,
+          "shieldSH": 0,
+          "shieldUntil": 0,
+          "oneHit": false,
+          "guard": 0,
+          "immuneUntil": 0,
+          "rage": 0,
+          "tuneUses": 0,
+          "calmUses": 0,
+          "manaGiftUses": 0,
+          "firstHit": false,
+          "fallen": false,
+          "tiePriority": 72193,
+          "shieldLayers": [],
+          "rageOnBreak": false
+        },
+        {
+          "id": "enemy",
+          "name": "莫言安",
+          "team": 1,
+          "soul": {
+            "id": "npc-yanan",
+            "name": "逸仙剑",
+            "tier": 7,
+            "main_kind": "器",
+            "subkind": "战斗",
+            "style": "强攻",
+            "attribute": "风",
+            "elements": [],
+            "spirit_specialist": false,
+            "combat_profile": {
+              "trait": "focus",
+              "trait_name": "模板特征",
+              "description": ""
+            }
+          },
+          "style": "强攻",
+          "release": "召出",
+          "level": 61,
+          "model": {
+            "level": 61,
+            "rings": 6,
+            "benchmark": 230,
+            "stats": {
+              "B": 364.48,
+              "S": 335.91,
+              "C": 294.78,
+              "D": 282.21,
+              "A": 265.07,
+              "P": 223.94,
+              "W": 68
+            },
+            "derived": {
+              "HP": 2771,
+              "baseMP": 1740,
+              "MP": 2609,
+              "SH": 2012,
+              "PA": 330.89,
+              "SA": 295.52,
+              "MA": 189.15,
+              "DEF": 224,
+              "MDEF": 142.37,
+              "costReduction": 19.48,
+              "castReduction": 29.48,
+              "controlGrowth": 2.12
+            },
+            "breakdown": {
+              "B": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 20,
+                "shape": 4,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 45.48,
+                "generated": 319
+              },
+              "S": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 10,
+                "shape": 4,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 41.91,
+                "generated": 294
+              },
+              "C": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 0,
+                "shape": 0,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 36.78,
+                "generated": 258
+              },
+              "D": {
+                "base": 230,
+                "grade": 1.12,
+                "style": 0,
+                "shape": -4,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 35.21,
+                "generated": 247
+              },
+              "A": {
+                "base": 230,
+                "grade": 1.12,
+                "style": -10,
+                "shape": 0,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 33.07,
+                "generated": 232
+              },
+              "P": {
+                "base": 230,
+                "grade": 1.12,
+                "style": -20,
+                "shape": -4,
+                "mental": 0,
+                "weapon": 0,
+                "deviation": 0,
+                "growth": 27.94,
+                "generated": 196
+              },
+              "W": {
+                "base": 68,
+                "grade": 1,
+                "style": 0,
+                "shape": 0,
+                "mental": 0,
+                "deviation": 0,
+                "growth": 0,
+                "generated": 68
+              }
+            }
+          },
+          "skills": [
+            {
+              "name": "断空",
+              "category": "攻击",
+              "channel": "能量",
+              "target": "一名敌人",
+              "effect": "凝聚剑尖风刃斩出或突刺，穿透25%常规防御。",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 172,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.04,
+              "cooldown": 8,
+              "ring": 1,
+              "years": 253,
+              "damageMode": "direct",
+              "factor": 1,
+              "penetration": 0.25,
+              "castExtra": -0.2,
+              "fx": "wind",
+              "description": "凝聚剑尖风刃斩出或突刺，穿透25%常规防御。",
+              "id": "yanan-1",
+              "damageNature": "residual"
+            },
+            {
+              "name": "回风叠絮",
+              "category": "攻击",
+              "channel": "能量",
+              "target": "一名敌人",
+              "effect": "共鸣风卷夹杂细小风刃，连续剑击叠加为三次延迟风刃伤害。",
+              "q": 1.35,
+              "K": 1.9,
+              "Q": 2.57,
+              "cost": 208,
+              "costFraction": 0.1,
+              "highest": false,
+              "cast": 1.04,
+              "cooldown": 8,
+              "ring": 2,
+              "years": 458,
+              "damageNature": "residual",
+              "damageMode": "periodic",
+              "factor": 1.15,
+              "fx": "wind",
+              "description": "共鸣风卷夹杂细小风刃，连续剑击叠加为三次延迟风刃伤害。",
+              "id": "yanan-2"
+            },
+            {
+              "name": "逸仙剑体",
+              "category": "强化",
+              "channel": "物理",
+              "target": "自己或一名队友",
+              "effect": "铭文浮现，攻击提高12%；抵御生命攻击时消耗魂力，每抵挡1点伤害消耗0.3点魂力，至多抵挡该次伤害30%。持续整场，可主动关闭防护。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 95,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 3,
+              "years": 1056,
+              "buff": 0.12,
+              "soulArmor": 0.3,
+              "fx": "wind",
+              "description": "铭文浮现，攻击提高12%；抵御生命攻击时消耗魂力，每抵挡1点伤害消耗0.3点魂力，至多抵挡该次伤害30%。持续整场，可主动关闭防护。",
+              "id": "yanan-3",
+              "damageNature": "residual"
+            },
+            {
+              "name": "不尘",
+              "category": "减益",
+              "channel": "物理",
+              "target": "一名敌人",
+              "effect": "张开无尘领域，近身斥退和飞行道具阻力改编为9秒减速18%，自身感知获得12个百分点闪避，持续整场；范围与距离在当前斗魂模型中不单独计算。",
+              "q": 1.8,
+              "K": 1.9,
+              "Q": 3.42,
+              "cost": 113,
+              "costFraction": 0.15,
+              "highest": false,
+              "cast": 1.1,
+              "cooldown": 8,
+              "ring": 4,
+              "years": 3000,
+              "slow": 0.18,
+              "costUp": 0,
+              "duration": 9,
+              "fieldEvasion": 0.12,
+              "fx": "wind",
+              "description": "张开无尘领域，近身斥退和飞行道具阻力改编为9秒减速18%，自身感知获得12个百分点闪避，持续9秒；范围与距离在当前斗魂模型中不单独计算。",
+              "id": "yanan-4",
+              "damageNature": "residual"
+            },
+            {
+              "name": "裂穹",
+              "category": "攻击",
+              "channel": "能量",
+              "target": "一名敌人",
+              "effect": "灌注魂力展开青白光剑，长读条高威力风属性攻击；不额外添加超过原设十米的距离收益。",
+              "q": 2.25,
+              "K": 1.9,
+              "Q": 4.27,
+              "cost": 393,
+              "costFraction": 0.22,
+              "highest": false,
+              "cast": 1.16,
+              "cooldown": 18,
+              "ring": 5,
+              "years": 7200,
+              "damageMode": "direct",
+              "factor": 2,
+              "castFixed": 2.5,
+              "costPercent": 0.18,
+              "fx": "wind",
+              "description": "灌注魂力展开青白光剑，长读条高威力风属性攻击；不额外添加超过原设十米的距离收益。",
+              "id": "yanan-5",
+              "damageNature": "residual"
+            },
+            {
+              "name": "风铭回锋",
+              "category": "防御",
+              "channel": "生命",
+              "target": "自己或一名队友",
+              "effect": "回收外放风压形成生命护盾，持续8秒，须额外支付魂力。",
+              "q": 2.8,
+              "K": 1.9,
+              "Q": 5.32,
+              "cost": 113,
+              "costFraction": 0.34,
+              "highest": true,
+              "cast": 1.24,
+              "cooldown": 14,
+              "ring": 6,
+              "years": 12000,
+              "costPercent": 0.12,
+              "fx": "wind",
+              "description": "回收外放风压形成生命护盾，持续8秒，须额外支付魂力。",
+              "id": "yanan-6",
+              "damageNature": "residual"
+            }
+          ],
+          "portrait": "莫言安",
+          "source": "D:/QQ/【人设】.md",
+          "note": "六招式考核库，按实际环数开放，最多六技。",
+          "templateId": "yanan",
+          "progress": 0,
+          "queuedAt": null,
+          "queueOrder": 0,
+          "actions": 0,
+          "hp": 0,
+          "mp": 2609,
+          "sh": 2012,
+          "cast": null,
+          "readyAt": 0,
+          "cooldowns": {},
+          "uses": {},
+          "statuses": [],
+          "dots": [],
+          "shieldHP": 0,
+          "shieldSH": 0,
+          "shieldUntil": 0,
+          "oneHit": false,
+          "guard": 0,
+          "immuneUntil": 0,
+          "rage": 0,
+          "tuneUses": 0,
+          "calmUses": 0,
+          "manaGiftUses": 0,
+          "firstHit": false,
+          "fallen": true,
+          "tiePriority": 77494,
+          "shieldLayers": [],
+          "rageOnBreak": false
+        }
+      ],
+      "seed": "browser-achievement-转正战-yanan-admission",
+      "rngState": 1076347407,
+      "now": 0,
+      "result": {
+        "winner": 0,
+        "time": 1000,
+        "reason": "界面验收夹具"
+      },
+      "log": [
+        {
+          "time": 0,
+          "text": "斗魂台开启。对手按当前等级切磋；HP或精神护持归零即退场；魂力耗尽不自动失败。同速同时准备时按种子投骰决定顺序。"
+        },
+        {
+          "time": 0,
+          "text": "入会考核：考官通常低5级但保留所在魂环阶段，伤害为标准的90%，双方行动后均回气0.3秒；按环数开放，最多六技。"
+        },
+        {
+          "time": 0,
+          "text": "行动滚轴：敏捷积累行动机会，完成后依次获得回合；实际等级参战，考核降级不会跨越魂环阶段。"
+        }
+      ],
+      "turn": 0,
+      "difficulty": "admission",
+      "controlRules": {
+        "burstSeconds": 10,
+        "ai": "compact"
+      },
+      "tacticsRulesVersion": 1005,
+      "dodgeConfig": {
+        "coefficient": 0.4,
+        "bonus": 0.35,
+        "cap": 0.9,
+        "costFraction": 0.02,
+        "duration": 4
+      }
+    },
+    "battleOptions": {
+      "character": {
+        "name": "验收角色",
+        "level": 61,
+        "initialLevel": 61,
+        "initialPotential": 7,
+        "soulId": "X07-器-1968",
+        "style": "强攻",
+        "release": "召出",
+        "luck": 10,
+        "charm": 1,
+        "initialLuck": 10,
+        "initialCharm": 1,
+        "talent": {
+          "rank": 5,
+          "label": "5档 · 良材可琢",
+          "xpMultiplier": 1.24,
+          "attributeMultiplier": 1.16
+        },
+        "identity": {
+          "gender": "男",
+          "nationality": "天魂",
+          "personality": "坚韧",
+          "family": "普通魂师家庭",
+          "originRank": 5,
+          "origin": "乡村",
+          "appearance": "长发与轻便外衣",
+          "motivation": "结识可以并肩同行的人",
+          "keepsake": "一张手绘路线图"
+        },
+        "time": {
+          "month": 7,
+          "age": 22,
+          "span": 16,
+          "rawSpan": 16,
+          "birthYear": 6080,
+          "startYear": 6086,
+          "startAge": 6,
+          "quarters": 24,
+          "timelineMode": "stages",
+          "awakeningAge": 6
+        },
+        "deviations": [
+          2,
+          -5,
+          0,
+          -3,
+          9,
+          -10
+        ],
+        "wDeviation": -8,
+        "growth": {
+          "B": 0,
+          "S": 0,
+          "C": 0,
+          "D": 0,
+          "A": 0,
+          "P": 0,
+          "W": 0
+        },
+        "rings": [
+          {
+            "index": 1,
+            "years": 360,
+            "cap": 423,
+            "quality": 69,
+            "plan": "balanced",
+            "band": "百年",
+            "q": 1.35,
+            "skills": [
+              {
+                "name": "鸣生相镜·击",
+                "category": "攻击",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "物理原始伤害 922；命中后按防御力减伤",
+                "q": 1.35,
+                "K": 1.9,
+                "Q": 2.57,
+                "cost": 144,
+                "costFraction": 0.1,
+                "highest": false,
+                "cast": 1.1,
+                "cooldown": 8,
+                "ring": 1,
+                "years": 360,
+                "damageMode": "direct"
+              }
+            ],
+            "guarantee": "初次攻击魂技保底",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          },
+          {
+            "index": 2,
+            "years": 362,
+            "cap": 764,
+            "quality": 24,
+            "plan": "balanced",
+            "band": "百年",
+            "q": 1.35,
+            "skills": [
+              {
+                "name": "鸣生相镜·击",
+                "category": "攻击",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "物理原始伤害 922；命中后按防御力减伤",
+                "q": 1.35,
+                "K": 1.9,
+                "Q": 2.57,
+                "cost": 144,
+                "costFraction": 0.1,
+                "highest": false,
+                "cast": 1.1,
+                "cooldown": 8,
+                "ring": 2,
+                "years": 362,
+                "damageMode": "direct"
+              }
+            ],
+            "guarantee": "",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          },
+          {
+            "index": 3,
+            "years": 1442,
+            "cap": 1760,
+            "quality": 70,
+            "plan": "balanced",
+            "band": "千年",
+            "q": 1.8,
+            "skills": [
+              {
+                "name": "鸣生相镜·禁锢·缚",
+                "category": "控制",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+                "q": 1.8,
+                "K": 1.9,
+                "Q": 3.42,
+                "cost": 224,
+                "costFraction": 0.15,
+                "highest": false,
+                "cast": 1.17,
+                "cooldown": 10,
+                "ring": 3,
+                "years": 1442,
+                "effectVariant": "bind",
+                "baseControl": 9.77,
+                "effectRulesVersion": 13
+              }
+            ],
+            "guarantee": "",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          },
+          {
+            "index": 4,
+            "years": 2372,
+            "cap": 5000,
+            "quality": 34,
+            "plan": "balanced",
+            "band": "千年",
+            "q": 1.8,
+            "skills": [
+              {
+                "name": "鸣生相镜·禁锢·缚",
+                "category": "控制",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "基础控制9.77秒；按双方精神力比例结算，无固定时长上限。成功后打断读条，行动条压至最多40%，结束后4秒免控。",
+                "q": 1.8,
+                "K": 1.9,
+                "Q": 3.42,
+                "cost": 224,
+                "costFraction": 0.15,
+                "highest": false,
+                "cast": 1.17,
+                "cooldown": 10,
+                "ring": 4,
+                "years": 2372,
+                "effectVariant": "bind",
+                "baseControl": 9.77,
+                "effectRulesVersion": 13
+              }
+            ],
+            "guarantee": "",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          },
+          {
+            "index": 5,
+            "years": 7653,
+            "cap": 12000,
+            "quality": 49,
+            "plan": "balanced",
+            "band": "千年",
+            "q": 2.25,
+            "skills": [
+              {
+                "name": "鸣生相镜·多维削弱",
+                "category": "减益",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "防御素质降低30.74%、精神力降低30.74%；共享一次精神判定，持续整场，同源不叠加",
+                "q": 2.25,
+                "K": 1.9,
+                "Q": 4.27,
+                "cost": 339,
+                "costFraction": 0.22,
+                "highest": false,
+                "cast": 1.24,
+                "cooldown": 8,
+                "ring": 5,
+                "years": 7653,
+                "effects": [
+                  {
+                    "key": "D",
+                    "value": 0.3074
+                  },
+                  {
+                    "key": "P",
+                    "value": 0.3074
+                  }
+                ],
+                "effectCount": 2,
+                "effectSeed": "browser-achievement|5|0",
+                "effectRulesVersion": 13,
+                "buff": 0
+              }
+            ],
+            "guarantee": "",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          },
+          {
+            "index": 6,
+            "years": 1121,
+            "cap": 20000,
+            "quality": 7,
+            "plan": "balanced",
+            "band": "千年",
+            "q": 1.8,
+            "skills": [
+              {
+                "name": "鸣生相镜·灼痕",
+                "category": "攻击",
+                "channel": "物理",
+                "target": "一名敌人",
+                "effect": "物理总原始伤害 1431，分3次每3秒一跳，同技能不叠层",
+                "q": 1.8,
+                "K": 1.9,
+                "Q": 3.42,
+                "cost": 506,
+                "costFraction": 0.34,
+                "highest": true,
+                "cast": 1.17,
+                "cooldown": 14,
+                "ring": 6,
+                "years": 1121,
+                "damageNature": "residual",
+                "damageMode": "periodic"
+              }
+            ],
+            "guarantee": "",
+            "acquiredAt": {
+              "year": 6102,
+              "month": 7,
+              "age": 22
+            }
+          }
+        ],
+        "eventFlags": {},
+        "bones": [],
+        "boneInventory": [],
+        "mutations": [],
+        "fatigue": 0,
+        "stats": {
+          "level": 61,
+          "rings": 6,
+          "benchmark": 230,
+          "stats": {
+            "B": 339,
+            "S": 274,
+            "C": 252,
+            "D": 237,
+            "A": 258,
+            "P": 172,
+            "W": 60
+          },
+          "derived": {
+            "HP": 2593,
+            "MP": 1430,
+            "SH": 1596,
+            "PA": 298.85,
+            "SA": 242.9,
+            "MA": 147.6,
+            "DEF": 196.3,
+            "MDEF": 114,
+            "costReduction": 2.25,
+            "castReduction": 25,
+            "controlGrowth": 1.86
+          },
+          "breakdown": {
+            "B": {
+              "base": 230,
+              "grade": 1.12,
+              "style": 20,
+              "shape": 4,
+              "mental": 0,
+              "weapon": 5,
+              "deviation": 2,
+              "growth": 0,
+              "generated": 339
+            },
+            "S": {
+              "base": 230,
+              "grade": 1.12,
+              "style": 10,
+              "shape": 4,
+              "mental": 0,
+              "weapon": -2,
+              "deviation": -5,
+              "growth": 0,
+              "generated": 274
+            },
+            "C": {
+              "base": 230,
+              "grade": 1.12,
+              "style": 0,
+              "shape": 0,
+              "mental": 0,
+              "weapon": -2,
+              "deviation": 0,
+              "growth": 0,
+              "generated": 252
+            },
+            "D": {
+              "base": 230,
+              "grade": 1.12,
+              "style": 0,
+              "shape": -4,
+              "mental": 0,
+              "weapon": -1,
+              "deviation": -3,
+              "growth": 0,
+              "generated": 237
+            },
+            "A": {
+              "base": 230,
+              "grade": 1.12,
+              "style": -10,
+              "shape": 0,
+              "mental": 0,
+              "weapon": 2,
+              "deviation": 9,
+              "growth": 0,
+              "generated": 258
+            },
+            "P": {
+              "base": 230,
+              "grade": 1.12,
+              "style": -20,
+              "shape": -4,
+              "mental": 0,
+              "weapon": -2,
+              "deviation": -10,
+              "growth": 0,
+              "generated": 172
+            },
+            "W": {
+              "base": 68,
+              "grade": 1,
+              "style": 0,
+              "shape": 0,
+              "mental": 0,
+              "deviation": -8,
+              "growth": 0,
+              "generated": 60
+            }
+          }
+        }
+      },
+      "soul": {
+        "id": "X07-器-1968",
+        "tier": 7,
+        "name": "鸣生相镜",
+        "kind": "器·战斗",
+        "attribute": "复合·音波/生命",
+        "style": "强攻/控制",
+        "release": "召出",
+        "feature": "与音波、生命相合；凝成器形，以结构与纹路引导魂力。特殊力量随潜力由局部反应逐渐成长，不改写既定骰果。",
+        "source": "本作原创·属性补足",
+        "main_kind": "器",
+        "subkind": "战斗",
+        "attribute_category": "复合",
+        "elements": [],
+        "mechanisms": [
+          "音波",
+          "生命"
+        ],
+        "ordinary_no_attribute": false,
+        "spirit_specialist": false,
+        "release_options": [
+          "召出"
+        ],
+        "attribute_coefficient": 1.12,
+        "quality_coefficient": 1.9,
+        "balance": [
+          5,
+          -2,
+          -2,
+          -1,
+          2,
+          -2
+        ],
+        "combat_profile": {
+          "family": "life",
+          "trait_name": "生息",
+          "trait": "life",
+          "description": "生命回复提高12%，每战首次受伤回复最大生命的3%"
+        }
+      },
+      "enemyId": "yanan",
+      "difficulty": "admission",
+      "withSupport": false,
+      "seed": "browser-achievement-转正战-yanan-admission",
+      "campaignExam": true,
+      "examAttempt": 1
+    },
+    "result": {
+      "winner": 0,
+      "time": 1000,
+      "reason": "界面验收夹具"
+    },
+    "attempts": 1,
+    "resultHandled": true,
+    "date": {
+      "year": 6102,
+      "month": 7,
+      "age": 22
+    },
+    "characterId": "character-1008-11",
+    "source": "formal",
+    "awakeningPending": false,
+    "storyRulesVersion": 1001,
+    "quests": {
+      "version": 1,
+      "active": null,
+      "records": {}
+    },
+    "growthPlan": {
+      "target": 41,
+      "baseXP": 50,
+      "createdAt": 0
+    },
+    "eventHistory": {},
+    "exam": {
+      "mode": "normal",
+      "starts": 1,
+      "opponent": "yanan"
+    },
+    "huntDelayMonths": 0,
+    "journeyRulesVersion": 1002,
+    "skippedPeriods": 24,
+    "episodePeriod": null,
+    "examDefeats": [],
+    "gameVersion": "10.08",
+    "promotions": [],
+    "promotionState": {
+      "version": 1,
+      "highestRatingIndex": 0,
+      "acknowledged": {}
+    },
+    "challenge": {
+      "version": 1,
+      "identity": "journey-cde6d084",
+      "failures": 3,
+      "serial": 0,
+      "completed": [],
+      "resolved": [],
+      "active": null,
+      "snapshot": null,
+      "options": null,
+      "exhausted": true
+    }
+  }
+}

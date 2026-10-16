@@ -102,7 +102,7 @@ const openStoryEvent=function(selected,training,options){
 
 const settleQuest=function(p){const before=p.questId;performsettleQuestCore.call(this,p);if(p.questId){const chain=chains.find(c=>c.id===p.questId),node=chain?.nodes.find(n=>n.eventId===this.event().id);p.castIntroductions={...(p.castIntroductions||{}),...(node?.castIntroductions||{})};if(!before)p.questStarted=true;}};
 
-const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'10.06'};};
+const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'v11'};};
 
 const static_validate=function(s,catalog){performvalidateCore(s,catalog);if(s.exam){const e=s.exam,max=e.mode==='member'?11:6;if(!['normal','member'].includes(e.mode)||!Number.isInteger(e.starts)||e.starts<0||e.starts>max||e.opponent!==null&&typeof e.opponent!=='string'||e.badEnding&&(s.phase!=='ending'||e.starts!==max||s.result?.winner===0))throw Error('考核机会存档无效');}if(s.huntDelayMonths!==undefined&&(!Number.isInteger(s.huntDelayMonths)||s.huntDelayMonths<0||s.huntDelayMonths>1000))throw Error('猎魂月份无效');if(s.hunt?.budgetStart!==undefined&&(!Number.isInteger(s.hunt.budgetStart)||s.hunt.budgetStart<1||s.hunt.budgetStart>(s.hunt.attempt||1)))throw Error('猎魂回合无效');return true;};
 return {methods:{ensure1002,setPlayMode,examStatus,assignExaminer,battleOptions,observeBattle,retry,returnArrival,refresh,monthsToAdmission,forceAdmission,elapsedMonths,startQuarter,finishQuarter,continueProgress,huntRound,abandonHunt,questStage,openStoryEvent,settleQuest,snapshot,static_validate}};

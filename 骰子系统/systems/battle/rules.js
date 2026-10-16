@@ -1,5 +1,6 @@
 (function(root){
   'use strict';
+  if(root.WitnessRules?.calculationVersion===11)return;
   const KEYS=['B','S','C','D','A','P'];
   const LABELS={B:'肉体强度',S:'魂力强度',C:'魂力操纵',D:'防御素质',A:'敏捷',P:'精神力',W:'精神稳定'};
   const BASE=[20,40,65,95,130,175,230,300,390,500];
@@ -9,8 +10,8 @@
     '控制':[-20,10,20,-10,-10,10], '防御':[10,0,-10,30,-20,-10],
     '辅助':[-20,10,20,-10,-10,10]
   };
-  const WEIGHTS={强攻:[45,20,10,5,5,5,0,10],敏攻:[40,20,5,10,10,0,0,15],控制:[15,5,10,20,35,0,0,15],防御:[15,15,40,15,10,0,0,5],辅助:[0,25,20,15,5,25,10,0]};
-  const CATEGORIES=['攻击','强化','防御','减益','控制','治疗','回蓝','持续伤害'];
+  const WEIGHTS={强攻:[45,20,10,5,5,5,10],敏攻:[40,20,5,10,10,0,15],控制:[15,5,10,20,35,0,15],防御:[15,15,40,15,10,0,5],辅助:[0,25,20,15,5,25,0]};
+  const CATEGORIES=['攻击','强化','防御','减益','控制','治疗','持续伤害'];
   const CAPS=[423,764,1760,5000,12000,20000,50000,99999,100000];
   const BAND_LIMITS=[99,999,3999,6999,9999,29999,49999,69999,89999,99999,100000];
   const BANDS=['十年','百年','千年','千年','千年','万年','万年','万年','万年','万年','十万年'];
@@ -29,7 +30,14 @@
     if(soul.subkind==='元素')return [-8,10,4,-6,0,0];
     return [-4,4,0,0,-4,4];
   }
-  function mainStyles(soul){return [...new Set(soul.style.split('/').map(s=>s.includes('辅助')?'辅助':s))].filter(s=>STYLE[s]);}
+  function mainStyles(soul){return Object.keys(STYLE);}
+  function ringFloor(cap){return cap>=100000?10000:cap>=10000?1000:cap>=1000?100:10;}
+  function ringRange(cap,quality){
+    const floor=ringFloor(cap),span=cap-floor;
+    const points=[floor, floor+Math.floor(span*.4),floor+Math.floor(span*.7),floor+Math.floor(span*.9),cap];
+    const i=quality<=20?0:quality<=65?1:quality<=95?2:3;
+    return {floor,low:i===0?floor:points[i]+1,high:points[i+1]};
+  }
   function isMental(soul){return !!soul.spirit_specialist;}
   let resourceConfig={multiplier:1.5,absorb:.25,mpPerDamage:1,basicFraction:.06,selfBuffBonus:true,domainAI:true};
   function setResourceConfig(c){resourceConfig={...resourceConfig,...c};}
@@ -64,7 +72,7 @@
     return {chance:round2(chance*100),duration:round2(Math.max(.01,base*ratio)),ratio:round2(ratio),immunity:4};
   }
   function band(years){if(!Number.isInteger(years)||years<10||years>100000)throw Error('魂环年限无效');return BAND_LIMITS.findIndex(n=>years<=n);}
-  function pickCategory(style,roll){let n=0;return CATEGORIES[WEIGHTS[style].findIndex(w=>(n+=w)>=roll)];}
+  function pickCategory(style,roll){let n=0;const w=WEIGHTS[style],point=roll/100*w.reduce((a,b)=>a+b,0);return CATEGORIES[w.findIndex(v=>(n+=v)>=point)];}
   function makeSkill({soul,style,stats,index,years,category,variant=0}){
     const b=band(years),q=QS[b],K=1+.15*(soul.tier-1),Q=round2(q*K);
     const mental=isMental(soul),attackChannel=mental?'精神':soul.main_kind==='兽'||(soul.main_kind==='器'&&soul.subkind==='战斗')?'物理':'能量';
@@ -100,10 +108,10 @@
     return Math.max(1,Math.ceil((model.derived.baseMP||model.derived.MP)*fraction*(s.costMultiplier||1)*(1-model.derived.costReduction/100)));
   }
   function rating(model){
-    const ring=Math.max(1,model.rings),standard=BASE[ring],score=KEYS.reduce((sum,k)=>sum+model.stats[k],0)/6/standard;
-    const title=score<.90?'弱标准':score<1.15?'标准':score<1.40?'强标准':'特级标准';
-    return {score:round2(score),label:title+['零','一','二','三','四','五','六','七','八','九'][ring]+'环',basis:'六项能力均值 / '+standard+'；同环起点标准，不含临时增益'};
+    const standard=benchmark(model.level).base,score=Math.round(KEYS.reduce((sum,k)=>sum+model.stats[k],0)/6/standard*10000)/10000;
+    const title=score<1?'纸':score<1.35?'并':score<1.60?'强':score<1.75?'凶':score<2.10?'狂':'神';
+    return {score:round2(score),label:title+'级',basis:'六维均值 / 同等级标准 '+standard+'；并级为合格线，不含临时增益'};
   }
-  const api={soulControl,setResourceConfig,getResourceConfig:()=>({...resourceConfig}),skillBudget,rating,KEYS,LABELS,BASE,GRADE,STYLE,CAPS,BANDS,QS,WEIGHTS,CATEGORIES,benchmark,shapeMods,mainStyles,isMental,derive,buildStats,controlEffect,band,pickCategory,makeSkill,round2};
+  const api={calculationVersion:11,ringFloor,ringRange,soulControl,setResourceConfig,getResourceConfig:()=>({...resourceConfig}),skillBudget,rating,KEYS,LABELS,BASE,GRADE,STYLE,CAPS,BAND_LIMITS,BANDS,QS,WEIGHTS,CATEGORIES,benchmark,shapeMods,mainStyles,isMental,derive,buildStats,controlEffect,band,pickCategory,makeSkill,round2};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessRules=api;
 })(typeof globalThis==='undefined'?this:globalThis);

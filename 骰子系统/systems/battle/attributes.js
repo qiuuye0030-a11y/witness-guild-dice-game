@@ -20,7 +20,7 @@ const config={coefficient:.40,bonus:.35,cap:.90,costFraction:.02,duration:4};
 
   const makeSkill=args=>SE.make(buildUnderlyingSkill,args);
 
-  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:14,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1005,dodgeConfig:{...config,...this.dodgeConfig}};};
+  const snapshot=function(){this.expireShields();return {v14ShieldVersion:1,shieldLayerSequence:this.shieldLayerSequence||0,version:10,soulControlVersion:11,combatRulesVersion:17,modernVersion:1100,mechanicsFixVersion:this.mechanicsFixVersion??1,traitsEnabled:this.traitsEnabled!==false,challengeId:this.challengeId||null,postGameChallenge:!!this.postGameChallenge,challengeSessionId:this.challengeSessionId||null,playerRulesVersion:2,drawRulesVersion:2,resourceConfig:this.resourceConfig,doubleEmptySince:this.doubleEmptySince??null,activeId:this.activeId,queueSequence:this.queueSequence,units:copy(this.units),seed:this.seed,rngState:this.rng.state,now:this.now,result:copy(this.result),log:copy(this.log),turn:this.turn,difficulty:this.difficulty||'standard',controlRules:{...(this.controlRules||root.WitnessControlV9.getConfig())},tacticsRulesVersion:1007,dodgeConfig:{...config,...this.dodgeConfig}};};
 
   const dodgeCost=function(u){return Math.max(1,Math.ceil(u.model.derived.baseMP*(this.dodgeConfig||config).costFraction));};
 
@@ -47,11 +47,10 @@ const config={coefficient:.40,bonus:.35,cap:.90,costFraction:.02,duration:4};
       const diff=a.A/Math.max(20,u.model.benchmark)-(controlled?0:b.A/Math.max(20,t.model.benchmark));
       const active=!controlled&&this.value(t,'activeDodge');
       chance=clamp(.9+diff*(active?c.coefficient:.12),.6,.97);
-      if(!controlled){chance-=this.value(t,'evasion');if(this.trait(t)==='evasion')chance-=.08;}
+      if(!controlled){chance-=this.value(t,'evasion');}
       if(active){const advantage=Math.max(0,-diff);chance-=c.bonus+advantage*c.coefficient;}
       chance=clamp(chance,active?1-c.cap:.4,.97);
     }
-    if(this.trait(u)==='sense')chance+=.05;
     chance=clamp(chance+bonus,mind?.55:(!controlled&&this.value(t,'activeDodge')?1-c.cap:.4),.97);
     return Math.round(clamp(chance-this.value(u,'accuracyDown'),.05,.97)*100)/100;
   };

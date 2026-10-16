@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>晨曦城 · 朝阳组件预览</title><style>body{margin:0}</style><link rel="stylesheet" href="01_界面样式.css"></head><body>
+<section class="cx-root cx-game" data-cx-root aria-label="晨曦城互动游戏界面">
+  <div class="cx-layer cx-rays" aria-hidden="true"></div>
+  <div class="cx-layer cx-sun" aria-hidden="true"></div>
+  <svg class="cx-layer cx-far" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 150V96l60-22 50 18 70-40 60 30 50-12 40 20 60-46 50 30 70-20 60 26 50-14 50 18v66z"/><path d="M0 150V96l60-22 50 18 70-40 60 30 50-12 40 20 60-46 50 30 70-20 60 26 50-14 50 18v66z" transform="translate(1440,0) scale(-1,1)"/>
+  </svg>
+  <div class="cx-layer cx-fog cx-a" aria-hidden="true"></div>
+  <svg class="cx-layer cx-near" viewBox="0 0 1440 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path d="M0 190V132h70v-10h14v10h40v-10h14v10h40V96l-14-4 44-22 44 22-14 4v36h50v-10h14v10h40v-10h14v10h34V78l-18-5 58-30 58 30-18 5v54h14v-10h14v10h40v-10h14v10h58v58z"/><path d="M0 190V132h70v-10h14v10h40v-10h14v10h40V96l-14-4 44-22 44 22-14 4v36h50v-10h14v10h40v-10h14v10h34V78l-18-5 58-30 58 30-18 5v54h14v-10h14v10h40v-10h14v10h58v58z" transform="translate(1440,0) scale(-1,1)"/>
+    <!-- 中央门楼：三重檐，顶上一枚日轮 -->
+    <path d="M610 190V120h30V98l-26-6 106-40 106 40-26 6v22h30v70h-80v-40a30 30 0 0 0-60 0v40z M662 60l-18-5 76-34 76 34-18 5v-8H662z M700 24l20-16 20 16z"/>
+  </svg>
+  <div class="cx-layer cx-water" aria-hidden="true"></div>
+  <div class="cx-layer cx-shimmer" aria-hidden="true"></div>
+  <div class="cx-layer cx-fog cx-b" aria-hidden="true"></div>
+  <div class="cx-layer cx-veil" aria-hidden="true"></div>
+
+  <header class="cx-hud">
+    <span class="cx-phase" data-cx="phase">初晓</span>
+    <span class="cx-place" data-cx="place">朝门渡口</span>
+    <span class="cx-clock" data-cx="clock">卯初 · 05:06</span>
+  </header>
+
+  <div class="cx-stage">
+    <article class="cx-panel" aria-live="polite">
+      <p class="cx-speaker" data-cx="speaker">旁白</p>
+      <div class="cx-narr" data-cx="narr">这里显示游戏正文。</div>
+      <ul class="cx-choices" data-cx="choices"></ul>
+    </article>
+  </div>
+
+  <footer class="cx-foot">
+    <button type="button" data-cx-menu="restart">从头开始</button>
+    <button type="button" data-cx-menu="journal">行记</button>
+    <button type="button" data-cx-menu="inventory">行囊</button>
+    <button type="button" data-cx-menu="settings">设置</button>
+  </footer>
+</section>
+<script src="03_界面接口.js"></script><script src="演示剧情.js"></script></body></html>

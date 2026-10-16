@@ -8,7 +8,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,11 +17,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      # The integration check reads the built themes, so build first.
-      - name: Build both standalone themes
-        run: npm run build
-      - name: Structure, hidden achievements, integration and frozen V14 paired checks
-        run: npm test
-      - name: Verify standalone packages
+      - name: Rebuild the trait catalog from the source catalog
         working-directory: 骰子系统
-        run: python -X utf8 verify-package-1006.py
+        run: node systems/traits/build.cjs
+      # The regression suites read the generated engine bundles and themes.
+      - name: Build both standalone themes
+        working-directory: 骰子系统
+        run: python -X utf8 _full_package.py
+      - name: Twelve regression suites for trait cards, saves, growth and naming
+        working-directory: 骰子系统
+        run: node tools/check-v11.cjs
+      - name: Verify the share archive and write both release ZIPs
+        working-directory: 骰子系统
+        run: python -X utf8 tools/package-v11.py

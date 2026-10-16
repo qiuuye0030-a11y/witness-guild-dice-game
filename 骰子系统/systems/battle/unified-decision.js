@@ -8,11 +8,11 @@ const UnifiedDecision=(function(root){
   const maximum=(u,ch)=>Math.max(1,u.model.derived[ch==='精神'?'SH':'HP']);
   const probabilityBranches=f=>(f.branches||[]).filter(b=>!b.invalid&&b.state&&b.probability>0);
   const mainBranch=f=>probabilityBranches(f).sort((a,b)=>b.probability-a.probability)[0];
-  const statusSignature=u=>JSON.stringify([u.statuses,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.rage,u.rageTotal,u.mp,u.bonusAttack]);
+  const statusSignature=u=>JSON.stringify([u.statuses,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.rage,u.rageTotal,u.mp,u.bonusAttack,u.guildmaster,u.modern,u.passive]);
   function directionSignature(b,u,offense){
     const e=b.effective(u),excluded=offense?new Set(['evasion','iceArmor','soulArmor','phantomSwapReady','statUpD','statDownD']):new Set(['coldAura','dotBoost','damageDown','accuracyDown','phantomPierce','bloodFirstStrike','buff','slow','costUp','statUpB','statDownB','statUpS','statDownS','statUpC','statDownC']);
     const statuses=u.statuses.filter(s=>!excluded.has(s.type));
-    return JSON.stringify(offense?[e.PA,e.SA,e.MA,e.A,e.C,e.P,e.costReduction,e.castReduction,statuses,u.mp,u.rage,u.rageTotal,u.bonusAttack,u.cast,u.petAlive]:[e.DEF,e.MDEF,e.A,e.P,statuses,u.hp,u.sh,u.mp,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.petHP,u.bodyHP]);
+    return JSON.stringify(offense?[e.PA,e.SA,e.MA,e.A,e.C,e.P,e.costReduction,e.castReduction,statuses,u.mp,u.rage,u.rageTotal,u.bonusAttack,u.cast,u.petAlive,u.passive]:[e.DEF,e.MDEF,e.A,e.P,statuses,u.hp,u.sh,u.mp,u.shieldLayers,u.shieldHP,u.shieldSH,u.guard,u.oneHit,u.immuneUntil,u.phantoms,u.phantomSwapped,u.petAlive,u.petHP,u.bodyHP,u.passive]);
   }
   function nextOpportunity(b,u,forceNext=false){
     const rate=Math.max(.06,b.actionRate(u)),recovery=Math.max(0,(u.readyAt-b.now)/1000);
@@ -35,8 +35,8 @@ const UnifiedDecision=(function(root){
     return b.targetOptions(u,s.id).some(v=>v.id===t.id);
   }
   function rawPriority(b,u,s){
-    const a=b.effective(u),ch=s?.channel||(u.soul.spirit_specialist?'精神':'物理');
-    const power=s?.mindPower?a.MA:ch==='精神'?a.MA:ch==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
+    const a=b.effective(u),ch=s?.channel||u.soul.basicChannel||(u.soul.spirit_specialist?'精神':'物理');
+    const power=(s?.mindPower||!s&&u.soul.basicMindPower)?a.MA:ch==='精神'?a.MA:ch==='物理'?a.PA:a.SA+(s?.poisonScaling||0)*a.MA;
     const damage=s?(periodic(s)?1.4:1.2)*s.Q*power*((s.factor??1)+(s.secondaryFactor||0)):.45*power;
     const cost=s?b.cost(u,s):b.basicCost(u),cast=s?b.castTime(u,s)*(s.castMultiplier||1):1.5;
     return damage/Math.pow(Math.max(1,cost),.25)/(cast+.3+1/b.actionRate(u));
@@ -204,7 +204,7 @@ const UnifiedDecision=(function(root){
     }
     return result;
   }
-  function hasMechanics(s,action){return !s?['defend','defendSH','dodge','calm','tune','phantomSwap','phantomSacrifice'].includes(action):!offensive(s)||!!(s.slow||s.corrode||s.costUp||s.controlOnHit||s.rageGain||s.rageSpend||s.detonate);}
+  function hasMechanics(s,action){if(s&&(s.attackSubtype==='pursuit'||s.modernEffect||s.preDR))return true;return !s?['defend','defendSH','dodge','calm','tune','phantomSwap','phantomSacrifice'].includes(action):!offensive(s)||!!(s.slow||s.corrode||s.costUp||s.controlOnHit||s.rageGain||s.rageSpend||s.detonate);}
   function scoreCandidate(ctx,u,t,action){
     const b=ctx.root,s=u.skills.find(v=>v.id===action)||null,f=cachedForecast(ctx,b,u,t,s||action);
     if(!f.valid)return null;

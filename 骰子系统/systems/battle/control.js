@@ -111,9 +111,6 @@ function text(s){
     let raw=s?((s.category==='持续伤害'||s?.damageMode==='periodic')?1.4:1.2)*s.Q*power*(s.factor??1):.45*power;
     if(s?.secondaryFactor)raw+=1.2*s.Q*power*s.secondaryFactor;
     if((s?.category==='持续伤害'||s?.damageMode==='periodic'))raw*=1+this.value(u,'dotBoost');
-    if((s?.category==='持续伤害'||s?.damageMode==='periodic')&&this.trait(u)==='poison')raw*=1.14;
-    if(s?.category==='攻击'&&this.trait(u)==='poison')raw*=.95;
-    if(s?.category==='攻击'&&this.trait(u)==='fire'&&channel==='能量')raw*=1.1;
     const pre=Object.fromEntries(this.units.map(x=>[x.id,this.effective(x)]));
     return this.damageValue(u,t,raw,channel,pre)*this.hitChance(u,t,channel);
   };
@@ -134,7 +131,7 @@ function text(s){
       if(s.effectVariant==='interrupt'&&!willInterrupt&&t.progress<.8)return -Infinity;
       const blocked=willInterrupt?(t.cast.skill&&['攻击','持续伤害'].includes(t.cast.skill.category)?this.forecastDamage(t,u,t.cast.skill):enemy*.65):0;
       const delay=e.duration+Math.max(0,t.progress-.4)/this.actionRate(t);
-      const dotValue=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+d.damage*Math.min(d.ticks,e.duration/3),0);
+      const dotValue=t.dots.filter(d=>d.source===u.id).reduce((n,d)=>n+this.dotDamage(d,t)*Math.min(d.ticks,e.duration/3),0);
       return e.chance/100*(blocked+enemy*Math.min(1.6,delay/enemyCycle)+dotValue*.25)*scale-cost;
     }
     const v=variants[s.effectVariant],type=v.status||(s.channel==='精神'?'mindDown':'defDown');

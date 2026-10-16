@@ -29,13 +29,28 @@
     s.effect=effects.map(e=>labels[e.key]+(s.category==='强化'?'提高':'降低')+(e.value*100).toFixed(2).replace(/\.?0+$/,'')+'%').join('、')+(s.category==='强化'?'；持续整场，同源不叠加':'；共享一次精神判定，持续整场，同源不叠加');
     return s;
   }
+  function statsRef(args){const b=[20,40,65,95,130,175,230,300,390,500][Math.max(0,Math.min(9,args.stats.rings))];return b*[.76,.82,.88,.94,1,1.06,1.12,1.18,1.24,1.30][args.soul.tier-1];}
   function make(base,args){
-    let mode=args.damageMode;
-    if(args.category==='持续伤害')mode='periodic';
-    if(args.category==='攻击'&&!mode&&!args.npcTemplate){const seed=args.effectSeed||[args.soul.id,args.index,args.years,args.variant||0].join('|');mode=random(seed+'|attack-mode')()<.25?'periodic':'direct';}
-    const resolved={...args,category:mode==='periodic'?'持续伤害':args.category};
-    const skill=decorate(base(resolved),resolved);
-    return resolved.category==='持续伤害'?{...skill,category:'攻击',damageMode:'periodic'}:args.category==='攻击'?{...skill,damageMode:'direct'}:skill;
+    if(args.category==='回蓝')args={...args,category:'防御'};
+    const legacy=!!args.damageMode&&!args.attackSubtype;
+    let subtype=args.attackSubtype;if(subtype==='pursuit'&&(args.style!=='敏攻'||args.soul.spirit_specialist))subtype='direct';
+    if(args.category==='持续伤害')subtype='periodic';
+    if(args.category==='攻击'&&!subtype){
+      if(legacy)subtype=args.damageMode==='periodic'?'periodic':'direct';
+      else if(args.npcTemplate)subtype='direct';
+      else {
+        const v=random((args.effectSeed||[args.soul.id,args.index,args.years,args.variant||0].join('|'))+'|attack-1007')();
+        const eligible=args.style==='敏攻'&&!args.soul.spirit_specialist;
+        subtype=v<.25?'periodic':v<.40?'multi':eligible&&v<.65?'pursuit':'direct';
+      }
+    }
+    const resolved={...args,category:subtype==='periodic'?'持续伤害':args.category};
+    let skill=decorate(base(resolved),resolved);
+    if(!['攻击','持续伤害'].includes(resolved.category))return skill;
+    skill={...skill,effectSeed:args.effectSeed||[args.soul.id,args.index,args.years,args.variant||0].join('|'),category:'攻击',damageMode:subtype==='periodic'?'periodic':'direct',attackSubtype:subtype||'direct',generationVersion:args.generationVersion||(legacy?1006:1007)};
+    if(subtype==='multi')Object.assign(skill,{name:args.soul.name+'·连刃',factor:1.10,budgetFactor:1.10,effect:'同次施法三段攻击，共用一次命中，总原始伤害为普通攻击魂技的110%；逐段结算，附带效果只触发一次。'});
+    if(subtype==='pursuit')Object.assign(skill,{name:args.soul.name+'·掠影追击',agilityCoefficient:((skill.channel==='物理'?.952:.85)*(Math.max(20,statsRef(args))*1)+10)/(1.36*Math.max(20,statsRef(args))),factor:.80,budgetFactor:1.00,effect:'以有效敏捷造成伤害，基准为普通攻击魂技的80%；命中获得追势，下一轮行动条、出手读条及衔接回气速度提高30%，最多保留8秒；不缩短冷却。'});
+    return skill;
   }
   const api={generate,decorate,make,weights,labels};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessSkillEffects=api;
 })(typeof globalThis==='undefined'?this:globalThis);

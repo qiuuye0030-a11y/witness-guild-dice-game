@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>晨曦城 · 前端设计方案（朝阳版）</title>
+<style>
+:root{
+  color-scheme: light;
+  /* —— 核心色板 —— */
+  --sun:#FFD84A;      /* 朝阳明黄：太阳、悬停高亮 */
+  --warm:#F5DE9C;     /* 晨曦暖黄：大面积底色、天空低处 */
+  --paper:#FFF9E4;    /* 宣白：对话框、文档底 */
+  --gilt:#B8892B;     /* 鎏金：边线、纹饰（只做装饰） */
+  --gilt-ink:#8A6414; /* 沉金：金色文字 */
+  --dai:#173F45;      /* 黛青：正文、近景 */
+  --qing:#2F7F82;     /* 城青：近景楼阁、选中态 */
+  --lan:#9CCFC6;      /* 岚青：远景、雾中的青 */
+  --zhu:#A8321F;      /* 朱砂：仅用于风险提示 */
+
+  /* —— 随时段变化（JS 切换） —— */
+  --sky-top:#9CC7C4; --sky-mid:#DCE7CF; --sky-low:#F7E7B0;
+  --sun-y:60%; --fog:.95; --ray:.25;
+
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--dai);font-family:var(--sans);line-height:1.7}
+
+/* ================= 演示：游戏画面 ================= */
+.game{position:relative;min-height:100vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;
+  background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 30%,var(--sky-low) 58%);
+  transition:background 2.6s ease}
+.layer{position:absolute;left:0;right:0;pointer-events:none}
+
+/* 太阳：居中，沿中轴升起 */
+.rays{left:50%;right:auto;top:var(--sun-y);width:1500px;height:1500px;margin:-750px 0 0 -750px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,216,74,.55) 0 4deg,transparent 4deg 15deg);
+  -webkit-mask:radial-gradient(circle,transparent 150px,#000 190px,transparent 70%);
+          mask:radial-gradient(circle,transparent 150px,#000 190px,transparent 70%);
+  opacity:var(--ray);transition:top 2.6s ease,opacity 2.6s ease;animation:turn 360s linear infinite}
+@keyframes turn{to{transform:rotate(360deg)}}
+.sun{left:50%;right:auto;top:var(--sun-y);width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;
+  background:radial-gradient(circle,#FFFDF0 0%,#FFEFA0 38%,var(--sun) 62%,#F6C533 100%);
+  box-shadow:0 0 0 14px rgba(255,216,74,.22),0 0 0 15px rgba(184,137,43,.35),
+             0 0 0 40px rgba(255,216,74,.12),0 0 0 41px rgba(184,137,43,.2),0 0 140px 60px rgba(255,226,122,.75);
+  transition:top 2.6s ease}
+
+/* 远景、近景楼阁（左右对称） */
+.far{top:calc(58% - 150px);height:150px;width:100%}
+.far path{fill:var(--lan);opacity:.75}
+.near{top:calc(58% - 190px);height:190px;width:100%}
+.near path{fill:var(--qing)}
+/* 水面与倒影 */
+.water{top:58%;bottom:0;background:linear-gradient(180deg,#CFE6D6 0%,#EEEBC4 30%,var(--warm) 70%,var(--paper) 100%)}
+.shimmer{top:58%;bottom:0;left:50%;right:auto;width:260px;margin-left:-130px;
+  background:repeating-linear-gradient(180deg,rgba(255,216,74,.85) 0 3px,transparent 3px 11px);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%),linear-gradient(90deg,transparent,#000 50%,transparent);
+  -webkit-mask-composite:source-in;mask:linear-gradient(180deg,#000,transparent 70%),linear-gradient(90deg,transparent,#000 50%,transparent);
+  mask-composite:intersect;opacity:calc(1.15 - var(--fog))}
+/* 雾：三层，前后夹住楼阁 */
+.fog{left:-20%;right:-20%;filter:blur(18px);opacity:var(--fog);transition:opacity 2.6s ease}
+.fog.a{top:44%;height:16%;background:radial-gradient(ellipse 38% 60% at 22% 50%,rgba(255,252,236,.95),transparent 70%),
+  radial-gradient(ellipse 34% 55% at 78% 55%,rgba(255,252,236,.9),transparent 70%);animation:drift 70s ease-in-out infinite alternate}
+.fog.b{top:50%;height:14%;background:radial-gradient(ellipse 60% 60% at 50% 60%,rgba(255,249,228,.9),transparent 72%),
+  radial-gradient(ellipse 30% 50% at 8% 50%,rgba(214,236,226,.9),transparent 70%),
+  radial-gradient(ellipse 30% 50% at 92% 50%,rgba(214,236,226,.9),transparent 70%);animation:drift 95s ease-in-out infinite alternate-reverse}
+.veil{top:0;bottom:0;background:linear-gradient(180deg,rgba(255,249,228,0) 20%,rgba(255,249,228,.5) 56%,rgba(255,249,228,.15) 80%);
+  opacity:var(--fog);transition:opacity 2.6s ease}
+@keyframes drift{from{transform:translateX(-4%)}to{transform:translateX(4%)}}
+
+/* 顶栏：居中题额 */
+.hud{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:20px clamp(16px,4vw,48px) 0;font-size:14px;color:var(--dai)}
+.hud .phase{font-family:var(--serif);letter-spacing:.3em}
+.place{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.5em;text-indent:.5em;padding:6px 28px;
+  border-top:1px solid var(--gilt);border-bottom:1px solid var(--gilt);position:relative}
+.place::before,.place::after{content:"";position:absolute;top:50%;width:7px;height:7px;background:var(--gilt);transform:translateY(-50%) rotate(45deg)}
+.place::before{left:-4px}.place::after{right:-4px}
+.clock{justify-self:end;font-variant-numeric:tabular-nums;letter-spacing:.1em}
+
+.stage{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding:0 16px 20px}
+.panel{position:relative;width:min(760px,100%);padding:34px 44px 30px;
+  background:rgba(255,249,228,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--gilt);box-shadow:0 18px 50px -20px rgba(23,63,69,.35)}
+.panel::before{content:"";position:absolute;inset:6px;border:1px solid rgba(184,137,43,.45);pointer-events:none}
+.panel::after{content:"";position:absolute;left:50%;top:-15px;width:30px;height:15px;margin-left:-15px;
+  border:1px solid var(--gilt);border-bottom:none;border-radius:30px 30px 0 0;background:var(--sun)}
+.speaker{font-family:var(--serif);font-weight:600;color:var(--gilt-ink);font-size:16px;letter-spacing:.2em;text-align:center;margin-bottom:10px}
+.narr{font-family:var(--serif);font-size:18px;line-height:2;color:var(--dai);min-height:6em}
+.narr .clue{color:var(--qing);font-weight:600;border-bottom:1px solid var(--qing);cursor:help}
+.choices{list-style:none;margin-top:22px;display:grid;gap:10px}
+.choice{position:relative;width:100%;text-align:left;font:inherit;font-size:16px;color:var(--dai);cursor:pointer;
+  padding:12px 18px 12px 44px;background:rgba(255,255,255,.4);border:1px solid rgba(184,137,43,.6);
+  transition:background .22s,border-color .22s,color .22s}
+.choice::before{content:"";position:absolute;left:18px;top:50%;width:9px;height:9px;margin-top:-5px;
+  border:1px solid var(--gilt-ink);transform:rotate(45deg);transition:background .22s,border-color .22s}
+.choice:hover,.choice:focus-visible{background:var(--sun);border-color:var(--gilt-ink);outline:none}
+.choice:hover::before,.choice:focus-visible::before{background:var(--dai);border-color:var(--dai)}
+.choice:focus-visible{outline:2px solid var(--dai);outline-offset:2px}
+.choice .tag{float:right;font-size:13px;color:var(--gilt-ink)}
+.choice.risk::before{border-color:var(--zhu)}
+.choice.risk .tag{color:var(--zhu)}
+.choice.risk:hover,.choice.risk:focus-visible{border-color:var(--zhu)}
+.choice.risk:hover::before,.choice.risk:focus-visible::before{background:var(--zhu);border-color:var(--zhu)}
+.choice[disabled]{cursor:not-allowed;background:transparent;border-style:dashed;border-color:rgba(23,63,69,.3);color:rgba(23,63,69,.5)}
+.choice[disabled]::before{border-color:rgba(23,63,69,.35);background:none}
+.choice[disabled] .tag{color:rgba(23,63,69,.6)}
+.choice.picked{background:var(--qing);border-color:var(--dai);color:var(--paper)}
+.choice.picked::before{background:var(--sun);border-color:var(--sun)}
+.choice.picked .tag{color:var(--paper)}
+
+.foot{position:relative;z-index:2;padding:6px 16px 22px;font-size:14px;color:var(--dai);display:flex;gap:34px;justify-content:center;flex-wrap:wrap}
+.foot button{background:none;border:none;color:inherit;font:inherit;letter-spacing:.2em;cursor:pointer;padding:2px 0;border-bottom:1px solid transparent}
+.foot button:hover,.foot button:focus-visible{border-bottom-color:var(--gilt-ink);outline:none}
+
+/* ================= 规范文档 ================= */
+.doc{background:var(--paper);padding:clamp(48px,7vw,104px) clamp(18px,6vw,80px);border-top:1px solid var(--gilt)}
+.doc-in{max-width:1040px;margin:0 auto}
+.doc h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.3;letter-spacing:.12em;text-align:center}
+.doc .lede{max-width:36em;margin:18px auto 0;font-size:17px;text-align:center;color:#2C5358}
+.doc h2{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:.15em;margin:72px 0 12px;display:flex;align-items:center;gap:14px}
+.doc h2::before{content:"";width:11px;height:11px;background:var(--sun);border:1px solid var(--gilt-ink);transform:rotate(45deg);flex:none}
+.doc h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gilt),transparent)}
+.doc h3{font-size:16px;margin:24px 0 6px}
+.doc p{max-width:42em;color:#24494E}
+.doc p+p{margin-top:10px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:22px}
+.sw div{background:#fff;border:1px solid rgba(184,137,43,.45)}
+.sw b{display:block;height:88px}
+.sw span{display:block;padding:10px 12px 12px;font-size:13px;line-height:1.55;color:#2C5358}
+.sw strong{display:block;font-size:15px;color:var(--dai)}
+.ratio{display:flex;height:46px;margin-top:22px;border:1px solid var(--gilt)}
+.ratio i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;color:var(--dai)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:#F3E9C2;padding:1px 5px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14.5px}
+th,td{text-align:left;padding:10px 12px;vertical-align:top;border-bottom:1px solid rgba(184,137,43,.4)}
+th{font-weight:600;background:#F8EDC4;border-top:1px solid var(--gilt)}
+.phases{display:grid;grid-template-columns:repeat(4,1fr);margin-top:20px;border:1px solid var(--gilt)}
+.phases div{position:relative;padding:96px 14px 14px;font-size:13px;line-height:1.55;overflow:hidden;background:var(--paper)}
+.phases div+div{border-left:1px solid rgba(184,137,43,.45)}
+.phases em{position:absolute;left:0;right:0;top:0;height:82px;overflow:hidden}
+.phases em::before{content:"";position:absolute;left:50%;width:56px;height:56px;margin-left:-28px;border-radius:50%;background:var(--sun);box-shadow:0 0 30px 10px rgba(255,226,122,.8)}
+.phases em::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22px;background:linear-gradient(180deg,rgba(47,127,130,.75),rgba(207,230,214,.9))}
+.phases div:nth-child(1) em::before{top:52px}.phases div:nth-child(2) em::before{top:34px}.phases div:nth-child(3) em::before{top:18px}.phases div:nth-child(4) em::before{top:6px}
+.phases strong{display:block;font-family:var(--serif);font-size:17px;letter-spacing:.15em}
+.mini{position:relative;margin-top:18px;padding:22px;background:rgba(255,255,255,.55);border:1px solid var(--gilt);display:grid;gap:10px}
+.mini .choice{cursor:default}
+.mini .hov{background:var(--sun);border-color:var(--gilt-ink)}
+.mini .hov::before{background:var(--dai);border-color:var(--dai)}
+.cols{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:start}
+pre{background:var(--dai);color:var(--paper);padding:18px 20px;overflow:auto;font-size:13px;line-height:1.6;margin-top:14px;font-family:Consolas,"Cascadia Mono","Microsoft YaHei",monospace}
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr}.phases{grid-template-columns:1fr 1fr}.phases div:nth-child(3){border-left:none}
+  .hud{grid-template-columns:1fr;justify-items:center;gap:8px}.clock{justify-self:center}.hud .phase{display:none}
+  .place{font-size:19px}.panel{padding:28px 22px 22px}.narr{font-size:16.5px}.sun{width:220px;height:220px;margin:-110px 0 0 -110px}
+  .choice .tag{float:none;display:block}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ================= 可玩演示 ================= -->
+<section class="game" id="game" aria-label="晨曦城游戏界面演示">
+  <div class="layer rays" aria-hidden="true"></div>
+  <div class="layer sun" aria-hidden="true"></div>
+  <svg class="layer far" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+    <defs><path id="farL" d="M0 150V96l60-22 50 18 70-40 60 30 50-12 40 20 60-46 50 30 70-20 60 26 50-14 50 18v66z"/></defs>
+    <use href="#farL"/><use href="#farL" transform="translate(1440,0) scale(-1,1)"/>
+  </svg>
+  <div class="layer fog a" aria-hidden="true"></div>
+  <svg class="layer near" viewBox="0 0 1440 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <!-- 左半城：城墙、角楼、殿阁，镜像后与中央门楼对称 -->
+      <path id="nearL" d="M0 190V132h70v-10h14v10h40v-10h14v10h40V96l-14-4 44-22 44 22-14 4v36h50v-10h14v10h40v-10h14v10h34V78l-18-5 58-30 58 30-18 5v54h14v-10h14v10h40v-10h14v10h58v58z"/>
+    </defs>
+    <use href="#nearL"/><use href="#nearL" transform="translate(1440,0) scale(-1,1)"/>
+    <!-- 中央门楼：三重檐，顶上一枚日轮 -->
+    <path d="M610 190V120h30V98l-26-6 106-40 106 40-26 6v22h30v70h-80v-40a30 30 0 0 0-60 0v40z M662 60l-18-5 76-34 76 34-18 5v-8H662z M700 24l20-16 20 16z"/>
+  </svg>
+  <div class="layer water" aria-hidden="true"></div>
+  <div class="layer shimmer" aria-hidden="true"></div>
+  <div class="layer fog b" aria-hidden="true"></div>
+  <div class="layer veil" aria-hidden="true"></div>
+
+  <header class="hud">
+    <span class="phase" id="phase">初晓</span>
+    <span class="place" id="place">朝门渡口</span>
+    <span class="clock" id="clock">卯初 · 05:06</span>
+  </header>
+
+  <main class="stage">
+    <article class="panel" aria-live="polite">
+      <p class="speaker" id="speaker">旁白</p>
+      <p class="narr" id="narr"></p>
+      <ul class="choices" id="choices"></ul>
+    </article>
+  </main>
+
+  <footer class="foot">
+    <button type="button" id="restart">从头开始</button>
+    <button type="button">行记</button>
+    <button type="button">行囊</button>
+    <button type="button">设置</button>
+  </footer>
+</section>
+
+<!-- ================= 设计规范 ================= -->
+<section class="doc">
+<div class="doc-in">
+  <h1>晨曦城前端设计方案</h1>
+  <p class="lede">一轮朝阳沿着画面中轴，从城门楼后升起。整个界面围绕这条中轴左右对称，用暖黄铺底、鎏金勾线、青色压住分量，再用几层薄雾把城与水隔开。</p>
+
+  <h2>设计主张</h2>
+  <p>端庄大气来自三件事：中轴对称的构图，大面积留白的暖黄，以及只用细线的鎏金。朝阳感来自画面里唯一的高饱和色块，也就是那轮明黄的太阳，其余黄色都比它淡。迷蒙感来自雾，雾只压在地平线附近，不盖住文字。</p>
+  <p>青色在这里承担“墨”的角色。正文不用黑色，用黛青；楼阁不用灰色，用城青和岚青。这样画面里只有暖黄和青两个色相在对话，显得干净。</p>
+
+  <h2>色板</h2>
+  <div class="sw">
+    <div><b style="background:#FFD84A"></b><span><strong>朝阳明黄 #FFD84A</strong>太阳、选项悬停。全画面最亮的颜色，用量最少</span></div>
+    <div><b style="background:#F5DE9C"></b><span><strong>晨曦暖黄 #F5DE9C</strong>天空低处、水面、大面积底色</span></div>
+    <div><b style="background:#FFF9E4"></b><span><strong>宣白 #FFF9E4</strong>对话框、菜单底、雾的颜色</span></div>
+    <div><b style="background:#B8892B"></b><span><strong>鎏金 #B8892B</strong>边线、纹饰、分隔线。只做装饰，不做文字</span></div>
+    <div><b style="background:#8A6414"></b><span><strong>沉金 #8A6414</strong>角色名、标签等金色文字</span></div>
+    <div><b style="background:#173F45"></b><span><strong>黛青 #173F45</strong>正文、图标、键盘焦点框</span></div>
+    <div><b style="background:#2F7F82"></b><span><strong>城青 #2F7F82</strong>近景楼阁、线索词、已选中的选项</span></div>
+    <div><b style="background:#9CCFC6"></b><span><strong>岚青 #9CCFC6</strong>远山、天空高处、雾里透出的青</span></div>
+    <div><b style="background:#A8321F"></b><span><strong>朱砂 #A8321F</strong>仅用于风险提示，每屏最多一处</span></div>
+  </div>
+  <h3>用色比例</h3>
+  <div class="ratio" aria-label="用色比例">
+    <i style="flex:55;background:#F5DE9C">暖黄与宣白 55%</i>
+    <i style="flex:25;background:#9CCFC6">青 25%</i>
+    <i style="flex:12;background:#B8892B;color:#FFF9E4">金 12%</i>
+    <i style="flex:8;background:#FFD84A">明黄 8%</i>
+  </div>
+  <p style="margin-top:14px">对比度（已计算）：黛青在宣白上 10.9:1，在明黄上 8.3:1，在暖黄上 8.6:1；沉金在宣白上 5.1:1；朱砂在宣白上 6.3:1，均满足 WCAG AA。鎏金在宣白上只有 3.0:1，所以只用于线条和纹饰。</p>
+
+  <h2>界面布局</h2>
+<pre>┌──────────────────────────────────────────────────┐
+│ 初晓          ◆═══ 朝 门 渡 口 ═══◆      卯初 05:06 │  顶栏：时段 / 地点题额 / 时辰
+│                                                  │
+│                     ╭────╮                       │
+│                    (  朝阳  )      ← 沿中轴上升     │
+│        ▁▃▂        ▟██▙        ▂▃▁               │
+│  ▂▅▃▂▅█▃▂▅▃▂▅▇▃ ▟█门楼█▙ ▃▇▅▂▃▅▂▃█▅▂▃▅▂        │  近景楼阁，左右镜像
+│ ░░░░░░░░░░░░░░░░ 雾 ░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
+│ ～～～～～～～～  水面与日光倒影  ～～～～～～～～～ │
+│        ╔══════════════ ◠ ══════════════╗        │
+│        ║           角 色 名             ║        │
+│        ║  叙事正文 ……                   ║        │  对话框：居中，双线金框
+│        ║  ◇ 选项一                      ║        │
+│        ║  ◇ 选项二                      ║        │
+│        ╚════════════════════════════════╝        │
+│          从头开始    行记    行囊    设置           │
+└──────────────────────────────────────────────────┘</pre>
+  <p style="margin-top:14px">所有界面元素居中并关于中轴对称，只有正文和选项文字在框内左对齐，保证长句好读。对话框是半透明宣白加背景模糊，外面一道实线金框，里面再套一道淡金细线，顶边正中嵌一枚半轮小日，呼应背后的太阳。框体全部直角，不用圆角和阴影卡片。</p>
+  <p>手机竖屏时顶栏只保留地点题额和时辰，太阳缩小到 220px，对话框占满宽度，天空保留上方约四成。</p>
+
+  <h2>交互选项的颜色与状态</h2>
+  <div class="cols">
+    <div>
+      <p>选项是一排等宽的金线框，前面有一枚菱形标记。悬停时整条被朝阳明黄填满，像被阳光照到，菱形变为实心黛青。</p>
+      <table>
+        <tr><th>状态</th><th>处理</th></tr>
+        <tr><td>默认</td><td>鎏金细框，40% 白底，黛青文字，空心菱形</td></tr>
+        <tr><td>悬停</td><td>明黄填充，沉金边框，实心黛青菱形</td></tr>
+        <tr><td>键盘焦点</td><td>同悬停，外加 2px 黛青描边</td></tr>
+        <tr><td>风险选项</td><td>菱形和右侧标签用朱砂，悬停时边框变朱砂</td></tr>
+        <tr><td>条件未满足</td><td>虚线框，文字减淡，右侧写明缺什么</td></tr>
+        <tr><td>已选中</td><td>城青填充，宣白文字，菱形变明黄；其余选项淡出</td></tr>
+      </table>
+    </div>
+    <div class="mini" aria-hidden="true">
+      <button class="choice" tabindex="-1">沿着朝门大街走向钟鼓楼</button>
+      <button class="choice hov" tabindex="-1">向渡口的船夫打听（悬停）</button>
+      <button class="choice risk" tabindex="-1">揭开请柬背面的金漆封印<span class="tag">不可撤回</span></button>
+      <button class="choice" disabled tabindex="-1">出示城防司腰牌<span class="tag">需要：腰牌</span></button>
+      <button class="choice picked" tabindex="-1">登上门楼（已选中）</button>
+    </div>
+  </div>
+
+  <h2>字体与排版</h2>
+  <p>叙事正文用宋体系（思源宋体 / Noto Serif SC），18px，行高 2，每行不超过 36 个汉字。地点题额用宋体加粗，字距拉开到半个字宽，像城门上的匾额。菜单、时辰、标签用黑体系（思源黑体），14–16px。宋体代表故事，黑体代表系统。</p>
+  <p>角色名用沉金、居中、字距略宽。线索词用城青加粗并加实线下划线，点击后收入行记。</p>
+
+  <h2>时段主题</h2>
+  <p>四个时段全程明亮，变化的只有三样：太阳高度、雾的浓度、光芒的强度。开局雾最浓，太阳只露出一道弧；越往后雾越散、城越清楚。每做一次关键选择推进一格，过渡 2.6 秒。上方演示可以直接体验。</p>
+  <div class="phases">
+    <div><em style="background:linear-gradient(180deg,#9CC7C4,#F7E7B0)"></em><strong>初晓</strong>雾浓度 95%。太阳只露一线，城只见轮廓。序章、悬念。</div>
+    <div><em style="background:linear-gradient(180deg,#A8D3CC,#FFE08A)"></em><strong>晨曦</strong>雾浓度 75%。太阳半出，水面出现金色倒影。人物登场。</div>
+    <div><em style="background:linear-gradient(180deg,#B5DCD2,#FFD84A)"></em><strong>旭日</strong>雾浓度 50%。太阳全出，光芒最盛。冲突与抉择。</div>
+    <div><em style="background:linear-gradient(180deg,#C4E6DC,#FFDF6B)"></em><strong>朝晖</strong>雾浓度 30%。太阳高悬，全城清晰。结局与余韵。</div>
+  </div>
+
+  <h2>迷蒙感的做法</h2>
+  <table>
+    <tr><th>手法</th><th>位置</th><th>实现</th></tr>
+    <tr><td>后雾</td><td>远山与近景楼阁之间</td><td>两团宣白椭圆渐变，模糊 18px，70 秒左右往返一次</td></tr>
+    <tr><td>前雾</td><td>楼阁脚下与水面交界</td><td>中间一团宣白、两侧两团淡青，95 秒反向往返</td></tr>
+    <tr><td>晨霭罩层</td><td>整个画面</td><td>从上到下的宣白渐变，地平线处最浓（50%），随时段减淡</td></tr>
+    <tr><td>对话框毛玻璃</td><td>对话框背后</td><td>背景模糊 10px，底色 84% 宣白</td></tr>
+    <tr><td>远近层次</td><td>远山 / 近楼</td><td>远景用岚青并降低不透明度，近景用城青，空气感靠颜色变淡表现</td></tr>
+  </table>
+  <p style="margin-top:14px">雾只出现在画面中段。顶栏和对话框区域不放雾，文字始终落在干净的底色上。</p>
+
+  <h2>贴图分层配置</h2>
+  <table>
+    <tr><th>层级</th><th>内容</th><th>格式与规格</th><th>随时段变化</th></tr>
+    <tr><td>1 天空</td><td>岚青到暖黄的三段渐变</td><td>CSS 变量，不需要贴图</td><td>三个色值</td></tr>
+    <tr><td>2 光芒</td><td>放射状细光束</td><td>CSS 锥形渐变，或 2048² 透明 PNG；极慢旋转</td><td>不透明度 0.25→0.6</td></tr>
+    <tr><td>3 太阳</td><td>明黄日轮 + 两圈金线光环</td><td>CSS；如需手绘质感，换 1024² PNG</td><td>高度沿中轴上升</td></tr>
+    <tr><td>4 远景</td><td>远山或远城轮廓</td><td>单色 SVG，岚青，75% 不透明</td><td>不变</td></tr>
+    <tr><td>5 后雾</td><td>见上表</td><td>CSS，或 2048×512 无缝雾 PNG</td><td>浓度递减</td></tr>
+    <tr><td>6 近景场景</td><td>当前地点的建筑</td><td>WebP 2560×1440，透明天空；左右对称构图，中轴留给太阳</td><td>可叠一张金色受光边图</td></tr>
+    <tr><td>7 水面与倒影</td><td>淡青到暖黄渐变 + 中轴金色波光</td><td>CSS</td><td>波光随雾散变亮</td></tr>
+    <tr><td>8 前雾与晨霭</td><td>见上表</td><td>CSS</td><td>浓度递减</td></tr>
+    <tr><td>9 界面</td><td>题额、对话框、选项</td><td>CSS；可加 256² 宣纸纹理 PNG，不透明度 5%</td><td>不变</td></tr>
+  </table>
+  <h3>美术出图要求</h3>
+  <p>场景图统一正面平视、中轴对称，画面正中上方留出直径约为画面高度三分之一的空位给太阳。建筑只用城青到黛青的色阶，不画细节纹理，靠轮廓说话；朝向中轴的一侧可以勾一道明黄或鎏金的受光边，并单独输出为一层。人物立绘的暗部用黛青，亮部用暖黄，不使用纯黑和纯白。</p>
+  <h3>纹饰</h3>
+  <p>纹饰只用三种，全部是鎏金细线：菱形（选项标记、标题起首），半轮日（对话框顶边、章节页），双横线（题额上下）。不使用回纹、云纹等满铺花边，保持画面干净。</p>
+
+  <h2>动效</h2>
+  <p>自动播放的动效只有两个：雾的缓慢横移，和时段切换时太阳上升、雾散开的 2.6 秒过渡。光芒的旋转慢到一圈六分钟，几乎察觉不到。其余动效都由玩家触发：选项悬停变色 220ms，选中后其余选项淡出 320ms。系统开启“减少动态效果”时全部关闭。</p>
+
+  <h2>CSS 变量参考</h2>
+<pre>:root{
+  --sun:#FFD84A;  --warm:#F5DE9C; --paper:#FFF9E4;
+  --gilt:#B8892B; --gilt-ink:#8A6414;
+  --dai:#173F45;  --qing:#2F7F82; --lan:#9CCFC6; --zhu:#A8321F;
+}
+/* 时段：只改这几个值 */
+[data-phase="0"]{--sky-top:#9CC7C4;--sky-mid:#DCE7CF;--sky-low:#F7E7B0;--sun-y:60%;--fog:.95;--ray:.25}
+[data-phase="1"]{--sky-top:#A8D3CC;--sky-mid:#EFE9BE;--sky-low:#FFE08A;--sun-y:52%;--fog:.75;--ray:.4}
+[data-phase="2"]{--sky-top:#B5DCD2;--sky-mid:#FBEDB4;--sky-low:#FFD84A;--sun-y:42%;--fog:.5; --ray:.6}
+[data-phase="3"]{--sky-top:#C4E6DC;--sky-mid:#FFF3C4;--sky-low:#FFDF6B;--sun-y:30%;--fog:.3; --ray:.5}</pre>
+</div>
+</section>
+
+<script>
+const PH=[
+ {n:'初晓',top:'#9CC7C4',mid:'#DCE7CF',low:'#F7E7B0',sun:'60%',fog:.95,ray:.25},
+ {n:'晨曦',top:'#A8D3CC',mid:'#EFE9BE',low:'#FFE08A',sun:'52%',fog:.75,ray:.4},
+ {n:'旭日',top:'#B5DCD2',mid:'#FBEDB4',low:'#FFD84A',sun:'42%',fog:.5,ray:.6},
+ {n:'朝晖',top:'#C4E6DC',mid:'#FFF3C4',low:'#FFDF6B',sun:'30%',fog:.3,ray:.5}
+];
+const S={
+ start:{p:0,t:'卯初 · 05:06',place:'朝门渡口',who:'旁白',
+  txt:'雾还没有散。渡船靠岸时，你只能看见对面城门楼的一道轮廓，和它背后刚刚亮起的一线金光。怀里那张请柬上写着：<span class="clue">日出之时，朝门自开</span>。',
+  ch:[['沿着朝门大街走向钟鼓楼','street'],['向渡口的船夫打听','boat'],['揭开请柬背面的金漆封印','seal','risk','不可撤回'],['出示城防司腰牌',null,'lock','需要：腰牌']]},
+ boat:{p:1,t:'卯初 · 05:24',place:'朝门渡口',who:'船夫 老岑',
+  txt:'“晨曦城的规矩，外乡人要赶在<span class="clue">钟鼓楼第三声钟</span>之前进城。”老岑把篙往水里一点，水面上碎了一片金光，“过了时辰，城门要到明早才开。”',
+  ch:[['道谢，立刻进城','street'],['追问城门为何只在日出时开','street','risk','他可能起疑']]},
+ seal:{p:1,t:'卯初 · 05:20',place:'朝门渡口',who:'旁白',
+  txt:'金漆剥落，露出一枚徽记：一轮被城墙托起的太阳。就在这时，城门楼后的光亮了一分，雾里隐约传来第一声钟响。',
+  ch:[['收好徽记，走向朝门大街','street']]},
+ street:{p:2,t:'卯正 · 06:02',place:'朝门大街',who:'旁白',
+  txt:'太阳越过了门楼的重檐。整条大街的青瓦被镀上一层金边，雾退到了街角和屋檐下。钟鼓楼前站着一位穿青袍的人，手里托着一盏还没熄的灯。',
+  ch:[['走上前去','end'],['在牌坊下先观察片刻','end','risk','可能错过时辰']]},
+ end:{p:3,t:'卯正 · 06:30',place:'钟鼓楼',who:'青袍人',
+  txt:'“你来得正是时候。”第三声钟响起，最后一缕雾从水面上散开，全城都亮了。“从今日起，你便是晨曦城的<span class="clue">司晨</span>。”（演示结束）',
+  ch:[['从头开始','start']]}
+};
+const g=document.getElementById('game'),$=id=>document.getElementById(id);
+function phase(i){const p=PH[i],s=g.style;
+ s.setProperty('--sky-top',p.top);s.setProperty('--sky-mid',p.mid);s.setProperty('--sky-low',p.low);
+ s.setProperty('--sun-y',p.sun);s.setProperty('--fog',p.fog);s.setProperty('--ray',p.ray);$('phase').textContent=p.n;}
+function go(id){const n=S[id],box=$('choices');phase(n.p);
+ $('place').textContent=n.place;$('clock').textContent=n.t;$('speaker').textContent=n.who;$('narr').innerHTML=n.txt;
+ box.innerHTML='';
+ n.ch.forEach(([label,to,kind,tag])=>{const li=document.createElement('li'),b=document.createElement('button');
+  b.type='button';b.className='choice'+(kind==='risk'?' risk':'');b.innerHTML=label+(tag?`<span class="tag">${tag}</span>`:'');
+  if(kind==='lock')b.disabled=true;
+  else b.onclick=()=>{b.classList.add('picked');box.querySelectorAll('.choice').forEach(x=>{if(x!==b)x.style.opacity=.3});setTimeout(()=>go(to),340)};
+  li.appendChild(b);box.appendChild(li);});}
+$('restart').onclick=()=>go('start');
+go('start');
+</script>
+</body>
+</html>

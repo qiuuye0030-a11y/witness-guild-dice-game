@@ -94,3 +94,19 @@
 @keyframes witness-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.achievement-witness-card{animation:none}}
 @media(max-width:420px){.achievement-witness-card{padding:24px 18px}.achievement-witness h2{font-size:28px}}
+
+/* 10.07 text-first battle and isolated challenge panels */
+.combat-state-detail,.combat-passives{margin:8px 0;padding:8px;border:1px solid #b7a37555;border-radius:7px;font-size:12px;overflow-wrap:anywhere;max-width:100%}.combat-state-detail summary,.combat-passives summary{cursor:pointer;font-weight:bold}.combat-state-detail p,.combat-passives p{margin:6px 0;line-height:1.6}
+.combat-state-detail,.combat-passives{grid-column:1 / -1;width:100%;box-sizing:border-box;text-align:left;min-width:0}.combat-state-detail summary,.combat-passives summary{line-height:1.6}.combat-state-detail p,.combat-passives p{font-size:12px;word-break:normal;overflow-wrap:anywhere}
+
+/* Hidden legendary witness: native effects, no artwork dependency. */
+.achievement-legendary{isolation:isolate;border:2px solid #d4b469!important;box-shadow:0 0 35px #e6c87688,0 0 100px #8ed6ff55!important;background:radial-gradient(ellipse at top,#284d69,#121c32 72%)!important;color:#fff5d6!important;overflow:hidden;max-width:min(560px,92vw);}
+.achievement-legendary .achievement-witness-card{position:relative;z-index:1;background:transparent;color:inherit;}
+.achievement-legendary .achievement-seal{border-color:#ffe2a1;color:#fff1bc;box-shadow:0 0 30px #eed48c99;animation:legendary-seal 1.6s ease-out;}
+.achievement-legendary h2{color:#ffe4a3;text-shadow:0 0 18px #eac87399;letter-spacing:.18em;}
+.legendary-halo{position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-conic-gradient(from 0deg at 50% 32%,#f8da8a10 0deg 8deg,transparent 8deg 24deg);animation:legendary-light 16s linear infinite;}
+.legendary-halo i{position:absolute;top:calc(12% + var(--i)*3.8%);left:calc(6% + var(--i)*4.3%);width:4px;height:4px;border-radius:50%;background:#fff0b4;box-shadow:0 0 9px #c6ebff;animation:legendary-snow 3.5s ease-in-out infinite;animation-delay:calc(var(--i)*-.19s);}
+@keyframes legendary-seal{from{opacity:0;transform:scale(.45) rotate(-35deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes legendary-light{to{transform:rotate(360deg)}}
+@keyframes legendary-snow{0%,100%{opacity:.15;transform:translateY(-16px)}50%{opacity:1;transform:translateY(12px)}}
+@media(prefers-reduced-motion:reduce){.achievement-legendary *{animation:none!important;}.legendary-halo i{opacity:.55;}}

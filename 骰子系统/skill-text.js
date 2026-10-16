@@ -1,9 +1,9 @@
 (function(root){
 'use strict';
   function describeBase(skill,{battle=null,unit=null,target=null}={}){
-    const cost=battle&&unit?battle.cost(unit,skill):skill.cost;
+    const cost=battle&&unit?battle.cost(unit,skill):(skill.previewCost??skill.cost);
     if(!['攻击','持续伤害'].includes(skill.category)){
-      const cast=battle&&unit?battle.castTime(unit,skill):skill.cast;
+      const cast=battle&&unit?battle.castTime(unit,skill):(skill.previewCast??skill.cast);
       return String(skill.effect||skill.category+'魂技')+' · 魂力消耗 '+Math.max(0,Math.ceil(cost||0))+(Number.isFinite(cast)?' · 读条 '+Math.round(cast*100)/100+'秒':'')+(Number.isFinite(skill.cooldown)?' · 冷却 '+skill.cooldown+'秒':'');
     }
     let damage='伤害：无';
@@ -33,7 +33,7 @@
     return text;
   }
   function costDetails(battle,unit,skill){
-    const cost=battle&&unit?battle.cost(unit,skill):skill.cost;
+    const cost=battle&&unit?battle.cost(unit,skill):(skill.previewCost??skill.cost);
     let text='魂力消耗 '+Math.max(0,Math.ceil(cost||0))+' 点';
     if(unit?.model?.derived&&skill.manaReturn){
       const base=unit.model.derived.baseMP||unit.model.derived.MP;
@@ -55,7 +55,7 @@
     // no random draws or calls to status-pruning helpers occur here.
     return JSON.stringify([battle.now,battle.activeId,battle.log?.length,battle.units.map(u=>[
       u.id,u.hp,u.sh,u.mp,u.petHP,u.petAlive,u.cast,u.statuses,u.dots,u.shieldLayers,
-      u.shieldHP,u.shieldSH,u.guard,u.phantoms,u.bloodDomainUsed,u.cooldowns,u.uses
+      u.shieldHP,u.shieldSH,u.guard,u.phantoms,u.bloodDomainUsed,u.cooldowns,u.uses,u.guildmaster,u.modern,u.passive
     ])]);
   }
   function forecast(battle,unit,target,skill){
@@ -74,7 +74,8 @@
     if(!battle||!unit){
       const original=correctedText(describeBase(skill,{unit}),skill);
       // The original skill card has no live target; retain its raw-damage label.
-      return self+original.replace(/魂力消耗\s*\d+(?:\.\d+)?/,cost);
+      const timing=attack?' · 读条 '+Math.round((skill.previewCast??skill.cast)*100)/100+'秒 · 冷却 '+skill.cooldown+'秒':'';
+      return self+original.replace(/魂力消耗\s*\d+(?:\.\d+)?/,cost)+timing;
     }
     if(!attack){
       const cast=battle.castTime(unit,skill);
@@ -99,7 +100,7 @@
       pieces.push('命中后消耗护盾约 '+rounded(number(conditional.shieldHP)+number(conditional.shieldSH)));
     if(number(expected.mp)>0)pieces.push('目标期望魂力损失约 '+rounded(expected.mp));
     if(number(p.futureDOT?.damage)>0)pieces.push('预计后续持续伤害 '+rounded(p.futureDOT.damage)+'（已计命中率，未扣未来防护，不计入即时损失）');
-    pieces.push(cost);
+    if(skill.attackSubtype==='multi')pieces.push('三段，共用命中、单次费用');if(skill.attackSubtype==='pursuit')pieces.push('敏捷攻击·80%基准；追势整体增速30%');pieces.push(cost);
     return pieces.join(' · ');
   }
   function shieldBadges(battle,unit){

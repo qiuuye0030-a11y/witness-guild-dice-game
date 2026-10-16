@@ -15,8 +15,6 @@ const R=root.WitnessRules;
   const controlNumbers=function(u,t,s){
     const a=this.effective(u),b=this.effective(t),effect=R.controlEffect(s.Q,a,b),ratio=(100+a.P)/(100+b.P);
     effect.duration=R.round2(Math.max(.01,(s.baseControl??(1+.5*s.Q))*ratio));
-    if(this.trait(u)==='binding')effect.duration=R.round2(effect.duration+.2);
-    if(this.trait(u)==='ice')effect.chance=Math.min(85,effect.chance+6);
     if(s.controlChance!==undefined)effect.chance=s.controlChance;
     return effect;
   };
@@ -26,11 +24,9 @@ const R=root.WitnessRules;
   const damageValue=function(u,t,raw,channel,pre){
       const penetration=this.value(u,'phantomPierce');
       if(channel!=='精神'&&penetration)pre={...pre,[t.id]:{...pre[t.id],DEF:pre[t.id].DEF*Math.max(0,1-penetration)}};
-      const target=pre[t.id],trait=this.trait(u);let def=channel==='精神'?target.MDEF:target.DEF;def*=130/Math.max(20,t.model.benchmark);
-      if(trait==='pierce'&&channel!=='精神')def*=.88;if(trait==='mind'&&channel==='精神')def*=.88;
+      const target=pre[t.id];let def=channel==='精神'?target.MDEF:target.DEF;def*=130/Math.max(20,t.model.benchmark);
       let damage=Math.max(1,Math.round(raw*100/(100+def)));
       if(this.difficulty==='admission'&&u.team===1)damage=Math.max(1,Math.round(damage*.9));
-      if(channel!=='精神'&&this.trait(t)==='body')damage=Math.round(damage*.92);
       if(this.status(t,channel==='精神'?'defendSH':'defendHP').length)damage=Math.round(damage*.70);
       damage=Math.max(1,damage);
       if(this._valuingAI&&this.value(u,'damageDown'))damage=Math.max(1,Math.round(damage*(1-this.value(u,'damageDown'))));
@@ -80,7 +76,7 @@ const R=root.WitnessRules;
     });
     if(first&&plan.hit?.success){
       plan.damage=Math.round(plan.damage*1.35);for(const extra of plan.extraDamage||[])extra.amount=Math.round(extra.amount*1.35);const beforeDots=new Set(t.dots);
-      plan.effects.push(()=>{for(const dot of t.dots)if(!beforeDots.has(dot)&&dot.source===u.id){dot.baseDamage=Math.round(dot.baseDamage*1.35);dot.damage=this.dotDamage(dot);}u.statuses=u.statuses.filter(x=>x.type!=='bloodFirstStrike');this.tryControl(u,t,{...s,Q:s?.Q||1,controlChance:50},1);});
+      plan.effects.push(()=>{for(const dot of t.dots)if(!beforeDots.has(dot)&&dot.source===u.id){dot.baseDamage=Math.round(dot.baseDamage*1.35);if(Number.isFinite(dot.rawPerTick))dot.damageMultiplier=(dot.damageMultiplier??1)*1.35;dot.damage=this.dotDamage(dot,t);}u.statuses=u.statuses.filter(x=>x.type!=='bloodFirstStrike');this.tryControl(u,t,{...s,Q:s?.Q||1,controlChance:50},1);});
     }
     return plan;
   };

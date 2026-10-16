@@ -1,0 +1,8 @@
+{
+  "passed": 3,
+  "tests": [
+    "v11 ongoing admission survives full campaign import, same attempt, RNG and result",
+    "growth reliability receives normal expected event gain and recovers failure gap within budget",
+    "CJS campaign and shared battle port support growth, snapshot and restored traits"
+  ]
+}

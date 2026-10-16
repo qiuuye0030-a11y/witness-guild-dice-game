@@ -1,0 +1,374 @@
+{
+  "journeys": 60,
+  "actions": 7082,
+  "reloads": 512,
+  "refusals": 7,
+  "subtypes": {
+    "periodic": 32,
+    "direct": 84,
+    "multi": 17,
+    "pursuit": 7
+  },
+  "rows": [
+    {
+      "seed": 0,
+      "level": 58,
+      "style": "强攻",
+      "rings": 5
+    },
+    {
+      "seed": 1,
+      "level": 62,
+      "style": "敏攻",
+      "rings": 6
+    },
+    {
+      "seed": 2,
+      "level": 33,
+      "style": "控制",
+      "rings": 3
+    },
+    {
+      "seed": 3,
+      "level": 28,
+      "style": "防御",
+      "rings": 2
+    },
+    {
+      "seed": 4,
+      "level": 59,
+      "style": "辅助",
+      "rings": 5
+    },
+    {
+      "seed": 5,
+      "level": 57,
+      "style": "强攻",
+      "rings": 5
+    },
+    {
+      "seed": 6,
+      "level": 56,
+      "style": "敏攻",
+      "rings": 5
+    },
+    {
+      "seed": 7,
+      "level": 29,
+      "style": "控制",
+      "rings": 2
+    },
+    {
+      "seed": 8,
+      "level": 28,
+      "style": "防御",
+      "rings": 2
+    },
+    {
+      "seed": 9,
+      "level": 29,
+      "style": "辅助",
+      "rings": 2
+    },
+    {
+      "seed": 10,
+      "level": 28,
+      "style": "强攻",
+      "rings": 2
+    },
+    {
+      "seed": 11,
+      "level": 32,
+      "style": "敏攻",
+      "rings": 3
+    },
+    {
+      "seed": 12,
+      "level": 56,
+      "style": "控制",
+      "rings": 5
+    },
+    {
+      "seed": 13,
+      "level": 33,
+      "style": "防御",
+      "rings": 3
+    },
+    {
+      "seed": 14,
+      "level": 61,
+      "style": "辅助",
+      "rings": 6
+    },
+    {
+      "seed": 15,
+      "level": 29,
+      "style": "强攻",
+      "rings": 2
+    },
+    {
+      "seed": 16,
+      "level": 29,
+      "style": "敏攻",
+      "rings": 2
+    },
+    {
+      "seed": 17,
+      "level": 30,
+      "style": "控制",
+      "rings": 2
+    },
+    {
+      "seed": 18,
+      "level": 59,
+      "style": "防御",
+      "rings": 5
+    },
+    {
+      "seed": 19,
+      "level": 72,
+      "style": "辅助",
+      "rings": 7
+    },
+    {
+      "seed": 20,
+      "level": 39,
+      "style": "强攻",
+      "rings": 3
+    },
+    {
+      "seed": 21,
+      "level": 64,
+      "style": "敏攻",
+      "rings": 6
+    },
+    {
+      "seed": 22,
+      "level": 60,
+      "style": "控制",
+      "rings": 5
+    },
+    {
+      "seed": 23,
+      "level": 60,
+      "style": "防御",
+      "rings": 5
+    },
+    {
+      "seed": 24,
+      "level": 30,
+      "style": "辅助",
+      "rings": 2
+    },
+    {
+      "seed": 25,
+      "level": 55,
+      "style": "强攻",
+      "rings": 5
+    },
+    {
+      "seed": 26,
+      "level": 30,
+      "style": "敏攻",
+      "rings": 2
+    },
+    {
+      "seed": 27,
+      "level": 29,
+      "style": "控制",
+      "rings": 2
+    },
+    {
+      "seed": 28,
+      "level": 28,
+      "style": "防御",
+      "rings": 2
+    },
+    {
+      "seed": 29,
+      "level": 30,
+      "style": "辅助",
+      "rings": 2
+    },
+    {
+      "seed": 30,
+      "level": 31,
+      "style": "强攻",
+      "rings": 3
+    },
+    {
+      "seed": 31,
+      "level": 33,
+      "style": "敏攻",
+      "rings": 3
+    },
+    {
+      "seed": 32,
+      "level": 72,
+      "style": "控制",
+      "rings": 7
+    },
+    {
+      "seed": 33,
+      "level": 32,
+      "style": "防御",
+      "rings": 3
+    },
+    {
+      "seed": 34,
+      "level": 55,
+      "style": "辅助",
+      "rings": 5
+    },
+    {
+      "seed": 35,
+      "level": 28,
+      "style": "强攻",
+      "rings": 2
+    },
+    {
+      "seed": 36,
+      "level": 30,
+      "style": "敏攻",
+      "rings": 2
+    },
+    {
+      "seed": 37,
+      "level": 61,
+      "style": "控制",
+      "rings": 6
+    },
+    {
+      "seed": 38,
+      "level": 29,
+      "style": "防御",
+      "rings": 2
+    },
+    {
+      "seed": 39,
+      "level": 31,
+      "style": "辅助",
+      "rings": 3
+    },
+    {
+      "seed": 40,
+      "level": 32,
+      "style": "强攻",
+      "rings": 3
+    },
+    {
+      "seed": 41,
+      "level": 29,
+      "style": "敏攻",
+      "rings": 2
+    },
+    {
+      "seed": 42,
+      "level": 60,
+      "style": "控制",
+      "rings": 5
+    },
+    {
+      "seed": 43,
+      "level": 63,
+      "style": "防御",
+      "rings": 6
+    },
+    {
+      "seed": 44,
+      "level": 32,
+      "style": "辅助",
+      "rings": 3
+    },
+    {
+      "seed": 45,
+      "level": 75,
+      "style": "强攻",
+      "rings": 7
+    },
+    {
+      "seed": 46,
+      "level": 59,
+      "style": "敏攻",
+      "rings": 5
+    },
+    {
+      "seed": 47,
+      "level": 31,
+      "style": "控制",
+      "rings": 3
+    },
+    {
+      "seed": 48,
+      "level": 73,
+      "style": "防御",
+      "rings": 7
+    },
+    {
+      "seed": 49,
+      "level": 57,
+      "style": "辅助",
+      "rings": 5
+    },
+    {
+      "seed": 50,
+      "level": 61,
+      "style": "强攻",
+      "rings": 6
+    },
+    {
+      "seed": 51,
+      "level": 58,
+      "style": "敏攻",
+      "rings": 5
+    },
+    {
+      "seed": 52,
+      "level": 34,
+      "style": "控制",
+      "rings": 3
+    },
+    {
+      "seed": 53,
+      "level": 28,
+      "style": "防御",
+      "rings": 2
+    },
+    {
+      "seed": 54,
+      "level": 66,
+      "style": "辅助",
+      "rings": 6
+    },
+    {
+      "seed": 55,
+      "level": 28,
+      "style": "强攻",
+      "rings": 2
+    },
+    {
+      "seed": 56,
+      "level": 32,
+      "style": "敏攻",
+      "rings": 3
+    },
+    {
+      "seed": 57,
+      "level": 61,
+      "style": "控制",
+      "rings": 6
+    },
+    {
+      "seed": 58,
+      "level": 63,
+      "style": "防御",
+      "rings": 6
+    },
+    {
+      "seed": 59,
+      "level": 54,
+      "style": "辅助",
+      "rings": 5
+    }
+  ]
+}

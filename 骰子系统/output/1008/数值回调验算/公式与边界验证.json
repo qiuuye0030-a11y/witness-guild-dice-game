@@ -1,0 +1,549 @@
+{
+  "passed": 7,
+  "tests": [
+    "all 100 coefficient cells are finite and monotonic in talent and weapon",
+    "initial level advantage is preserved at 25 percent, never reversed",
+    "qualified fifth talent reaches fifth ring even from innate1 without event XP",
+    "old baseXP values no longer multiply the catch-up-to41 allowance",
+    "event, opportunity and quest XP scale once; seasonal XP and all attribute receipts retain their rules",
+    "preview and reload cannot grant scaled XP a second time",
+    "conservative ordinary-event upper bounds exclude non-double90 and low-talent fifth rings"
+  ],
+  "configuration": {
+    "version": 10081,
+    "journeyXP": 4800,
+    "eventMultiplier": 0.15,
+    "initialRetention": 0.25,
+    "talent": [
+      0.5,
+      0.53,
+      0.56,
+      0.59,
+      1.12,
+      1.17,
+      1.21,
+      1.24,
+      1.27,
+      1.53
+    ],
+    "weapon": [
+      0.875,
+      0.89,
+      0.9,
+      0.91,
+      0.92,
+      0.94,
+      0.96,
+      0.98,
+      1,
+      1.15
+    ]
+  },
+  "nonExtremeDefinition": "bias1..19, includes all successes, full bone fallback and every quest ending; bias20 excluded only from this analytical bound",
+  "maxPerEvent": 125,
+  "extraChapters": 8,
+  "questBound": 1745,
+  "eventXPBound": 871.75,
+  "bounds": [
+    {
+      "rank": 1,
+      "tier": 1,
+      "upper": 35.9687
+    },
+    {
+      "rank": 1,
+      "tier": 2,
+      "upper": 36.3287
+    },
+    {
+      "rank": 1,
+      "tier": 3,
+      "upper": 36.5687
+    },
+    {
+      "rank": 1,
+      "tier": 4,
+      "upper": 36.8087
+    },
+    {
+      "rank": 1,
+      "tier": 5,
+      "upper": 37.0487
+    },
+    {
+      "rank": 1,
+      "tier": 6,
+      "upper": 37.5287
+    },
+    {
+      "rank": 1,
+      "tier": 7,
+      "upper": 38.0087
+    },
+    {
+      "rank": 1,
+      "tier": 8,
+      "upper": 38.488699999999994
+    },
+    {
+      "rank": 1,
+      "tier": 9,
+      "upper": 38.9687
+    },
+    {
+      "rank": 1,
+      "tier": 10,
+      "upper": 42.5663
+    },
+    {
+      "rank": 2,
+      "tier": 1,
+      "upper": 37.2287
+    },
+    {
+      "rank": 2,
+      "tier": 2,
+      "upper": 37.610299999999995
+    },
+    {
+      "rank": 2,
+      "tier": 3,
+      "upper": 37.8647
+    },
+    {
+      "rank": 2,
+      "tier": 4,
+      "upper": 38.1191
+    },
+    {
+      "rank": 2,
+      "tier": 5,
+      "upper": 38.37350000000001
+    },
+    {
+      "rank": 2,
+      "tier": 6,
+      "upper": 38.8823
+    },
+    {
+      "rank": 2,
+      "tier": 7,
+      "upper": 39.3911
+    },
+    {
+      "rank": 2,
+      "tier": 8,
+      "upper": 39.8999
+    },
+    {
+      "rank": 2,
+      "tier": 9,
+      "upper": 40.408699999999996
+    },
+    {
+      "rank": 2,
+      "tier": 10,
+      "upper": 44.224700000000006
+    },
+    {
+      "rank": 3,
+      "tier": 1,
+      "upper": 38.488699999999994
+    },
+    {
+      "rank": 3,
+      "tier": 2,
+      "upper": 38.8919
+    },
+    {
+      "rank": 3,
+      "tier": 3,
+      "upper": 39.160700000000006
+    },
+    {
+      "rank": 3,
+      "tier": 4,
+      "upper": 39.4295
+    },
+    {
+      "rank": 3,
+      "tier": 5,
+      "upper": 39.6983
+    },
+    {
+      "rank": 3,
+      "tier": 6,
+      "upper": 40.2359
+    },
+    {
+      "rank": 3,
+      "tier": 7,
+      "upper": 40.7735
+    },
+    {
+      "rank": 3,
+      "tier": 8,
+      "upper": 41.311099999999996
+    },
+    {
+      "rank": 3,
+      "tier": 9,
+      "upper": 41.848699999999994
+    },
+    {
+      "rank": 3,
+      "tier": 10,
+      "upper": 45.878299999999996
+    },
+    {
+      "rank": 4,
+      "tier": 1,
+      "upper": 39.7487
+    },
+    {
+      "rank": 4,
+      "tier": 2,
+      "upper": 40.173500000000004
+    },
+    {
+      "rank": 4,
+      "tier": 3,
+      "upper": 40.4543
+    },
+    {
+      "rank": 4,
+      "tier": 4,
+      "upper": 40.739900000000006
+    },
+    {
+      "rank": 4,
+      "tier": 5,
+      "upper": 41.020700000000005
+    },
+    {
+      "rank": 4,
+      "tier": 6,
+      "upper": 41.5871
+    },
+    {
+      "rank": 4,
+      "tier": 7,
+      "upper": 42.1559
+    },
+    {
+      "rank": 4,
+      "tier": 8,
+      "upper": 42.7223
+    },
+    {
+      "rank": 4,
+      "tier": 9,
+      "upper": 43.2887
+    },
+    {
+      "rank": 4,
+      "tier": 10,
+      "upper": 47.5343
+    },
+    {
+      "rank": 5,
+      "tier": 1,
+      "upper": 62.0087
+    },
+    {
+      "rank": 5,
+      "tier": 2,
+      "upper": 62.8151
+    },
+    {
+      "rank": 5,
+      "tier": 3,
+      "upper": 63.3527
+    },
+    {
+      "rank": 5,
+      "tier": 4,
+      "upper": 63.890299999999996
+    },
+    {
+      "rank": 5,
+      "tier": 5,
+      "upper": 64.4279
+    },
+    {
+      "rank": 5,
+      "tier": 6,
+      "upper": 65.50309999999999
+    },
+    {
+      "rank": 5,
+      "tier": 7,
+      "upper": 66.5783
+    },
+    {
+      "rank": 5,
+      "tier": 8,
+      "upper": 67.65350000000001
+    },
+    {
+      "rank": 5,
+      "tier": 9,
+      "upper": 68.7287
+    },
+    {
+      "rank": 5,
+      "tier": 10,
+      "upper": 76.7903
+    },
+    {
+      "rank": 6,
+      "tier": 1,
+      "upper": 64.1087
+    },
+    {
+      "rank": 6,
+      "tier": 2,
+      "upper": 64.9511
+    },
+    {
+      "rank": 6,
+      "tier": 3,
+      "upper": 65.5127
+    },
+    {
+      "rank": 6,
+      "tier": 4,
+      "upper": 66.0743
+    },
+    {
+      "rank": 6,
+      "tier": 5,
+      "upper": 66.6335
+    },
+    {
+      "rank": 6,
+      "tier": 6,
+      "upper": 67.7567
+    },
+    {
+      "rank": 6,
+      "tier": 7,
+      "upper": 68.88230000000001
+    },
+    {
+      "rank": 6,
+      "tier": 8,
+      "upper": 70.00549999999998
+    },
+    {
+      "rank": 6,
+      "tier": 9,
+      "upper": 71.12870000000001
+    },
+    {
+      "rank": 6,
+      "tier": 10,
+      "upper": 79.5503
+    },
+    {
+      "rank": 7,
+      "tier": 1,
+      "upper": 65.7887
+    },
+    {
+      "rank": 7,
+      "tier": 2,
+      "upper": 66.6599
+    },
+    {
+      "rank": 7,
+      "tier": 3,
+      "upper": 67.2407
+    },
+    {
+      "rank": 7,
+      "tier": 4,
+      "upper": 67.82149999999999
+    },
+    {
+      "rank": 7,
+      "tier": 5,
+      "upper": 68.4023
+    },
+    {
+      "rank": 7,
+      "tier": 6,
+      "upper": 69.5639
+    },
+    {
+      "rank": 7,
+      "tier": 7,
+      "upper": 70.72549999999998
+    },
+    {
+      "rank": 7,
+      "tier": 8,
+      "upper": 71.8871
+    },
+    {
+      "rank": 7,
+      "tier": 9,
+      "upper": 73.0487
+    },
+    {
+      "rank": 7,
+      "tier": 10,
+      "upper": 81.7583
+    },
+    {
+      "rank": 8,
+      "tier": 1,
+      "upper": 67.0487
+    },
+    {
+      "rank": 8,
+      "tier": 2,
+      "upper": 67.94149999999999
+    },
+    {
+      "rank": 8,
+      "tier": 3,
+      "upper": 68.5367
+    },
+    {
+      "rank": 8,
+      "tier": 4,
+      "upper": 69.1319
+    },
+    {
+      "rank": 8,
+      "tier": 5,
+      "upper": 69.72710000000001
+    },
+    {
+      "rank": 8,
+      "tier": 6,
+      "upper": 70.91749999999999
+    },
+    {
+      "rank": 8,
+      "tier": 7,
+      "upper": 72.1079
+    },
+    {
+      "rank": 8,
+      "tier": 8,
+      "upper": 73.2983
+    },
+    {
+      "rank": 8,
+      "tier": 9,
+      "upper": 74.4887
+    },
+    {
+      "rank": 8,
+      "tier": 10,
+      "upper": 83.4167
+    },
+    {
+      "rank": 9,
+      "tier": 1,
+      "upper": 68.3087
+    },
+    {
+      "rank": 9,
+      "tier": 2,
+      "upper": 69.22309999999999
+    },
+    {
+      "rank": 9,
+      "tier": 3,
+      "upper": 69.83269999999999
+    },
+    {
+      "rank": 9,
+      "tier": 4,
+      "upper": 70.4423
+    },
+    {
+      "rank": 9,
+      "tier": 5,
+      "upper": 71.0519
+    },
+    {
+      "rank": 9,
+      "tier": 6,
+      "upper": 72.27109999999999
+    },
+    {
+      "rank": 9,
+      "tier": 7,
+      "upper": 73.49029999999999
+    },
+    {
+      "rank": 9,
+      "tier": 8,
+      "upper": 74.7095
+    },
+    {
+      "rank": 9,
+      "tier": 9,
+      "upper": 75.92869999999999
+    },
+    {
+      "rank": 9,
+      "tier": 10,
+      "upper": 85.0703
+    },
+    {
+      "rank": 10,
+      "tier": 1,
+      "upper": 79.2287
+    },
+    {
+      "rank": 10,
+      "tier": 2,
+      "upper": 80.33030000000001
+    },
+    {
+      "rank": 10,
+      "tier": 3,
+      "upper": 81.0623
+    },
+    {
+      "rank": 10,
+      "tier": 4,
+      "upper": 81.7967
+    },
+    {
+      "rank": 10,
+      "tier": 5,
+      "upper": 82.53349999999999
+    },
+    {
+      "rank": 10,
+      "tier": 6,
+      "upper": 84.00229999999999
+    },
+    {
+      "rank": 10,
+      "tier": 7,
+      "upper": 85.47109999999999
+    },
+    {
+      "rank": 10,
+      "tier": 8,
+      "upper": 86.9399
+    },
+    {
+      "rank": 10,
+      "tier": 9,
+      "upper": 88.4087
+    },
+    {
+      "rank": 10,
+      "tier": 10,
+      "upper": 99.42469999999999
+    }
+  ]
+}

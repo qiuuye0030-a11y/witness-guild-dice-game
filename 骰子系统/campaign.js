@@ -69,7 +69,7 @@ const upgrade=function(){
       const s=this.state,c=s.character;if(!c)return;this.ensureStoryState();
       c.talent=copy(Creation.TALENTS[(c.talent?.rank||1)-1]);if(!c.identity.originRank)c.identity.originRank=3;
       if(!s.growthPlan){const remaining=Math.max(1,c.time.quarters-s.completed);s.growthPlan={target:41,baseXP:Math.ceil(Math.max(50,(Math.max(0,41-c.level)*100-s.xp)/remaining)*100)/100,createdAt:s.completed};}
-      if(s.phase==='battle'&&s.battleSnapshot&&(s.battleSnapshot.tacticsRulesVersion!==1005||s.battleSnapshot.playerRulesVersion!==2||s.battleSnapshot.version!==10||![13,14].includes(s.battleSnapshot.combatRulesVersion)||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;s.result=null;s.resultHandled=false;s.phase='arrival';}
+      if(s.phase==='battle'&&s.battleSnapshot&&(![1005,1007].includes(s.battleSnapshot.tacticsRulesVersion)||s.battleSnapshot.playerRulesVersion!==2||s.battleSnapshot.version!==10||![13,14,15,16,17].includes(s.battleSnapshot.combatRulesVersion)||s.battleSnapshot.soulControlVersion!==11)){s.legacyBattleReport=copy(s.battleSnapshot);s.battleSnapshot=null;s.battleOptions=null;s.result=null;s.resultHandled=false;s.phase='arrival';}
       if(s.hunt&&!s.hunt.stage){const h=s.hunt;if(h.result){h.stage='result';h.plan=h.result.plan||'balanced';h.quality=h.result.quality||50;h.low=h.high=h.years=h.result.years;}else h.stage='plan';h.initial=false;}if(s.version<3&&s.hunt){const h=s.hunt;h.selectedCategory='random';h.location='forest';h.attempt=1;h.legacyFloor=true;h.absorbed=!!h.result;}if(s.version<4){if(s.pending)s.pending.legacyEvent=true;s.eventHistory={};s.failureStreak=0;}c.luck=c.luck||5;c.eventFlags=c.eventFlags||{};c.bones=c.bones||[];c.boneInventory=c.boneInventory||[];c.mutations=c.mutations||[];s.eventHistory=s.eventHistory||{};c.charm=c.charm||5;c.fatigue=c.fatigue||0;this.freezeFortune();s.hiddenRolls=s.hiddenRolls||[];if(s.pending){s.pending.bias=s.pending.bias||10;s.pending.receipts=s.pending.receipts||[];}s.version=8;
     };
 
@@ -95,7 +95,7 @@ const rollCreation=function(){if(this.state.awakeningPending)throw Error("请先
 
 const soul=function(){const c=this.state.character,base=this.catalog.find(x=>x.id===c?.soulId);return base&&c?.effectiveTier?{...base,tier:c.effectiveTier,name:c.mutationName||base.name}:base;};
 
-const growthRates=function(){const c=this.state.character;if(!c)return null;const weapon=1+.02*(this.soul().tier-1),talent=c.talent||Creation.TALENTS[0];return {base:this.state.growthPlan.baseXP,weapon:R.round2(weapon),talent:talent.xpMultiplier,xp:R.round2(this.state.growthPlan.baseXP*weapon*talent.xpMultiplier),attribute:talent.attributeMultiplier};};
+const growthRates=function(){const c=this.state.character;if(!c)return null;return Creation.cultivationRates({rank:c.talent?.rank||1,tier:this.soul().tier,initialLevel:c.initialLevel,stages:c.time.quarters});};
 
 const draw=function(sides,label){const face=sides===1?1:this.rng.die(sides);this.state.rolls.push({label,sides,face,quarter:this.state.completed});this.sync();return face;};
 
@@ -105,7 +105,7 @@ const sync=function(){this.state.rngState=this.rng.state;};
 
 const refresh=function(){
       const c=this.state.character,soul=this.soul();if(!c)return;this.freezeFortune();c.stats=R.buildStats({...c,soul});
-      for(const ring of [...c.rings,...(this.state.hunt?.result&&!this.state.hunt.absorbed?[this.state.hunt.result]:[])])ring.skills=ring.skills.map((skill,i)=>({...R.makeSkill({soul,style:c.style,stats:c.stats,index:ring.index,years:ring.years,category:skill.category,effectVariant:skill.effectVariant,damageMode:skill.damageMode||(skill.category==='持续伤害'?'periodic':'direct'),variant:i,effects:skill.effects,effectSeed:skill.effectSeed||this.state.seed+'|'+ring.index+'|'+i}),name:skill.name}));
+      for(const ring of [...c.rings,...(this.state.hunt?.result&&!this.state.hunt.absorbed?[this.state.hunt.result]:[])])ring.skills=ring.skills.map((skill,i)=>({...R.makeSkill({soul,style:c.style,stats:c.stats,index:ring.index,years:ring.years,category:skill.category,effectVariant:skill.effectVariant,attackSubtype:skill.attackSubtype,generationVersion:skill.generationVersion,damageMode:skill.damageMode||(skill.category==='持续伤害'?'periodic':'direct'),variant:i,effects:skill.effects,effectSeed:skill.effectSeed||this.state.seed+'|'+ring.index+'|'+i}),name:skill.name}));
     };
 
 const review=function({name,style,release=this.state.character.release}){
@@ -255,7 +255,7 @@ const reward=function(key,amount,p){
       const s=this.state,c=s.character;
       if(amount>0&&R.KEYS.includes(key))amount=R.round2(amount*3);
       if(amount>0&&R.KEYS.includes(key)&&p.rewardContext!=='season')amount=R.round2(amount*1.08);
-      if(key==='XP'){const from=s.xp;s.xp=R.round2(s.xp+amount);this.receipt(p,'xp','修炼进度',R.round2(amount),from,s.xp,'点','XP');p.reward.push(`${amount}点修炼进度`);return;}
+      if(key==='XP'){if(p.rewardContext!=='season')amount=R.round2(amount*Creation.CULTIVATION.eventMultiplier);const from=s.xp;s.xp=R.round2(s.xp+amount);this.receipt(p,'xp','修炼进度',R.round2(amount),from,s.xp,'点','XP');p.reward.push(`${amount}点修炼进度`);return;}
       if(key==='PREP'){if(c.level>=90){this.reward('P',2,p);return;}const before=s.prep;s.prep=Math.min(10,s.prep+Math.max(0,Math.round(amount)));this.receipt(p,'prep','猎魂准备',s.prep-before,before,s.prep,'点','PREP');p.reward.push(`猎魂准备 ${before}→${s.prep}`);return;}
       if(key==='CHARM'||key==='LUCK'){this.freezeFortune();return;}
       if(key==='TRAIN'){this.reward(p.training,amount,p);return;}
@@ -412,7 +412,7 @@ const generateRing=function(index,plan='balanced',prep=0,targetCount=null){
           weights=weights.map((v,i)=>i===at?old+extra:Math.floor(v*(other-extra)/other));
           let delta=100-weights.reduce((a,b)=>a+b,0);for(let i=0;delta>0;i=(i+1)%weights.length)if(i!==at&&weights[i]>0){weights[i]++;delta--;}
         }
-        const roll=this.draw(100,'第'+index+'环魂技类别');let total=0;category=R.CATEGORIES[weights.findIndex(w=>(total+=w)>=roll)];
+        const roll=this.draw(weights.reduce((a,b)=>a+b,0),'第'+index+'环魂技类别');let total=0;category=R.CATEGORIES[weights.findIndex(w=>(total+=w)>=roll)];
       }
       if(category==='治疗')category='强化';
       let guarantee='';
@@ -421,12 +421,12 @@ const generateRing=function(index,plan='balanced',prep=0,targetCount=null){
       const last=targetCount===null?index:Math.min(targetCount,6);
       if(index===last&&index!==7&&needs&&!has&&!['攻击','持续伤害'].includes(category)){category='攻击';guarantee='初次攻击魂技保底';}
 
-      const skills=[R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category,effectSeed:this.state.seed+'|'+index+'|0'})];
-      if(years===100000){let second=R.pickCategory(c.style,this.draw(100,'十万年第二魂技'));if(second==='治疗')second='强化';if(second===category)second=this.huntCategories(index).find(x=>x!==category);skills.push(R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category:second,variant:1,effectSeed:this.state.seed+'|'+index+'|1'}));guarantee+='；同环两技共享冷却';}
+      const serial=this.state.skillGenerationSerial=(this.state.skillGenerationSerial||0)+1;const skills=[R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category,effectSeed:this.state.seed+'|'+index+'|'+serial+'|0'})];
+      if(years===100000){let second=R.pickCategory(c.style,this.draw(100,'十万年第二魂技'));if(second==='治疗')second='强化';if(second===category)second=this.huntCategories(index).find(x=>x!==category);skills.push(R.makeSkill({soul,style:c.style,stats:c.stats,index,years,category:second,variant:1,effectSeed:this.state.seed+'|'+index+'|'+serial+'|1'}));guarantee+='；同环两技共享冷却';}
       return {index,years,cap,quality,plan,band:R.BANDS[R.band(years)],q:R.QS[R.band(years)],skills,guarantee,acquiredAt:copy(this.state.date)};
     };
 
-const huntCategories=function(index=this.state.hunt?.index){return index===7?['强化','防御']:R.CATEGORIES.filter(x=>!['治疗','持续伤害'].includes(x));};
+const huntCategories=function(index=this.state.hunt?.index){return index===7?['强化','防御']:R.CATEGORIES.filter(x=>!['治疗','回蓝','持续伤害'].includes(x));};
 
 const huntPlan=function(plan='balanced',category='random',location='forest'){
       const s=this.state,h=s.hunt;
@@ -535,20 +535,20 @@ const static_validate=function(s,catalog){
       if(!Array.isArray(s.rolls)||s.rolls.length>10000||!Array.isArray(s.journal)||s.journal.length>160||!Array.isArray(c.rings)||c.rings.length>9)throw Error('记录超出范围');
       if(!Number.isFinite(s.xp)||s.xp<0||s.xp>20000||!Number.isInteger(s.prep)||s.prep<0||s.prep>10)throw Error('成长数据无效');
       for(const key of [...R.KEYS,'W'])if(!Number.isFinite(c.growth?.[key])||c.growth[key]<0||c.growth[key]>5000)throw Error('能力积累无效');
-      c.rings.forEach((r,i)=>{if(r.index!==i+1||!Number.isInteger(r.years)||r.years<10||r.years>R.CAPS[i]||!Array.isArray(r.skills)||r.skills.length<1||r.skills.length>2||r.skills.some(x=>!R.CATEGORIES.includes(x.category)))throw Error('魂环数据无效');});
+      c.rings.forEach((r,i)=>{if(r.index!==i+1||!Number.isInteger(r.years)||r.years<10||r.years>R.CAPS[i]||!Array.isArray(r.skills)||r.skills.length<1||r.skills.length>2||r.skills.some(x=>![...R.CATEGORIES,'回蓝'].includes(x.category)))throw Error('魂环数据无效');});
       for(const ring of c.rings)for(const skill of ring.skills)if(skill.effects!==undefined){if(!['强化','减益'].includes(skill.category)||!Array.isArray(skill.effects)||skill.effects.length<1||skill.effects.length>3||new Set(skill.effects.map(e=>e.key)).size!==skill.effects.length||skill.effects.some(e=>!R.KEYS.includes(e.key)||!Number.isFinite(e.value)||e.value<=0)||typeof skill.effectSeed!=='string'||skill.effectSeed.length>240)throw Error('多项魂技数据无效');}
       if(['event','eventResult'].includes(s.phase)&&(!s.pending||!Number.isInteger(s.pending.eventIndex)||s.pending.eventIndex<0||s.pending.eventIndex>=(s.version<4||s.pending.legacyEvent?24:EVENTS.length)||s.phase==='event'&&s.pending.settled||s.phase==='eventResult'&&!s.pending.settled||!TRAINING[s.pending.training]))throw Error('事件状态无效');
       if(s.phase==='initialHunt'&&(!s.hunt?.initial||s.completed!==0||s.pending))throw Error('初始魂环状态无效');
       if(s.phase==='hunt'&&(!s.hunt||!s.pending?.settled||!TRAINING[s.pending.training]))throw Error('猎魂状态无效');
       if(['hunt','initialHunt'].includes(s.phase)&&s.version>=2){const h=s.hunt,cap=R.CAPS[h.index-1];if(!Number.isInteger(h.index)||!cap||!['plan','quality','years','category','second','result'].includes(h.stage)||h.index!==((s.version===2&&h.result||s.version>=3&&h.absorbed)?c.rings.length:c.rings.length+1))throw Error('猎魂步骤无效');if(h.stage!=='plan'&&!['balanced','offense','guard'].includes(h.plan))throw Error('猎魂倾向无效');if(['years','category','second','result'].includes(h.stage)&&(!Number.isInteger(h.quality)||h.quality<1||h.quality>100||!Number.isInteger(h.low)||!Number.isInteger(h.high)||h.low<10||h.high>cap||h.low>h.high))throw Error('猎魂区间无效');if(['category','second','result'].includes(h.stage)&&(!Number.isInteger(h.years)||h.years<h.low||h.years>h.high))throw Error('猎魂年限无效');}
       if(['hunt','initialHunt'].includes(s.phase)&&s.version>=3){
-        const h=s.hunt,allowed=h.index===7?['强化','防御']:R.CATEGORIES;
+        const h=s.hunt,allowed=h.index===7?['强化','防御']:[...R.CATEGORIES,'回蓝'];
         if(h.selectedCategory!==undefined&&h.selectedCategory!=='random'&&!allowed.includes(h.selectedCategory)||h.location!==undefined&&!['forest','valley','wetland'].includes(h.location)||h.attempt!==undefined&&(!Number.isInteger(h.attempt)||h.attempt<1||h.attempt>10000))throw Error('猎魂选择无效');
         if(h.result){const r=h.result;if(r.index!==h.index||r.years!==h.years||!Array.isArray(r.skills)||r.skills.length!==(h.years===100000?2:1)||r.skills.some(x=>!allowed.includes(x.category))||r.skills[0].category!==h.category&&!h.absorbed)throw Error('候选魂环无效');}
         if(!h.legacyFloor&&h.years!==undefined&&h.years<R.ringFloor(R.CAPS[h.index-1]))throw Error('候选年限低于保底');
       }
       if(['arrival','battle','ending'].includes(s.phase)&&(s.completed!==c.time.quarters||s.date.year!==6102||s.date.month!==c.time.month||s.date.age!==c.time.age))throw Error('入会时间无效');
-      if(c.talent&&(!Number.isInteger(c.talent.rank)||c.talent.rank<1||c.talent.rank>10||c.talent.xpMultiplier!==Creation.TALENTS[c.talent.rank-1].xpMultiplier||c.talent.attributeMultiplier!==Creation.TALENTS[c.talent.rank-1].attributeMultiplier))throw Error('天赋数据无效');
+      if(c.talent&&(!Number.isInteger(c.talent.rank)||c.talent.rank<1||c.talent.rank>10||![Creation.TALENTS[c.talent.rank-1].xpMultiplier,R.round2(1+.06*(c.talent.rank-1)),R.round2(c.talent.rank<5?1+.06*(c.talent.rank-1):1.40+.16*(c.talent.rank-5))].includes(c.talent.xpMultiplier)||c.talent.attributeMultiplier!==Creation.TALENTS[c.talent.rank-1].attributeMultiplier))throw Error('天赋数据无效');
       if(s.growthPlan&&(!Number.isFinite(s.growthPlan.baseXP)||s.growthPlan.baseXP<0||s.growthPlan.baseXP>2000))throw Error('成长路线无效');
       if(s.version>=4){
         if(!Number.isInteger(c.luck)||c.luck<1||c.luck>10||!c.eventFlags||!Array.isArray(c.bones)||!Array.isArray(c.boneInventory)||c.bones.length+c.boneInventory.length>6||!Array.isArray(c.mutations)||c.mutations.length>20)throw Error('培养数据无效');
@@ -763,11 +763,91 @@ const openStoryEvent=function(selected,training,options){
 
 const settleQuest=function(p){const before=p.questId;performsettleQuestCore.call(this,p);if(p.questId){const chain=chains.find(c=>c.id===p.questId),node=chain?.nodes.find(n=>n.eventId===this.event().id);p.castIntroductions={...(p.castIntroductions||{}),...(node?.castIntroductions||{})};if(!before)p.questStarted=true;}};
 
-const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'10.06'};};
+const snapshot=function(){this.ensure1002();this.sync();return {...JSON.parse(JSON.stringify(this.state)),version:9,gameVersion:'v11'};};
 
 const static_validate=function(s,catalog){performvalidateCore(s,catalog);if(s.exam){const e=s.exam,max=e.mode==='member'?11:6;if(!['normal','member'].includes(e.mode)||!Number.isInteger(e.starts)||e.starts<0||e.starts>max||e.opponent!==null&&typeof e.opponent!=='string'||e.badEnding&&(s.phase!=='ending'||e.starts!==max||s.result?.winner===0))throw Error('考核机会存档无效');}if(s.huntDelayMonths!==undefined&&(!Number.isInteger(s.huntDelayMonths)||s.huntDelayMonths<0||s.huntDelayMonths>1000))throw Error('猎魂月份无效');if(s.hunt?.budgetStart!==undefined&&(!Number.isInteger(s.hunt.budgetStart)||s.hunt.budgetStart<1||s.hunt.budgetStart>(s.hunt.attempt||1)))throw Error('猎魂回合无效');return true;};
 return {methods:{ensure1002,setPlayMode,examStatus,assignExaminer,battleOptions,observeBattle,retry,returnArrival,refresh,monthsToAdmission,forceAdmission,elapsedMonths,startQuarter,finishQuarter,continueProgress,huntRound,abandonHunt,questStage,openStoryEvent,settleQuest,snapshot,static_validate}};
 })(typeof globalThis==='undefined'?this:globalThis);
+
+const CampaignModern=(function(){
+'use strict';
+const baseRefresh=JourneyActions.methods.refresh;
+function refresh(){
+  const s=this.state,c=s.character;
+  if(c)for(const ring of [...(c.rings||[]),...(s.hunt?.result?[s.hunt.result]:[])])for(let i=0;i<ring.skills.length;i++){const sk=ring.skills[i];if(sk.attackSubtype==='pursuit'&&(c.style!=='敏攻'||this.soul().spirit_specialist)){s.skillMigrations||=[];s.skillMigrations.push({ring:ring.index,slot:i,old:sk.name,reason:'追势仅限敏攻系，转为普通攻击'});sk.attackSubtype='direct';sk.name=this.soul().name+'·击';}if(sk.category==='回蓝'){s.skillMigrations||=[];s.skillMigrations.push({ring:ring.index,slot:i,old:sk.name,reason:'回蓝类退场，确定性迁移为防御'});sk.category='防御';sk.name=this.soul().name+'·护';delete sk.attackSubtype;delete sk.effects;}}
+  baseRefresh.call(this);if(!c)return;
+  if(s.growthPlan?.cultivationVersion!==CampaignCore.Creation.CULTIVATION.version){s.cultivationMigration={version:CampaignCore.Creation.CULTIVATION.version,atPeriod:s.completed,previousBaseXP:s.growthPlan?.baseXP??null,earnedLevel:c.level,earnedXP:s.xp};s.growthPlan={...(s.growthPlan||{}),baseXP:CampaignCore.R.round2(CampaignCore.Creation.CULTIVATION.journeyXP/Math.max(1,c.time.quarters)),cultivationVersion:CampaignCore.Creation.CULTIVATION.version};}
+
+  for(const ring of c.rings||[])for(let i=0;i<ring.skills.length;i++){
+    const skill=ring.skills[i];
+    if(skill.category==='回蓝'){
+      s.skillMigrations||=[];s.skillMigrations.push({ring:ring.index,slot:i,old:skill.name,reason:'回蓝类退场，确定性迁移为防御'});
+      ring.skills[i]=CampaignCore.R.makeSkill({soul:this.soul(),style:c.style,stats:c.stats,index:ring.index,years:ring.years,category:'防御',effectSeed:s.seed+'|migration-1007|'+ring.index+'|'+i});
+    }else if(skill.category==='攻击'&&!skill.attackSubtype){skill.attackSubtype=skill.damageMode==='periodic'?'periodic':'direct';skill.generationVersion=1006;}
+  }
+  if(s.hunt?.selectedCategory==='回蓝'){s.hunt.selectedCategory='random';if(s.hunt.result){s.hunt.result=null;s.hunt.stage='category';}s.hunt.category=undefined;}
+  if(s.hunt?.category==='回蓝')s.hunt.category='防御';if(s.hunt?.secondCategory==='回蓝')s.hunt.secondCategory=s.hunt.category==='防御'?'强化':'防御';
+  if(s.phase==='battle'&&s.battleSnapshot&&![1007,1008,1100].includes(s.battleSnapshot.modernVersion)){s.legacyBattleReport=s.battleSnapshot;s.battleSnapshot=null;s.result=null;s.resultHandled=false;s.modernBattleRestart=true;s.pendingExamResume=true;s.phase='arrival';}
+  s.cultivationRulesVersion=10081;s.gameVersion='v11';
+}
+function static_validate(s,catalog){
+  JourneyActions.methods.static_validate(s,catalog);const runtime=typeof module!=='undefined'&&module.exports?require('./v13-runtime.cjs'):globalThis;const challengeAPI=typeof module!=='undefined'&&module.exports?require('./systems/challenge/state.js'):globalThis.WitnessChallenge;challengeAPI?.validate(s.challenge);
+  if(s.soulTrait){const t=runtime.WitnessTraitRegistry.getBySoulId(s.character.soulId);if(!t||t.id!==s.soulTrait.definitionId){delete s.soulTrait;}else if(t.kind==='growth'){runtime.WitnessTraitBalance.validateState(t,s.soulTrait.state);if(s.soulTrait.history!==undefined&&(!Array.isArray(s.soulTrait.history)||s.soulTrait.history.length>200))throw Error('特性训练记录无效');if(s.soulTrait.serial!==undefined&&(!Number.isSafeInteger(s.soulTrait.serial)||s.soulTrait.serial<0))throw Error('特性记录序号无效');}}
+  if(s.challenge){const q=s.challenge;if(q.version!==1||!Number.isInteger(q.failures)||q.failures<0||q.failures>5||!Array.isArray(q.completed)||q.completed.length>40||!Array.isArray(q.resolved)||q.resolved.length>200)throw Error('挑战进度无效');if(q.active&&(!q.options?.postGameChallenge||q.options.challengeSessionId!==q.active||typeof q.active!=='string'||q.active.length>160))throw Error('挑战场次无效');}
+  for(const ring of s.character?.rings||[])for(const sk of ring.skills){if(sk.attackSubtype!==undefined&&!['direct','periodic','multi','pursuit'].includes(sk.attackSubtype))throw Error('攻击子类无效');}
+  return true;
+}
+function battleOptions(...args){const s=this.state;if(s.pendingExamResume){if(s.phase!=='arrival'||s.exam?.badEnding)throw Error('旧战斗恢复资格无效');const options=JSON.parse(JSON.stringify(s.battleOptions));options.character=JSON.parse(JSON.stringify(s.character));options.soul=JSON.parse(JSON.stringify(this.soul()));s.phase='battle';s.pendingExamResume=false;s.battleSnapshot=null;s.result=null;s.resultHandled=false;return options;}return JourneyActions.methods.battleOptions.apply(this,args);}
+function autoEventStep(){
+ const s=this.state;if(s.phase==='growth')return this.startQuarter(s.quickTraining||'C');
+ if(s.phase==='event'){
+  const p=s.pending;if(p.choice===null||p.choice===undefined){
+   const chances=p.legacyEvent?[50,50]:[this.eventEstimate(0),this.eventEstimate(1)];
+   const choice=chances[1]>chances[0]?1:0;p.autoChoice={index:choice,policy:'公开估计成功率较高者；同率选前项',chances};
+   if(p.legacyEvent)return this.chooseEvent(choice);this.prepareEvent(choice);return;
+  }return this.chooseEvent();
+ }
+ if(s.phase==='eventResult')return this.finishEvent();
+ throw Error('当前阶段需要本人确认');
+}
+return {methods:{refresh,static_validate,battleOptions,autoEventStep}};
+})();
+
+// Growth passives consume the existing choices and final gains; no extra dice or menu.
+const CampaignTraits=(function(root){
+ const runtime=typeof module!=='undefined'&&module.exports?require('./v13-runtime.cjs'):root;
+ const B=runtime.WitnessTraitBalance,registry=runtime.WitnessTraitRegistry,copy=x=>JSON.parse(JSON.stringify(x));
+ function remember(c){const s=c.state,soul=c.soul(),t=registry.getBySoulId(soul.id);if(!t){delete s.soulTrait;return null;}
+  const previous=s.soulTrait?.definitionId===t.id?s.soulTrait:null;
+  if(!previous||previous.version!==2||previous.soulId!==soul.id||Object.keys(previous).some(k=>!['version','soulId','definitionId','state','history','serial'].includes(k))){
+   s.soulTrait={version:2,soulId:soul.id,definitionId:t.id,state:t.kind==='growth'?(previous?.state||B.createState(t,s.seed+':growth',{effectiveTier:soul.tier})):null};
+   if(t.kind==='growth'){s.soulTrait.history=previous?.history||[];s.soulTrait.serial=previous?.serial||0;}
+  }
+  return {t,p:s.soulTrait};
+ }
+ function binding(c){const bound=remember(c);return bound?.t.kind==='growth'?bound:null;
+ }
+ function reward(key,amount,p){const c=this.state.character,before={...c.growth};CampaignCore.methods.reward.call(this,key,amount,p);
+  if(this.state.features?.traitsEnabled===false||!CampaignCore.R.KEYS.includes(key))return;
+  const bound=binding(this);if(!bound)return;const {t,p:g}=bound,actual=Math.max(0,c.growth[key]-before[key]);if(!actual)return;
+  const expectedRaw=this._traitExpected?.[key];if(this._traitExpected)delete this._traitExpected[key];const expectedAmount=amount>0&&Number.isFinite(expectedRaw)?Math.max(actual,actual*expectedRaw/amount):actual;
+  const result=B.applyToChoice(t,g.state,{id:'reward:'+(++g.serial),time:this.state.completed,stage:this.state.completed,trainingKey:p.training,rewardKey:key,method:p.training,amount:actual,expectedAmount,effectiveTier:this.soul().tier});g.state=result.state;
+  if(result.applied){const bonus=CampaignCore.R.round2(result.delta);c.growth[key]=CampaignCore.R.round2(c.growth[key]+bonus);this.receipt(p,'trait',t.name+' · '+CampaignCore.R.LABELS[key],bonus,before[key]+actual,c.growth[key],'点',key);p.reward.push(t.name+'：'+CampaignCore.R.LABELS[key]+' +'+bonus);}
+ }
+ function resolveEventBranch(option,success,excellent,p){const prior=this._traitExpected,map={};for(const [key,value]of Object.entries(option.gain||{})){const actualKey=key==='TRAIN'?p.training:key==='WEAK'?CampaignCore.R.KEYS[this.state.character.deviations.indexOf(Math.min(...this.state.character.deviations))]:key;if(CampaignCore.R.KEYS.includes(actualKey))map[actualKey]=CampaignCore.R.round2(value*(p.bias>=17?1.6:p.bias>=13?1.2:p.bias<=4?1.3:1));}this._traitExpected=map;try{return QuestActions.methods.resolveEventBranch.call(this,option,success,excellent,p);}finally{this._traitExpected=prior;}}
+ function chooseEvent(...args){const s=this.state,p=s.pending,result=CampaignCore.methods.chooseEvent.apply(this,args);if(s.features?.traitsEnabled===false)return result;
+  const bound=binding(this);if(!bound)return result;const {t,p:g}=bound,history=g.history,prior=history.at(-1),key=p.training,stage=s.completed;
+  const text=String(p.outcome?.text||'')+' '+String(this.event()?.options?.[p.choice]?.text||''),valid=p.receipts.some(r=>r.kind==='attribute'&&r.amount>0);
+  const physical=k=>['B','D','A'].includes(k),review=p.outcome?.success===true&&/复盘|回顾|反思/.test(text),rest=p.outcome?.success===true&&/休整|休息|休养|恢复/.test(text),skill=/魂技|招式/.test(text),adapt=/适应|环境/.test(text);
+  const flags={repeat_direction:prior?.key===key,repeat_method:prior?.key===key,repeat_skill:skill&&prior?.skill,alternate_direction:prior&&prior.key!==key,practice_review:review&&prior?.valid,skill_body_switch:prior&&physical(prior.key)!==physical(key),physical_load:physical(key),control_load:key==='C',environment_load:adapt&&text.includes(this.soul().attribute),valid_failure:p.outcome?.success===false,skill_obstacle:skill&&p.outcome?.success===false,adapt_obstacle:adapt&&p.outcome?.success===false,rest_after_training:rest&&prior?.valid,review_after_skill:review&&prior?.skill,restore_after_load:rest&&prior?.physical,training_milestone:(history.filter(h=>h.valid).length+1)%3===0,skill_milestone:skill&&(history.filter(h=>h.skill&&h.valid).length+1)%3===0,adapt_milestone:adapt&&p.outcome?.success===true};
+  const currentStage=history.filter(h=>h.stage===stage),directions=[...new Set([key,...p.receipts.filter(r=>r.kind==='attribute'&&r.amount>0).map(r=>r.key)])],dirs=new Set([...currentStage.flatMap(h=>h.directions||[h.key]),...directions]),mains=new Set([...currentStage.map(h=>h.key),key]),environment=this.event()?.id;
+  if(valid&&flags[t.spec.event]){const r=B.recordEvent(t,g.state,{id:'event:'+stage+':'+(p.eventIndex??'')+':'+g.serial,type:t.spec.event,time:stage,stage,effectiveTier:this.soul().tier,trainingKey:key,method:key,valid:true,focused:mains.size===1,dual:dirs.size>=2,rested:rest||currentStage.some(h=>h.rest),reviewed:review||currentStage.some(h=>h.review),firstMethod:!currentStage.some(h=>h.key===key),familiarMethod:history.some(h=>h.stage<stage&&h.key===key),adaptedEnvironment:adapt&&history.some(h=>h.adapt&&h.valid&&h.environment===environment),actualContribution:p.receipts.filter(r=>r.kind==='attribute').reduce((n,r)=>n+r.amount,0),contributionReference:10});g.state=r.state;}
+  history.push({stage,key,directions,environment,valid,rest,review,skill,adapt,physical:physical(key)});if(history.length>200)history.shift();return result;
+ }
+ function battleOptions(...args){const options={...CampaignModern.methods.battleOptions.apply(this,args),traitsEnabled:this.state.features?.traitsEnabled!==false};this.state.battleOptions=copy(options);return options;}
+ function refresh(){CampaignModern.methods.refresh.call(this);if(this.state.character)remember(this);}
+ return {methods:{reward,chooseEvent,battleOptions,refresh,resolveEventBranch}};
+})(globalThis);
 
 // Single assembly point; public methods are installed once.
 (function(root){
@@ -780,10 +860,11 @@ acknowledgeAwakening:CampaignCore.methods.acknowledgeAwakening,
 rollCreation:CampaignCore.methods.rollCreation,
 soul:CampaignCore.methods.soul,
 growthRates:CampaignCore.methods.growthRates,
+autoEventStep:CampaignModern.methods.autoEventStep,
 draw:CampaignCore.methods.draw,
 dark:CampaignCore.methods.dark,
 sync:CampaignCore.methods.sync,
-refresh:JourneyActions.methods.refresh,
+refresh:CampaignTraits.methods.refresh,
 review:CampaignCore.methods.review,
 begin:CampaignCore.methods.begin,
 startGrowth:CampaignCore.methods.startGrowth,
@@ -804,9 +885,9 @@ eventChance:CampaignCore.methods.eventChance,
 eventEstimate:CampaignCore.methods.eventEstimate,
 receipt:CampaignCore.methods.receipt,
 prepareEvent:CampaignCore.methods.prepareEvent,
-reward:CampaignCore.methods.reward,
-chooseEvent:CampaignCore.methods.chooseEvent,
-resolveEventBranch:QuestActions.methods.resolveEventBranch,
+reward:CampaignTraits.methods.reward,
+chooseEvent:CampaignTraits.methods.chooseEvent,
+resolveEventBranch:CampaignTraits.methods.resolveEventBranch,
 previewEvent:CampaignCore.methods.previewEvent,
 settleBias:CampaignCore.methods.settleBias,
 specialEvent:CampaignCore.methods.specialEvent,
@@ -824,7 +905,7 @@ abandonHunt:JourneyActions.methods.abandonHunt,
 hunt:CampaignCore.methods.hunt,
 finishHunt:CampaignCore.methods.finishHunt,
 finishQuarter:JourneyActions.methods.finishQuarter,
-battleOptions:JourneyActions.methods.battleOptions,
+battleOptions:CampaignTraits.methods.battleOptions,
 observeBattle:JourneyActions.methods.observeBattle,
 returnArrival:JourneyActions.methods.returnArrival,
 retry:JourneyActions.methods.retry,
@@ -852,7 +933,7 @@ huntRound:JourneyActions.methods.huntRound,
 questStage:JourneyActions.methods.questStage
 };
 Object.defineProperties(Campaign.prototype,Object.fromEntries(Object.entries(methods).map(([key,value])=>[key,{value,writable:true,configurable:true}])));
-Campaign.validate=JourneyActions.methods.static_validate;
+Campaign.validate=CampaignModern.methods.static_validate;
 const api={Campaign,TRAINING,EVENTS,Creation,CHAINS:EventData.CHAINS};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessCampaign=api;
 })(typeof globalThis==='undefined'?this:globalThis);
 

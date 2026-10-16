@@ -1,0 +1,739 @@
+{
+  "format": "witness-complete-game",
+  "version": 9,
+  "gameVersion": "10.08",
+  "speed": 0,
+  "state": {
+    "version": 9,
+    "seed": "rollback-browser-qualified-growth",
+    "rngState": 1202656563,
+    "phase": "growth",
+    "draft": {
+      "version": 2,
+      "attributeSchema": 2,
+      "timeSchema": 2,
+      "seed": "rollback-browser-qualified-growth",
+      "rngState": 1202656563,
+      "cursor": 25,
+      "results": {
+        "month": 4,
+        "age": 33,
+        "span": 27,
+        "originRank": 9,
+        "charm": 7,
+        "luck": 5,
+        "talent": 10,
+        "tier": 5,
+        "soulKind": "器",
+        "soulAttribute": "冰",
+        "soulId": "T05-03",
+        "style": "强攻",
+        "release": "召出",
+        "gender": "女",
+        "nationality": "天魂",
+        "region": "林区",
+        "personality": "热情",
+        "appearance": "利落束发与旧披风",
+        "motivation": "靠自己的能力谋生",
+        "keepsake": "一截木哨",
+        "level": 5,
+        "B": 1,
+        "S": 4,
+        "C": -7,
+        "D": 0,
+        "A": -1,
+        "P": 1,
+        "W": -3
+      },
+      "rolls": [
+        {
+          "key": "month",
+          "label": "入会季节",
+          "sides": 4,
+          "face": 2,
+          "value": 4,
+          "text": "6102年4月",
+          "quarter": 0
+        },
+        {
+          "key": "age",
+          "label": "入会年龄",
+          "sides": 25,
+          "face": 18,
+          "value": 33,
+          "text": "33岁",
+          "quarter": 0
+        },
+        {
+          "key": "originRank",
+          "label": "出身",
+          "sides": 10,
+          "face": 9,
+          "value": 9,
+          "text": "9档 · 封号斗罗门下",
+          "quarter": 0
+        },
+        {
+          "key": "charm",
+          "label": "魅力",
+          "sides": 10,
+          "face": 7,
+          "value": 7,
+          "text": "7档魅力 · 顾盼生辉!!",
+          "quarter": 0
+        },
+        {
+          "key": "luck",
+          "label": "气运",
+          "sides": 10,
+          "face": 5,
+          "value": 5,
+          "text": "5档气运 · 顺遂平稳",
+          "quarter": 0
+        },
+        {
+          "key": "talent",
+          "label": "成长天赋",
+          "sides": 10,
+          "face": 10,
+          "value": 10,
+          "text": "10档 · 天纵之才!!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "soulKind",
+          "label": "武魂种类",
+          "sides": 4,
+          "face": 1,
+          "value": "器",
+          "text": "器",
+          "quarter": 0
+        },
+        {
+          "key": "soulAttribute",
+          "label": "武魂属性",
+          "sides": 87,
+          "face": 3,
+          "value": "冰",
+          "text": "冰",
+          "quarter": 0
+        },
+        {
+          "key": "gender",
+          "label": "性别",
+          "sides": 3,
+          "face": 2,
+          "value": "女",
+          "text": "女",
+          "quarter": 0
+        },
+        {
+          "key": "nationality",
+          "label": "国籍",
+          "sides": 5,
+          "face": 2,
+          "value": "天魂",
+          "text": "天魂",
+          "quarter": 0
+        },
+        {
+          "key": "region",
+          "label": "成长地点",
+          "sides": 8,
+          "face": 4,
+          "value": "林区",
+          "text": "林区",
+          "quarter": 0
+        },
+        {
+          "key": "personality",
+          "label": "性格",
+          "sides": 8,
+          "face": 6,
+          "value": "热情",
+          "text": "热情",
+          "quarter": 0
+        },
+        {
+          "key": "appearance",
+          "label": "外形",
+          "sides": 8,
+          "face": 3,
+          "value": "利落束发与旧披风",
+          "text": "利落束发与旧披风",
+          "quarter": 0
+        },
+        {
+          "key": "motivation",
+          "label": "入会动机",
+          "sides": 6,
+          "face": 5,
+          "value": "靠自己的能力谋生",
+          "text": "靠自己的能力谋生",
+          "quarter": 0
+        },
+        {
+          "key": "keepsake",
+          "label": "随身纪念物",
+          "sides": 8,
+          "face": 4,
+          "value": "一截木哨",
+          "text": "一截木哨",
+          "quarter": 0
+        },
+        {
+          "key": "B",
+          "label": "肉体强度偏差",
+          "sides": 21,
+          "face": 12,
+          "value": 1,
+          "text": "+1% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "S",
+          "label": "魂力强度偏差",
+          "sides": 21,
+          "face": 15,
+          "value": 4,
+          "text": "+4% · 出类拔萃!",
+          "quarter": 0
+        },
+        {
+          "key": "C",
+          "label": "魂力操纵偏差",
+          "sides": 21,
+          "face": 4,
+          "value": -7,
+          "text": "-7% · 尚待雕琢",
+          "quarter": 0
+        },
+        {
+          "key": "D",
+          "label": "防御素质偏差",
+          "sides": 21,
+          "face": 11,
+          "value": 0,
+          "text": "+0% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "A",
+          "label": "敏捷偏差",
+          "sides": 21,
+          "face": 10,
+          "value": -1,
+          "text": "-1% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "P",
+          "label": "精神力偏差",
+          "sides": 21,
+          "face": 12,
+          "value": 1,
+          "text": "+1% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "W",
+          "label": "精神稳定偏差",
+          "sides": 21,
+          "face": 8,
+          "value": -3,
+          "text": "-3",
+          "quarter": 0
+        }
+      ],
+      "hiddenRolls": [
+        {
+          "label": "姓名 · 姓氏",
+          "sides": 70,
+          "face": 57
+        },
+        {
+          "label": "姓名 · 组合方式",
+          "sides": 100,
+          "face": 1
+        },
+        {
+          "label": "姓名 · 固定名",
+          "sides": 50,
+          "face": 23
+        },
+        {
+          "label": "武魂觉醒",
+          "sides": 3,
+          "face": 1
+        }
+      ],
+      "options": {
+        "name": "",
+        "gender": "随机",
+        "tier": 5,
+        "level": 5
+      },
+      "generatedName": "金映雪"
+    },
+    "character": {
+      "name": "金映雪",
+      "level": 5,
+      "initialLevel": 5,
+      "initialPotential": 5,
+      "soulId": "T05-01",
+      "style": "强攻",
+      "release": "召出",
+      "luck": 5,
+      "charm": 5,
+      "initialLuck": 5,
+      "initialCharm": 5,
+      "talent": {
+        "rank": 5,
+        "label": "5档 · 良材可琢",
+        "xpMultiplier": 1.12,
+        "attributeMultiplier": 1.16
+      },
+      "identity": {
+        "gender": "女",
+        "nationality": "天魂",
+        "personality": "热情",
+        "family": "封号斗罗门下",
+        "originRank": 5,
+        "origin": "集镇",
+        "appearance": "利落束发与旧披风",
+        "motivation": "靠自己的能力谋生",
+        "keepsake": "一截木哨"
+      },
+      "time": {
+        "month": 1,
+        "age": 28,
+        "span": 22,
+        "rawSpan": 22,
+        "birthYear": 6074,
+        "startYear": 6080,
+        "startAge": 6,
+        "quarters": 24,
+        "timelineMode": "stages",
+        "awakeningAge": 6
+      },
+      "deviations": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "wDeviation": 0,
+      "growth": {
+        "B": 0,
+        "S": 0,
+        "C": 0,
+        "D": 0,
+        "A": 0,
+        "P": 0,
+        "W": 0
+      },
+      "rings": [],
+      "eventFlags": {},
+      "bones": [],
+      "boneInventory": [],
+      "mutations": [],
+      "fatigue": 0,
+      "stats": {
+        "level": 5,
+        "rings": 0,
+        "benchmark": 28,
+        "stats": {
+          "B": 36,
+          "S": 31,
+          "C": 28,
+          "D": 27,
+          "A": 25,
+          "P": 21,
+          "W": 50
+        },
+        "derived": {
+          "HP": 472,
+          "MP": 215,
+          "SH": 388,
+          "PA": 41.15,
+          "SA": 36.35,
+          "MA": 26.8,
+          "DEF": 30.7,
+          "MDEF": 35.5,
+          "costReduction": 0,
+          "castReduction": 4.67,
+          "controlGrowth": 1.11
+        },
+        "breakdown": {
+          "B": {
+            "base": 28,
+            "grade": 1,
+            "style": 20,
+            "shape": 4,
+            "mental": 0,
+            "weapon": 5,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 36
+          },
+          "S": {
+            "base": 28,
+            "grade": 1,
+            "style": 10,
+            "shape": 4,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 31
+          },
+          "C": {
+            "base": 28,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "weapon": 0,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 28
+          },
+          "D": {
+            "base": 28,
+            "grade": 1,
+            "style": 0,
+            "shape": -4,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 27
+          },
+          "A": {
+            "base": 28,
+            "grade": 1,
+            "style": -10,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -2,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 25
+          },
+          "P": {
+            "base": 28,
+            "grade": 1,
+            "style": -20,
+            "shape": -4,
+            "mental": 0,
+            "weapon": 0,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 21
+          },
+          "W": {
+            "base": 50,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "deviation": 0,
+            "growth": 0,
+            "generated": 50
+          }
+        }
+      }
+    },
+    "rolls": [
+      {
+        "key": "month",
+        "label": "入会季节",
+        "sides": 4,
+        "face": 2,
+        "value": 4,
+        "text": "6102年4月",
+        "quarter": 0
+      },
+      {
+        "key": "age",
+        "label": "入会年龄",
+        "sides": 25,
+        "face": 18,
+        "value": 33,
+        "text": "33岁",
+        "quarter": 0
+      },
+      {
+        "key": "originRank",
+        "label": "出身",
+        "sides": 10,
+        "face": 9,
+        "value": 9,
+        "text": "9档 · 封号斗罗门下",
+        "quarter": 0
+      },
+      {
+        "key": "charm",
+        "label": "魅力",
+        "sides": 10,
+        "face": 7,
+        "value": 7,
+        "text": "7档魅力 · 顾盼生辉!!",
+        "quarter": 0
+      },
+      {
+        "key": "luck",
+        "label": "气运",
+        "sides": 10,
+        "face": 5,
+        "value": 5,
+        "text": "5档气运 · 顺遂平稳",
+        "quarter": 0
+      },
+      {
+        "key": "talent",
+        "label": "成长天赋",
+        "sides": 10,
+        "face": 10,
+        "value": 10,
+        "text": "10档 · 天纵之才!!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "soulKind",
+        "label": "武魂种类",
+        "sides": 4,
+        "face": 1,
+        "value": "器",
+        "text": "器",
+        "quarter": 0
+      },
+      {
+        "key": "soulAttribute",
+        "label": "武魂属性",
+        "sides": 87,
+        "face": 3,
+        "value": "冰",
+        "text": "冰",
+        "quarter": 0
+      },
+      {
+        "key": "gender",
+        "label": "性别",
+        "sides": 3,
+        "face": 2,
+        "value": "女",
+        "text": "女",
+        "quarter": 0
+      },
+      {
+        "key": "nationality",
+        "label": "国籍",
+        "sides": 5,
+        "face": 2,
+        "value": "天魂",
+        "text": "天魂",
+        "quarter": 0
+      },
+      {
+        "key": "region",
+        "label": "成长地点",
+        "sides": 8,
+        "face": 4,
+        "value": "林区",
+        "text": "林区",
+        "quarter": 0
+      },
+      {
+        "key": "personality",
+        "label": "性格",
+        "sides": 8,
+        "face": 6,
+        "value": "热情",
+        "text": "热情",
+        "quarter": 0
+      },
+      {
+        "key": "appearance",
+        "label": "外形",
+        "sides": 8,
+        "face": 3,
+        "value": "利落束发与旧披风",
+        "text": "利落束发与旧披风",
+        "quarter": 0
+      },
+      {
+        "key": "motivation",
+        "label": "入会动机",
+        "sides": 6,
+        "face": 5,
+        "value": "靠自己的能力谋生",
+        "text": "靠自己的能力谋生",
+        "quarter": 0
+      },
+      {
+        "key": "keepsake",
+        "label": "随身纪念物",
+        "sides": 8,
+        "face": 4,
+        "value": "一截木哨",
+        "text": "一截木哨",
+        "quarter": 0
+      },
+      {
+        "key": "B",
+        "label": "肉体强度偏差",
+        "sides": 21,
+        "face": 12,
+        "value": 1,
+        "text": "+1% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "S",
+        "label": "魂力强度偏差",
+        "sides": 21,
+        "face": 15,
+        "value": 4,
+        "text": "+4% · 出类拔萃!",
+        "quarter": 0
+      },
+      {
+        "key": "C",
+        "label": "魂力操纵偏差",
+        "sides": 21,
+        "face": 4,
+        "value": -7,
+        "text": "-7% · 尚待雕琢",
+        "quarter": 0
+      },
+      {
+        "key": "D",
+        "label": "防御素质偏差",
+        "sides": 21,
+        "face": 11,
+        "value": 0,
+        "text": "+0% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "A",
+        "label": "敏捷偏差",
+        "sides": 21,
+        "face": 10,
+        "value": -1,
+        "text": "-1% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "P",
+        "label": "精神力偏差",
+        "sides": 21,
+        "face": 12,
+        "value": 1,
+        "text": "+1% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "W",
+        "label": "精神稳定偏差",
+        "sides": 21,
+        "face": 8,
+        "value": -3,
+        "text": "-3",
+        "quarter": 0
+      }
+    ],
+    "hiddenRolls": [
+      {
+        "label": "姓名 · 姓氏",
+        "sides": 70,
+        "face": 57
+      },
+      {
+        "label": "姓名 · 组合方式",
+        "sides": 100,
+        "face": 1
+      },
+      {
+        "label": "姓名 · 固定名",
+        "sides": 50,
+        "face": 23
+      },
+      {
+        "label": "武魂觉醒",
+        "sides": 3,
+        "face": 1
+      }
+    ],
+    "journal": [
+      {
+        "type": "origin",
+        "date": {
+          "year": 6080,
+          "month": 1,
+          "age": 6
+        },
+        "title": "出发前",
+        "text": "金映雪从集镇出发，封号斗罗门下的经历与5档 · 良材可琢一起成为起点。随身带着一截木哨，想要靠自己的能力谋生。",
+        "level": 5
+      }
+    ],
+    "completed": 0,
+    "xp": 0,
+    "prep": 0,
+    "lastEvent": null,
+    "pending": null,
+    "hunt": null,
+    "battleSnapshot": null,
+    "battleOptions": null,
+    "result": null,
+    "attempts": 0,
+    "resultHandled": false,
+    "date": {
+      "year": 6080,
+      "month": 1,
+      "age": 6
+    },
+    "characterId": "character-e5a75981-aa61-4a5c-bd6b-fdd4228cede7",
+    "source": "test",
+    "awakeningPending": false,
+    "storyRulesVersion": 1001,
+    "quests": {
+      "version": 1,
+      "active": null,
+      "records": {}
+    },
+    "growthPlan": {
+      "target": 41,
+      "baseXP": 200,
+      "createdAt": 0,
+      "cultivationVersion": 10081
+    },
+    "eventHistory": {},
+    "exam": {
+      "mode": "normal",
+      "starts": 0,
+      "opponent": null
+    },
+    "huntDelayMonths": 0,
+    "journeyRulesVersion": 1002,
+    "cultivationMigration": {
+      "version": 10081,
+      "atPeriod": 0,
+      "previousBaseXP": 150,
+      "earnedLevel": 5,
+      "earnedXP": 0
+    },
+    "cultivationRulesVersion": 10081,
+    "gameVersion": "10.08",
+    "promotionState": {
+      "version": 1,
+      "highestRatingIndex": 1,
+      "acknowledged": {}
+    },
+    "promotions": []
+  }
+}

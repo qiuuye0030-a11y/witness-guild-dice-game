@@ -1,0 +1,585 @@
+<!-- 这是片段，粘贴到游戏 body 内；不是独立网页。 -->
+<style>
+.cx-root {
+  color-scheme: light;
+  --cx-sun:#FFD84A;
+  --cx-warm:#F5DE9C;
+  --cx-paper:#FFF9E4;
+  --cx-gilt:#B8892B;
+  --cx-gilt-ink:#8A6414;
+  --cx-dai:#173F45;
+  --cx-qing:#2F7F82;
+  --cx-lan:#9CCFC6;
+  --cx-zhu:#A8321F;
+  --cx-sky-top:#9CC7C4;
+   --cx-sky-mid:#DCE7CF;
+   --cx-sky-low:#F7E7B0;
+  --cx-sun-y:60%;
+   --cx-fog:.95;
+   --cx-ray:.25;
+  --cx-serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --cx-sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+.cx-root.cx-game {
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  background:linear-gradient(180deg,var(--cx-sky-top) 0%,var(--cx-sky-mid) 30%,var(--cx-sky-low) 58%);
+  transition:background 2.6s ease
+}
+.cx-root .cx-layer {
+  position:absolute;
+  left:0;
+  right:0;
+  pointer-events:none
+}
+.cx-root .cx-rays {
+  left:50%;
+  right:auto;
+  top:var(--cx-sun-y);
+  width:1500px;
+  height:1500px;
+  margin:-750px 0 0 -750px;
+  border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,216,74,.55) 0 4deg,transparent 4deg 15deg);
+  -webkit-mask:radial-gradient(circle,transparent 150px,#000 190px,transparent 70%);
+          mask:radial-gradient(circle,transparent 150px,#000 190px,transparent 70%);
+  opacity:var(--cx-ray);
+  transition:top 2.6s ease,opacity 2.6s ease;
+  animation:cx-turn 360s linear infinite
+}
+@keyframes cx-turn {
+  to {
+  transform:rotate(360deg)
+}
+}
+.cx-root .cx-sun {
+  left:50%;
+  right:auto;
+  top:var(--cx-sun-y);
+  width:300px;
+  height:300px;
+  margin:-150px 0 0 -150px;
+  border-radius:50%;
+  background:radial-gradient(circle,#FFFDF0 0%,#FFEFA0 38%,var(--cx-sun) 62%,#F6C533 100%);
+  box-shadow:0 0 0 14px rgba(255,216,74,.22),0 0 0 15px rgba(184,137,43,.35),
+             0 0 0 40px rgba(255,216,74,.12),0 0 0 41px rgba(184,137,43,.2),0 0 140px 60px rgba(255,226,122,.75);
+  transition:top 2.6s ease
+}
+.cx-root .cx-far {
+  top:calc(58% - 150px);
+  height:150px;
+  width:100%
+}
+.cx-root .cx-far path {
+  fill:var(--cx-lan);
+  opacity:.75
+}
+.cx-root .cx-near {
+  top:calc(58% - 190px);
+  height:190px;
+  width:100%
+}
+.cx-root .cx-near path {
+  fill:var(--cx-qing)
+}
+.cx-root .cx-water {
+  top:58%;
+  bottom:0;
+  background:linear-gradient(180deg,#CFE6D6 0%,#EEEBC4 30%,var(--cx-warm) 70%,var(--cx-paper) 100%)
+}
+.cx-root .cx-shimmer {
+  top:58%;
+  bottom:0;
+  left:50%;
+  right:auto;
+  width:260px;
+  margin-left:-130px;
+  background:repeating-linear-gradient(180deg,rgba(255,216,74,.85) 0 3px,transparent 3px 11px);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 70%),linear-gradient(90deg,transparent,#000 50%,transparent);
+  -webkit-mask-composite:source-in;
+  mask:linear-gradient(180deg,#000,transparent 70%),linear-gradient(90deg,transparent,#000 50%,transparent);
+  mask-composite:intersect;
+  opacity:calc(1.15 - var(--cx-fog))
+}
+.cx-root .cx-fog {
+  left:-20%;
+  right:-20%;
+  filter:blur(18px);
+  opacity:var(--cx-fog);
+  transition:opacity 2.6s ease
+}
+.cx-root .cx-fog.cx-a {
+  top:44%;
+  height:16%;
+  background:radial-gradient(ellipse 38% 60% at 22% 50%,rgba(255,252,236,.95),transparent 70%),
+  radial-gradient(ellipse 34% 55% at 78% 55%,rgba(255,252,236,.9),transparent 70%);
+  animation:cx-drift 70s ease-in-out infinite alternate
+}
+.cx-root .cx-fog.cx-b {
+  top:50%;
+  height:14%;
+  background:radial-gradient(ellipse 60% 60% at 50% 60%,rgba(255,249,228,.9),transparent 72%),
+  radial-gradient(ellipse 30% 50% at 8% 50%,rgba(214,236,226,.9),transparent 70%),
+  radial-gradient(ellipse 30% 50% at 92% 50%,rgba(214,236,226,.9),transparent 70%);
+  animation:cx-drift 95s ease-in-out infinite alternate-reverse
+}
+.cx-root .cx-veil {
+  top:0;
+  bottom:0;
+  background:linear-gradient(180deg,rgba(255,249,228,0) 20%,rgba(255,249,228,.5) 56%,rgba(255,249,228,.15) 80%);
+  opacity:var(--cx-fog);
+  transition:opacity 2.6s ease
+}
+@keyframes cx-drift {
+  from {
+  transform:translateX(-4%)
+}
+to {
+  transform:translateX(4%)
+}
+}
+.cx-root .cx-hud {
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  padding:20px clamp(16px,4vw,48px) 0;
+  font-size:14px;
+  color:var(--cx-dai)
+}
+.cx-root .cx-hud .cx-phase {
+  font-family:var(--cx-serif);
+  letter-spacing:.3em
+}
+.cx-root .cx-place {
+  font-family:var(--cx-serif);
+  font-weight:600;
+  font-size:22px;
+  letter-spacing:.5em;
+  text-indent:.5em;
+  padding:6px 28px;
+  border-top:1px solid var(--cx-gilt);
+  border-bottom:1px solid var(--cx-gilt);
+  position:relative
+}
+.cx-root .cx-place::before,.cx-root .cx-place::after {
+  content:"";
+  position:absolute;
+  top:50%;
+  width:7px;
+  height:7px;
+  background:var(--cx-gilt);
+  transform:translateY(-50%) rotate(45deg)
+}
+.cx-root .cx-place::before {
+  left:-4px
+}
+.cx-root .cx-place::after {
+  right:-4px
+}
+.cx-root .cx-clock {
+  justify-self:end;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.1em
+}
+.cx-root .cx-stage {
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0 16px 20px
+}
+.cx-root .cx-panel {
+  position:relative;
+  width:min(760px,100%);
+  padding:34px 44px 30px;
+  background:rgba(255,249,228,.84);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--cx-gilt);
+  box-shadow:0 18px 50px -20px rgba(23,63,69,.35)
+}
+.cx-root .cx-panel::before {
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(184,137,43,.45);
+  pointer-events:none
+}
+.cx-root .cx-panel::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-15px;
+  width:30px;
+  height:15px;
+  margin-left:-15px;
+  border:1px solid var(--cx-gilt);
+  border-bottom:none;
+  border-radius:30px 30px 0 0;
+  background:var(--cx-sun)
+}
+.cx-root .cx-speaker {
+  font-family:var(--cx-serif);
+  font-weight:600;
+  color:var(--cx-gilt-ink);
+  font-size:16px;
+  letter-spacing:.2em;
+  text-align:center;
+  margin-bottom:10px
+}
+.cx-root .cx-narr {
+  font-family:var(--cx-serif);
+  font-size:18px;
+  line-height:2;
+  color:var(--cx-dai);
+  min-height:6em
+}
+.cx-root .cx-narr .cx-clue {
+  color:var(--cx-qing);
+  font-weight:600;
+  border-bottom:1px solid var(--cx-qing);
+  cursor:help
+}
+.cx-root .cx-choices {
+  list-style:none;
+  margin-top:22px;
+  display:grid;
+  gap:10px
+}
+.cx-root .cx-choice {
+  position:relative;
+  width:100%;
+  text-align:left;
+  font:inherit;
+  font-size:16px;
+  color:var(--cx-dai);
+  cursor:pointer;
+  padding:12px 18px 12px 44px;
+  background:rgba(255,255,255,.4);
+  border:1px solid rgba(184,137,43,.6);
+  transition:background .22s,border-color .22s,color .22s
+}
+.cx-root .cx-choice::before {
+  content:"";
+  position:absolute;
+  left:18px;
+  top:50%;
+  width:9px;
+  height:9px;
+  margin-top:-5px;
+  border:1px solid var(--cx-gilt-ink);
+  transform:rotate(45deg);
+  transition:background .22s,border-color .22s
+}
+.cx-root .cx-choice:hover,.cx-root .cx-choice:focus-visible {
+  background:var(--cx-sun);
+  border-color:var(--cx-gilt-ink);
+  outline:none
+}
+.cx-root .cx-choice:hover::before,.cx-root .cx-choice:focus-visible::before {
+  background:var(--cx-dai);
+  border-color:var(--cx-dai)
+}
+.cx-root .cx-choice:focus-visible {
+  outline:2px solid var(--cx-dai);
+  outline-offset:2px
+}
+.cx-root .cx-choice .cx-tag {
+  float:right;
+  font-size:13px;
+  color:var(--cx-gilt-ink)
+}
+.cx-root .cx-choice.cx-risk::before {
+  border-color:var(--cx-zhu)
+}
+.cx-root .cx-choice.cx-risk .cx-tag {
+  color:var(--cx-zhu)
+}
+.cx-root .cx-choice.cx-risk:hover,.cx-root .cx-choice.cx-risk:focus-visible {
+  border-color:var(--cx-zhu)
+}
+.cx-root .cx-choice.cx-risk:hover::before,.cx-root .cx-choice.cx-risk:focus-visible::before {
+  background:var(--cx-zhu);
+  border-color:var(--cx-zhu)
+}
+.cx-root .cx-choice[disabled] {
+  cursor:not-allowed;
+  background:transparent;
+  border-style:dashed;
+  border-color:rgba(23,63,69,.3);
+  color:rgba(23,63,69,.5)
+}
+.cx-root .cx-choice[disabled]::before {
+  border-color:rgba(23,63,69,.35);
+  background:none
+}
+.cx-root .cx-choice[disabled] .cx-tag {
+  color:rgba(23,63,69,.6)
+}
+.cx-root .cx-choice.cx-picked {
+  background:var(--cx-qing);
+  border-color:var(--cx-dai);
+  color:var(--cx-paper)
+}
+.cx-root .cx-choice.cx-picked::before {
+  background:var(--cx-sun);
+  border-color:var(--cx-sun)
+}
+.cx-root .cx-choice.cx-picked .cx-tag {
+  color:var(--cx-paper)
+}
+.cx-root .cx-foot {
+  position:relative;
+  z-index:2;
+  padding:6px 16px 22px;
+  font-size:14px;
+  color:var(--cx-dai);
+  display:flex;
+  gap:34px;
+  justify-content:center;
+  flex-wrap:wrap
+}
+.cx-root .cx-foot button {
+  background:none;
+  border:none;
+  color:inherit;
+  font:inherit;
+  letter-spacing:.2em;
+  cursor:pointer;
+  padding:2px 0;
+  border-bottom:1px solid transparent
+}
+.cx-root .cx-foot button:hover,.cx-root .cx-foot button:focus-visible {
+  border-bottom-color:var(--cx-gilt-ink);
+  outline:none
+}
+/* 基础重置只在组件内生效。这里修改颜色、字体和阅读区尺寸。 */
+.cx-root  {
+  box-sizing:border-box;
+  color:var(--cx-dai);
+  font:16px/1.7 var(--cx-sans);
+  isolation:isolate;
+  width:100%;
+  min-height:760px;
+  min-height:max(760px,100svh)
+}
+.cx-root *, .cx-root *::before, .cx-root *::after  {
+  box-sizing:border-box
+}
+.cx-root p,.cx-root ul  {
+  margin:0;
+  padding:0
+}
+.cx-root button  {
+  text-transform:none;
+  letter-spacing:normal;
+  border-radius:0;
+  box-shadow:none
+}
+.cx-root .cx-stage  {
+  padding-top:clamp(180px,28vh,320px)
+}
+.cx-root .cx-panel  {
+  width:min(var(--cx-panel-width,760px),100%)
+}
+.cx-root .cx-speaker  {
+  margin-bottom:10px
+}
+.cx-root .cx-narr  {
+  overflow-wrap:anywhere
+}
+.cx-root .cx-choices  {
+  margin-top:22px
+}
+.cx-root .cx-choice .cx-tag  {
+  margin-left:12px
+}
+.cx-root .cx-choice[disabled]:hover  {
+  background:transparent;
+  color:rgba(23,63,69,.5);
+  border-color:rgba(23,63,69,.3)
+}
+.cx-root .cx-choice[disabled]:hover::before  {
+  background:none;
+  border-color:rgba(23,63,69,.35)
+}
+.cx-root .cx-choice.cx-picked  {
+  background:var(--cx-qing);
+  color:var(--cx-paper)
+}
+.cx-root .cx-layer  {
+  z-index:0
+}
+.cx-root .cx-far path,.cx-root .cx-near path  {
+  stroke:none
+}
+.cx-root [hidden]  {
+  display:none!important
+}
+@media(max-width:760px) {
+ .cx-root  {
+  min-height:100svh
+}
+ .cx-root .cx-hud  {
+  grid-template-columns:1fr;
+  justify-items:center;
+  gap:8px
+}
+ .cx-root .cx-clock  {
+  justify-self:center
+}
+ .cx-root .cx-hud .cx-phase  {
+  display:none
+}
+ .cx-root .cx-place  {
+  font-size:19px
+}
+ .cx-root .cx-panel  {
+  padding:28px 22px 22px
+}
+ .cx-root .cx-narr  {
+  font-size:16.5px
+}
+ .cx-root .cx-sun  {
+  width:220px;
+  height:220px;
+  margin:-110px 0 0 -110px
+}
+ .cx-root .cx-choice .cx-tag  {
+  float:none;
+  display:block;
+  margin-left:0
+}
+ .cx-root .cx-foot  {
+  gap:20px
+}
+}
+@media(prefers-reduced-motion:reduce) {
+  .cx-root *,.cx-root *::before,.cx-root *::after  {
+  transition:none!important;
+  animation:none!important
+}
+}
+
+</style>
+<section class="cx-root cx-game" data-cx-root aria-label="晨曦城互动游戏界面">
+  <div class="cx-layer cx-rays" aria-hidden="true"></div>
+  <div class="cx-layer cx-sun" aria-hidden="true"></div>
+  <svg class="cx-layer cx-far" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 150V96l60-22 50 18 70-40 60 30 50-12 40 20 60-46 50 30 70-20 60 26 50-14 50 18v66z"/><path d="M0 150V96l60-22 50 18 70-40 60 30 50-12 40 20 60-46 50 30 70-20 60 26 50-14 50 18v66z" transform="translate(1440,0) scale(-1,1)"/>
+  </svg>
+  <div class="cx-layer cx-fog cx-a" aria-hidden="true"></div>
+  <svg class="cx-layer cx-near" viewBox="0 0 1440 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path d="M0 190V132h70v-10h14v10h40v-10h14v10h40V96l-14-4 44-22 44 22-14 4v36h50v-10h14v10h40v-10h14v10h34V78l-18-5 58-30 58 30-18 5v54h14v-10h14v10h40v-10h14v10h58v58z"/><path d="M0 190V132h70v-10h14v10h40v-10h14v10h40V96l-14-4 44-22 44 22-14 4v36h50v-10h14v10h40v-10h14v10h34V78l-18-5 58-30 58 30-18 5v54h14v-10h14v10h40v-10h14v10h58v58z" transform="translate(1440,0) scale(-1,1)"/>
+    <!-- 中央门楼：三重檐，顶上一枚日轮 -->
+    <path d="M610 190V120h30V98l-26-6 106-40 106 40-26 6v22h30v70h-80v-40a30 30 0 0 0-60 0v40z M662 60l-18-5 76-34 76 34-18 5v-8H662z M700 24l20-16 20 16z"/>
+  </svg>
+  <div class="cx-layer cx-water" aria-hidden="true"></div>
+  <div class="cx-layer cx-shimmer" aria-hidden="true"></div>
+  <div class="cx-layer cx-fog cx-b" aria-hidden="true"></div>
+  <div class="cx-layer cx-veil" aria-hidden="true"></div>
+
+  <header class="cx-hud">
+    <span class="cx-phase" data-cx="phase">初晓</span>
+    <span class="cx-place" data-cx="place">朝门渡口</span>
+    <span class="cx-clock" data-cx="clock">卯初 · 05:06</span>
+  </header>
+
+  <div class="cx-stage">
+    <article class="cx-panel" aria-live="polite">
+      <p class="cx-speaker" data-cx="speaker">旁白</p>
+      <div class="cx-narr" data-cx="narr">这里显示游戏正文。</div>
+      <ul class="cx-choices" data-cx="choices"></ul>
+    </article>
+  </div>
+
+  <footer class="cx-foot">
+    <button type="button" data-cx-menu="restart">从头开始</button>
+    <button type="button" data-cx-menu="journal">行记</button>
+    <button type="button" data-cx-menu="inventory">行囊</button>
+    <button type="button" data-cx-menu="settings">设置</button>
+  </footer>
+</section>
+<script>
+/* 晨曦城朝阳组件：只显示数据和发出事件，不负责骰子、剧情、存档。 */
+(function (global) {
+ 'use strict';
+ const phases = [
+  {name:'初晓',top:'#9CC7C4',mid:'#DCE7CF',low:'#F7E7B0',sun:'60%',fog:.95,ray:.25},
+  {name:'晨曦',top:'#A8D3CC',mid:'#EFE9BE',low:'#FFE08A',sun:'52%',fog:.75,ray:.4},
+  {name:'旭日',top:'#B5DCD2',mid:'#FBEDB4',low:'#FFD84A',sun:'42%',fog:.5,ray:.6},
+  {name:'朝晖',top:'#C4E6DC',mid:'#FFF3C4',low:'#FFDF6B',sun:'30%',fog:.3,ray:.5}
+ ];
+ function create(root, options = {}) {
+  if (!root || !root.matches('.cx-root')) throw new Error('ChenxiUI.create 需要 .cx-root 元素');
+  if (root.chenxiUI) return root.chenxiUI;
+  const find = key => root.querySelector('[data-cx="'+key+'"]');
+  const box = find('choices');
+  let choices = [], disposed = false;
+  function emit(type, detail) {
+   root.dispatchEvent(new CustomEvent('chenxi:'+type, {detail, bubbles:true}));
+   const callback = options[{choice:'onChoice',menu:'onMenu',clue:'onClue'}[type]];
+   if (typeof callback === 'function') callback(detail, api);
+  }
+  function setPhase(index) {
+   if (disposed) return;
+   if (!Number.isInteger(index) || !phases[index]) throw new RangeError('phase 应为 0、1、2、3');
+   const p = phases[index];
+   root.dataset.cxPhase = String(index);
+   for (const [key, value] of Object.entries({'sky-top':p.top,'sky-mid':p.mid,'sky-low':p.low,'sun-y':p.sun,fog:p.fog,ray:p.ray})) root.style.setProperty('--cx-'+key,value);
+   find('phase').textContent = p.name;
+  }
+  function render(view = {}) {
+   if (disposed) return;
+   if (view.phase !== undefined) setPhase(view.phase);
+   for (const [key, target] of Object.entries({place:'place',time:'clock',speaker:'speaker'})) if (view[key] !== undefined) find(target).textContent = String(view[key]);
+   // 默认 narrative 按纯文本显示；narrativeHTML 只能使用自己可信的游戏正文。
+   if (view.narrativeHTML !== undefined) find('narr').innerHTML = String(view.narrativeHTML);
+   else if (view.narrative !== undefined) {find('narr').textContent = String(view.narrative);find('narr').style.whiteSpace = 'pre-wrap';}
+   if (view.narrativeHTML !== undefined) find('narr').style.whiteSpace = 'normal';
+   if (view.choices !== undefined) {
+    choices = view.choices.map(choice => ({...choice}));
+    box.replaceChildren();
+    choices.forEach((choice, index) => {
+     const li = document.createElement('li'), button = document.createElement('button');
+     button.type = 'button';button.className = 'cx-choice';button.dataset.cxChoice = String(index);
+     button.textContent = String(choice.label ?? '');button.disabled = Boolean(choice.disabled);
+     button.classList.toggle('cx-risk', Boolean(choice.risk));
+     button.classList.toggle('cx-picked', Boolean(choice.selected));
+     if (choice.selected) button.setAttribute('aria-pressed','true');
+     if (choice.tag) {const tag = document.createElement('span');tag.className = 'cx-tag';tag.textContent = String(choice.tag);button.append(tag);}
+     li.append(button);box.append(li);
+    });
+   }
+   if (view.menus) root.querySelectorAll('[data-cx-menu]').forEach(button => {const value = view.menus[button.dataset.cxMenu];if(value !== undefined) button.hidden = !value;});
+  }
+  function click(event) {
+   const target = event.target.closest('[data-cx-choice],[data-cx-menu],.cx-clue');
+   if (!target || !root.contains(target) || target.disabled) return;
+   if (target.hasAttribute('data-cx-choice')) {const index = Number(target.dataset.cxChoice);emit('choice',{index,choice:{...choices[index]},id:choices[index].id});}
+   else if (target.hasAttribute('data-cx-menu')) emit('menu',{action:target.dataset.cxMenu});
+   else emit('clue',{text:target.textContent,id:target.dataset.clueId || null});
+  }
+  const api = {render,setPhase,destroy() {if(disposed)return;disposed=true;root.removeEventListener('click',click);delete root.chenxiUI;}};
+  root.addEventListener('click',click);root.chenxiUI = api;setPhase(0);
+  if (options.initialView) render(options.initialView);
+  return api;
+ }
+ global.ChenxiUI = Object.freeze({create});
+})(window);
+
+</script>
+<script>
+// 放在界面结构与界面接口之后。变量封装在函数里，可与游戏原有脚本并存。
+(function () {
+ const root = document.currentScript.previousElementSibling.previousElementSibling;
+ window.ChenxiUI.create(root);
+ // 游戏内可用 root.chenxiUI.render(...) 更新界面。
+})();
+</script>

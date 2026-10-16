@@ -1,0 +1,125 @@
+{
+  "version": 3,
+  "passed": 22,
+  "total": 22,
+  "checks": [
+    "十档预算单调；战斗最高50%、减耗18%、读条22%，成长每阶段最高13.5%",
+    "六维按正常选择自动结算，无需预先选分支",
+    "多种正常训练方向可先后自动适配，不永久锁定主修",
+    "XP与W不加成；训练上下文是B也不能把XP当B奖励",
+    "只作用于天赋与训练等原有修正后的实际值一次",
+    "稳定型弥补实际差额；领悟型有固定点数上限",
+    "失败与多次奖励仍受阶段比例、点数、次数共同约束",
+    "无效训练与特性派生收益不能刷层或重复收益",
+    "状态保存恢复后重复事件、重复奖励仍幂等",
+    "同一事件不能同时生成并消费特性收益",
+    "攻击、多段与持续伤害共享整次施法总预算",
+    "自动识别防护、成功控制和多项强化，保留额外上限",
+    "普攻与免费行动不冒充付费魂技消费收益",
+    "控制失败、免控和减益失败不消费收益、不提高成功率",
+    "减耗作用于现有实际费用，至少支付1点，不加回蓝",
+    "读条不低于0.5秒，不能附带缩冷却或整体追势",
+    "战斗兑现至少间隔4秒且每场最多8次",
+    "窗口、跨阶段时效、换向与换方法规则真实生效",
+    "转化必须有真实基数，并按贡献比例兑现",
+    "变异升档仅更新数值、不换特性、不清空次数账本",
+    "非法档位、NaN、负数、倒退与跨作用域调用被拒绝",
+    "2464条全部有十档预算、无手选分支、查重仍通过"
+  ],
+  "bindings": 2464,
+  "tierProfilesChecked": 24640,
+  "rows": [
+    {
+      "tier": 1,
+      "battleBase": 0.06,
+      "battlePeak": 0.1121,
+      "costBase": 0.027,
+      "castBase": 0.036,
+      "growthCap": 0.03,
+      "stagePointCap": 0.75
+    },
+    {
+      "tier": 2,
+      "battleBase": 0.08,
+      "battlePeak": 0.1495,
+      "costBase": 0.036000000000000004,
+      "castBase": 0.048,
+      "growthCap": 0.04,
+      "stagePointCap": 1
+    },
+    {
+      "tier": 3,
+      "battleBase": 0.1,
+      "battlePeak": 0.1869,
+      "costBase": 0.045000000000000005,
+      "castBase": 0.06,
+      "growthCap": 0.05,
+      "stagePointCap": 1.25
+    },
+    {
+      "tier": 4,
+      "battleBase": 0.12,
+      "battlePeak": 0.2242,
+      "costBase": 0.054,
+      "castBase": 0.072,
+      "growthCap": 0.06,
+      "stagePointCap": 1.5
+    },
+    {
+      "tier": 5,
+      "battleBase": 0.14,
+      "battlePeak": 0.2616,
+      "costBase": 0.06300000000000001,
+      "castBase": 0.084,
+      "growthCap": 0.07,
+      "stagePointCap": 1.75
+    },
+    {
+      "tier": 6,
+      "battleBase": 0.16,
+      "battlePeak": 0.299,
+      "costBase": 0.07200000000000001,
+      "castBase": 0.096,
+      "growthCap": 0.08,
+      "stagePointCap": 2
+    },
+    {
+      "tier": 7,
+      "battleBase": 0.18,
+      "battlePeak": 0.3364,
+      "costBase": 0.081,
+      "castBase": 0.108,
+      "growthCap": 0.09,
+      "stagePointCap": 2.25
+    },
+    {
+      "tier": 8,
+      "battleBase": 0.2,
+      "battlePeak": 0.3737,
+      "costBase": 0.09000000000000001,
+      "castBase": 0.12,
+      "growthCap": 0.1,
+      "stagePointCap": 2.5
+    },
+    {
+      "tier": 9,
+      "battleBase": 0.23,
+      "battlePeak": 0.4298,
+      "costBase": 0.10350000000000001,
+      "castBase": 0.138,
+      "growthCap": 0.115,
+      "stagePointCap": 2.75
+    },
+    {
+      "tier": 10,
+      "battleBase": 0.27,
+      "battlePeak": 0.5,
+      "costBase": 0.12150000000000001,
+      "castBase": 0.162,
+      "growthCap": 0.135,
+      "stagePointCap": 3
+    }
+  ],
+  "scope": "代数上限、分档单调性、独立结算函数与状态恢复检查；未创建Battle或运行旅程",
+  "limitations": "条件触发频率、实战胜率与长期流派强弱尚未验证；主游戏尚未挂接模块。"
+}

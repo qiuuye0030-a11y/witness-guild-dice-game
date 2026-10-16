@@ -1,7 +1,7 @@
 const BattleProjection=(function(root){
   'use strict';
   const B=root.WitnessBattle, R=root.WitnessRules;
-  const base={plan:ShieldActions.methods.plan,hit:MemberActions.methods.hit,tryControl:MemberActions.methods.tryControl,applyDamage:ShieldActions.methods.applyDamage,heal:BattleCore.methods.heal};
+  const base={plan:SoulTraitActions.methods.plan,hit:MemberActions.methods.hit,tryControl:SoulTraitActions.methods.tryControl,applyDamage:SoulTraitActions.methods.applyDamage,heal:BattleCore.methods.heal};
   const fields=['hp','sh','mp','petHP','bodyHP','shieldHP','shieldSH'];
   const copy=x=>x===undefined?undefined:JSON.parse(JSON.stringify(x));
   const empty=()=>Object.fromEntries(fields.map(k=>[k,0]));
@@ -11,7 +11,7 @@ const BattleProjection=(function(root){
   const threshold=n=>Math.max(0,Math.min(100,Math.round(n)));
   const isAttack=s=>!s||s.category==='攻击'||s.category==='持续伤害'||s.damageMode==='periodic';
   const periodic=s=>!!s&&(s.category==='持续伤害'||s.damageMode==='periodic');
-  const channel=(u,s)=>s?.channel||(u.soul.spirit_specialist?'精神':'物理');
+  const channel=(u,s)=>s?.channel||u.soul.basicChannel||(u.soul.spirit_specialist?'精神':'物理');
 
   // Only immutable character definitions are shared. All combat resources,
   // status records, shield layers, cooldowns and casts belong to the fork.
@@ -52,10 +52,10 @@ const BattleProjection=(function(root){
 
   function run(source,actorId,targetId,action,options,rollPath,explicit){
     const b=source.forkProjectionState(),origin=source.now;
-    const effectiveCache=new WeakMap(),effective=AttributeActions.methods.effective;
+    const effectiveCache=new WeakMap(),effective=ModernActions.methods.effective;
     b.effective=function(unit){
       const previous=effectiveCache.get(unit);
-      if(previous&&previous.now===this.now&&previous.statuses===unit.statuses&&previous.model===unit.model)return previous.value;
+      // Effective state also depends on form and passive counters; calculate afresh.
       const value=effective.call(this,unit);effectiveCache.set(unit,{now:this.now,statuses:unit.statuses,model:unit.model,value});return value;
     };
     const finish=result=>{delete b.effective;return result;};
@@ -96,6 +96,7 @@ const BattleProjection=(function(root){
         const before=cast===marker?totals(plan.t):null,own=cast===marker?totals(u):null;
         if(cast===marker&&!capture.beforeEffects){capture.beforeEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.beforeDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
         try{effect();}finally{context=prior;}
+        b.refreshDotDamage();
         if(cast===marker){add(capture.immediate,difference(before,totals(plan.t)));add(capture.actorEffects,difference(own,totals(u)));capture.afterEffects=Object.fromEntries(this.units.map(x=>[x.id,copy(x.dots)]));capture.afterDotBoost=Object.fromEntries(this.units.map(x=>[x.id,copy(x.statuses.filter(s=>s.type==='dotBoost'))]));}
       });
       return plan;
@@ -226,7 +227,7 @@ const BattleProjection=(function(root){
       for(const u of b.units){for(const s of u.statuses)if(s.until>b.now)times.push(s.until);for(const d of u.dots)if(d.ticks>0&&d.next>b.now)times.push(d.next);if(u.shieldUntil>b.now)times.push(u.shieldUntil);}
       b.now=Math.min(...times);
       for(const u of b.units){
-        for(const s of u.statuses)if(s.until<=b.now&&s.fatigue)b.setStatus(u,'fatigue',.1,6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
+        for(const s of u.statuses)if(s.until<=b.now&&s.fatigue)b.setStatus(u,'fatigue',s.fatigueValue??.1,s.fatigueSeconds??6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
         u.statuses=u.statuses.filter(s=>s.until>b.now);b.expireShields?.(u);
         for(const d of u.dots)d.damage=b.dotDamage(d);
         for(const d of u.dots)if(d.next<=b.now&&d.ticks>0){

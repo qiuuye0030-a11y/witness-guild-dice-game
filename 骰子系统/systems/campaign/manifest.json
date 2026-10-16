@@ -3,10 +3,13 @@
     "core.js",
     "quests.js",
     "journey.js",
+    "modern.js",
+    "traits.js",
     "compose.js"
   ],
-  "publicMethods": 78,
+  "publicMethods": 79,
   "definitionsBefore": 96,
   "liveDefinitions": 93,
-  "version": "10.06"
+  "version": "v11",
+  "cultivationRulesVersion": 10081
 }

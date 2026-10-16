@@ -11,74 +11,92 @@
     "subkind": "元素",
     "attribute": "雷",
     "portrait": "秦衍",
-    "trait": "thunder",
-    "source": "秦衍最终版 2017年3769楼",
+    "source": "用户2026-10-16新版一至五技；第六为10.07候选",
     "note": "六招式考核库，按实际环数开放，最多六技。",
     "skills": [
       {
-        "name": "雷光",
-        "category": "攻击",
-        "channel": "能量",
-        "fx": "lightning",
-        "factor": 0.85,
-        "slow": 0.1,
-        "duration": 2,
-        "description": "电流攻击，并使目标读条速度降低10%，持续2秒。"
-      },
-      {
         "name": "极速",
         "category": "强化",
-        "fx": "lightning",
-        "buff": 0.22,
-        "agility": 0.15,
-        "duration": 7,
-        "description": "提升攻击与敏捷，持续整场。",
-        "burstActions": 0,
-        "buffMode": "battle"
-      },
-      {
-        "name": "雷化·雷矢",
-        "category": "攻击",
-        "channel": "能量",
-        "fx": "lightning",
-        "factor": 1.25,
-        "castExtra": 0.8,
-        "cd": 9,
-        "description": "较长读条的高威力雷矢。"
-      },
-      {
-        "name": "晶化",
-        "category": "防御",
-        "fx": "crystal",
-        "description": "塑成晶化屏障，保护生命通道。"
-      },
-      {
-        "name": "雷矢·并爆",
-        "category": "攻击",
-        "factor": 1.35,
-        "channel": "能量",
+        "modernEffect": "qinyanSpeed",
+        "selfOnly": true,
+        "costPercent": 0.06,
+        "castFixed": 0.5,
         "cd": 12,
-        "castExtra": 0.5,
-        "description": "多枚雷矢并爆，造成雷属性伤害；需要较长准备。"
+        "description": "极速：肉体强度提高35%、敏捷30%，最多四个动作或24秒；普通形态结束后轻度疲劳，半能量形态无身体负荷。"
       },
       {
-        "name": "晶棱雷阵",
-        "category": "减益",
-        "effects": [
+        "name": "置换",
+        "category": "防御",
+        "modernEffect": "qinyanSwap",
+        "selfOnly": true,
+        "costPercent": 0.06,
+        "castFixed": 0.5,
+        "cd": 10,
+        "description": "与极光锚点置换，准备过程可被打断，完成后4秒内避开一次直接生命伤害；重炮过热时不能发动。"
+      },
+      {
+        "name": "雷化·冲击雷矢",
+        "category": "攻击",
+        "channel": "能量",
+        "factor": 1.35,
+        "castFixed": 0.8,
+        "cd": 7,
+        "fx": "lightning",
+        "sharedCooldown": "qinyan-spear",
+        "description": "冲击雷矢直接爆炸；倍率1.35、读条0.8秒，与操控雷矢共用冷却。",
+        "subActions": [
           {
-            "key": "D",
-            "value": 0.18
-          },
-          {
-            "key": "A",
-            "value": 0.12
+            "name": "雷化·操控雷矢",
+            "category": "持续伤害",
+            "channel": "能量",
+            "factor": 1.15,
+            "castFixed": 0.8,
+            "cd": 7,
+            "fx": "lightning",
+            "dotFirstMs": 1200,
+            "dotTicks": 1,
+            "sharedCooldown": "qinyan-spear",
+            "description": "操控雷矢命中部署，1.2秒后爆炸；与冲击型共用冷却。"
           }
-        ],
-        "effectSeed": "proposal-晶棱雷阵",
-        "description": "晶棱导引雷流，防御素质降低18%、敏捷降低12%；一次精神判定，持续整场。"
+        ]
+      },
+      {
+        "name": "重炮",
+        "category": "攻击",
+        "channel": "物理",
+        "factor": 2.05,
+        "castFixed": 1.35,
+        "cd": 8,
+        "hitKind": "blunt",
+        "modernEffect": "railgun",
+        "description": "电磁动能重炮，倍率2.05、读条1.35秒；普通形态单臂过热6秒，过热时不能置换；半能量形态无新增过热。",
+        "costMultiplier": 0.9
+      },
+      {
+        "name": "乌拉诺斯",
+        "category": "强化",
+        "modernEffect": "uranus",
+        "selfOnly": true,
+        "costPercent": 0.08,
+        "castFixed": 0.75,
+        "cd": 24,
+        "description": "支付6%最大精神护持，半能量化12秒；肉体强度提高25%，刺斩减伤20%，其他技费用降低22%；极速无负荷，重炮无新增过热。结束后仍需精神蓄养。"
+      },
+      {
+        "name": "极光·天极贯流",
+        "category": "攻击",
+        "channel": "能量",
+        "attackSubtype": "multi",
+        "factor": 1.65,
+        "modernEffect": "qinyanSix",
+        "castFixed": 1.3,
+        "cd": 18,
+        "fx": "lightning",
+        "description": "三段极光贯流共用命中，总倍率1.65；半能量形态读条0.9秒，不附送必中或永久破甲。"
       }
     ],
-    "originalTier": 7
+    "originalTier": 7,
+    "registeredLevel": 55
   },
   {
     "id": "xiaowen",
@@ -90,7 +108,6 @@
     "subkind": "战斗",
     "attribute": "无属性·斩切",
     "portrait": "晓雯",
-    "trait": "pierce",
     "source": "晓雯 2017年17楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
     "skills": [
@@ -162,7 +179,6 @@
     "subkind": "战斗",
     "attribute": "无属性·力量",
     "portrait": "李一行",
-    "trait": "heavy",
     "source": "李一行 2016年23992楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
     "skills": [
@@ -236,7 +252,6 @@
     "subkind": "虫",
     "attribute": "毒",
     "portrait": "暗牧",
-    "trait": "poison",
     "source": "当前登记 用户补充的五类毒素；演绎2017年1883楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
     "skills": [
@@ -256,8 +271,10 @@
         "fx": "poison",
         "factor": 1.25,
         "corrode": 0.12,
-        "description": "强化腐蚀：三跳毒伤，降低12%防御，激化可增幅正在生效的毒伤。 精神力转化为毒效，额外采用35%精神攻击值，仍结算生命通道。",
-        "poisonScaling": 0.35
+        "description": "强化腐蚀：三跳毒伤（1、4、7秒），降低12%防御，激化可增幅正在生效的毒伤。 精神力转化为毒效，额外采用35%精神攻击值，仍结算生命通道。",
+        "poisonScaling": 0.35,
+        "costMultiplier": 0.85,
+        "dotFirstMs": 1000
       },
       {
         "name": "激化毒素",
@@ -317,7 +334,6 @@
     "subkind": "皮肤",
     "attribute": "无属性·幻象",
     "portrait": null,
-    "trait": "ghost",
     "source": "当前登记 哈什用户补充完整原文",
     "note": "六招式考核库，按实际环数开放，最多六技。",
     "skills": [
@@ -325,57 +341,68 @@
         "name": "虚像投影",
         "category": "强化",
         "channel": "能量",
-        "evasion": 0.15,
+        "evasion": 0.22,
         "costPercent": 0.08,
         "fx": "ghost",
-        "description": "无攻击幻像扰乱瞄准，闪避提高15个百分点，持续整场。",
+        "description": "无攻击幻像干扰瞄准，闪避提高22个百分点，持续整场；精神攻击仍按精神通道命中。",
         "burstActions": 0,
-        "buffMode": "battle"
+        "buffMode": "battle",
+        "castFixed": 0.5,
+        "costMultiplier": 0.8
       },
       {
         "name": "虚空匿行",
         "category": "强化",
         "channel": "能量",
-        "evasion": 0.3,
-        "buff": 0.18,
-        "burstActions": 2,
-        "costPercent": 0.12,
-        "castFixed": 0.75,
+        "evasion": 0.35,
+        "buff": 0.28,
+        "burstActions": 4,
+        "costPercent": 0.1,
+        "castFixed": 0.5,
         "cd": 14,
         "fx": "ghost",
-        "description": "爆发隐匿：闪避提高30个百分点、攻击提高18%，持续自己2个动作。",
+        "description": "隐匿准备0.5秒，攻击提高28%、闪避提高35个百分点，持续随后四个完成动作（含附赠普攻）。幻像不独立攻击。",
         "buffMode": "actions"
       },
       {
         "name": "虚能爆裂",
         "category": "控制",
         "channel": "能量",
-        "baseControl": 1.6,
+        "baseControl": 2,
         "dispel": 0.6,
-        "chipFactor": 0.35,
-        "costPercent": 0.1,
-        "cd": 12,
-        "castFixed": 0.65,
+        "chipFactor": 0.55,
+        "costPercent": 0.08,
+        "cd": 10,
+        "castFixed": 0.5,
         "fx": "wave",
-        "description": "铭符爆裂造成能量伤害，削去60%生命盾，并尝试控制及打断。",
+        "description": "实体铭符爆裂，精神驱动能量伤害，削去60%生命盾，并按正常精神对抗控制与打断；获得下一次能量攻击40%免伤，最多6秒。",
         "castMultiplier": 1,
-        "costMultiplier": 1
+        "costMultiplier": 1,
+        "energyWard": true,
+        "energyWardRate": 0.4,
+        "energyWardDuration": 6
       },
       {
         "name": "虚实刻印",
         "category": "攻击",
         "channel": "能量",
         "mindPower": true,
-        "factor": 2.2,
-        "cd": 8,
+        "factor": 2.75,
+        "cd": 7,
         "fx": "ghost",
-        "description": "以精神力驱动实体铭符，造成能量伤害；不赋予投影攻击能力。"
+        "description": "实体铭符以精神力驱动能量刻印，倍率2.75、读条0.65秒，沿用2.2倍率费用预算后减耗28%；幻像不攻击。",
+        "costMultiplier": 0.72,
+        "castFixed": 0.65,
+        "budgetFactor": 2.2
       },
       {
         "name": "铭符折护",
         "category": "防御",
         "fx": "ghost",
-        "description": "实体铭符卸散来袭能量，形成生命护盾，持续8秒；投影本身仍无攻击能力。"
+        "description": "实体铭符折叠防护，盾量提高25%，持续10秒；不回复生命。",
+        "shieldMultiplier": 1.25,
+        "shieldDuration": 10,
+        "costMultiplier": 0.9
       },
       {
         "name": "晦光滞流",
@@ -383,15 +410,15 @@
         "effects": [
           {
             "key": "C",
-            "value": 0.18
+            "value": 0.24
           },
           {
             "key": "A",
-            "value": 0.12
+            "value": 0.18
           }
         ],
         "effectSeed": "proposal-晦光滞流",
-        "description": "实体铭符扰乱魂力，魂力操纵降低18%、敏捷降低12%；一次精神判定，持续整场。"
+        "description": "晦光扰流：魂力操纵降低24%、敏捷降低18%；共享一次精神判定，持续整场，同源不叠加。"
       }
     ],
     "originalTier": 6
@@ -406,7 +433,6 @@
     "subkind": "辅助植物",
     "attribute": "复合·木/毒",
     "portrait": "伊筱蓓",
-    "trait": "frugal",
     "support": true,
     "source": "伊筱蓓 2016年6043楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -445,7 +471,8 @@
         "category": "减益",
         "fx": "petal",
         "baseControl": 1.5,
-        "description": "将玫瑰牵制拆出缠枝，短时削防并减速18%。",
+        "description": "将玫瑰牵制拆出缠枝，减速18%，并判定削防；两项效果均持续8秒，同来源再次施放刷新时限。",
+        "statusLifetime": "timed",
         "slow": 0.18,
         "duration": 8
       },
@@ -484,7 +511,6 @@
     "subkind": "超自然兽",
     "attribute": "复合·血/暗",
     "portrait": "夏维宇",
-    "trait": "swift",
     "registeredLevel": 74,
     "source": "登记文件·搬运帖17楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -572,7 +598,6 @@
     "subkind": "战斗",
     "attribute": "暗",
     "portrait": "瑔",
-    "trait": "pierce",
     "registeredLevel": 53,
     "source": "登记文件·搬运帖18楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -644,7 +669,6 @@
     "subkind": "战斗",
     "attribute": "风",
     "portrait": "明缓",
-    "trait": "pierce",
     "registeredLevel": 40,
     "source": "登记文件·搬运帖14楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -712,7 +736,6 @@
     "subkind": "辅助植物",
     "attribute": "复合·木/毒",
     "portrait": "林洛樱",
-    "trait": "poison",
     "registeredLevel": 50,
     "source": "登记文件·搬运帖10楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -798,7 +821,6 @@
     "subkind": "战斗",
     "attribute": "复合·光/暗",
     "portrait": "清凌",
-    "trait": "pierce",
     "registeredLevel": 72,
     "source": "登记文件·搬运帖11楼",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -874,7 +896,6 @@
     "subkind": "战斗",
     "attribute": "风",
     "portrait": "莫言安",
-    "trait": "focus",
     "provisional": false,
     "source": "D:/QQ/【人设】.md",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -912,6 +933,8 @@
         "costUp": 0,
         "duration": 9,
         "fieldEvasion": 0.12,
+        "statusLifetime": "timed",
+        "genericDefDown": false,
         "fx": "wind",
         "description": "张开无尘领域，近身斥退和飞行道具阻力改编为9秒减速18%，自身感知获得12个百分点闪避，持续9秒；范围与距离在当前斗魂模型中不单独计算。"
       },
@@ -929,10 +952,12 @@
       {
         "name": "风铭回锋",
         "category": "防御",
-        "costPercent": 0.12,
+        "modernEffect": "yananGuard",
+        "selfOnly": true,
+        "castFixed": 0.5,
+        "costPercent": 0.08,
         "cd": 14,
-        "fx": "wind",
-        "description": "回收外放风压形成生命护盾，持续8秒，须额外支付魂力。"
+        "description": "回收风压迎击：下一次直接物理/能量施法造成的伤害在防御前降低30%，最多保留4秒；不额外生成护盾，不抵御精神或已挂持续伤害。"
       }
     ],
     "originalTier": 7,
@@ -948,7 +973,6 @@
     "subkind": "爬行",
     "attribute": "冰",
     "portrait": "雪寂冬",
-    "trait": "ice",
     "provisional": false,
     "source": "用户提供的雪寂冬正式人设与魂技原文",
     "note": "六招式考核库，按实际环数开放，最多六技。",
@@ -1051,7 +1075,6 @@
     "subkind": "辅助",
     "attribute": "无属性·魂力塑形",
     "portrait": "伊其然",
-    "trait": "focus",
     "support": true,
     "registeredLevel": 41,
     "source": "登记文件·搬运帖8楼，41级上限版",
@@ -1110,6 +1133,180 @@
       }
     ],
     "originalTier": 6
+  },
+  {
+    "id": "linshi",
+    "name": "林式",
+    "weapon": "光元古符",
+    "tier": 7,
+    "style": "控制",
+    "kind": "器",
+    "subkind": "符文",
+    "attribute": "光",
+    "portrait": null,
+    "registeredLevel": 41,
+    "ownerId": "o0h2",
+    "source": "用户10.08登记；第五、第六魂技为游戏扩展",
+    "note": "原登记41级，战斗按实际环数开放六技库。实验后外貌定格14岁，黑发金瞳，身高140cm。实体与空间作用采用单目标文字战斗抽象。",
+    "skills": [
+      {
+        "name": "实体化",
+        "category": "强化",
+        "selfOnly": true,
+        "effects": [
+          {
+            "key": "S",
+            "value": 0.15
+          },
+          {
+            "key": "C",
+            "value": 0.15
+          }
+        ],
+        "description": "聚合高浓度光元素造出实体光，靠自身魂力驱动；本作抽象为魂力强度、魂力操纵各提高15%，同源不叠加。"
+      },
+      {
+        "name": "光之波动",
+        "category": "控制",
+        "baseControl": 1.2,
+        "fx": "wave",
+        "description": "使光元素浓稠并剧烈波动，按正常精神判定干扰并打断敌方行动。"
+      },
+      {
+        "name": "能量之源·光缚",
+        "category": "控制",
+        "channel": "能量",
+        "modernEffect": "linEnergy",
+        "cd": 14,
+        "description": "控制主技：实体光冲击以精神力驱动（0.65倍率能量伤害），随后按正常精神对抗施加基础2.5秒光缚并打断。仅控制成功时附带抽离目标当前魂力8%，单次不超过目标基础魂力6%，整场最多两次；将实际抽离量25%转为自身魂力，单次不超过自身基础魂力1.5%。免控或抵抗时不吸蓝。",
+        "baseControl": 2.5,
+        "castFixed": 0.75,
+        "costPercent": 0.08,
+        "costMultiplier": 0.8,
+        "chipFactor": 0.65
+      },
+      {
+        "name": "太阳普照",
+        "modernEffect": "linSun",
+        "category": "攻击",
+        "channel": "能量",
+        "factor": 0.6,
+        "costPercent": 0.1,
+        "castFixed": 1,
+        "cd": 8,
+        "fx": "fire",
+        "description": "每次用1秒与基础魂力上限10%（可受操纵减耗）制造并引爆一枚小太阳；储能释放损失40%已计入0.60倍率。单目标战斗将照射与引爆合并为当次攻击，不另赠魂力池或模拟空间。"
+      },
+      {
+        "name": "古符·光壁",
+        "category": "防御",
+        "selfOnly": true,
+        "modernEffect": "linLightwall",
+        "castFixed": 0.75,
+        "costPercent": 0.08,
+        "cd": 12,
+        "description": "【游戏扩展第五技】以实体光符构筑护壁：4秒内获得20%物理、能量防御前免伤，同源不叠加。"
+      },
+      {
+        "name": "古符·曜日连印",
+        "category": "攻击",
+        "channel": "能量",
+        "attackSubtype": "multi",
+        "factor": 1.1,
+        "budgetFactor": 1.1,
+        "castFixed": 1.2,
+        "cd": 12,
+        "description": "【游戏扩展第六技】三个光印连续引爆，共用一次命中，总原始伤害110%，三段各自经过护盾与防御。"
+      }
+    ]
+  },
+  {
+    "id": "anjingwen",
+    "name": "安景文",
+    "weapon": "黄金叶",
+    "tier": 7,
+    "style": "强攻",
+    "kind": "器",
+    "subkind": "战斗",
+    "attribute": "金",
+    "portrait": null,
+    "registeredLevel": 49,
+    "source": "用户10.08登记；系别与第五、第六魂技为游戏扩展",
+    "note": "登记49级；星辰殿天行者卫队外出训练者，不引入宗门剧情。双臂护臂的半米吸附／推送只保留设定，不对人增加额外控制。",
+    "skills": [
+      {
+        "name": "叶刃",
+        "category": "强化",
+        "selfOnly": true,
+        "modernEffect": "goldBlade",
+        "castFixed": 0.6,
+        "cd": 8,
+        "description": "使黄金叶锋锐，进入叶刃形态，物理攻击提高20%；覆盖叶燃形态，两者绝不同时生效。"
+      },
+      {
+        "name": "叶燃",
+        "category": "强化",
+        "selfOnly": true,
+        "modernEffect": "goldBurn",
+        "castFixed": 0.6,
+        "cd": 8,
+        "description": "使黄金叶魂力不稳定，进入叶燃形态，能量攻击提高25%，黄金叶攻击改为能量爆炸；覆盖叶刃形态，两者绝不同时生效。"
+      },
+      {
+        "name": "叶阵",
+        "category": "攻击",
+        "leafAttack": true,
+        "channel": "物理",
+        "attackSubtype": "multi",
+        "factor": 1.1,
+        "budgetFactor": 1.3,
+        "costMultiplier": 1.2,
+        "castFixed": 1.1,
+        "cd": 10,
+        "description": "至多36片黄金叶编织叶阵，抽象为三段、一次命中，总原始伤害110%，费用提高；不将36片重复触发为36次附带效果。"
+      },
+      {
+        "name": "黄金左手",
+        "category": "强化",
+        "selfOnly": true,
+        "effects": [
+          {
+            "key": "B",
+            "value": 0.2
+          },
+          {
+            "key": "D",
+            "value": 0.2
+          }
+        ],
+        "modernEffect": "goldHand",
+        "castFixed": 0.8,
+        "cd": 14,
+        "description": "左手力量与防御增强，肉体强度、防御素质各提高20%；黄金叶攻击再提高15%，同源不叠加。"
+      },
+      {
+        "name": "黄金叶·回旋屏障",
+        "category": "防御",
+        "selfOnly": true,
+        "modernEffect": "goldWall",
+        "castFixed": 0.75,
+        "costPercent": 0.08,
+        "cd": 12,
+        "description": "【游戏扩展第五技】以回旋叶片护住身体，4秒内获得20%物理防御前免伤；护臂的近距离推送不作为对人硬控。"
+      },
+      {
+        "name": "黄金叶·贯阵终击",
+        "category": "攻击",
+        "leafAttack": true,
+        "channel": "物理",
+        "factor": 1.45,
+        "penetration": 0.2,
+        "castFixed": 1.4,
+        "costPercent": 0.14,
+        "cd": 14,
+        "description": "【游戏扩展第六技】汇聚黄金叶进行终击，1.45倍率、20%穿甲；随叶刃／叶燃使用物理锋刃或能量爆炸。"
+      }
+    ]
   }
 ];
   root.WitnessTemplates=templates;

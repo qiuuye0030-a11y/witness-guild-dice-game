@@ -1,10 +1,16 @@
 {
-  "version": "10.06",
-  "combatRulesVersion": 14,
+  "version": "v11",
+  "combatRulesVersion": 17,
   "modules": [
     "../dice/engine.js",
+    "../traits/tables.js",
+    "../traits/balance.js",
+    "../traits/naming.js",
+    "../traits/index.js",
+    "../traits/traits-data.js",
     "rules.js",
     "examiners.js",
+    "../challenge/battle.js",
     "core.js",
     "control.js",
     "forecast.js",
@@ -16,9 +22,13 @@
     "permanent-effects.js",
     "members.js",
     "shields.js",
+    "modern.js",
+    "mechanics-fix.js",
+    "traits.js",
     "projection.js",
     "unified-decision.js",
-    "compose.js"
+    "compose.js",
+    "models.js"
   ],
-  "publicMethods": 74
+  "publicMethods": 77
 }

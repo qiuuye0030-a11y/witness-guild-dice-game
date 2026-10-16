@@ -8,7 +8,8 @@
     intact_team:['并肩无缺','辅助角色赢得双人转正考核，己方两人全程未退场。'],
     persevering_clear:['百折成章','同一角色实际经历至少两次转正考核失利，最终取得会徽。']
   });
-  const witnessText={spark_clear:'最初只有一点微光，后来也照见了自己的名字。',spotless_clear:'掸去衣角的微尘，你从容接过了会徽。',intact_team:'会徽属于你，这场胜利也属于并肩的人。',persevering_clear:'失败留在前页，名字写在最后。',rating_crazy:'一路行来的脚印，终于抵达了新的境界。',rating_divine:'此后的行记，会记得今天的你。',all_styles_clear:'五条不同的道路，都留下了你的见证。',all_examiners_defeated:'每一次交锋，都成为了公会中的一段故事。'};
+  definitions.guildmaster_clear=['银岭之巅','在结局后的会长挑战中，战胜95级凶级的公会会长——雪寂冬。'];
+  const witnessText={guildmaster_clear:'冰雪敛去，会长向你颔首。此刻，银岭也见证了你的名字。',spark_clear:'最初只有一点微光，后来也照见了自己的名字。',spotless_clear:'掸去衣角的微尘，你从容接过了会徽。',intact_team:'会徽属于你，这场胜利也属于并肩的人。',persevering_clear:'失败留在前页，名字写在最后。',rating_crazy:'一路行来的脚印，终于抵达了新的境界。',rating_divine:'此后的行记，会记得今天的你。',all_styles_clear:'五条不同的道路，都留下了你的见证。',all_examiners_defeated:'每一次交锋，都成为了公会中的一段故事。'};
   const empty=()=>({format:'witness-achievements',version:1,unlocked:{},styles:[],examiners:{},participants:{},defeats:{}});
   const copy=x=>JSON.parse(JSON.stringify(x));
   function migrateIdentity(s){
@@ -45,11 +46,12 @@
     unlock(id,s){
       if(this.data.unlocked[id])return;
       const player=s.battleSnapshot?.units?.find(u=>u.id==='player');
-      const evidence=id==='spark_clear'?'开局潜力 · 1档':id==='spotless_clear'&&player?'结算生命 · '+player.hp+' / '+player.model.derived.HP+'（'+(player.hp/player.model.derived.HP*100).toFixed(1)+'%）':id==='intact_team'?'并肩成员 · '+s.battleSnapshot.units.filter(u=>u.team===0).map(u=>u.name||u.id).join('、'):id==='persevering_clear'?'经历失利 · '+(this.data.defeats[s.characterId]||[]).length+'次':'';
+      const evidence=id==='guildmaster_clear'?'会长挑战 · 95级凶级 · 雪寂冬':id==='spark_clear'?'开局潜力 · 1档':id==='spotless_clear'&&player?'结算生命 · '+player.hp+' / '+player.model.derived.HP+'（'+(player.hp/player.model.derived.HP*100).toFixed(1)+'%）':id==='intact_team'?'并肩成员 · '+s.battleSnapshot.units.filter(u=>u.team===0).map(u=>u.name||u.id).join('、'):id==='persevering_clear'?'经历失利 · '+(this.data.defeats[s.characterId]||[]).length+'次':'';
       this.data.unlocked[id]={characterId:s.characterId,name:s.character.name,at:new Date().toISOString(),...(evidence?{evidence}: {})};this.queue.push(id);
     }
     check(s,targets,currentRatingIndex=-1){
       if(!s?.character||s.source!=='formal')return;
+      if(s.phase==='ending'&&s.result?.winner===0&&s.challenge?.completed?.includes('guildmaster:xuejidong'))this.unlock('guildmaster_clear',s);
       const defeats=(s.examDefeats||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=11);
       if(defeats.length)this.data.defeats[s.characterId]=[...new Set([...(this.data.defeats[s.characterId]||[]),...defeats])];
       const highest=Math.max(s.promotionState?.highestRatingIndex??-1,currentRatingIndex);

@@ -1,0 +1,13 @@
+{
+  "passed": 7,
+  "tests": [
+    "a broken outer layer triggers passive while another shield remains",
+    "finite guard without shield points still triggers effective_guard",
+    "real control success applies bounded duration bonus; resist does not consume",
+    "economy and preparation previews are pure and consume only once on paid cast",
+    "changing mutation potential retains binding, updates budget and old growth saves do not backfill",
+    "challenge win and fifth loss render selectable report, log details and working JSON export",
+    "both final HTML themes compile every inline script, no external dependency and v11 label"
+  ],
+  "browserVisualQA": false
+}

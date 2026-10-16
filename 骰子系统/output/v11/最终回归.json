@@ -1,0 +1,80 @@
+{
+  "gameVersion": "v11",
+  "budgetVersion": 3,
+  "passed": true,
+  "tests": [
+    {
+      "test": "tools/verify-trait-card-v11.cjs",
+      "passed": true,
+      "output": "PASS all2464 briefs under20 characters, numeric-free and match each actual benefit\nPASS actual card creates one bordered container with a name and concise description\nPASS generic passive data and modifiers removed; old injected profile has no effect\nPASS growth binding migrates to compact ID-only metadata and preserves pending budget/history\nPASS battle-kind journey stores binding only; changing soul replaces identity without stale prose\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-v11.cjs",
+      "passed": true,
+      "output": "PASS single calculation object; level55 MP1575 and reduction40%\nPASS all 10 potential tiers × 5 styles × 3 levels: panel model/cost/cast equal combat\nPASS support examiner and support player always symmetric2v2; explicit duel retains2\nregistry audit {\"schemaVersion\":2,\"ok\":true,\"total\":2464,\"valid\":2464,\"invalid\":[],\"duplicateSoulIds\":[],\"duplicateTraitIds\":[],\"duplicateNames\":[],\"duplicateMechanics\":[],\"similarFamilies\":[{\"signature\":\"{\\\"benefit\\\":\\\"reliability\\\",\\\"event\\\":\\\"review_after_skill\\\",\\\"kind\\\":\\\"growth\\\",\\\"settlement\\\":\\\"stack\\\"}\",\"soulIds\":[\"T01-01\",\"T06-12\",\"X05-器-361\",\"X05-器-439\",\"X06-兽-1681\",\"X07-兽-762\",\"X08-兽-986\",\"X09-兽-1134\nPASS trait registry covers every soul and examiner; names and strict mechanisms unique\nPASS real battle trait readiness and potency: preview pure, multihit one budget, save reload\nPASS all active growth rewards follow actual chosen stat, cap stage, exclude XP and no double claim\nPASS Qinyan actual speed/form and Hash actual mind-energy attack/shield\nPASS Lin control success limited siphon ×2; immunity/resistance no siphon; ordinary light impact retained\nPASS challenge win/loss reports persist after settlement, reload, exhausted and duplicate observe\nPASS automatic battles finish, finite resources, passive caps, no restore extra uses\nALL 10\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-merged-v11.cjs",
+      "passed": true,
+      "output": "PASS blood first-strike DOT multiplier persists for all three ticks and current defence\nPASS Anmu detonation uses live defence; forecast matches actual and consumes dots\nPASS yanan timed debuff exactly 9s; refresh no duplicate; other source survives\nPASS yixiaobei timed debuff exactly 8s; refresh no duplicate; other source survives\nPASS Yixian armour absorbs 30% with .3MP per point; lowMP, ordinary and mental remain\nPASS 30 reports, single/all JSON export, ledger only summaries, old missing log honest\nPASS complete old finished battle untouched; ongoing short states migrate from release log\nALL MERGED 7\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-edges-v11.cjs",
+      "passed": true,
+      "output": "PASS a broken outer layer triggers passive while another shield remains\nPASS finite guard without shield points still triggers effective_guard\nPASS real control success applies bounded duration bonus; resist does not consume\nPASS economy and preparation previews are pure and consume only once on paid cast\nPASS changing mutation potential retains binding, updates budget and old growth saves do not backfill\nPASS challenge win and fifth loss render selectable report, log details and working JSON export\nPASS both final HTML themes compile every inline script, no external dependency and v11 label\nALL EDGES 7\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-journey-v11.cjs",
+      "passed": true,
+      "output": "PASS v11 ongoing admission survives full campaign import, same attempt, RNG and result\nPASS growth reliability receives normal expected event gain and recovers failure gap within budget\nPASS CJS campaign and shared battle port support growth, snapshot and restored traits\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-naming-v11.cjs",
+      "passed": true,
+      "output": "PASS all attributes have naming vocabulary; 2464 normalized names unique and include chosen keyword\nPASS changing trigger, kind, settlement and benefit cannot change attribute naming candidates\nPASS renaming preserves every soulID, traitID, keyword and passive structure\nPASS input order independent; repeated apply deterministic; increment retains existing names\n{\n  \"version\": 2,\n  \"mode\": \"preview\",\n  \"seed\": \"属性命名-v11\",\n  \"total\": 2464,\n  \"changed\": 0,\n  \"uniqueNames\": 2464,\n  \"duplicateNames\": 0,\n  \"mechanicsChanged\": 0,\n  \"basis\": \"只使用主属性、属性关键词、武魂ID；不读取触发/条件/兑现方式/用途/类别\",\n  \"changes\": []\n}\nPASS renamer preview makes no file change and current migration is idempotent\nPASS matrix3 rare conditions get compensation but remain within every hard cap\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-quests-v11.cjs",
+      "passed": true,
+      "output": "PASS: 168 events, 10 chains, all routes, episode timing, rewards, reservations, imports and old narratives.\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-growth-1008.cjs",
+      "passed": true,
+      "output": "growth journeys 10\ngrowth journeys 20\ngrowth journeys 30\ngrowth journeys 40\ngrowth journeys 50\ngrowth journeys 60\nPASS 7082 512 { periodic: 32, direct: 84, multi: 17, pursuit: 7 }\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-achievements-1008.cjs",
+      "passed": true,
+      "output": "PASS nine hidden definitions, no removed challenges\nPASS exact 95% qualifies; 94.9% does not\nPASS defeat, practice and unfinished journeys never award clearing achievements\nPASS initial potential survives mutation; missing evidence not guessed\nPASS old draft provides initial potential evidence\nPASS two unique losses required; repeated observation cannot multiply losses\nPASS archived losses survive older save imports and retain character identity\nPASS auxiliary four-person battle requires both friendly units surviving\nPASS simultaneous achievements queue once and old v1 archive merges\nPASS corrupt imported archive does not replace valid data\nPASS summoned-unit condition follows displayed total HP and fallen player excluded\n",
+      "errors": ""
+    },
+    {
+      "test": "tools/verify-cultivation-1008.cjs",
+      "passed": true,
+      "output": "PASS all 100 coefficient cells are finite and monotonic in talent and weapon\nPASS initial level advantage is preserved at 25 percent, never reversed\nPASS qualified fifth talent reaches fifth ring even from innate1 without event XP\nPASS old baseXP values no longer multiply the catch-up-to41 allowance\nPASS event, opportunity and quest XP scale once; seasonal XP and all attribute receipts retain their rules\nPASS preview and reload cannot grant scaled XP a second time\nPASS conservative ordinary-event upper bounds exclude non-double90 and low-talent fifth rings\nALL 7 normal-event additional-level bound 8.7175\n",
+      "errors": ""
+    },
+    {
+      "test": "systems/traits/test.cjs",
+      "passed": true,
+      "output": "PASS 所有可觉醒武魂和实际NPC武魂ID均一对一绑定\nPASS 按ID、角色soulId和战斗单位soul.id调用，未知ID返回null\nPASS 同种子与同一源库可逐条重建；不依赖输入顺序\nPASS 生成不修改武魂库，也不消耗调用方骰子状态\nPASS 增量扩库保持原ID绑定，拒绝源资料不一致\nPASS 复合属性只保留一个机制关键词，保留完整来源标签\nPASS 前三层骰子可重放，去重不改变属性关键词和类别\nPASS 改名字、改ID或改倍率无法绕过严格机制查重\nPASS 换属性与关键词文案仍识别相同机制\nPASS 名称忽略空格、标点和全半角；重名与机制重复独立报告\nPASS 重复武魂ID、非法词条、漏绑与未知绑定可检出\nPASS 不能篡改自动效果或档位预算伪装成合法机制\nPASS 跨资源阈值没有不可能的同资源高位要求\nPASS 取消手选分支，返回自动适配规则且原绑定只读\nPASS v1数据升级保留名字和ID，删除手选分支并补全预算\nPASS 重复候选可预检，修改同一ID可显式排除旧记录\nPASS 独立取名与重名预检不会追加ID伪造新机制\nPASS 浏览器全局API和数据可独立装载，不依赖游戏主程序\nPASS 离线审阅页无外部依赖，内嵌数据与JSON一致，脚本语法正确\nPASS 审阅页搜索、类别/属性筛选、会员目录与空结果交互逻辑\nPASS 相近机制保留在报告，数值配置不冒充已接入主游戏\n{\"passed\":21,\"total\":21,\"scope\":\"数据、确定性、接口与查重；无战斗/旅程模拟\",\"bindings\":2464}\n",
+      "errors": ""
+    },
+    {
+      "test": "systems/traits/test-balance.cjs",
+      "passed": true,
+      "output": "PASS 十档预算单调；战斗最高50%、减耗18%、读条22%，成长每阶段最高13.5%\nPASS 六维按正常选择自动结算，无需预先选分支\nPASS 多种正常训练方向可先后自动适配，不永久锁定主修\nPASS XP与W不加成；训练上下文是B也不能把XP当B奖励\nPASS 只作用于天赋与训练等原有修正后的实际值一次\nPASS 稳定型弥补实际差额；领悟型有固定点数上限\nPASS 失败与多次奖励仍受阶段比例、点数、次数共同约束\nPASS 无效训练与特性派生收益不能刷层或重复收益\nPASS 状态保存恢复后重复事件、重复奖励仍幂等\nPASS 同一事件不能同时生成并消费特性收益\nPASS 攻击、多段与持续伤害共享整次施法总预算\nPASS 自动识别防护、成功控制和多项强化，保留额外上限\nPASS 普攻与免费行动不冒充付费魂技消费收益\nPASS 控制失败、免控和减益失败不消费收益、不提高成功率\nPASS 减耗作用于现有实际费用，至少支付1点，不加回蓝\nPASS 读条不低于0.5秒，不能附带缩冷却或整体追势\nPASS 战斗兑现至少间隔4秒且每场最多8次\nPASS 窗口、跨阶段时效、换向与换方法规则真实生效\nPASS 转化必须有真实基数，并按贡献比例兑现\nPASS 变异升档仅更新数值、不换特性、不清空次数账本\nPASS 非法档位、NaN、负数、倒退与跨作用域调用被拒绝\nPASS 2464条全部有十档预算、无手选分支、查重仍通过\n{\"passed\":22,\"bindings\":2464,\"tierProfilesChecked\":24640}\n",
+      "errors": ""
+    }
+  ],
+  "visualBrowserQA": false
+}

@@ -1,14 +1,7 @@
-* text=auto
-*.js text eol=lf
-*.cjs text eol=lf
-*.py text eol=lf
-*.json text eol=lf
-*.md text eol=lf
-*.css text eol=lf
-*.html text eol=lf
+# Keep the shipped bytes untouched: the working tree matches the released v11
+# source bundle, so a Windows rebuild reproduces the delivered HTML byte for byte.
+* -text
 
-*.txt text eol=lf
-
-# Frozen comparison source retains original whitespace.
+# Frozen comparison sources retain their original whitespace.
 骰子系统/fixtures/** -whitespace
-见证者公会_V14_完整交接版_2026-10-15/** -whitespace
+修订包参考/** -whitespace

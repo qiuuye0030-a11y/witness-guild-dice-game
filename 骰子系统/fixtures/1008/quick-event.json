@@ -1,0 +1,801 @@
+{
+  "format": "witness-complete-game",
+  "version": 9,
+  "gameVersion": "10.08",
+  "speed": 0,
+  "state": {
+    "version": 9,
+    "seed": "10.08-browser-auto",
+    "rngState": 3889805007,
+    "phase": "event",
+    "draft": {
+      "version": 2,
+      "attributeSchema": 2,
+      "timeSchema": 2,
+      "seed": "10.08-browser-auto",
+      "rngState": 226673381,
+      "cursor": 25,
+      "results": {
+        "month": 10,
+        "age": 39,
+        "span": 33,
+        "originRank": 3,
+        "charm": 3,
+        "luck": 9,
+        "talent": 9,
+        "tier": 2,
+        "soulKind": "本体",
+        "soulId": "T02-17",
+        "style": "强攻",
+        "release": "本体显化",
+        "gender": "男",
+        "nationality": "天魂",
+        "region": "地方学院",
+        "personality": "热情",
+        "appearance": "深色头发与贴身训练服",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一张手绘路线图",
+        "level": 3,
+        "B": 8,
+        "S": -3,
+        "C": 6,
+        "D": 2,
+        "A": -6,
+        "P": 7,
+        "W": 3
+      },
+      "rolls": [
+        {
+          "key": "month",
+          "label": "入会季节",
+          "sides": 4,
+          "face": 4,
+          "value": 10,
+          "text": "6102年10月",
+          "quarter": 0
+        },
+        {
+          "key": "age",
+          "label": "入会年龄",
+          "sides": 25,
+          "face": 24,
+          "value": 39,
+          "text": "39岁",
+          "quarter": 0
+        },
+        {
+          "key": "originRank",
+          "label": "出身",
+          "sides": 10,
+          "face": 3,
+          "value": 3,
+          "text": "3档 · 城镇平民家庭",
+          "quarter": 0
+        },
+        {
+          "key": "charm",
+          "label": "魅力",
+          "sides": 10,
+          "face": 3,
+          "value": 3,
+          "text": "3档魅力 · 平易近人",
+          "quarter": 0
+        },
+        {
+          "key": "luck",
+          "label": "气运",
+          "sides": 10,
+          "face": 9,
+          "value": 9,
+          "text": "9档气运 · 天赐良机!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "talent",
+          "label": "成长天赋",
+          "sides": 10,
+          "face": 9,
+          "value": 9,
+          "text": "9档 · 绝世之资!!!!",
+          "quarter": 0
+        },
+        {
+          "key": "tier",
+          "label": "武魂潜力",
+          "sides": 1000,
+          "face": 239,
+          "value": 2,
+          "text": "2档",
+          "quarter": 0
+        },
+        {
+          "key": "soulKind",
+          "label": "武魂种类",
+          "sides": 3,
+          "face": 3,
+          "value": "本体",
+          "text": "本体",
+          "quarter": 0
+        },
+        {
+          "key": "gender",
+          "label": "性别",
+          "sides": 3,
+          "face": 1,
+          "value": "男",
+          "text": "男",
+          "quarter": 0
+        },
+        {
+          "key": "nationality",
+          "label": "国籍",
+          "sides": 5,
+          "face": 2,
+          "value": "天魂",
+          "text": "天魂",
+          "quarter": 0
+        },
+        {
+          "key": "region",
+          "label": "成长地点",
+          "sides": 8,
+          "face": 5,
+          "value": "地方学院",
+          "text": "地方学院",
+          "quarter": 0
+        },
+        {
+          "key": "personality",
+          "label": "性格",
+          "sides": 8,
+          "face": 6,
+          "value": "热情",
+          "text": "热情",
+          "quarter": 0
+        },
+        {
+          "key": "appearance",
+          "label": "外形",
+          "sides": 8,
+          "face": 5,
+          "value": "深色头发与贴身训练服",
+          "text": "深色头发与贴身训练服",
+          "quarter": 0
+        },
+        {
+          "key": "motivation",
+          "label": "入会动机",
+          "sides": 6,
+          "face": 6,
+          "value": "结识可以并肩同行的人",
+          "text": "结识可以并肩同行的人",
+          "quarter": 0
+        },
+        {
+          "key": "keepsake",
+          "label": "随身纪念物",
+          "sides": 8,
+          "face": 6,
+          "value": "一张手绘路线图",
+          "text": "一张手绘路线图",
+          "quarter": 0
+        },
+        {
+          "key": "level",
+          "label": "初始魂力等级",
+          "sides": 10,
+          "face": 3,
+          "value": 3,
+          "text": "3",
+          "quarter": 0
+        },
+        {
+          "key": "B",
+          "label": "肉体强度偏差",
+          "sides": 21,
+          "face": 19,
+          "value": 8,
+          "text": "+8% · 惊才绝艳!!!",
+          "quarter": 0
+        },
+        {
+          "key": "S",
+          "label": "魂力强度偏差",
+          "sides": 21,
+          "face": 8,
+          "value": -3,
+          "text": "-3% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "C",
+          "label": "魂力操纵偏差",
+          "sides": 21,
+          "face": 17,
+          "value": 6,
+          "text": "+6% · 非凡之资!!",
+          "quarter": 0
+        },
+        {
+          "key": "D",
+          "label": "防御素质偏差",
+          "sides": 21,
+          "face": 13,
+          "value": 2,
+          "text": "+2% · 根基平稳",
+          "quarter": 0
+        },
+        {
+          "key": "A",
+          "label": "敏捷偏差",
+          "sides": 21,
+          "face": 5,
+          "value": -6,
+          "text": "-6% · 稍显薄弱",
+          "quarter": 0
+        },
+        {
+          "key": "P",
+          "label": "精神力偏差",
+          "sides": 21,
+          "face": 18,
+          "value": 7,
+          "text": "+7% · 非凡之资!!",
+          "quarter": 0
+        },
+        {
+          "key": "W",
+          "label": "精神稳定偏差",
+          "sides": 21,
+          "face": 14,
+          "value": 3,
+          "text": "3",
+          "quarter": 0
+        }
+      ],
+      "hiddenRolls": [
+        {
+          "label": "武魂觉醒",
+          "sides": 5,
+          "face": 2
+        }
+      ],
+      "options": {
+        "name": "10.08自动事件核验",
+        "gender": "随机",
+        "tier": null,
+        "level": null
+      },
+      "generatedName": "10.08自动事件核验"
+    },
+    "character": {
+      "name": "undefined",
+      "level": 3,
+      "initialLevel": 3,
+      "initialPotential": 2,
+      "soulId": "T02-17",
+      "style": "强攻",
+      "release": "本体显化",
+      "luck": 9,
+      "charm": 3,
+      "initialLuck": 9,
+      "initialCharm": 3,
+      "talent": {
+        "rank": 9,
+        "label": "9档 · 绝世之资!!!!",
+        "xpMultiplier": 2.04,
+        "attributeMultiplier": 1.32
+      },
+      "identity": {
+        "gender": "男",
+        "nationality": "天魂",
+        "personality": "热情",
+        "family": "城镇平民家庭",
+        "originRank": 3,
+        "origin": "地方学院",
+        "appearance": "深色头发与贴身训练服",
+        "motivation": "结识可以并肩同行的人",
+        "keepsake": "一张手绘路线图"
+      },
+      "time": {
+        "month": 10,
+        "age": 39,
+        "span": 33,
+        "rawSpan": 33,
+        "birthYear": 6063,
+        "startYear": 6069,
+        "startAge": 6,
+        "quarters": 24,
+        "timelineMode": "stages",
+        "awakeningAge": 6
+      },
+      "deviations": [
+        8,
+        -3,
+        6,
+        2,
+        -6,
+        7
+      ],
+      "wDeviation": 3,
+      "growth": {
+        "B": 0,
+        "S": 0,
+        "C": 0,
+        "D": 0,
+        "A": 0,
+        "P": 0,
+        "W": 0
+      },
+      "rings": [],
+      "eventFlags": {},
+      "bones": [],
+      "boneInventory": [],
+      "mutations": [],
+      "fatigue": 0,
+      "stats": {
+        "level": 3,
+        "rings": 0,
+        "benchmark": 24,
+        "stats": {
+          "B": 28,
+          "S": 19,
+          "C": 21,
+          "D": 21,
+          "A": 15,
+          "P": 17,
+          "W": 53
+        },
+        "derived": {
+          "HP": 416,
+          "MP": 155,
+          "SH": 356,
+          "PA": 32.95,
+          "SA": 26.15,
+          "MA": 23.6,
+          "DEF": 26.1,
+          "MDEF": 34.4,
+          "costReduction": 0,
+          "castReduction": 3.5,
+          "controlGrowth": 1.09
+        },
+        "breakdown": {
+          "B": {
+            "base": 24,
+            "grade": 0.82,
+            "style": 20,
+            "shape": 8,
+            "mental": 0,
+            "weapon": 6,
+            "deviation": 8,
+            "growth": 0,
+            "generated": 28
+          },
+          "S": {
+            "base": 24,
+            "grade": 0.82,
+            "style": 10,
+            "shape": -6,
+            "mental": 0,
+            "weapon": -3,
+            "deviation": -3,
+            "growth": 0,
+            "generated": 19
+          },
+          "C": {
+            "base": 24,
+            "grade": 0.82,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 6,
+            "growth": 0,
+            "generated": 21
+          },
+          "D": {
+            "base": 24,
+            "grade": 0.82,
+            "style": 0,
+            "shape": 4,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": 2,
+            "growth": 0,
+            "generated": 21
+          },
+          "A": {
+            "base": 24,
+            "grade": 0.82,
+            "style": -10,
+            "shape": -6,
+            "mental": 0,
+            "weapon": -1,
+            "deviation": -6,
+            "growth": 0,
+            "generated": 15
+          },
+          "P": {
+            "base": 24,
+            "grade": 0.82,
+            "style": -20,
+            "shape": 0,
+            "mental": 0,
+            "weapon": 0,
+            "deviation": 7,
+            "growth": 0,
+            "generated": 17
+          },
+          "W": {
+            "base": 50,
+            "grade": 1,
+            "style": 0,
+            "shape": 0,
+            "mental": 0,
+            "deviation": 3,
+            "growth": 0,
+            "generated": 53
+          }
+        }
+      }
+    },
+    "rolls": [
+      {
+        "key": "month",
+        "label": "入会季节",
+        "sides": 4,
+        "face": 4,
+        "value": 10,
+        "text": "6102年10月",
+        "quarter": 0
+      },
+      {
+        "key": "age",
+        "label": "入会年龄",
+        "sides": 25,
+        "face": 24,
+        "value": 39,
+        "text": "39岁",
+        "quarter": 0
+      },
+      {
+        "key": "originRank",
+        "label": "出身",
+        "sides": 10,
+        "face": 3,
+        "value": 3,
+        "text": "3档 · 城镇平民家庭",
+        "quarter": 0
+      },
+      {
+        "key": "charm",
+        "label": "魅力",
+        "sides": 10,
+        "face": 3,
+        "value": 3,
+        "text": "3档魅力 · 平易近人",
+        "quarter": 0
+      },
+      {
+        "key": "luck",
+        "label": "气运",
+        "sides": 10,
+        "face": 9,
+        "value": 9,
+        "text": "9档气运 · 天赐良机!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "talent",
+        "label": "成长天赋",
+        "sides": 10,
+        "face": 9,
+        "value": 9,
+        "text": "9档 · 绝世之资!!!!",
+        "quarter": 0
+      },
+      {
+        "key": "tier",
+        "label": "武魂潜力",
+        "sides": 1000,
+        "face": 239,
+        "value": 2,
+        "text": "2档",
+        "quarter": 0
+      },
+      {
+        "key": "soulKind",
+        "label": "武魂种类",
+        "sides": 3,
+        "face": 3,
+        "value": "本体",
+        "text": "本体",
+        "quarter": 0
+      },
+      {
+        "key": "gender",
+        "label": "性别",
+        "sides": 3,
+        "face": 1,
+        "value": "男",
+        "text": "男",
+        "quarter": 0
+      },
+      {
+        "key": "nationality",
+        "label": "国籍",
+        "sides": 5,
+        "face": 2,
+        "value": "天魂",
+        "text": "天魂",
+        "quarter": 0
+      },
+      {
+        "key": "region",
+        "label": "成长地点",
+        "sides": 8,
+        "face": 5,
+        "value": "地方学院",
+        "text": "地方学院",
+        "quarter": 0
+      },
+      {
+        "key": "personality",
+        "label": "性格",
+        "sides": 8,
+        "face": 6,
+        "value": "热情",
+        "text": "热情",
+        "quarter": 0
+      },
+      {
+        "key": "appearance",
+        "label": "外形",
+        "sides": 8,
+        "face": 5,
+        "value": "深色头发与贴身训练服",
+        "text": "深色头发与贴身训练服",
+        "quarter": 0
+      },
+      {
+        "key": "motivation",
+        "label": "入会动机",
+        "sides": 6,
+        "face": 6,
+        "value": "结识可以并肩同行的人",
+        "text": "结识可以并肩同行的人",
+        "quarter": 0
+      },
+      {
+        "key": "keepsake",
+        "label": "随身纪念物",
+        "sides": 8,
+        "face": 6,
+        "value": "一张手绘路线图",
+        "text": "一张手绘路线图",
+        "quarter": 0
+      },
+      {
+        "key": "level",
+        "label": "初始魂力等级",
+        "sides": 10,
+        "face": 3,
+        "value": 3,
+        "text": "3",
+        "quarter": 0
+      },
+      {
+        "key": "B",
+        "label": "肉体强度偏差",
+        "sides": 21,
+        "face": 19,
+        "value": 8,
+        "text": "+8% · 惊才绝艳!!!",
+        "quarter": 0
+      },
+      {
+        "key": "S",
+        "label": "魂力强度偏差",
+        "sides": 21,
+        "face": 8,
+        "value": -3,
+        "text": "-3% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "C",
+        "label": "魂力操纵偏差",
+        "sides": 21,
+        "face": 17,
+        "value": 6,
+        "text": "+6% · 非凡之资!!",
+        "quarter": 0
+      },
+      {
+        "key": "D",
+        "label": "防御素质偏差",
+        "sides": 21,
+        "face": 13,
+        "value": 2,
+        "text": "+2% · 根基平稳",
+        "quarter": 0
+      },
+      {
+        "key": "A",
+        "label": "敏捷偏差",
+        "sides": 21,
+        "face": 5,
+        "value": -6,
+        "text": "-6% · 稍显薄弱",
+        "quarter": 0
+      },
+      {
+        "key": "P",
+        "label": "精神力偏差",
+        "sides": 21,
+        "face": 18,
+        "value": 7,
+        "text": "+7% · 非凡之资!!",
+        "quarter": 0
+      },
+      {
+        "key": "W",
+        "label": "精神稳定偏差",
+        "sides": 21,
+        "face": 14,
+        "value": 3,
+        "text": "3",
+        "quarter": 0
+      },
+      {
+        "label": "本季相遇",
+        "sides": 10000,
+        "face": 431,
+        "quarter": 0,
+        "text": "学院试训名额"
+      }
+    ],
+    "hiddenRolls": [
+      {
+        "label": "武魂觉醒",
+        "sides": 5,
+        "face": 2
+      },
+      {
+        "sides": 20,
+        "face": 20,
+        "label": "境遇偏倚",
+        "quarter": 0
+      }
+    ],
+    "journal": [
+      {
+        "type": "origin",
+        "date": {
+          "year": 6069,
+          "month": 10,
+          "age": 6
+        },
+        "title": "出发前",
+        "text": "undefined从地方学院出发，城镇平民家庭的经历与9档 · 绝世之资!!!!一起成为起点。随身带着一张手绘路线图，想要结识可以并肩同行的人。",
+        "level": 3
+      }
+    ],
+    "completed": 0,
+    "xp": 0,
+    "prep": 0,
+    "lastEvent": 4,
+    "pending": {
+      "training": "A",
+      "eventIndex": 4,
+      "eventSnapshot": {
+        "id": "E05",
+        "title": "学院试训名额",
+        "text": "报名的人散去，老师把最后一块试训木牌推到桌边：“还有一个名额。”操场上摆着绕桩的绳、搬运的沙袋，最后一项却只是听完指令再做。你问是不是太简单。老师抬眼：“前面的人也这样说。然后他们连错了两次。”木牌还没有写名字。",
+        "when": {},
+        "options": [
+          {
+            "text": "完成老师安排的基础项目。",
+            "keys": [
+              "B",
+              "W"
+            ],
+            "base": 76,
+            "gain": {
+              "XP": 30
+            },
+            "success": "你把项目按顺序做完，失误处停下来确认了一次。老师在名册上写了评语，又给你指了旁听的位置：“下一回，自己找得到门吧？”",
+            "failure": "一项指令听岔了，你没能通过。老师把练习单递来，错处划得很明白。下次要准备什么，终于不用靠猜。",
+            "special": "mentor"
+          },
+          {
+            "text": "申请展示自己琢磨的新用法。",
+            "keys": [
+              "C",
+              "P"
+            ],
+            "base": 48,
+            "gain": {
+              "C": 5,
+              "XP": 20
+            },
+            "success": "你说明新用法，又做了一次缩短的示范。老师追问两处细节，最后把木牌翻过来写上名字，约你课后再谈。",
+            "failure": "显化在关键处散了，围观的人已经准备离开。老师却留住你，把完整展示拆成三步：“先把第一步做给自己看。”",
+            "special": "mentor"
+          }
+        ],
+        "weight": 3,
+        "cooldown": 3
+      },
+      "questId": null,
+      "noSeasonRewards": false,
+      "bias": 20,
+      "receipts": [],
+      "PStart": 17,
+      "date": {
+        "year": 6069,
+        "month": 10,
+        "age": 6
+      },
+      "before": {
+        "B": 28,
+        "S": 19,
+        "C": 21,
+        "D": 21,
+        "A": 15,
+        "P": 17,
+        "W": 53
+      },
+      "beforeLevel": 3,
+      "beforeRating": "纸级",
+      "triggerTags": [],
+      "ringCount": 0,
+      "choice": null,
+      "reward": [],
+      "settled": false,
+      "castIntroductions": {}
+    },
+    "hunt": null,
+    "battleSnapshot": null,
+    "battleOptions": null,
+    "result": null,
+    "attempts": 0,
+    "resultHandled": false,
+    "date": {
+      "year": 6069,
+      "month": 10,
+      "age": 6
+    },
+    "characterId": "character-1951b734-7e13-467c-a8f6-3731a72dde3c",
+    "source": "formal",
+    "awakeningPending": false,
+    "storyRulesVersion": 1001,
+    "quests": {
+      "version": 1,
+      "active": null,
+      "records": {}
+    },
+    "growthPlan": {
+      "target": 41,
+      "baseXP": 158.34,
+      "createdAt": 0
+    },
+    "eventHistory": {
+      "E05": 0
+    },
+    "exam": {
+      "mode": "normal",
+      "starts": 0,
+      "opponent": null
+    },
+    "huntDelayMonths": 0,
+    "journeyRulesVersion": 1002,
+    "gameVersion": "10.08",
+    "promotionState": {
+      "version": 1,
+      "highestRatingIndex": 0,
+      "acknowledged": {}
+    },
+    "promotions": []
+  }
+}

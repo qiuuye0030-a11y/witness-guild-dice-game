@@ -1,0 +1,12 @@
+{
+  "passed": 7,
+  "tests": [
+    "blood first-strike DOT multiplier persists for all three ticks and current defence",
+    "Anmu detonation uses live defence; forecast matches actual and consumes dots",
+    "yanan timed debuff exactly 9s; refresh no duplicate; other source survives",
+    "yixiaobei timed debuff exactly 8s; refresh no duplicate; other source survives",
+    "Yixian armour absorbs 30% with .3MP per point; lowMP, ordinary and mental remain",
+    "30 reports, single/all JSON export, ledger only summaries, old missing log honest",
+    "complete old finished battle untouched; ongoing short states migrate from release log"
+  ]
+}

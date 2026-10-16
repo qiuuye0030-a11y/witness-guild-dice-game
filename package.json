@@ -1,10 +1,12 @@
 {
   "name": "witness-guild-dice-game",
   "private": true,
-  "description": "10.06 offline game, canonical V14 systems and frozen regression baseline",
+  "description": "v11 offline game: V17 combat rules, trait catalog and frozen comparison fixtures",
   "scripts": {
-    "test": "node 骰子系统/tools/check.cjs",
-    "build": "python -X utf8 骰子系统/_full_package.py"
+    "traits": "node 骰子系统/systems/traits/build.cjs",
+    "build": "node 骰子系统/systems/traits/build.cjs && python -X utf8 骰子系统/_full_package.py",
+    "test": "node 骰子系统/tools/check-v11.cjs",
+    "package": "python -X utf8 骰子系统/tools/package-v11.py"
   },
   "engines": { "node": ">=22" }
 }
