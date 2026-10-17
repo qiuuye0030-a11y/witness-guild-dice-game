@@ -1,0 +1,73 @@
+{
+  "gameVersion": "v12.01",
+  "combatRulesVersion": 17,
+  "cultivationRulesVersion": 10081,
+  "huntVersion": 2,
+  "huntAttemptLimit": 3,
+  "huntTimeLimit": null,
+  "huntStalemateSeconds": 10,
+  "traitEffectViewVersion": 1,
+  "boneEquipmentVersion": 1,
+  "soulTraits": false,
+  "ratingRulesVersion": 2,
+  "ratingCurveAmplitude": 1.8,
+  "baseline": {
+    "source": "v12 build, itself based on the 10.08.01 user revision pack",
+    "sha256": "644d2829b99a0e52140b235e159d1738ff7a1fd35855016dddcdb4a01b40145b"
+  },
+  "regression": {
+    "entry": "骰子系统/tools/verify-v12-release.py",
+    "scripts": 9,
+    "allPassed": true,
+    "suites": {
+      "v12.01专项": 12,
+      "v12核心": 31,
+      "界面组件": 9,
+      "v12合并回归": 7,
+      "伤疤女挑战": "passed",
+      "成长曲线10081": "passed",
+      "隐藏成就": "passed",
+      "培养与读档": "60 journeys / 7094 actions / 514 reloads",
+      "独立模块包": 188
+    },
+    "evidence": "骰子系统/output/v12/"
+  },
+  "reproducibility": {
+    "themeHtmlByteIdentical": true,
+    "editions": {
+      "经典深靛版": {
+        "bytes": 11060272,
+        "sha256": "846f6e834ff33057e6fba1bd78c23f733ec6826e2493b8beb70512b852fe1a89"
+      },
+      "晨曦朝阳版": {
+        "bytes": 11093579,
+        "sha256": "fedf3e7052c4f7c2d5c70feb8da7ecc1c73b5caf2660203286f12454235d56ab"
+      }
+    },
+    "shareArchive": {
+      "file": "见证者公会_v12.01版_双前端分享包.zip",
+      "bytes": 14002833,
+      "sha256": "8f263a5e2b2d66000da5f7a86ade6ff4de46f574c175505a5c2b5571ff8b7e38",
+      "note": "The rebuilt archive differs by ~12 bytes: the build manifest records the absolute build path."
+    }
+  },
+  "documentationCleanup": {
+    "removed": [
+      "骰子系统/systems/v12/modules/审查验证结果.txt",
+      "骰子系统/systems/v12/modules/拼接说明.md",
+      "骰子系统/systems/v12/modules/核对报告.md",
+      "骰子系统/systems/v12/modules/独立审查与修复报告.md",
+      "骰子系统/systems/v12/modules/验收清单.md",
+      "all v11 documents, 10.08交接资料/, 基线说明/, 修订包参考/"
+    ],
+    "kept": [
+      "骰子系统/systems/v12/modules/reference/v12_重大更新交接文档.md (read by tools/lib/doc-text.cjs for the text verification of the module package)"
+    ],
+    "keptWhy": "Deleting it would break the 188-check module suite, because tools/check.cjs loads lib/doc-text.cjs which parses that document path."
+  },
+  "visualBrowserQA": false,
+  "privateSaveIncluded": false,
+  "verifiedCodeCommit": "11715ef51da894edcaee80ed8ead08fa21b8a4c4",
+  "remoteCiStatus": "success",
+  "remoteCiUrl": "https://github.com/qiuuye0030-a11y/witness-guild-dice-game/actions/runs/39040169059"
+}
