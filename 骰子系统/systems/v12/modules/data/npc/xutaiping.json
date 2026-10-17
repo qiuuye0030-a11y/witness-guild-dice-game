@@ -1,0 +1,544 @@
+{
+  "schemaVersion": 1,
+  "id": "xutaiping",
+  "name": "徐太平",
+  "nationality": "斗灵",
+  "gender": "女",
+  "level": 81,
+  "stage": "魂斗罗",
+  "style": "辅助",
+  "role": "减益特化／团队集火辅助",
+  "soul": {
+    "id": "friendly-soul-yemodengjiao",
+    "name": "夜魔灯鲛",
+    "tier": 10,
+    "main_kind": "兽",
+    "subkind": "水生",
+    "attribute": "暗",
+    "attribute_category": "单属性",
+    "elements": [
+      "暗"
+    ],
+    "mechanisms": [],
+    "spirit_specialist": false,
+    "release_options": [
+      "附体",
+      "召唤"
+    ],
+    "balance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "release": "附体",
+  "rating": "强级",
+  "ratingRatio": 1.5,
+  "model": {
+    "level": 81,
+    "rings": 8,
+    "benchmark": 390,
+    "stats": {
+      "B": 386.1,
+      "S": 549.9,
+      "C": 748.8,
+      "D": 421.2,
+      "A": 514.8,
+      "P": 889.2,
+      "W": 76
+    },
+    "derived": {
+      "HP": 2923,
+      "baseMP": 2810,
+      "MP": 4214,
+      "SH": 7334,
+      "PA": 398.44,
+      "SA": 477.42,
+      "MA": 721.36,
+      "DEF": 297.82,
+      "MDEF": 477.4,
+      "costReduction": 40,
+      "castReduction": 30,
+      "controlGrowth": 2.5
+    },
+    "breakdown": {
+      "B": {
+        "base": 390,
+        "grade": 1.3,
+        "style": -20,
+        "shape": 8,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": -59.9,
+        "generated": 446
+      },
+      "S": {
+        "base": 390,
+        "grade": 1.3,
+        "style": 10,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": -8.1,
+        "generated": 558
+      },
+      "C": {
+        "base": 390,
+        "grade": 1.3,
+        "style": 20,
+        "shape": -8,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 180.8,
+        "generated": 568
+      },
+      "D": {
+        "base": 390,
+        "grade": 1.3,
+        "style": -10,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": -34.8,
+        "generated": 456
+      },
+      "A": {
+        "base": 390,
+        "grade": 1.3,
+        "style": -10,
+        "shape": 6,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 27.8,
+        "generated": 487
+      },
+      "P": {
+        "base": 390,
+        "grade": 1.3,
+        "style": 10,
+        "shape": -6,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 362.2,
+        "generated": 527
+      },
+      "W": {
+        "base": 74,
+        "grade": 1,
+        "style": 0,
+        "shape": 0,
+        "mental": 0,
+        "deviation": 2,
+        "growth": 0,
+        "generated": 76
+      }
+    },
+    "ratingProfile": "npc"
+  },
+  "skills": [
+    {
+      "q": 1.35,
+      "K": 2.35,
+      "Q": 3.17,
+      "name": "黑蚀",
+      "category": "减益",
+      "channel": "能量",
+      "years": 420,
+      "target": "一名敌人",
+      "castFixed": 1,
+      "cooldown": 16,
+      "role": "延迟复合诅咒",
+      "effect": "抬灯指向目标，按双方精神力与精神稳定作一次减益对抗。成功后，目标头顶浮现三盏亮黄魂灯；持续灌注，每2秒熄灭一盏，三灯俱灭时诅咒落下：敏捷降低20%，造成的伤害降低15%，持续至本场战斗结束，可被正常净化。灌注期间可作其他正常行动；徐太平受控时暂停灌注，解除后继续，布标满12秒尚未完成则散去。标记可被净化，徐太平退场时未完成的灯消散；不即时禁锢或清空行动条。同一目标只能保留她的一组三灯，重复施放不叠组、不提前引爆。",
+      "operations": [
+        {
+          "type": "debuff_contest",
+          "once": true
+        },
+        {
+          "type": "delayed_three_lamps",
+          "intervalSeconds": 2,
+          "lamps": 3,
+          "timeoutSeconds": 12,
+          "pauseOnOwnerControl": true,
+          "dispelEligible": true,
+          "removeIncompleteOnOwnerDefeat": true,
+          "slotsPerTarget": 1
+        },
+        {
+          "type": "numeric_debuff",
+          "values": {
+            "agilityDown": 0.2,
+            "damageDown": 0.15
+          },
+          "lifetime": "battle",
+          "trigger": "three_lamps_extinguished",
+          "amplifierSnapshot": "curse_resolution_before_group"
+        }
+      ],
+      "id": "xutaiping-skill-1",
+      "ring": 1,
+      "costPercent": 0.08,
+      "cost": 135,
+      "cast": 1,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.35,
+      "K": 2.35,
+      "Q": 3.17,
+      "name": "沉鳞",
+      "category": "减益",
+      "channel": "能量",
+      "years": 760,
+      "target": "一名敌人",
+      "castFixed": 0.8,
+      "cooldown": 14,
+      "role": "破除防御",
+      "effect": "银蓝鳞光落在目标护甲的接缝。通过普通减益对抗后，防御与精神抗御各降低15%，持续至本场战斗结束；同来源重施只更新幅度，不叠加层数，可被正常净化。不直接削去护盾，也不穿透角色固有伤害免疫。",
+      "operations": [
+        {
+          "type": "debuff_contest"
+        },
+        {
+          "type": "numeric_debuff",
+          "values": {
+            "defDown": 0.15,
+            "mindDown": 0.15
+          },
+          "lifetime": "battle",
+          "sameSourcePolicy": "replace-not-stack",
+          "amplifierSnapshot": "before_cast_group"
+        }
+      ],
+      "id": "xutaiping-skill-2",
+      "ring": 2,
+      "costPercent": 0.08,
+      "cost": 135,
+      "cast": 0.8,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.8,
+      "K": 2.35,
+      "Q": 4.23,
+      "name": "窒流",
+      "category": "减益",
+      "channel": "能量",
+      "years": 1700,
+      "target": "一名敌人",
+      "castFixed": 1,
+      "cooldown": 16,
+      "role": "抬高魂技消耗",
+      "effect": "暗潮堵塞目标的魂力流转。通过普通减益对抗后，其魂技消耗提高20%，持续至本场战斗结束；原本免费或无需支付魂力的效果不因此产生费用，不直接扣除现有魂力，也不改变普通攻击的费用。同来源重施只更新幅度，不叠加层数，可被正常净化。",
+      "operations": [
+        {
+          "type": "debuff_contest"
+        },
+        {
+          "type": "numeric_debuff",
+          "values": {
+            "skillCostUp": 0.2
+          },
+          "lifetime": "battle",
+          "paidSoulSkillsOnly": true,
+          "sameSourcePolicy": "replace-not-stack",
+          "amplifierSnapshot": "before_cast_group"
+        }
+      ],
+      "id": "xutaiping-skill-3",
+      "ring": 3,
+      "costPercent": 0.09,
+      "cost": 152,
+      "cast": 1,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.05,
+      "K": 2.35,
+      "Q": 4.82,
+      "name": "噤声",
+      "category": "控制",
+      "channel": "精神",
+      "years": 4800,
+      "target": "一名敌人",
+      "castFixed": 0.5,
+      "cooldown": 14,
+      "baseControl": 1.2,
+      "role": "打断施法",
+      "effect": "灯芯骤暗，截断对手正在组织的魂力。按正常控制对抗结算；成功后打断读条，并以1.2秒为基础、按双方精神力比例结算短促控制，行动条压至最多40%，结束后获得4秒免控。不处于读条时仍只产生同样的短控，不额外附加长时间禁技。深暗不增加其控制时长或成功率。",
+      "operations": [
+        {
+          "type": "control_contest",
+          "baseSeconds": 1.2,
+          "ratio": "(100+attacker.P)/(100+defender.P)",
+          "interrupt": true,
+          "gaugeCeiling": 0.4,
+          "immunitySeconds": 4,
+          "deepDarkEligible": false
+        }
+      ],
+      "id": "xutaiping-skill-4",
+      "ring": 4,
+      "costPercent": 0.09,
+      "cost": 175,
+      "cast": 0.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.35,
+      "Q": 6.58,
+      "name": "替鳞",
+      "category": "防御",
+      "channel": "生命",
+      "years": 11500,
+      "target": "另一名队友",
+      "castFixed": 0.8,
+      "cooldown": 18,
+      "role": "代承友方减益",
+      "effect": "亮黄灯光照住队友，替其承接一项可净化的数值减益。该效果从队友身上移除，转至徐太平身上，保留原施加者与原层数，当前削弱幅度减半，承接后持续至本场战斗结束，可被正常净化。只转移一项，不转移硬控制、持续伤害、生命上限削减、角色固有机制或不可净化诅咒；自身没有承接位置时不能施放，不因转移再次触发深暗。转入效果尚未被净化或随战斗结束清除前，不能再承接第二项；不生成护盾或治疗。",
+      "operations": [
+        {
+          "type": "transfer_one_dispellable_numeric_debuff",
+          "exclude": [
+            "hard_control",
+            "damage_over_time",
+            "max_hp_reduction",
+            "innate_mechanic",
+            "undispellable"
+          ],
+          "receiver": "self",
+          "magnitudeMultiplier": 0.5,
+          "keepSource": true,
+          "keepRemainingTime": false,
+          "lifetime": "battle",
+          "keepStacks": true,
+          "capacity": 1,
+          "reapplyAmplifier": false
+        }
+      ],
+      "id": "xutaiping-skill-5",
+      "ring": 5,
+      "costPercent": 0.1,
+      "cost": 169,
+      "cast": 0.8,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.35,
+      "Q": 6.58,
+      "name": "逆潮",
+      "category": "攻击",
+      "channel": "能量",
+      "years": 19000,
+      "target": "一名敌人",
+      "castFixed": 1.2,
+      "cooldown": 15,
+      "factor": 0.75,
+      "role": "有限伤害与行动条干扰",
+      "effect": "夜魔灯鲛的暗潮卷过目标，按普通命中、防御与护盾结算，造成1.2×Q×魂力攻击值×0.75的能量原始伤害。命中后，将目标尚未进入读条的行动条降低20个百分点，最低归零；这项瞬时削弱可受深暗增幅。已经开始准备的魂技不会因此取消或延长，不额外禁锢目标，也不为己方附送行动。单次施放只干扰一次。",
+      "operations": [
+        {
+          "type": "direct_attack",
+          "factor": 0.75,
+          "channel": "能量"
+        },
+        {
+          "type": "numeric_debuff",
+          "values": {
+            "gaugeLoss": 0.2
+          },
+          "instant": true,
+          "onlyBeforeCast": true,
+          "floor": 0,
+          "oncePerCast": true,
+          "trigger": "on_hit",
+          "amplifierSnapshot": "before_cast_group"
+        }
+      ],
+      "id": "xutaiping-skill-6",
+      "ring": 6,
+      "costPercent": 0.12,
+      "cost": 326,
+      "cast": 1.2,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.15,
+      "K": 2.35,
+      "Q": 7.4,
+      "name": "夜魔真身",
+      "category": "强化",
+      "channel": "能量",
+      "years": 48000,
+      "target": "自己",
+      "castFixed": 1.5,
+      "cooldown": 32,
+      "role": "维持辅助生存与对抗能力",
+      "effect": "银蓝鲛鳞覆体，明黄灯火沉入鳞隙。本场战斗内精神力提高20%、防御素质提高15%，按游戏六维增益规则换算；不增加当前资源，不另增生命上限。同来源重复施放不叠层；不再额外提高深暗倍率，也不额外积累灯灭层数。",
+      "operations": [
+        {
+          "type": "battle_stat_up",
+          "values": {
+            "P": 0.2,
+            "D": 0.15
+          },
+          "lifetime": "battle",
+          "sameSourcePolicy": "replace-not-stack",
+          "refillResources": false
+        }
+      ],
+      "id": "xutaiping-skill-7",
+      "ring": 7,
+      "costPercent": 0.12,
+      "cost": 203,
+      "cast": 1.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.8,
+      "K": 2.35,
+      "Q": 8.93,
+      "name": "沉灯之海",
+      "category": "减益",
+      "channel": "能量",
+      "years": 88000,
+      "target": "敌方全体",
+      "castFixed": 1.8,
+      "cooldown": 26,
+      "role": "团队集火易伤",
+      "effect": "将灯影铺成一片无昼的海。逐个敌人独立进行普通减益对抗，成功者在本场战斗内，受到徐太平以外的友方角色造成的伤害提高15%；这项易伤受深暗增幅。同来源重施只更新幅度，不叠加层数，可被正常净化；不削双防，不降低敌方输出，不同时结算黑蚀三灯或灯灭封锁；没有其他友方输出时，不转化为徐太平自己的额外伤害。",
+      "operations": [
+        {
+          "type": "debuff_contest",
+          "perTarget": true
+        },
+        {
+          "type": "numeric_debuff",
+          "values": {
+            "allyVulnerability": 0.15
+          },
+          "lifetime": "battle",
+          "sameSourcePolicy": "replace-not-stack",
+          "damageSources": "allies_except_owner",
+          "amplifierSnapshot": "before_cast_group"
+        }
+      ],
+      "id": "xutaiping-skill-8",
+      "ring": 8,
+      "costPercent": 0.16,
+      "cost": 270,
+      "cast": 1.8,
+      "extensionRequired": true
+    }
+  ],
+  "traits": [
+    {
+      "name": "深暗",
+      "effect": "她施加的数值削弱幅度提高50%；同一目标已带有她的一项生效削弱时，改为提高80%。两档互相替代，不连续相乘；只增加幅度，不增加持续时间、层数上限、控制时长或成功率。同一次施放的多项削弱统一使用结算前的一次判定；尚未完成的三灯、灯灭计数和她自身承接的减益不用于升级增幅档。"
+    },
+    {
+      "name": "灯灭",
+      "effect": "每个个人回合，对每名敌方目标第一次真正获得的增益、治疗、护盾或回魂进行压制：数值幅度或回复量减半，并为该目标积1层灯灭。达到3层后，该目标下一次可被压制的正向效果完全失效，随后清空灯灭层数。每回合每目标最多压制一次，其余正向效果正常结算；同一次施放对同一目标产生的多项正向效果合并处理，只计一次。完全失效仍正常消耗施放者的资源与冷却。灯灭层数独立于黑蚀三灯，不受深暗放大，战斗结束或徐太平退场后清除。"
+    }
+  ],
+  "implementation": {
+    "status": "specification-only",
+    "integrated": false,
+    "numericStatusLifetime": "battle",
+    "numericStatusEndsOn": "battle_end_or_valid_dispel",
+    "turnClock": "徐太平个人回合：从获得一次正常行动机会至该次行动结束；普通攻击、魂技与正常防御均计，连击分段、追击和持续伤害跳数不额外计回合。每次有效回合开始重置一次灯灭的每目标触发名额。",
+    "deepDark": {
+      "normalMultiplier": 1.5,
+      "coveredMultiplier": 1.8,
+      "stackMultipliers": false,
+      "eligible": "enemy_numeric_debuffs_from_self",
+      "eligibilitySnapshot": "before_cast_group_or_delayed_curse_group",
+      "ignoreMarkers": [
+        "black_erosion_lamps",
+        "lamp_out_stacks",
+        "transferred_debuff"
+      ],
+      "excluded": [
+        "control_duration",
+        "debuff_duration",
+        "control_chance",
+        "stack_cap",
+        "buffs",
+        "damage",
+        "lamp_out"
+      ],
+      "caps": {
+        "agilityDown": 0.9,
+        "damageDown": 0.9,
+        "defDown": 1,
+        "mindDown": 1,
+        "skillCostUp": 1,
+        "gaugeLoss": 0.9,
+        "allyVulnerability": 0.6
+      }
+    },
+    "lampOut": {
+      "scope": "living_enemy_beneficiaries",
+      "eligibleEvents": [
+        "buff_received",
+        "healing_received",
+        "shield_received",
+        "mana_recovery_received"
+      ],
+      "normalMultiplier": 0.5,
+      "maxStacks": 3,
+      "fullStacksNextMultiplier": 0,
+      "consumeAllOnBlock": true,
+      "usesPerTargetPerOwnerTurn": 1,
+      "groupBy": "cast_or_tick_id+beneficiary_id",
+      "sameTurnAfterThird": "wait_for_next_eligible_turn",
+      "zeroActualBenefitCounts": false,
+      "affectsInitialResources": false,
+      "affectsInnatePassives": false,
+      "affectsCleanse": false,
+      "affectsRevive": false,
+      "durationOnlyBuffPolicy": "halve_duration",
+      "untimedBooleanBuffPolicy": "explicit_adapter_required",
+      "removeOnOwnerDefeat": true,
+      "persistAcrossBattles": false
+    },
+    "blackErosion": {
+      "lamps": 3,
+      "intervalSeconds": 2,
+      "timeoutSeconds": 12,
+      "pauseWhileControlled": true,
+      "progressIsNotLampOut": true,
+      "amplifyOnCurseResolution": true
+    },
+    "requiredAdapters": [
+      "personal-turn-events",
+      "delayed-lamp-channel",
+      "grouped-benefit-events",
+      "source-tagged-debuffs",
+      "debuff-amplification",
+      "debuff-transfer",
+      "precast-gauge-reduction",
+      "ally-source-vulnerability"
+    ],
+    "notes": [
+      "灯灭以获得正向效果的敌人为受益目标记账，而不是按施放者记账；群体治疗逐个受益者独立判断。",
+      "持续治疗每一跳是新的正向效果事件，但同一回合同一目标仍只压制一次；实际零治疗或零回复不计触发。",
+      "只有时长、没有数值幅度的主动增益减半时长；完全封锁时整项不生效。无幅度且无时限的二值增益必须另写适配，不能擅自减半概率。",
+      "控制结束后的系统免控窗不视为可封锁的主动增益。驱散、复活、入场初始资源和角色常驻固有机制不默认被灯灭拦截。",
+      "深暗只改变原有削弱字段，仍受该字段原上限约束；不会扩大目标数或把多项效果拆开，借同一次施放先挂弱项再吃80%。",
+      "无昼场景只作沉灯之海的视觉表现，不改变照明、命中、位移或事件骰。",
+      "原稿的早年受伤经历只作为背景资料；本次81级战斗稿不推定具体恢复经过，也不另乘未指定的伤残惩罚。"
+    ]
+  }
+}

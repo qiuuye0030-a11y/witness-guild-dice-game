@@ -1,12 +1,11 @@
 {
   "name": "witness-guild-dice-game",
   "private": true,
-  "description": "v11 offline game: V17 combat rules, trait catalog and frozen comparison fixtures",
+  "description": "v12.01 offline game: hunt battles, soul-bone gear and the modular hunt package",
   "scripts": {
-    "traits": "node 骰子系统/systems/traits/build.cjs",
-    "build": "node 骰子系统/systems/traits/build.cjs && python -X utf8 骰子系统/_full_package.py",
-    "test": "node 骰子系统/tools/check-v11.cjs",
-    "package": "python -X utf8 骰子系统/tools/package-v11.py"
+    "build": "python -X utf8 骰子系统/_build_v12.py",
+    "test": "node 骰子系统/tools/verify-v12-package.cjs",
+    "regression": "python -X utf8 骰子系统/tools/verify-v12-release.py"
   },
   "engines": { "node": ">=22" }
 }

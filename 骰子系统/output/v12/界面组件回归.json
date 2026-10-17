@@ -1,0 +1,15 @@
+{
+  "passed": 9,
+  "visualReview": false,
+  "tests": [
+    "sponsor selector exposes three beasts, ten origins and five levels; button passes selected values",
+    "invitation displays exact accept/refuse choices and refusal returns to journey",
+    "arrival 1 shows the frozen introductions and forward starts actual combat",
+    "arrival 8 shows the frozen introductions and forward starts actual combat",
+    "arrival 10 shows the frozen introductions and forward starts actual combat",
+    "defeat exposes a lazy readable report, export and return",
+    "victory exposes a lazy readable report, export and return",
+    "bone conflicts offer separate replace / keep buttons",
+    "defeat screen retries using the remaining real allowance; re-entry remains visible after leaving"
+  ]
+}

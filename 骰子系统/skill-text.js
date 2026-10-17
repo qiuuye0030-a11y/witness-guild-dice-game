@@ -43,7 +43,7 @@
     return text;
   }
   function cardDescription(skill,unit){
-    let text=(ownOnly(skill)?'仅限自身 · ':'')+correctedText(skill.description||skill.effect,skill);
+    let text='属性：'+(skill.attribute||unit?.soul?.attribute||'无')+' · '+(ownOnly(skill)?'仅限自身 · ':'')+correctedText(skill.description||skill.effect,skill);
     if(skill.manaReturn&&unit?.model?.derived){
       const base=unit.model.derived.baseMP||unit.model.derived.MP;
       text+=' 本等级每次反哺至多 '+Math.round(base*Math.min(.02,skill.manaReturn))+' 点。';
@@ -68,6 +68,7 @@
     return entry.items.get(key);
   }
   function describe(skill,{battle=null,unit=null,target=null}={}){
+    if(battle?.v12Battle)return String(skill.effect||skill.description||skill.category+'魂技')+' · 魂力消耗 '+battle.cost(unit,skill)+' · 读条 '+Math.round(battle.castTime(unit,skill)*100)/100+'秒 · 冷却 '+skill.cooldown+'秒；魂兽与魂骨特性另行结算';
     const cost=costDetails(battle,unit,skill);
     const self=ownOnly(skill)?'仅限自身 · ':'';
     const attack=['攻击','持续伤害'].includes(skill.category);
@@ -113,7 +114,7 @@
         const amount=rounded(layer.amount??layer.value??layer.remaining);
         const life=channel==='生命',name=life?'生命盾':'精神盾';
         const until=layer.until??layer.expiresAt;
-        const duration=until>=180001||until===Infinity?'整场':Number.isFinite(until)?Math.max(0,(until-battle.now)/1000).toFixed(1)+'秒':'独立期限';
+        const duration=(battle.v12Battle?until>1e12:until>=180001)||until===Infinity?'整场':Number.isFinite(until)?Math.max(0,(until-battle.now)/1000).toFixed(1)+'秒':'独立期限';
         const source=layer.from||layer.sourceName||battle.unit(layer.casterId)?.name||'';
         const order=index===0?'最先承伤':'第'+(index+1)+'层承伤';
         const once=layer.oneHit?'；本层首次承伤后消失，外层挡住全部伤害时保留':'';
@@ -127,6 +128,7 @@
     return badges;
   }
 
-root.WitnessSkillText={describe};
-root.WitnessUIV14={version:14,describe,shieldBadges,costDetails,correctedText,cardDescription,clearPreviewCache:battle=>cache.delete(battle)};
+const taggedDescribe=(skill,ctx)=>'属性：'+(skill.attribute||ctx?.unit?.soul?.attribute||'无')+' · '+describe(skill,ctx);
+root.WitnessSkillText={describe:taggedDescribe};
+root.WitnessUIV14={version:14,describe:taggedDescribe,shieldBadges,costDetails,correctedText,cardDescription,clearPreviewCache:battle=>cache.delete(battle)};
 })(typeof globalThis==='undefined'?this:globalThis);

@@ -1,0 +1,1414 @@
+{
+  "schemaVersion": 1,
+  "libraryVersion": 2,
+  "note": "三例正式魂兽资料已编目；四个主动技能统一最低万年档。available表示可选取定义，实际战斗与六条被动/继承处理器仍需宿主实现，不能将编目完成视作实战接入完成。",
+  "source": {
+    "file": "魂兽资料_三例.txt",
+    "sha256": "5f339647ac7859f6db9afa78ec43f0f8042a4f04e7b62fc4b773f51eeb6f603c",
+    "rulesVersion": 11,
+    "ratingRulesVersion": 2,
+    "skillYears": 10000,
+    "generatedBy": "tools/build-beasts.cjs"
+  },
+  "beasts": [
+    {
+      "id": "frost-moss-frog",
+      "name": "霜苔巨蛙",
+      "version": 2,
+      "originalName": "霜苔巨螈",
+      "style": "防御",
+      "elements": [
+        "木",
+        "冰"
+      ],
+      "statDice": [
+        3,
+        2,
+        1,
+        10,
+        9,
+        9
+      ],
+      "statRatios": [
+        1.3,
+        1.05,
+        0.85,
+        2.25,
+        2.05,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 3,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·蛙类",
+      "size": "大（象鲸级）",
+      "sociality": "成对",
+      "actualAge": "约十四万年",
+      "habitat": "极北冻林最深处的活水沼——水面结壳，底下永远不冻。",
+      "appearance": "体形如伏地的巨蛙，背阔腹沉，通体覆一层会结霜的青苔。苔甲沿背脊木质化成脊板，板缝嵌冰壳；前肢短粗，后肢壮硕，趾间有蹼。头骨宽扁，口裂极大，双眼半埋苔层，只露出暗黄光点。它不动的时候，整只兽就是沼面上一块长苔的石头。",
+      "habits": "一年里大半时间伏在沼底不动，靠皮肤与苔甲缓慢吸取周围生机。它几乎不运使魂力，可被惊动时暴起极快。",
+      "role": "敌方——冻林守地兽。不主动离沼，但踏进它的沼面就别想走出来。",
+      "battleText": "沼面的青苔忽然隆起，冰壳沿着脊板接连崩裂。霜苔巨蛙睁开暗黄的眼，粗壮的后肢一撑，庞大的身躯便封住了退路。",
+      "defeatText": "苔甲层层剥落，巨蛙终于伏回冻沼。寒雾散去，一枚猩红魂环缓缓升起。",
+      "talents": [
+        {
+          "name": "苔甲覆霜",
+          "effect": "体表苔层吸寒变硬，短时间几乎吃不下物理攻击。"
+        },
+        {
+          "name": "霜沼拖拽",
+          "effect": "四肢陷泥时不能移动，但周围寒气会把靠近者一并冻住。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "苔甲覆霜",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 575，持续8秒",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 145,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 1,
+          "years": 10000,
+          "previewCost": 145,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-moss-frog-skill-1",
+          "skillIndex": 1,
+          "element": "木／冰",
+          "description": "苔甲吸寒凝霜，在体表结成生命护盾。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-moss-frog:skill:1",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "ttlSeconds": 8,
+              "element": "木／冰",
+              "elements": [
+                "木",
+                "冰"
+              ]
+            }
+          ],
+          "attribute": "木／冰",
+          "elements": [
+            "木",
+            "冰"
+          ],
+          "attributeTags": [
+            "木",
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "霜沼拖拽",
+          "category": "控制",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 159,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 10,
+          "ring": 2,
+          "years": 10000,
+          "previewCost": 159,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-moss-frog-skill-2",
+          "skillIndex": 2,
+          "element": "木／冰",
+          "description": "寒泥攀住目标四肢；控制成功后短暂冻结并打断蓄力。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-moss-frog:skill:2",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "control_contest",
+              "baseSeconds": 2.4,
+              "interrupt": true,
+              "immunitySeconds": 4,
+              "element": "木／冰",
+              "elements": [
+                "木",
+                "冰"
+              ]
+            }
+          ],
+          "baseControl": 2.4,
+          "attribute": "木／冰",
+          "elements": [
+            "木",
+            "冰"
+          ],
+          "attributeTags": [
+            "木",
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "冻沼撞击",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 1894；命中后按防御力减伤",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 234,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 3,
+          "years": 10000,
+          "effectSeed": "|3|10000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 234,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-moss-frog-skill-3",
+          "skillIndex": 3,
+          "element": "木／冰",
+          "description": "以覆满苔甲的庞大身躯猛撞目标，造成单次物理伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-moss-frog:skill:3",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "物理",
+              "factor": 1.2,
+              "element": "木／冰",
+              "elements": [
+                "木",
+                "冰"
+              ]
+            }
+          ],
+          "attribute": "木／冰",
+          "elements": [
+            "木",
+            "冰"
+          ],
+          "attributeTags": [
+            "木",
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "生苔回息",
+          "category": "治疗",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "回复生命 511，不超过最大值",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 145,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 10,
+          "ring": 4,
+          "years": 10000,
+          "previewCost": 145,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-moss-frog-skill-4",
+          "skillIndex": 4,
+          "element": "木／冰",
+          "description": "苔层汲取沼中生机，回复自身生命。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-moss-frog:skill:4",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "heal",
+              "channel": "生命",
+              "coefficient": 0.4,
+              "power": "Q*SA",
+              "target": "self",
+              "allowOverheal": false,
+              "element": "木／冰",
+              "elements": [
+                "木",
+                "冰"
+              ]
+            }
+          ],
+          "attribute": "木／冰",
+          "elements": [
+            "木",
+            "冰"
+          ],
+          "attributeTags": [
+            "木",
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        }
+      ],
+      "traits": [
+        {
+          "id": "frost-moss-immunity",
+          "name": "霜苔不侵",
+          "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供最大生命5%的护盾，上限10层。非冰属性越盾真伤不受减免。",
+          "params": {
+            "iceDamageImmunity": true,
+            "iceDamageToHealing": 1,
+            "immuneTags": [
+              "slow",
+              "freeze",
+              "sluggish"
+            ],
+            "iceHitStacks": 2,
+            "otherHitStacks": 1,
+            "shieldPerStackMaxHP": 0.05,
+            "maxStacks": 10,
+            "shieldMode": "stack-capacity"
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:frost-moss-immunity",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:frost-moss-immunity",
+            "implementationVersion": 1,
+            "name": "霜苔不侵",
+            "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供最大生命5%的护盾，上限10层。非冰属性越盾真伤不受减免。",
+            "params": {
+              "iceDamageImmunity": true,
+              "iceDamageToHealing": 1,
+              "immuneTags": [
+                "slow",
+                "freeze",
+                "sluggish"
+              ],
+              "iceHitStacks": 2,
+              "otherHitStacks": 1,
+              "shieldPerStackMaxHP": 0.05,
+              "maxStacks": 10,
+              "shieldMode": "stack-capacity",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        },
+        {
+          "id": "moss-armor-accumulation",
+          "name": "苔甲凝积",
+          "effect": "每次实际受创叠1层苔凝，每层永久提高防御素质10%、肉体强度5%，上限12层；每满4层额外获得5%固定减伤，最多15%。持续伤害不叠层。",
+          "params": {
+            "trigger": "actual-damage-received",
+            "excludeDamageTags": [
+              "dot"
+            ],
+            "defensePerStack": 0.1,
+            "bodyPerStack": 0.05,
+            "maxStacks": 12,
+            "reductionEveryStacks": 4,
+            "reductionPerStep": 0.05,
+            "maxReduction": 0.15,
+            "stackLifetime": "permanent",
+            "saveFields": [
+              "mossStacks"
+            ]
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:moss-armor-accumulation",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:moss-armor-accumulation",
+            "implementationVersion": 1,
+            "name": "苔甲凝积",
+            "effect": "每次实际受创叠1层苔凝，每层永久提高防御素质10%、肉体强度5%，上限12层；每满4层额外获得5%固定减伤，最多15%。持续伤害不叠层。",
+            "params": {
+              "trigger": "actual-damage-received",
+              "excludeDamageTags": [
+                "dot"
+              ],
+              "defensePerStack": 0.1,
+              "bodyPerStack": 0.05,
+              "maxStacks": 12,
+              "reductionEveryStacks": 4,
+              "reductionPerStep": 0.05,
+              "maxReduction": 0.15,
+              "stackLifetime": "permanent",
+              "saveFields": [
+                "mossStacks"
+              ],
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": [
+                "mossStacks"
+              ]
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 650,
+          "S": 525,
+          "C": 425,
+          "D": 1125,
+          "A": 1025,
+          "P": 1025,
+          "W": 77
+        },
+        "derived": {
+          "HP": 4770,
+          "baseMP": 2685,
+          "MP": 4028,
+          "SH": 8420,
+          "PA": 563.75,
+          "SA": 456.25,
+          "MA": 830,
+          "DEF": 702.5,
+          "MDEF": 545.6,
+          "costReduction": 32.5,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "强级",
+        "ratingScore": 1.59
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          1.3,
+          1.05,
+          0.85,
+          2.25,
+          2.05,
+          2.05
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "uniform-six",
+        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "catalogued",
+        "hostIntegrated": false,
+        "skills": "operations-spec",
+        "traits": "spec-only",
+        "inheritanceHandlers": "spec-only"
+      }
+    },
+    {
+      "id": "frost-gnat",
+      "name": "霜蚋",
+      "version": 1,
+      "style": "敏攻",
+      "elements": [
+        "冰"
+      ],
+      "statDice": [
+        9,
+        6,
+        1,
+        5,
+        10,
+        8
+      ],
+      "statRatios": [
+        2.05,
+        1.63,
+        0.85,
+        1.55,
+        2.25,
+        1.82
+      ],
+      "bloodline": {
+        "roll": 2,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "虫类·蚋（双翅目）",
+      "size": "微（指掌以下）",
+      "sociality": "独居",
+      "actualAge": "不可考，换过太多次壳",
+      "habitat": "冰原裂隙与积雪层下的暖缝，那一线不结冰的缝就是它的领地。",
+      "appearance": "体长不足三分，通体冰蓝半透，翅薄如霜且几乎不反光。飞行时肉眼只能看到一点雪屑似的浮动。口器细长如针，腹末两根短刺。",
+      "habits": "终生独居，不结群、不筑巢。以极高速度在雪面跳点，用口针吸取体温与少量魂力；极惧光，日间深藏隙中。",
+      "role": "异种·首领——体型最小、最难打的十万年魂兽。",
+      "battleText": "一粒雪屑停在你的感知边缘，下一瞬却已掠至近前。冰蓝的薄翅无声展开，脚下的雪地渐渐凝成霜域。",
+      "defeatText": "薄翅终于停止震颤，最后一层冰壳碎成细雪。霜域消退，猩红魂环在雪面上凝聚。",
+      "talents": [
+        {
+          "name": "霜针",
+          "effect": "口器刺入时注入寒气，伤口不流血而是结霜。"
+        },
+        {
+          "name": "雪屑掩形",
+          "effect": "高速移动时翅膜散出细霜，短时间内难以锁定其位置。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "霜针",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 2957；命中后按防御力减伤",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 361,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 1,
+          "years": 10000,
+          "effectSeed": "|1|10000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 361,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-gnat-skill-1",
+          "skillIndex": 1,
+          "element": "冰",
+          "description": "掠近目标，以冰针般的口器完成一次迅疾刺击。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-gnat:skill:1",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "物理",
+              "factor": 1.2,
+              "element": "冰",
+              "elements": [
+                "冰"
+              ]
+            }
+          ],
+          "attribute": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "雪屑掩形",
+          "category": "强化",
+          "channel": "物理",
+          "target": "自己",
+          "effect": "自身敏捷提高33.6%，持续整场，同技能不叠加",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 215,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 2,
+          "years": 10000,
+          "previewCost": 215,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-gnat-skill-2",
+          "skillIndex": 2,
+          "element": "冰",
+          "description": "翅膜散霜，借细雪遮掩行迹，提高自身敏捷。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-gnat:skill:2",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "battle_stat_up",
+              "values": {
+                "A": 0.336
+              },
+              "lifetime": "battle",
+              "sameSourcePolicy": "refresh-not-stack",
+              "refillResources": false,
+              "element": "冰",
+              "elements": [
+                "冰"
+              ]
+            }
+          ],
+          "agility": 0.336,
+          "attribute": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "寒痕入骨",
+          "category": "持续伤害",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理总原始伤害 3450，分3次每3秒一跳，同技能不叠层",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 400,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 3,
+          "years": 10000,
+          "damageNature": "residual",
+          "effectSeed": "|3|10000|0",
+          "damageMode": "periodic",
+          "attackSubtype": "periodic",
+          "generationVersion": 1007,
+          "previewCost": 400,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-gnat-skill-3",
+          "skillIndex": 3,
+          "element": "冰",
+          "description": "将寒气留在创口，分三次侵蚀目标，不重复叠加同一寒痕。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-gnat:skill:3",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "periodic_attack",
+              "channel": "物理",
+              "factor": 1.4,
+              "parts": 3,
+              "intervalSeconds": 3,
+              "element": "冰",
+              "sameSourcePolicy": "refresh-not-stack",
+              "elements": [
+                "冰"
+              ]
+            }
+          ],
+          "attribute": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "掠影断脉",
+          "category": "控制",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 244,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 10,
+          "ring": 4,
+          "years": 10000,
+          "previewCost": 244,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "frost-gnat-skill-4",
+          "skillIndex": 4,
+          "element": "冰",
+          "description": "疾掠时刺向魂力流转的间隙；判定成功后短暂打断并控制目标。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-gnat:skill:4",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "control_contest",
+              "baseSeconds": 2.4,
+              "interrupt": true,
+              "immunitySeconds": 4,
+              "element": "冰",
+              "elements": [
+                "冰"
+              ]
+            }
+          ],
+          "baseControl": 2.4,
+          "attribute": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1
+        }
+      ],
+      "traits": [
+        {
+          "id": "ice-shell-preservation",
+          "name": "冰壳护生",
+          "effect": "受击时先生成最大生命80%的冰壳护盾，每回合自行重结一次；未破可叠加，最多两层。冰壳击破时，向攻击者反弹该层已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。",
+          "params": {
+            "preHitShieldMaxHP": 0.8,
+            "renewPerOwnerTurn": 1,
+            "maxLayers": 2,
+            "reflectionRate": 0.3,
+            "reflectionElement": "冰",
+            "reflectionBypassShield": true,
+            "bypassedByTags": [
+              "shield-bypass-true-damage"
+            ]
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:ice-shell-preservation",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:ice-shell-preservation",
+            "implementationVersion": 1,
+            "name": "冰壳护生",
+            "effect": "受击时先生成最大生命80%的冰壳护盾，每回合自行重结一次；未破可叠加，最多两层。冰壳击破时，向攻击者反弹该层已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。",
+            "params": {
+              "preHitShieldMaxHP": 0.8,
+              "renewPerOwnerTurn": 1,
+              "maxLayers": 2,
+              "reflectionRate": 0.3,
+              "reflectionElement": "冰",
+              "reflectionBypassShield": true,
+              "bypassedByTags": [
+                "shield-bypass-true-damage"
+              ],
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        },
+        {
+          "id": "frost-domain",
+          "name": "霜域",
+          "effect": "展开不可驱散的霜域，持续整场。非冰属性单位读条速度降低20%、行动条速度降低15%；冰属性单位（含自身）每回合敏捷提高5%。每2回合加深一档，最多3档，最终读条速度降低35%、行动条速度降低25%。驱散技能可压住霜域一回合。",
+          "params": {
+            "lifetime": "battle",
+            "dispellable": false,
+            "suppressibleByDispelOwnerTurns": 1,
+            "tiers": [
+              {
+                "castSpeedDown": 0.2,
+                "gaugeSpeedDown": 0.15
+              },
+              {
+                "castSpeedDown": 0.275,
+                "gaugeSpeedDown": 0.2
+              },
+              {
+                "castSpeedDown": 0.35,
+                "gaugeSpeedDown": 0.25
+              }
+            ],
+            "deepenEveryOwnerTurns": 2,
+            "iceUnitAgilityPerTurn": 0.05,
+            "iceAgilityStackLifetime": "battle",
+            "tierInterpolation": "中间档按两端线性取值；待后续调数值"
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:frost-domain",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:frost-domain",
+            "implementationVersion": 1,
+            "name": "霜域",
+            "effect": "展开不可驱散的霜域，持续整场。非冰属性单位读条速度降低20%、行动条速度降低15%；冰属性单位（含自身）每回合敏捷提高5%。每2回合加深一档，最多3档，最终读条速度降低35%、行动条速度降低25%。驱散技能可压住霜域一回合。",
+            "params": {
+              "lifetime": "battle",
+              "dispellable": false,
+              "suppressibleByDispelOwnerTurns": 1,
+              "tiers": [
+                {
+                  "castSpeedDown": 0.2,
+                  "gaugeSpeedDown": 0.15
+                },
+                {
+                  "castSpeedDown": 0.275,
+                  "gaugeSpeedDown": 0.2
+                },
+                {
+                  "castSpeedDown": 0.35,
+                  "gaugeSpeedDown": 0.25
+                }
+              ],
+              "deepenEveryOwnerTurns": 2,
+              "iceUnitAgilityPerTurn": 0.05,
+              "iceAgilityStackLifetime": "battle",
+              "tierInterpolation": "中间档按两端线性取值；待后续调数值",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 1025,
+          "S": 815,
+          "C": 425,
+          "D": 775,
+          "A": 1125,
+          "P": 910,
+          "W": 77
+        },
+        "derived": {
+          "HP": 7395,
+          "baseMP": 4135,
+          "MP": 6203,
+          "SH": 7500,
+          "PA": 880,
+          "SA": 702.75,
+          "MA": 738,
+          "DEF": 602.5,
+          "MDEF": 488.1,
+          "costReduction": 32.5,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "凶级",
+        "ratingScore": 1.69
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          2.05,
+          1.63,
+          0.85,
+          1.55,
+          2.25,
+          1.82
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "uniform-six",
+        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "catalogued",
+        "hostIntegrated": false,
+        "skills": "operations-spec",
+        "traits": "spec-only",
+        "inheritanceHandlers": "spec-only"
+      }
+    },
+    {
+      "id": "abyss-imperial-salamander",
+      "name": "沧渊帝螈",
+      "version": 1,
+      "style": "控制",
+      "elements": [
+        "水"
+      ],
+      "statDice": [
+        8,
+        10,
+        2,
+        4,
+        8,
+        7
+      ],
+      "statRatios": [
+        1.82,
+        2.25,
+        1.05,
+        1.4,
+        1.82,
+        1.72
+      ],
+      "bloodline": {
+        "roll": 9,
+        "name": "帝血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·鲵",
+      "size": "中（马牛级）",
+      "sociality": "独居",
+      "actualAge": "约十二万年",
+      "habitat": "地下暗河汇成的深潭，水面常年浮一层不散的白气。",
+      "appearance": "大小如牛犊的鲵，通体青灰近墨，皮肤湿滑。头部两侧生有鳍状冠，冠缘不断逸出淡蓝色光雾。",
+      "habits": "独居且极静，魂力庞大而难以收束。泄露的魂力驱动附近水流，自行形成压迫与吸取。",
+      "role": "首领——深潭区域的唯一强敌，擅长把战斗拖长到自己回满。",
+      "battleText": "潭底亮起两道幽光，逸散的魂力令四周水汽骤然下沉。沧渊帝螈浮出暗河，鳍冠间的蓝雾正牵动整片深潭。",
+      "defeatText": "鳍冠间的蓝雾渐渐熄灭，沉重的水压终于散去。沧渊帝螈伏入浅水，猩红魂环随涟漪升起。",
+      "talents": [
+        {
+          "name": "沧澜压",
+          "effect": "潭水骤然加重，范围内所有单位的读条与行动被拖慢。"
+        },
+        {
+          "name": "引潮",
+          "effect": "外泄魂力自行抽取周围单位逸散的魂力，补回自身。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "沧澜压",
+          "category": "控制",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 299,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 10,
+          "ring": 1,
+          "years": 10000,
+          "previewCost": 299,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "abyss-imperial-salamander-skill-1",
+          "skillIndex": 1,
+          "element": "水",
+          "description": "将水压收束在一名敌人身上，控制成功后打断其行动。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "abyss-imperial-salamander:skill:1",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "control_contest",
+              "baseSeconds": 2.4,
+              "interrupt": true,
+              "immunitySeconds": 4,
+              "element": "水",
+              "elements": [
+                "水"
+              ]
+            }
+          ],
+          "baseControl": 2.4,
+          "attribute": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "潭流冲击",
+          "category": "攻击",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "能量原始伤害 3247；命中后按防御力减伤",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 441,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 2,
+          "years": 10000,
+          "effectSeed": "|2|10000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 441,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "abyss-imperial-salamander-skill-2",
+          "skillIndex": 2,
+          "element": "水",
+          "description": "释放一道沉重水流，造成单次能量伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "abyss-imperial-salamander:skill:2",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "能量",
+              "factor": 1.2,
+              "element": "水",
+              "elements": [
+                "水"
+              ]
+            }
+          ],
+          "attribute": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "滞水缠身",
+          "category": "减益",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "目标敏捷降低28%，持续6秒；按双方精神力与稳定进行减益判定",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 262,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 3,
+          "years": 10000,
+          "previewCost": 262,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "abyss-imperial-salamander-skill-3",
+          "skillIndex": 3,
+          "element": "水",
+          "description": "黏滞水流缠住目标，精神对抗成功后降低其敏捷。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "abyss-imperial-salamander:skill:3",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "numeric_debuff",
+              "values": {
+                "A": 0.28
+              },
+              "ttlSeconds": 6,
+              "sameSourcePolicy": "refresh-not-stack",
+              "contest": "spirit-and-stability",
+              "element": "水",
+              "elements": [
+                "水"
+              ]
+            }
+          ],
+          "attribute": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1
+        },
+        {
+          "name": "回潮护身",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 1217，持续8秒",
+          "q": 2.8,
+          "K": 1,
+          "Q": 2.8,
+          "cost": 273,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.23,
+          "cooldown": 8,
+          "ring": 4,
+          "years": 10000,
+          "previewCost": 273,
+          "previewCast": 1.23,
+          "previewRulesVersion": 17,
+          "id": "abyss-imperial-salamander-skill-4",
+          "skillIndex": 4,
+          "element": "水",
+          "description": "以回旋水流包覆身体，生成生命护盾。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "abyss-imperial-salamander:skill:4",
+          "strengthReference": {
+            "years": 10000,
+            "band": "万年最低档",
+            "q": 2.8,
+            "K": 1,
+            "Q": 2.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "ttlSeconds": 8,
+              "element": "水",
+              "elements": [
+                "水"
+              ]
+            }
+          ],
+          "attribute": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1
+        }
+      ],
+      "traits": [
+        {
+          "id": "oppressive-tides",
+          "name": "沧澜压境",
+          "effect": "每次受到攻击后，对攻击者施加滞流：读条速度降低20%、行动条速度降低15%，持续6秒，可叠3层；同时该目标本回合魂力消耗提高30%。无魂力单位只受减速，不受费用惩罚。",
+          "params": {
+            "trigger": "attack-received",
+            "castSpeedDownPerStack": 0.2,
+            "gaugeSpeedDownPerStack": 0.15,
+            "maxStacks": 3,
+            "durationSeconds": 6,
+            "costUp": 0.3,
+            "costDuration": "target-current-turn",
+            "excludeResourceFreeUnits": true
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:oppressive-tides",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:oppressive-tides",
+            "implementationVersion": 1,
+            "name": "沧澜压境",
+            "effect": "每次受到攻击后，对攻击者施加滞流：读条速度降低20%、行动条速度降低15%，持续6秒，可叠3层；同时该目标本回合魂力消耗提高30%。无魂力单位只受减速，不受费用惩罚。",
+            "params": {
+              "trigger": "attack-received",
+              "castSpeedDownPerStack": 0.2,
+              "gaugeSpeedDownPerStack": 0.15,
+              "maxStacks": 3,
+              "durationSeconds": 6,
+              "costUp": 0.3,
+              "costDuration": "target-current-turn",
+              "excludeResourceFreeUnits": true,
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        },
+        {
+          "id": "devouring-soul-recovery",
+          "name": "吞噬回魂",
+          "effect": "每回合结束回复最大魂力8%。场上任一单位消耗魂力时，吸收其实际消耗量的30%转为自身魂力。魂力满溢部分转为护盾，每回合最多生成最大生命10%的护盾。被封锁或禁绝效果命中时，该回合不吸收。",
+          "params": {
+            "endTurnMaxMPRate": 0.08,
+            "manaSpentSiphonRate": 0.3,
+            "manaSpentScope": "all-units-including-self",
+            "overflowShieldRate": 1,
+            "overflowShieldPerTurnMaxHP": 0.1,
+            "sealTags": [
+              "resource_seal",
+              "resource_prohibition"
+            ],
+            "siphonTransfersOpponentMana": false,
+            "resourceRecoveryTriggersSiphon": false
+          },
+          "implementation": {
+            "status": "spec-only",
+            "handler": "beast:devouring-soul-recovery",
+            "version": 1,
+            "requiresHostAdapter": true
+          },
+          "inherit": {
+            "handler": "inherit:devouring-soul-recovery",
+            "implementationVersion": 1,
+            "name": "吞噬回魂",
+            "effect": "每回合结束回复最大魂力8%。场上任一单位消耗魂力时，吸收其实际消耗量的30%转为自身魂力。魂力满溢部分转为护盾，每回合最多生成最大生命10%的护盾。被封锁或禁绝效果命中时，该回合不吸收。",
+            "params": {
+              "endTurnMaxMPRate": 0.08,
+              "manaSpentSiphonRate": 0.3,
+              "manaSpentScope": "all-units-including-self",
+              "overflowShieldRate": 1,
+              "overflowShieldPerTurnMaxHP": 0.1,
+              "sealTags": [
+                "resource_seal",
+                "resource_prohibition"
+              ],
+              "siphonTransfersOpponentMana": false,
+              "resourceRecoveryTriggersSiphon": false,
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "spec-only",
+            "requiresHostAdapter": true,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 910,
+          "S": 1125,
+          "C": 525,
+          "D": 700,
+          "A": 910,
+          "P": 860,
+          "W": 77
+        },
+        "derived": {
+          "HP": 6590,
+          "baseMP": 5685,
+          "MP": 8528,
+          "SH": 7100,
+          "PA": 882.75,
+          "SA": 966.25,
+          "MA": 698,
+          "DEF": 542,
+          "MDEF": 463.1,
+          "costReduction": 40,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "凶级",
+        "ratingScore": 1.68
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          1.82,
+          2.25,
+          1.05,
+          1.4,
+          1.82,
+          1.72
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "uniform-six",
+        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "catalogued",
+        "hostIntegrated": false,
+        "skills": "operations-spec",
+        "traits": "spec-only",
+        "inheritanceHandlers": "spec-only"
+      }
+    }
+  ]
+}

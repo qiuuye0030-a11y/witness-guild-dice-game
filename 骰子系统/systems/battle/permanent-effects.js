@@ -8,7 +8,7 @@ const PermanentEffects=(function(root){
       plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.appliedAt=this.now;status.until=this.now+Math.round(cast.skill.duration*1000);delete status.hitsRemaining;delete status.actionsRemaining;}});
       return plan;
     }
-    plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.until=180001;delete status.hitsRemaining;delete status.actionsRemaining;}});
+    plan.effects=plan.effects.map(apply=>()=>{const before=new Set(this.units.flatMap(t=>t.statuses));apply();for(const t of this.units)for(const status of t.statuses)if(!before.has(status)){status.until=this.v12Battle?Number.MAX_SAFE_INTEGER:180001;delete status.hitsRemaining;delete status.actionsRemaining;}});
     return plan;
   };
 

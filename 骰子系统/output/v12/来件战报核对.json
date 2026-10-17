@@ -1,0 +1,81 @@
+{
+  "original": {
+    "seconds": 180,
+    "result": {
+      "winner": 1,
+      "reason": "180秒内未讨伐成功",
+      "time": 180000,
+      "huntOutcome": "timeout"
+    },
+    "units": [
+      {
+        "id": "player",
+        "name": "讨伐试炼者",
+        "hp": 2911,
+        "mp": 5,
+        "sh": 6148,
+        "actions": 38
+      },
+      {
+        "id": "ally:chengliang",
+        "name": "程良",
+        "hp": 5241,
+        "mp": 17,
+        "sh": 7096,
+        "actions": 38
+      },
+      {
+        "id": "ally:sailiya_fengzhi",
+        "name": "赛利亚·风织",
+        "hp": 4725,
+        "mp": 4766,
+        "sh": 4058,
+        "actions": 34
+      },
+      {
+        "id": "beast:frost-moss-frog",
+        "name": "霜苔巨蛙",
+        "hp": 968,
+        "mp": 113,
+        "sh": 8420,
+        "actions": 30
+      }
+    ],
+    "mossStacks": 12,
+    "chengGrid": {
+      "self": 4,
+      "enemies": {
+        "beast:frost-moss-frog": 4
+      },
+      "turns": 38,
+      "paused": false,
+      "defeated": false,
+      "cleared": false
+    },
+    "thiefQi": 1,
+    "saiManaRestores": 34,
+    "saiManaRestored": 12924,
+    "runeActivations": 34,
+    "illegalAgilityDown": [
+      {
+        "type": "statDownA",
+        "value": 0.277,
+        "until": 180001,
+        "source": "player-4-百战戟·多维削弱",
+        "label": "百战戟·多维削弱",
+        "from": "讨伐试炼者"
+      }
+    ]
+  },
+  "revisedReplay": {
+    "seconds": 136.99,
+    "result": {
+      "winner": 0,
+      "reason": "魂兽实际退场",
+      "time": 136990,
+      "huntOutcome": "victory"
+    },
+    "chengManaRestores": 26
+  },
+  "note": "同一初始编队与种子在修订规则下的单场重放；不是胜率统计。"
+}

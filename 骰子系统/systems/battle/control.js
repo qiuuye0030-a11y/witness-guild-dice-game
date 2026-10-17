@@ -100,7 +100,7 @@ function text(s){
       const v=variants[s.effectVariant],type=v.status||(s.channel==='精神'?'mindDown':'defDown');
       const seconds=s.effectVariant==='breach'?(this.controlRules?.burstSeconds||10):v.duration;
       this.setStatus(t,type,v.value,seconds,{source:this.statusSource(u,s),label:s.name,from:u.name,effectVariant:s.effectVariant,...(v.hits?{hitsRemaining:v.hits}:{})});
-      if(s.effectVariant==='corrosion')this.status(t,type).find(x=>x.source===this.statusSource(u,s)).until=180001;
+      if(s.effectVariant==='corrosion')this.status(t,type).find(x=>x.source===this.statusSource(u,s)).until=this.v12Battle?Number.MAX_SAFE_INTEGER:180001;
     });
     return p;
   };

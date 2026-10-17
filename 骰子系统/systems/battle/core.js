@@ -21,6 +21,7 @@ function templateUnit(template,level,id,team){
     const raw=R.buildStats({level,soul,style:template.style,release}),average=R.KEYS.reduce((n,k)=>n+raw.stats[k],0)/6;
     const growth=Object.fromEntries(R.KEYS.map(k=>[k,R.round2(raw.stats[k]*((template.statRatio||1.28)*raw.benchmark/average-1))]));
     const model=R.buildStats({level,soul,style:template.style,release,growth});
+    model.ratingProfile='npc';
     const count=R.benchmark(level).rings;
     const skills=template.skills.slice(0,Math.min(template.skillLimit||6,R.benchmark(level).rings)).map((t,i)=>{
       const years=Math.max(10,Math.floor(R.CAPS[i]*.6));
@@ -38,8 +39,9 @@ function runtime(unit){
     return u;
   }
 
-  class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,traitsEnabled=true,seed='battle',snapshot=null,difficulty='standard',challengeId=null,postGameChallenge=false,challengeSessionId=null,enemyLevelOverride=null}){
-      if(snapshot){if(![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('不支持的战斗规则');if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.mechanicsFixVersion=snapshot.mechanicsFixVersion||0;this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);ChallengeBattle.restore(this);MechanicsFix.restore(this,snapshot);if(!this.result&&snapshot.modernVersion!==1100){for(const u of this.units){const template=templates.find(t=>t.id===u.templateId);if(!template||u.guildmaster)continue;u.skills=templateUnit(template,u.level,u.id,u.team).skills;if(u.templateId==='hash'){u.soul.basicChannel='能量';u.soul.basicMindPower=true;}if(u.cast?.skill){const current=u.skills.find(s=>s.id===u.cast.skill.id);if(current)u.cast.skill=copy(current);}}this.addLog('已同步v11会员技能；既有资源与已支付费用保留。',{type:'rulesMigration',gameVersion:'v11'});}this.initializeSoulTraits();return;}
+  class Battle { constructor({character,soul,playerTemplateId=null,testLevel=41,duel=false,enemyId='qinyan',withSupport=false,traitsEnabled=true,seed='battle',snapshot=null,difficulty='standard',challengeId=null,postGameChallenge=false,challengeSessionId=null,enemyLevelOverride=null,huntPlan=null}){
+      if(huntPlan&&!snapshot){V12Battle.initializeBattle(this,{huntPlan,seed});return;}
+      if(snapshot){if(![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('不支持的战斗规则');if(snapshot.combatRulesVersion===14&&snapshot.v14ShieldVersion!==1)throw Error('不支持的V14护盾存档版本');if(snapshot.playerRulesVersion!==2||snapshot.soulControlVersion!==11||![13,14,15,16,17].includes(snapshot.combatRulesVersion))throw Error('此战报使用旧版战斗规则，请保留人物并重新开战');if(snapshot.version!==10)throw Error('旧版即时战斗战报不能用于行动滚轴，请返回登记重开本场');Object.assign(this,copy(snapshot));this.mechanicsFixVersion=snapshot.mechanicsFixVersion||0;this.rng=new D.DiceEngine(this.seed,this.rngState);this.events=[];if(!this.v12Battle&&this.result&&(this.result.winner===null||this.result.tieBreak&&snapshot.drawRulesVersion!==2))this.resolveDraw(this.result.reason.split(' · ')[0]);this.controlRules={...(snapshot.controlRules||root.WitnessControlV9.getConfig())};ShieldActions.initialize(this);ChallengeBattle.restore(this);MechanicsFix.restore(this,snapshot);if(!this.result&&snapshot.modernVersion!==1100){for(const u of this.units){const template=templates.find(t=>t.id===u.templateId);if(!template||u.guildmaster)continue;u.skills=templateUnit(template,u.level,u.id,u.team).skills;if(u.templateId==='hash'){u.soul.basicChannel='能量';u.soul.basicMindPower=true;}if(u.cast?.skill){const current=u.skills.find(s=>s.id===u.cast.skill.id);if(current)u.cast.skill=copy(current);}}this.addLog('已同步v11会员技能；既有资源与已支付费用保留。',{type:'rulesMigration',gameVersion:'v11.01'});}this.initializeActorState();return;}
       const t=templates.find(t=>t.id===enemyId)||templates[0];
       if(playerTemplateId){const chosen=templates.find(t=>t.id===playerTemplateId);if(!chosen)throw Error('角色卡不存在');const l=Math.max(41,Math.min(99,Math.round(testLevel)));soul={name:chosen.weapon};character={level:l,style:chosen.style,rings:[]};}
       soul=copy(soul);character=copy(character);const level=Math.max(1,character.level),enemyLevel=enemyLevelOverride??(difficulty==='admission'?Math.max(1,Math.floor(Math.max(0,level-1)/10)*10+1,level-5):level);character.level=level;if(!playerTemplateId)character.stats=R.buildStats({...character,soul});
@@ -52,19 +54,19 @@ function runtime(unit){
         const enemyPartner=t.style==='辅助'?fighter:support;
         units.push(templateUnit(allyTemplate,level,'ally',0),templateUnit(enemyPartner,enemyLevel,'enemySupport',1));
       }
-      this.traitsEnabled=traitsEnabled;this.resourceConfig=R.getResourceConfig();this.activeId=null;this.queueSequence=0;this.units=units.map(runtime);this.difficulty=difficulty;this.postGameChallenge=postGameChallenge;this.challengeSessionId=challengeSessionId;this.seed=String(seed);this.rng=new D.DiceEngine(this.seed);this.now=0;this.result=null;this.log=[];this.events=[];this.turn=0;
+      units[0].v12Permanent=copy(character.v12TraitProgress||{});units[0].v12Traits=Object.values(character.v12Equipment?.runtimeTraits||{}).map(t=>({...t,id:t.traitId}));this.resourceConfig=R.getResourceConfig();this.activeId=null;this.queueSequence=0;this.units=units.map(runtime);this.difficulty=difficulty;this.postGameChallenge=postGameChallenge;this.challengeSessionId=challengeSessionId;this.seed=String(seed);this.rng=new D.DiceEngine(this.seed);this.now=0;this.result=null;this.log=[];this.events=[];this.turn=0;
       for(const u of this.units)u.tiePriority=this.rng.die(100000);
       this.addLog('斗魂台开启。对手按当前等级切磋；HP或精神护持归零即退场；魂力耗尽不自动失败。同速同时准备时按种子投骰决定顺序。');
       if(difficulty==='admission')this.addLog('入会考核：考官通常低5级但保留所在魂环阶段，伤害为标准的90%，双方行动后均回气0.3秒；按环数开放，最多六技。');
       this.addLog('行动滚轴：敏捷积累行动机会，完成后依次获得回合；实际等级参战，考核降级不会跨越魂环阶段。');
-      ShieldActions.initialize(this);if(challengeId)ChallengeBattle.initialize(this,challengeId);this.initializeSoulTraits();this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
+      ShieldActions.initialize(this);if(challengeId)ChallengeBattle.initialize(this,challengeId);this.initializeActorState();this.scheduleAI();this.controlRules={...root.WitnessControlV9.getConfig()};
     } }
   root.WitnessBattle={Battle,templateUnit,playerUnit,fxFor,templates};
 
 
   const unit=function(id){return this.units.find(u=>u.id===id);};
 
-  const alive=function(u){return !!u&&!u.fallen&&u.hp>0&&u.sh>0;};
+  const alive=function(u){return !!u&&!u.fallen&&(u.scarred?(u.hp>0||u.sh>0):(u.hp>0&&u.sh>0));};
 
   const status=function(u,type){return u.statuses.filter(s=>s.type===type&&s.until>this.now);};
 
@@ -157,7 +159,7 @@ function runtime(unit){
       return '';
     };
 
-  const addLog=function(text,event={}){const line={time:this.now,text,...event};this.log.push(line);if(this.log.length>1500)this.log.shift();this.events.push(line);};
+  const addLog=function(text,event={}){const line={time:this.now,text,...event};this.log.push(line);if(!this.v12Battle&&this.log.length>1500)this.log.shift();this.events.push(line);};
 
 
 
@@ -280,18 +282,18 @@ function runtime(unit){
     };
 
   const nextTime=function(){this.expireShields();
-      this.refreshExhaustion();const times=[180000];
+      this.refreshExhaustion();const times=[this.v12Battle?Number.MAX_SAFE_INTEGER:180000];
       for(const u of this.units)if(this.alive(u)&&u.exhaustTick>this.now)times.push(u.exhaustTick);
       for(const u of this.units){if(this.alive(u)&&!u.cast&&u.id!==this.activeId&&u.progress<1&&!this.value(u,'control')&&u.readyAt<=this.now)times.push(this.now+Math.max(1,Math.ceil((1-u.progress)/this.actionRate(u)*1000)));if(u.cast)times.push(u.cast.end);if(u.readyAt>this.now)times.push(u.readyAt);for(const s of u.statuses)if(s.until>this.now)times.push(s.until);for(const d of u.dots)if(d.next>this.now)times.push(d.next);if(u.shieldUntil>this.now)times.push(u.shieldUntil);}
       return Math.min(...times.filter(t=>t>this.now));
     };
 
   const tick=function(targetTime,autoPlayer=false){this.expireShields();
-      if(this.result)return;this.scheduleAI(autoPlayer);const until=Math.min(targetTime,180000);
+      if(this.result)return;this.scheduleAI(autoPlayer);const until=this.v12Battle?targetTime:Math.min(targetTime,180000);
       let safety=0;
       while(!this.result&&this.now<until&&safety++<5000){
         if(!autoPlayer&&this.canAct(this.unit('player')))break;
-        const next=this.nextTime();if(next>until){this.advanceGauge(until-this.now);this.now=until;break;}this.advanceGauge(next-this.now);this.now=next;
+        const next=this.nextTime();if(next>until){this.advanceGauge(until-this.now);this.now=until;break;}this.advanceGauge(next-this.now);this.now=next;if(this.v12Pulse)this.v12Pulse();
         for(const u of this.units){
           for(const s of u.statuses)if(s.until<=this.now&&s.fatigue)this.setStatus(u,'fatigue',s.fatigueValue??.1,s.fatigueSeconds??6,{source:s.source,label:(s.label||'强化')+'后疲劳',from:s.from});
           u.statuses=u.statuses.filter(s=>s.until>this.now);
@@ -323,7 +325,7 @@ function runtime(unit){
         if(!this.result)this.scheduleAI(autoPlayer);
       }
       if(safety>=5000)throw Error('时间轴推进异常');
-      if(!this.result&&this.now>=180000)this.finishByTime();this.expireShields();
+      if(!this.v12Battle&&!this.result&&this.now>=180000)this.finishByTime();this.expireShields();
     };
 
   const hasOffense=function(u){
@@ -341,7 +343,7 @@ function runtime(unit){
     };
 
   const checkResult=function(){for(const u of this.units)this.onResourceChange(u);
-      for(const u of this.units)if(!u.fallen&&(u.sh<=0||(u.release==='召唤'?u.bodyHP<=0:u.hp<=0))){u.fallen=true;u.cast=null;this.addLog(u.name+'失去战斗能力，保护阵接住了他／她。',{type:'fall',target:u.id,fx:'wave'});}
+      for(const u of this.units)if(!u.fallen&&(u.scarred?(u.hp<=0&&u.sh<=0):(u.sh<=0||(u.release==='召唤'?u.bodyHP<=0:u.hp<=0)))){u.fallen=true;u.cast=null;this.addLog(u.name+'失去战斗能力，保护阵接住了他／她。',{type:'fall',target:u.id,fx:'wave'});}
       if(this.units.filter(u=>this.alive(u)).length>=2&&!this.units.some(u=>this.hasOffense(u))&&!this.units.some(u=>u.dots.length||u.cast&&u.cast.action!=='wait')){
         this.doubleEmptySince??=this.now;
         if(this.now-this.doubleEmptySince>=5000){this.resolveDraw('双方无攻击资源');return;}

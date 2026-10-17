@@ -13,9 +13,9 @@ function render({campaign:c,body,el,button,paragraph,save,render:rerender,start}
  if(q.active){paragraph(box,'当前挑战尚未结束，刷新会继续同一场。请在下方斗魂台继续或认输。');body.append(box);return;}
  const tree=el('details');tree.append(el('summary','展开挑战目录'));
  const mode=el('select');mode.setAttribute('aria-label','挑战目录');mode.id='challengeMode';
- for(const [value,label]of [['member','会员切磋 · 对手高5级'],['advanced','进阶试炼 · 对手高10级'],['guildmaster','公会会长——雪寂冬 · 95级封号斗罗·凶级']])mode.append(new Option(label,value));
+ for(const [value,label]of [['member','会员切磋 · 对手高5级'],['advanced','进阶试炼 · 对手高10级'],['guildmaster','公会会长——雪寂冬 · 95级封号斗罗·凶级'],['mysterious','神秘伤疤女 · 与你同级·神级']])mode.append(new Option(label,value));
  const enemy=el('select');enemy.id='challengeEnemy';enemy.setAttribute('aria-label','选择会员');for(const t of root.WitnessTemplates)enemy.append(new Option(t.name+' · '+t.weapon,t.id));
- const brief=el('p');const refresh=()=>{enemy.hidden=mode.value==='guildmaster';brief.textContent=mode.value==='guildmaster'?'独立会长档案：九魂技、头部魂骨与四个专属被动，不属于普通转正考核。':'使用标准斗魂规则，对手实际等级'+Math.min(99,c.state.character.level+(mode.value==='advanced'?10:5))+'级，不使用入会降级与伤害优惠。';};mode.onchange=refresh;refresh();
+ const brief=el('p');const refresh=()=>{enemy.hidden=['guildmaster','mysterious'].includes(mode.value);brief.textContent=mode.value==='mysterious'?'神秘伤疤女：'+c.state.character.level+'级·神级，仅两项万年最高档魂技。事象洞穿、祥光、多识、幽行常驻；需在时限内清空生命与精神双槽。':mode.value==='guildmaster'?'独立会长档案：九魂技、头部魂骨与四个专属被动，不属于普通转正考核。':'使用标准斗魂规则，对手实际等级'+Math.min(99,c.state.character.level+(mode.value==='advanced'?10:5))+'级，不使用入会降级与伤害优惠。';};mode.onchange=refresh;refresh();
  const launch=button('接受挑战',()=>{
   const d=el('dialog');d.className='challenge-confirm';d.append(el('h3','高难度挑战提醒'));paragraph(d,brief.textContent);paragraph(d,'剩余'+(5-q.failures)+'次失败机会。累计五次失败后挑战入口隐藏，只能保留结局或重开旅程。取消不会消耗机会。');
   d.append(button('确认登台',()=>{try{const options=C.start(c,{mode:mode.value,enemyId:enemy.value},storage);d.close();d.remove();save();start(options);}catch(e){paragraph(d,e.message,'camp-note');}}),button('暂不挑战',()=>{d.close();d.remove();},'quiet'));d.addEventListener('cancel',()=>d.remove());document.body.append(d);d.showModal();
@@ -28,7 +28,7 @@ function renderReports({state:s,body,el,paragraph,button,download}){
   section.append(el('h3','挑战战报（'+reports.length+' / '+C.REPORT_LIMIT+'）'));
   paragraph(section,'保留最近'+C.REPORT_LIMIT+'场挑战。超过上限时自动移出最早一场，可提前导出保存。','micro');
   const select=el('select');select.setAttribute('aria-label','选择挑战战报');select.style.maxWidth='100%';
-  const modes={member:'会员切磋',advanced:'进阶试炼',guildmaster:'会长挑战'};
+  const modes={member:'会员切磋',advanced:'进阶试炼',guildmaster:'会长挑战',mysterious:'神秘伤疤女'};
   const enemyName=r=>r.snapshot?.units?.find(u=>u.id==='enemy')?.name||root.WitnessTemplates?.find(t=>t.id===r.enemy)?.name||r.enemy;
   const outcome=r=>r.result.winner===0?'胜利':r.result.winner===1?'落败':'平局';
   for(const r of reports){const option=el('option','第'+r.id.split(':').at(-1)+'场 · '+modes[r.mode]+' · '+enemyName(r)+' · '+outcome(r)+' · '+(r.result.time/1000).toFixed(1)+'秒');option.value=r.id;select.append(option);}

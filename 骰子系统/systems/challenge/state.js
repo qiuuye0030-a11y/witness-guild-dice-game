@@ -2,7 +2,7 @@
 'use strict';
 const runtime=typeof module!=='undefined'&&module.exports?require('../../v13-runtime.cjs'):root;
 const copy=x=>JSON.parse(JSON.stringify(x)),KEY='witness-postgame-challenges-v1',REPORT_LIMIT=30;
-const SAVE_KEY='witness-complete-game-v1008';
+const SAVE_KEY='witness-complete-game-v1201';
 function identity(s){let h=2166136261;for(const c of [s.seed,s.character?.name,s.character?.soulId,s.character?.initialLevel,s.character?.time?.month].join('|'))h=Math.imul(h^c.charCodeAt(0),16777619);return 'journey-'+(h>>>0).toString(16);}
 function ledger(storage){const x=JSON.parse(storage?.getItem(KEY)||'{}');if(!x||typeof x!=='object'||Array.isArray(x))throw Error('挑战账本无效');return x;}
 function eligible(c){const s=c?.state;return !!(s?.phase==='ending'&&s.result?.winner===0&&!s.exam?.badEnding&&s.character&&s.journal?.some(x=>x.type==='ending'));}
@@ -31,7 +31,7 @@ function validate(q){
  for(const r of q.reports||[]){
   if(typeof r.id!=='string'||r.id.length>160||!r.id.startsWith(q.identity+':')||!Number.isSafeInteger(serialOf(r))||serialOf(r)<1||seen.has(r.id))throw Error('挑战战报场次无效');
   seen.add(r.id);
-  if(!['member','advanced','guildmaster'].includes(r.mode)||typeof r.enemy!=='string'||![0,1,null].includes(r.result?.winner)||!Number.isFinite(r.result?.time)||r.result.time<0||r.result.time>180000)throw Error('挑战战报结果无效');
+  if(!['member','advanced','guildmaster','mysterious'].includes(r.mode)||typeof r.enemy!=='string'||![0,1,null].includes(r.result?.winner)||!Number.isFinite(r.result?.time)||r.result.time<0||r.result.time>180000)throw Error('挑战战报结果无效');
   if(r.snapshot){const b=r.snapshot;if(b.challengeSessionId!==r.id||!b.postGameChallenge||!Array.isArray(b.log)||b.log.length>1500||!Array.isArray(b.units)||b.units.length<2||b.units.length>4||b.result?.winner!==r.result.winner||b.result?.time!==r.result.time)throw Error('挑战战报内容无效');}
   if(r.initial&&(r.initial.challengeSessionId!==r.id||!r.initial.postGameChallenge))throw Error('挑战战报初始参数无效');
  }
@@ -66,16 +66,16 @@ function persist(c,storage){
 }
 function start(c,{mode='member',enemyId='qinyan'}={},storage){
  const q=ensure(c,storage);if(!q||q.failures>=5)throw Error('挑战机会已用尽');if(q.active)throw Error('请先完成当前挑战');
- if(!['member','advanced','guildmaster'].includes(mode))throw Error('挑战目录无效');
- if(mode!=='guildmaster'&&!runtime.WitnessTemplates?.some(t=>t.id===enemyId))throw Error('挑战对手无效');
+ if(!['member','advanced','guildmaster','mysterious'].includes(mode))throw Error('挑战目录无效');
+ if(!['guildmaster','mysterious'].includes(mode)&&!runtime.WitnessTemplates?.some(t=>t.id===enemyId))throw Error('挑战对手无效');
  const serial=(q.serial||0)+1,session=q.identity+':'+serial;
- const character=copy(c.state.character),targetLevel=mode==='guildmaster'?95:Math.min(99,character.level+(mode==='advanced'?10:5));
- const options={character,soul:copy(c.soul()),enemyId:mode==='guildmaster'?'xuejidong':enemyId,difficulty:'standard',seed:c.state.seed+'-追加挑战-'+serial,enemyLevelOverride:targetLevel,traitsEnabled:c.state.features?.traitsEnabled!==false,postGameChallenge:true,challengeSessionId:session,challengeId:mode==='guildmaster'?'guildmaster_xuejidong':null};
+ const character=copy(c.state.character),targetLevel=mode==='mysterious'?character.level:mode==='guildmaster'?95:Math.min(99,character.level+(mode==='advanced'?10:5));
+ const options={character,soul:copy(c.soul()),enemyId:['guildmaster','mysterious'].includes(mode)?'xuejidong':enemyId,difficulty:'standard',seed:c.state.seed+'-追加挑战-'+serial,enemyLevelOverride:targetLevel,traitsEnabled:c.state.features?.traitsEnabled!==false,postGameChallenge:true,challengeSessionId:session,challengeId:mode==='mysterious'?'mysterious_scarred_woman':mode==='guildmaster'?'guildmaster_xuejidong':null};
  q.serial=serial;q.active=session;q.mode=mode;q.options=copy(options);q.snapshot=null;
  try{persist(c,storage);}catch(e){q.active=null;q.options=null;throw Error('不能保存挑战场次，请先保存旅程或释放本机存储：'+e.message);}
  return options;
 }
-function observe(c,b,storage){
+function observe(c,b,storage){runtime.WitnessV12Live?.persist(c.state.character,b);
  const q=c.state.challenge;if(!q?.active||b.challengeSessionId!==q.active)return false;
  q.snapshot=b.snapshot();
  if(b.result&&!q.resolved.includes(q.active)){

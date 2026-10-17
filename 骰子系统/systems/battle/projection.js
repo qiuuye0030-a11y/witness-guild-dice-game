@@ -1,7 +1,7 @@
 const BattleProjection=(function(root){
   'use strict';
   const B=root.WitnessBattle, R=root.WitnessRules;
-  const base={plan:SoulTraitActions.methods.plan,hit:MemberActions.methods.hit,tryControl:SoulTraitActions.methods.tryControl,applyDamage:SoulTraitActions.methods.applyDamage,heal:BattleCore.methods.heal};
+  const base={plan:ScarredActions.methods.plan,hit:MemberActions.methods.hit,tryControl:ModernActions.methods.tryControl,applyDamage:ScarredActions.methods.applyDamage,heal:BattleCore.methods.heal};
   const fields=['hp','sh','mp','petHP','bodyHP','shieldHP','shieldSH'];
   const copy=x=>x===undefined?undefined:JSON.parse(JSON.stringify(x));
   const empty=()=>Object.fromEntries(fields.map(k=>[k,0]));
@@ -24,7 +24,7 @@ const BattleProjection=(function(root){
     out.units=this.units.map(u=>{
       const v={};for(const [key,value] of Object.entries(u))v[key]=['model','soul','skills'].includes(key)?value:(value&&typeof value==='object'?copy(value):value);return v;
     });
-    out.events=[];out.log=[];out.seed='public-projection';out._valuingAI=false;
+    out.events=[];out.log=[];out.seed='public-projection';out._valuingAI=false;out._projection=true;
     out.scheduleAI=function(){};
     // No seed or future state from the real random generator is copied.
     out.rng={die(){throw Error('Projection randomness requires an explicit branch');}};
@@ -52,7 +52,7 @@ const BattleProjection=(function(root){
 
   function run(source,actorId,targetId,action,options,rollPath,explicit){
     const b=source.forkProjectionState(),origin=source.now;
-    const effectiveCache=new WeakMap(),effective=ModernActions.methods.effective;
+    const effectiveCache=new WeakMap(),effective=ScarredActions.methods.effective;
     b.effective=function(unit){
       const previous=effectiveCache.get(unit);
       // Effective state also depends on form and passive counters; calculate afresh.

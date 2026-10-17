@@ -1,7 +1,0 @@
-{
-  "status": "not-completed",
-  "reason": "浏览器安全策略拒绝file协议本地审阅页；未改用其他路径绕过。Playwright CLI在本机缓存中不可用。",
-  "completed": ["HTML内嵌数据一致性", "脚本语法", "纯DOM替身下的搜索与筛选交互逻辑"],
-  "notVerified": ["真实浏览器视觉布局", "手机视口视觉布局"],
-  "note": "不影响已完成的Node.js接口和本机HTTP接口验证。"
-}

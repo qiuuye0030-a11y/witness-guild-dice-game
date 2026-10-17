@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 1,
+  "id": "chengliang",
+  "name": "程良",
+  "nationality": "斗灵",
+  "gender": "男",
+  "level": 81,
+  "style": "控制",
+  "role": "空间控制／友方护持",
+  "soul": {
+    "id": "friendly-soul-mofang",
+    "name": "魔方",
+    "tier": 9,
+    "main_kind": "器",
+    "subkind": "阵器",
+    "attribute": "空间",
+    "attribute_category": "无属性",
+    "elements": [],
+    "mechanisms": [
+      "空间"
+    ],
+    "spirit_specialist": false,
+    "release_options": [
+      "召出"
+    ],
+    "balance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "basicChannel": "物理"
+  },
+  "release": "召出",
+  "rating": "狂级",
+  "ratingRatio": 1.9,
+  "model": {
+    "level": 81,
+    "rings": 8,
+    "benchmark": 390,
+    "stats": {
+      "B": 652.08,
+      "S": 681.72,
+      "C": 918.84,
+      "D": 548.34,
+      "A": 785.46,
+      "P": 859.56,
+      "W": 80
+    },
+    "derived": {
+      "HP": 4785,
+      "baseMP": 3469,
+      "MP": 5203,
+      "SH": 7096,
+      "PA": 604.28,
+      "SA": 589.46,
+      "MA": 697.65,
+      "DEF": 414.59,
+      "MDEF": 463.78,
+      "costReduction": 40,
+      "castReduction": 30,
+      "controlGrowth": 2.5
+    },
+    "breakdown": {
+      "B": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -20,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 246.08,
+        "generated": 406
+      },
+      "S": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 10,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 130.72,
+        "generated": 551
+      },
+      "C": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 20,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 338.84,
+        "generated": 580
+      },
+      "D": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -10,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 132.34,
+        "generated": 416
+      },
+      "A": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -10,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 350.46,
+        "generated": 435
+      },
+      "P": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 10,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 346.56,
+        "generated": 513
+      },
+      "W": {
+        "base": 74,
+        "grade": 1,
+        "style": 0,
+        "shape": 0,
+        "mental": 0,
+        "deviation": 6,
+        "growth": 0,
+        "generated": 80
+      }
+    },
+    "ratingProfile": "npc"
+  },
+  "permanentProgress": {
+    "thiefQiStacks": 0,
+    "devourRemainder": 0,
+    "maximumStacks": 10,
+    "maximumRemainder": 2,
+    "carryAcrossBattles": true
+  },
+  "matureModel": {
+    "level": 81,
+    "rings": 8,
+    "benchmark": 390,
+    "stats": {
+      "B": 1304.16,
+      "S": 681.72,
+      "C": 918.84,
+      "D": 548.34,
+      "A": 785.46,
+      "P": 859.56,
+      "W": 80
+    },
+    "derived": {
+      "HP": 9349,
+      "baseMP": 3469,
+      "MP": 5203,
+      "SH": 7096,
+      "PA": 1028.13,
+      "SA": 589.46,
+      "MA": 697.65,
+      "DEF": 545,
+      "MDEF": 463.78,
+      "costReduction": 40,
+      "castReduction": 30,
+      "controlGrowth": 2.5
+    },
+    "breakdown": {
+      "B": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -20,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 246.08,
+        "generated": 406
+      },
+      "S": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 10,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 130.72,
+        "generated": 551
+      },
+      "C": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 20,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 338.84,
+        "generated": 580
+      },
+      "D": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -10,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 132.34,
+        "generated": 416
+      },
+      "A": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -10,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 350.46,
+        "generated": 435
+      },
+      "P": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 10,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 346.56,
+        "generated": 513
+      },
+      "W": {
+        "base": 74,
+        "grade": 1,
+        "style": 0,
+        "shape": 0,
+        "mental": 0,
+        "deviation": 6,
+        "growth": 0,
+        "generated": 80
+      }
+    },
+    "ratingProfile": "npc"
+  },
+  "skills": [
+    {
+      "q": 1.35,
+      "K": 2.2,
+      "Q": 2.97,
+      "name": "演",
+      "category": "强化",
+      "channel": "能量",
+      "years": 420,
+      "target": "自己或一名队友",
+      "castFixed": 0.7,
+      "cooldown": 14,
+      "effect": "魔方推演已知的攻防变化，标记自己或一名队友。8秒内，其下一次攻击魂技的命中提高12个百分点，且该次准备时间缩短20%；开始施放时耗用。不能预知未知情报，也不改变伤害、冷却或骰果。",
+      "operations": [
+        {
+          "type": "next_attack_skill_accuracy",
+          "points": 12,
+          "uses": 1,
+          "ttlSeconds": 8
+        },
+        {
+          "type": "next_attack_skill_cast_multiplier",
+          "value": 0.8,
+          "sharedUse": true
+        }
+      ],
+      "id": "chengliang-skill-1",
+      "ring": 1,
+      "costPercent": 0.06,
+      "cost": 125,
+      "cast": 0.7,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.35,
+      "K": 2.2,
+      "Q": 2.97,
+      "name": "门",
+      "category": "防御",
+      "channel": "生命",
+      "years": 760,
+      "target": "自己或一名队友",
+      "castFixed": 0.5,
+      "cooldown": 12,
+      "effect": "在友方身侧展开相连的方门，6秒内为其转移一次冲击。下一次非精神直接攻击命中时，最终生命伤害减少45%，随后门扉闭合；不会增加行动机会，也不处理精神伤害、持续伤害或已结算的攻击。",
+      "operations": [
+        {
+          "type": "one_hit_damage_reduction",
+          "value": 0.45,
+          "channels": [
+            "物理",
+            "能量"
+          ],
+          "ttlSeconds": 6,
+          "directOnly": true
+        }
+      ],
+      "id": "chengliang-skill-2",
+      "ring": 2,
+      "costPercent": 0.08,
+      "cost": 167,
+      "cast": 0.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.8,
+      "K": 2.2,
+      "Q": 3.96,
+      "name": "锁",
+      "category": "控制",
+      "channel": "精神",
+      "years": 1700,
+      "target": "一名敌人",
+      "castFixed": 1.1,
+      "cooldown": 16,
+      "baseControl": 3,
+      "effect": "将魔方投影合拢在目标周围，按双方精神力与精神稳定进行普通控制判定。成功后打断读条，并以3秒为基础、按双方精神力比例结算禁锢；行动条压至最多40%，结束后获得4秒免控。目标仍可受伤，不进入不可选中状态；不永久封印敌人或拆除魂环。",
+      "operations": [
+        {
+          "type": "control_contest",
+          "baseSeconds": 3,
+          "ratio": "(100+attacker.P)/(100+defender.P)",
+          "interrupt": true,
+          "gaugeCeiling": 0.4,
+          "immunitySeconds": 4
+        }
+      ],
+      "id": "chengliang-skill-3",
+      "ring": 3,
+      "costPercent": 0.09,
+      "cost": 202,
+      "cast": 1.1,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.05,
+      "K": 2.2,
+      "Q": 4.51,
+      "name": "封",
+      "category": "防御",
+      "channel": "生命",
+      "years": 4800,
+      "target": "自己",
+      "castFixed": 1,
+      "cooldown": 18,
+      "effect": "展开一层封存壁，获得0.65×Q×魂力攻击值的生命护盾，持续8秒。护盾实际吸收的能量直接伤害有50%封存为一份余能，至多为最大生命的15%。10秒内下一次攻击魂技命中后，以原能量伤害追加释放并按目标防御结算；未命中不释放，到期消散，不重复蓄存。场外仍可封存普通物品；战斗不调用师父预存魂技，也不收取敌方魂技或魂环。",
+      "operations": [
+        {
+          "type": "shield",
+          "coefficient": 0.65,
+          "power": "SA",
+          "ttlSeconds": 8
+        },
+        {
+          "type": "reserve_absorbed_energy",
+          "rate": 0.5,
+          "capMaxHP": 0.15,
+          "ttlSeconds": 10,
+          "slots": 1
+        },
+        {
+          "type": "next_attack_skill_hit_release",
+          "channel": "能量",
+          "mitigated": true
+        }
+      ],
+      "id": "chengliang-skill-4",
+      "ring": 4,
+      "costPercent": 0.11,
+      "cost": 229,
+      "cast": 1,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.2,
+      "Q": 6.16,
+      "name": "隐",
+      "category": "防御",
+      "channel": "生命",
+      "years": 11500,
+      "target": "自己",
+      "castFixed": 0.8,
+      "cooldown": 20,
+      "effect": "将本体藏入裂隙，最多维持5秒。期间避开下一次非精神直接攻击，并立即回到现实；主动攻击也会提前现身。精神攻击、既有持续伤害与场地持续伤害照常结算。本回合不重开、不附送行动，也不能携带敌人进入裂隙。",
+      "operations": [
+        {
+          "type": "phase_avoid_once",
+          "channels": [
+            "物理",
+            "能量"
+          ],
+          "ttlSeconds": 5,
+          "directOnly": true,
+          "breakOnOffense": true
+        }
+      ],
+      "id": "chengliang-skill-5",
+      "ring": 5,
+      "costPercent": 0.1,
+      "cost": 209,
+      "cast": 0.8,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.2,
+      "Q": 6.16,
+      "name": "游",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 19000,
+      "target": "一名敌人",
+      "castFixed": 1,
+      "cooldown": 14,
+      "factor": 1.1,
+      "effect": "以预先记下的坐标折跃至可交战位置，接续一记刀斩。造成1.2×Q×物理攻击值×1.10的原始伤害，再按命中、防御与护盾正常结算。本次命中额外提高10个百分点；不必中、不越盾、不额外触发一次普攻，也不将目标坐标重叠判为即死。",
+      "operations": [
+        {
+          "type": "direct_attack",
+          "factor": 1.1,
+          "channel": "物理",
+          "accuracyPoints": 10
+        }
+      ],
+      "id": "chengliang-skill-6",
+      "ring": 6,
+      "costPercent": 0.12,
+      "cost": 517,
+      "cast": 1,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.15,
+      "K": 2.2,
+      "Q": 6.93,
+      "name": "虚空真身",
+      "category": "强化",
+      "channel": "能量",
+      "years": 48000,
+      "target": "自己",
+      "castFixed": 1.6,
+      "cooldown": 32,
+      "effect": "魔方展开为环绕周身的空间格架。12秒内魂力操纵提高20%、精神力提高15%、敏捷提高12%；沿用当前游戏的六维增益换算，不额外回满资源或提高生命上限。再次施放只刷新持续时间。空间转动作为护持与步法表现，不强制搬动敌人，不额外叠阵，也不改变三回合转位周期。",
+      "operations": [
+        {
+          "type": "temporary_stat_up",
+          "values": {
+            "C": 0.2,
+            "P": 0.15,
+            "A": 0.12
+          },
+          "ttlSeconds": 12,
+          "refreshOnly": true,
+          "refillResources": false
+        }
+      ],
+      "id": "chengliang-skill-7",
+      "ring": 7,
+      "costPercent": 0.12,
+      "cost": 250,
+      "cast": 1.6,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.8,
+      "K": 2.2,
+      "Q": 8.36,
+      "name": "解",
+      "category": "攻击",
+      "channel": "能量",
+      "years": 88000,
+      "target": "一名敌人",
+      "castFixed": 1.4,
+      "cooldown": 20,
+      "factor": 0.9,
+      "effect": "逆转魔方的结构，拆开目标最外层的生命护盾。先进行一次普通命中判定；成功后仅削去该护盾至多0.50×Q×魂力攻击值的盾量，再结算1.2×Q×魂力攻击值×0.90的能量攻击。没有生命护盾时仅造成攻击伤害。不能清除精神盾、无限次防护、角色固有机制或直接拆解生命；不重复判定命中，不同时拆除全部护盾。",
+      "operations": [
+        {
+          "type": "hit_contest_once"
+        },
+        {
+          "type": "reduce_outer_life_shield",
+          "coefficient": 0.5,
+          "power": "SA",
+          "layers": 1
+        },
+        {
+          "type": "direct_attack",
+          "factor": 0.9,
+          "channel": "能量",
+          "reuseHit": true
+        }
+      ],
+      "id": "chengliang-skill-8",
+      "ring": 8,
+      "costPercent": 0.14,
+      "cost": 564,
+      "cast": 1.4,
+      "extensionRequired": true
+    }
+  ],
+  "traits": [
+    {
+      "name": "周天格阵",
+      "effect": "开场布阵，持续至程良退场。每个有效个人回合开始时，所有在场敌人各叠1层困阵，每层敏捷降低5%；程良叠1层据阵，每层造成的伤害提高10%，两者各上限6层。每累计3个有效回合，先完成本回合叠层，再将双方层数分别减半并向下取整，随后继续累积。程良被控制时，暂停叠层与周期计数，已有层数保留；退场后清除本阵法的状态。"
+    },
+    {
+      "name": "六库仙贼",
+      "effect": "每个个人回合结束时回复最大生命的5%与最大魂力的5%，分别不超过各自上限。对有生命的受击实体造成实际生命伤害时，吸取该伤害的30%回复自身生命；不计算护盾、精神槽损失、过量伤害或自伤。每累计3次有效吞噬永久获得1层盗气，每层肉体强度提高10%，上限10层，跨战斗保留；满血仍可计吞噬次数，溢出治疗不转为护盾。免疫疲劳以及带衰老、腐坏标签的减益。对元素、灵体、构装、亡灵等无生命目标，吸血与盗气均不生效。"
+    },
+    {
+      "name": "易中日月",
+      "effect": "免疫幻象与伪装，面对分身、替身、虚影始终锁定真实本体。对高敏捷目标不计纯敏捷差造成的负向命中修正，完成闪避修正后的基础命中下限提高到60%。每个个人回合开始时锁定一名凝视对象，本回合对其命中提高8个百分点；该对象对程良造成的伤害同时提高10%，至下次选择或任一方退场。正向命中加成合计后最高97%，致盲等命中降低在保底之后结算，最终最低5%。识破不等于穿越位面或无视伤害免疫。"
+    }
+  ],
+  "implementation": {
+    "status": "specification-only",
+    "integrated": false,
+    "turnClock": "个人回合：从获得一次正常行动机会到该次行动结束；普攻、魂技、防御等正常行动均计，附赠普攻、持续伤害跳数、连击分段和凝视选择不额外计回合。",
+    "grid": {
+      "maxStacks": 6,
+      "agilityDownPerStack": 0.05,
+      "damageUpPerStack": 0.1,
+      "period": 3,
+      "rounding": "floor",
+      "order": "add-then-halve-before-action",
+      "pauseCounterWhileControlled": true,
+      "removeOnOwnerDefeat": true
+    },
+    "regeneration": {
+      "endTurnMaxHPRate": 0.05,
+      "lifestealRate": 0.3,
+      "eventsPerPermanentStack": 3,
+      "bodyUpPerPermanentStack": 0.1,
+      "maximumPermanentStacks": 10,
+      "appliesToLivingOnly": true,
+      "actualHPOnly": true,
+      "countAtFullHP": true,
+      "unclassifiedLifeType": "ineligible-until-tagged",
+      "raiseHPMaximumWithoutRefill": true,
+      "endTurnMaxMPRate": 0.05
+    },
+    "vision": {
+      "ignoreIllusion": true,
+      "ignoreDisguise": true,
+      "selectRealBody": true,
+      "ignoreNegativeAgilityDifference": true,
+      "preDebuffHitFloor": 0.6,
+      "gazeHitPoints": 8,
+      "gazeIncomingDamageMultiplier": 1.1,
+      "hitCap": 0.97,
+      "postDebuffHitFloor": 0.05
+    },
+    "requiredAdapters": [
+      "personal-turn-events",
+      "life-type-tags",
+      "permanent-npc-progress",
+      "scoped-grid-states",
+      "real-body-targeting",
+      "gaze-target-selection",
+      "per-hit-skill-extensions"
+    ],
+    "notes": [
+      "本项目是事件可读取的角色规范，未向主游戏注册，不能把operations直接传入旧战斗引擎当成已经实现的技能。",
+      "行动机会开始和结束各触发一次回合钩子；控制期间跳过场地钩子，不借无效指令刷层；连击、追击和防御反击均不能另开回合。",
+      "阵法伤害倍率作用于程良自己造成的已结算伤害；盗气不是场内临时buff，读取永久层数时只应用一次。",
+      "生命实体判定依据实际受击者，不凭其武魂是否元素属性推断；阵法来源清除只移除程良自己的状态。",
+      "演与易中日月、游的命中加成可以相加，最高97%；控制技能另走精神对抗，不将攻击命中保底套到控制成功率。",
+      "凝视每回合至多选择一次，可沿用上一存活敌人；不产生独立行动。多个友方使用者的场地来源需分别记账，不共享层数。"
+    ]
+  }
+}

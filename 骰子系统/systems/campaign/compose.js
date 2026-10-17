@@ -13,7 +13,7 @@ autoEventStep:CampaignModern.methods.autoEventStep,
 draw:CampaignCore.methods.draw,
 dark:CampaignCore.methods.dark,
 sync:CampaignCore.methods.sync,
-refresh:CampaignTraits.methods.refresh,
+refresh:CampaignModern.methods.refresh,
 review:CampaignCore.methods.review,
 begin:CampaignCore.methods.begin,
 startGrowth:CampaignCore.methods.startGrowth,
@@ -34,9 +34,9 @@ eventChance:CampaignCore.methods.eventChance,
 eventEstimate:CampaignCore.methods.eventEstimate,
 receipt:CampaignCore.methods.receipt,
 prepareEvent:CampaignCore.methods.prepareEvent,
-reward:CampaignTraits.methods.reward,
-chooseEvent:CampaignTraits.methods.chooseEvent,
-resolveEventBranch:CampaignTraits.methods.resolveEventBranch,
+reward:CampaignCore.methods.reward,
+chooseEvent:CampaignCore.methods.chooseEvent,
+resolveEventBranch:QuestActions.methods.resolveEventBranch,
 previewEvent:CampaignCore.methods.previewEvent,
 settleBias:CampaignCore.methods.settleBias,
 specialEvent:CampaignCore.methods.specialEvent,
@@ -54,7 +54,7 @@ abandonHunt:JourneyActions.methods.abandonHunt,
 hunt:CampaignCore.methods.hunt,
 finishHunt:CampaignCore.methods.finishHunt,
 finishQuarter:JourneyActions.methods.finishQuarter,
-battleOptions:CampaignTraits.methods.battleOptions,
+battleOptions:CampaignModern.methods.battleOptions,
 observeBattle:JourneyActions.methods.observeBattle,
 returnArrival:JourneyActions.methods.returnArrival,
 retry:JourneyActions.methods.retry,
@@ -81,7 +81,8 @@ forceAdmission:JourneyActions.methods.forceAdmission,
 huntRound:JourneyActions.methods.huntRound,
 questStage:JourneyActions.methods.questStage
 };
+CampaignV12.install(methods);
 Object.defineProperties(Campaign.prototype,Object.fromEntries(Object.entries(methods).map(([key,value])=>[key,{value,writable:true,configurable:true}])));
-Campaign.validate=CampaignModern.methods.static_validate;
-const api={Campaign,TRAINING,EVENTS,Creation,CHAINS:EventData.CHAINS};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessCampaign=api;
+Campaign.validate=CampaignV12.validate;
+const api={Campaign,TRAINING,EVENTS,Creation,V12:CampaignV12,CHAINS:EventData.CHAINS};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessCampaign=api;
 })(typeof globalThis==='undefined'?this:globalThis);

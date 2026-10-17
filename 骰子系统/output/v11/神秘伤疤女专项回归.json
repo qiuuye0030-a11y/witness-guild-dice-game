@@ -1,0 +1,18 @@
+{
+  "passed": 11,
+  "tests": [
+    "same level, god rating, exactly2 uppermost myriad skills, triple mana, fullHP shield, no ordinary registration",
+    "attack and basic cost exactly200percent; HPzero makes all soul skills free",
+    "piercing ignores DEF, guard, shields, ice armour, phase swap and ordinary mana absorption without consuming shields",
+    "nonmental damage split90mana10life; insufficient mana spills to life; shield is applied before restructuring",
+    "both pools can substitute with overflow; only emptying both causes defeat",
+    "swords are actually deferred, upkeep is paid over elapsed time and releases do not add another soul skill",
+    "veil charges with real time, breaks on real injury and restores only40percent actual injury capped at ownHP",
+    "actual and forecast piercing damage match and public forecast leaves source untouched",
+    "ongoing ghost/veil snapshot restores without refilling shield or mana and advances identically",
+    "postgame start uses same playerlevel; new mode settles and report survives save/reload",
+    "three automated full battles terminate and conserve finite resources; boss cannot lose a single-pool timeout"
+  ],
+  "version": "v11.01",
+  "browserVisualQA": false
+}

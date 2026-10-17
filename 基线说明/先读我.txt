@@ -1,1 +1,0 @@
-先读10.08版_交接与验收.md。进入骰子系统运行python _full_package.py，再node tools/check.cjs和python verify-package-1008.py。仅需Node.js和Python标准库。挑战代码在systems/challenge；普通考官池不含会长。

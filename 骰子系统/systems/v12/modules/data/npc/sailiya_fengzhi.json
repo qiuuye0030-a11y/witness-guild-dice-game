@@ -1,0 +1,575 @@
+{
+  "schemaVersion": 1,
+  "id": "sailiya_fengzhi",
+  "name": "赛利亚·风织",
+  "aliases": [
+    "赛丽亚·风织",
+    "赛利亚",
+    "赛丽亚"
+  ],
+  "nationality": "斗灵",
+  "gender": "女",
+  "level": 81,
+  "stage": "魂斗罗",
+  "sect": "天枢宗·承露门",
+  "style": "敏攻",
+  "role": "敏攻双剑／符剑消耗／受伤回魂",
+  "soul": {
+    "id": "friendly-soul-tianhuiyujian",
+    "name": "天廻羽剑",
+    "tier": 9,
+    "main_kind": "器",
+    "subkind": "战斗",
+    "attribute": "风",
+    "attribute_category": "单属性",
+    "elements": [
+      "风"
+    ],
+    "mechanisms": [],
+    "spirit_specialist": false,
+    "release_options": [
+      "召出"
+    ],
+    "balance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "basicChannel": "物理"
+  },
+  "release": "召出",
+  "rating": "强级",
+  "ratingRatio": 1.5,
+  "appearance": "白色齐肩短发夹带黛色挑染，右手缠绕绷带；双持细长弯钩剑，黑白羽翼覆剑，靛青刃锋近乎隐形。",
+  "model": {
+    "level": 81,
+    "rings": 8,
+    "benchmark": 390,
+    "stats": {
+      "B": 643.5,
+      "S": 666.9,
+      "C": 526.5,
+      "D": 339.3,
+      "A": 854.1,
+      "P": 479.7,
+      "W": 78
+    },
+    "derived": {
+      "HP": 4725,
+      "baseMP": 3395,
+      "MP": 7638,
+      "SH": 4058,
+      "PA": 595,
+      "SA": 576.87,
+      "MA": 393.76,
+      "DEF": 308.35,
+      "MDEF": 273.25,
+      "costReduction": 40,
+      "castReduction": 30,
+      "controlGrowth": 2.5
+    },
+    "breakdown": {
+      "B": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 0,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 140.5,
+        "generated": 503
+      },
+      "S": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 0,
+        "shape": 4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 163.9,
+        "generated": 503
+      },
+      "C": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 10,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": -5.5,
+        "generated": 532
+      },
+      "D": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -20,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": -28.7,
+        "generated": 368
+      },
+      "A": {
+        "base": 390,
+        "grade": 1.24,
+        "style": 30,
+        "shape": 0,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 225.1,
+        "generated": 629
+      },
+      "P": {
+        "base": 390,
+        "grade": 1.24,
+        "style": -20,
+        "shape": -4,
+        "mental": 0,
+        "weapon": 0,
+        "deviation": 0,
+        "growth": 111.7,
+        "generated": 368
+      },
+      "W": {
+        "base": 74,
+        "grade": 1,
+        "style": 0,
+        "shape": 0,
+        "mental": 0,
+        "deviation": 4,
+        "growth": 0,
+        "generated": 78
+      }
+    },
+    "ratingProfile": "npc"
+  },
+  "skills": [
+    {
+      "q": 1.35,
+      "K": 2.2,
+      "Q": 2.97,
+      "name": "回羽双刺",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 420,
+      "target": "一名敌人",
+      "castFixed": 0.6,
+      "cooldown": 6,
+      "factor": 0.75,
+      "role": "快速双剑试探",
+      "effect": "双持细剑先后刺出，钩旋收刃。总原始伤害为1.2×Q×物理攻击值×0.75，均分为两段，各自命中与正常减伤；两段共用一次施放、一次冷却与一次符剑选择。准备短，适合寻找破绽，不附送第三次普攻。",
+      "operations": [
+        {
+          "type": "partitioned_attack",
+          "channel": "物理",
+          "factor": 0.75,
+          "parts": 2,
+          "hitPolicy": "per_part",
+          "sharedCast": true,
+          "sharedRuneActivation": true
+        }
+      ],
+      "id": "sailiya-skill-1",
+      "ring": 1,
+      "costPercent": 0.1,
+      "cost": 228,
+      "cast": 0.6,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.35,
+      "K": 2.2,
+      "Q": 2.97,
+      "name": "星月静谧",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 760,
+      "target": "一名敌人",
+      "castFixed": 1.5,
+      "cooldown": 16,
+      "factor": 0.95,
+      "role": "蓄势点刺与读条干扰",
+      "effect": "星与月的光辉在双剑之间蓄成，随一记即沾即走的刺探迸发。造成1.2×Q×物理攻击值×0.95的原始伤害，按普通命中、防御与护盾结算。命中时若目标正在准备魂技，另作一次普通精神对抗；成功则打断，并以1秒为基础按精神力比例结算短控，随后保留4秒免控窗。目标没有读条时只造成伤害；不直接封死魂力循环。",
+      "operations": [
+        {
+          "type": "direct_attack",
+          "channel": "物理",
+          "factor": 0.95
+        },
+        {
+          "type": "conditional_control_contest",
+          "condition": "target_casting_and_attack_hit",
+          "baseSeconds": 1,
+          "immunitySeconds": 4,
+          "interrupt": true
+        }
+      ],
+      "id": "sailiya-skill-2",
+      "ring": 2,
+      "costPercent": 0.12,
+      "cost": 265,
+      "cast": 1.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 1.8,
+      "K": 2.2,
+      "Q": 3.96,
+      "name": "化羽华",
+      "category": "强化",
+      "channel": "能量",
+      "years": 1700,
+      "target": "自己",
+      "castFixed": 1,
+      "cooldown": 20,
+      "role": "血敕蓄羽，强化有限次数攻击",
+      "effect": "支付最大生命6%的生命费用，令黑白羽织自剑上生长，血色法符托住三枚风羽。随后三次攻击魂技的主攻击原始伤害提高15%，每次施放只消耗一枚，整次连击共用；三枚风羽保留至耗尽或战斗结束。重复施放只将余数补至三枚，不叠加增幅。施放须保证支付后仍存活；这笔生命费用不产生秘元，不治疗也不生成护盾。符剑以增强后的主攻击为基数，但不会再被单独增幅一次。",
+      "operations": [
+        {
+          "type": "hp_cost",
+          "maxHPRate": 0.06,
+          "mustRemainAlive": true,
+          "countsAsDamage": false
+        },
+        {
+          "type": "charged_attack_modifier",
+          "rawMultiplier": 1.15,
+          "charges": 3,
+          "maxCharges": 3,
+          "lifetime": "battle",
+          "recastPolicy": "refill-not-stack",
+          "consumePerCast": 1,
+          "applyToMainAttackOnly": true
+        }
+      ],
+      "id": "sailiya-skill-3",
+      "ring": 3,
+      "costPercent": 0.09,
+      "cost": 184,
+      "cast": 1,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.05,
+      "K": 2.2,
+      "Q": 4.51,
+      "name": "天阑舞",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 4800,
+      "target": "一名敌人",
+      "castFixed": 0.8,
+      "cooldown": 18,
+      "factor": 1.6,
+      "role": "可被打断的持续剑舞",
+      "effect": "法符连血色燃起，双剑牵动黑白羽翼，将风卷成连续六次斩击。进入剑舞后，每0.5秒结算一段，总原始伤害为1.2×Q×物理攻击值×1.60，均分六段，各段独立命中、正常减伤。剑舞期间不能另起正常行动；被控制、打断或退场时，尚未挥出的斩击终止。一次剑舞只支付一次符剑附加费，附伤预算随实际挥出并命中的分段结算，未完成部分不追加伤害，也不退还已经支付的费用。",
+      "operations": [
+        {
+          "type": "channeled_partitioned_attack",
+          "channel": "物理",
+          "factor": 1.6,
+          "parts": 6,
+          "intervalSeconds": 0.5,
+          "hitPolicy": "per_part",
+          "interruptible": true,
+          "blockOtherActions": true,
+          "sharedRuneActivation": true,
+          "unexecutedParts": "discard"
+        }
+      ],
+      "id": "sailiya-skill-4",
+      "ring": 4,
+      "costPercent": 0.15,
+      "cost": 533,
+      "cast": 0.8,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.2,
+      "Q": 6.16,
+      "name": "牵丝风",
+      "category": "防御",
+      "channel": "生命",
+      "years": 11500,
+      "target": "自己",
+      "castFixed": 0.5,
+      "cooldown": 12,
+      "role": "有限偏斜，避开一次直接攻势",
+      "effect": "千丝之风牵引身形偏倚，保留一次偏斜机会，直至遭受下一次非精神直接攻击或本场战斗结束。该次攻击的命中额外降低25个百分点，无论最终命中与否均消耗机会；同来源不能囤积。它不提供减伤或护盾，不规避已有持续伤害；明确无视闪避、强制命中或已锁定空间的攻击不受这次偏斜影响。",
+      "operations": [
+        {
+          "type": "one_use_evasion",
+          "incomingHitPoints": -25,
+          "uses": 1,
+          "lifetime": "battle",
+          "channels": [
+            "物理",
+            "能量"
+          ],
+          "directOnly": true,
+          "consumeOnHitAttempt": true,
+          "ignoreAgainst": [
+            "bypass_evasion",
+            "forced_hit",
+            "space_lock"
+          ],
+          "maxStoredUses": 1
+        }
+      ],
+      "id": "sailiya-skill-5",
+      "ring": 5,
+      "costPercent": 0.08,
+      "cost": 163,
+      "cast": 0.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 2.8,
+      "K": 2.2,
+      "Q": 6.16,
+      "name": "青红敕剑",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 19000,
+      "target": "一名敌人",
+      "castFixed": 1.2,
+      "cooldown": 18,
+      "factor": 0.85,
+      "budgetFactor": 1.25,
+      "role": "双符合敕，先削生命盾再斩击",
+      "effect": "以断肠之红、真实之青合敕双剑。作一次普通命中判定；命中后先以0.45×Q×魂力攻击值削减目标最外层生命护盾，再造成1.2×Q×物理攻击值×0.85的物理原始伤害。削盾部分不足以摧毁护盾时，后续攻击仍正常受剩余护盾阻挡；没有生命护盾时，该部分不转为生命伤害。整式只附加一次符剑，削盾段不重复生成附伤基数，不移除精神盾、免疫或角色固有机制。",
+      "operations": [
+        {
+          "type": "hit_contest_once"
+        },
+        {
+          "type": "reduce_outer_life_shield",
+          "coefficient": 0.45,
+          "power": "SA",
+          "layers": 1,
+          "damageIfNoShield": 0,
+          "runeBasis": false
+        },
+        {
+          "type": "direct_attack",
+          "channel": "物理",
+          "factor": 0.85,
+          "reuseHit": true
+        }
+      ],
+      "id": "sailiya-skill-6",
+      "ring": 6,
+      "costPercent": 0.14,
+      "cost": 563,
+      "cast": 1.2,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.15,
+      "K": 2.2,
+      "Q": 6.93,
+      "name": "天廻真身",
+      "category": "强化",
+      "channel": "能量",
+      "years": 48000,
+      "target": "自己",
+      "castFixed": 1.5,
+      "cooldown": 32,
+      "role": "双剑真身，强化持续攻伐",
+      "effect": "黑白羽翼自双剑展开，靛青刃锋如细线贯入风中。本场战斗内物理攻击值提高20%，同来源重施不叠层。该效果作用于攻击值，不赠送额外斩击或回合，不提供新的减伤、治疗或魂力上限加成。秘元归宿体与符剑仍按各自规则结算。",
+      "operations": [
+        {
+          "type": "battle_attack_up",
+          "channel": "物理",
+          "value": 0.2,
+          "lifetime": "battle",
+          "sameSourcePolicy": "replace-not-stack",
+          "extraActions": 0
+        }
+      ],
+      "id": "sailiya-skill-7",
+      "ring": 7,
+      "costPercent": 0.12,
+      "cost": 245,
+      "cast": 1.5,
+      "extensionRequired": true
+    },
+    {
+      "q": 3.8,
+      "K": 2.2,
+      "Q": 8.36,
+      "name": "万羽归风",
+      "category": "攻击",
+      "channel": "物理",
+      "years": 88000,
+      "target": "敌方全体",
+      "castFixed": 2,
+      "cooldown": 26,
+      "factor": 1.25,
+      "role": "分配总威力的群体终式",
+      "effect": "万千羽翼卷向剑锋，将乱舞尽数压入一阵纵横的风。整次原始伤害预算为1.2×Q×物理攻击值×1.25，在施放完成时所有存活敌人之间均分，各目标独立命中并按防御与护盾结算；未命中份额不转移给其他目标。整式只选择一次符剑、支付一次附加费，附伤按各目标主攻击份额分别结算，不因敌人数增加总伤害预算。目标数于施放完成时固定，不追补后来入场者。",
+      "operations": [
+        {
+          "type": "budgeted_area_attack",
+          "channel": "物理",
+          "factor": 1.25,
+          "totalBudgetFixed": true,
+          "splitPolicy": "equal_living_targets_at_release",
+          "hitPolicy": "per_target",
+          "missedShares": "discard",
+          "sharedRuneActivation": true
+        }
+      ],
+      "id": "sailiya-skill-8",
+      "ring": 8,
+      "costPercent": 0.18,
+      "cost": 571,
+      "cast": 2,
+      "extensionRequired": true
+    }
+  ],
+  "traits": [
+    {
+      "name": "承露符锋",
+      "effect": "每次普通攻击或攻击魂技施放时，可在正常费用之外，再支付本次实际魂力费用的50%，为整次攻击附加一次符剑。符剑以各主攻击段进入生命护盾与承伤分配前的有效伤害为基数，取其30%作为附伤原始值，自动选择目标元素抗性最低的一项，再结算对应元素抗性、护盾与承伤机制；主攻击已结算的普通防御不重复扣除。连击和群攻共享一次附加选择与费用，不因附伤再次触发。魂力不足时不能附加，但可只施放原攻击。被该次攻击命中的目标，若在抵挡主攻击或附伤时实际消耗魂力，对应的本次抵挡魂力费用翻倍；预先付费护盾不追溯收费，免费护盾、纯肉体承伤或绝对免伤不凭空产生费用。"
+    },
+    {
+      "name": "秘元归宿体",
+      "effect": "魂力上限提高50%，每个个人回合结束回复有效最大魂力的5%。自上次个人回合结束以来，真实受到的生命或精神护持伤害有20%凝为秘元，在本次回合末等量回复魂力，不超过魂力上限；护盾损失、过量伤害、主动支付的生命费用与自伤不计。若本次结算周期被带有封锁或禁绝标签的效果命中，则该周期不凝结秘元，待凝结量清空，不留到下一回合；其他回魂是否受阻依封锁效果本身结算。她不受隐匿与目标高速造成的命中惩罚，能锁定隐形或虚化目标，但仍受正常命中判定与明确伤害免疫约束。"
+    }
+  ],
+  "implementation": {
+    "status": "specification-only",
+    "integrated": false,
+    "numericStatusLifetime": "battle_or_consumed",
+    "turnClock": "个人回合以一次正常行动机会至行动结束计；连击分段、符剑附伤、持续伤害跳数不额外计回合。受伤凝元从上次回合末累计至本次回合末，包含待机期间的真实受伤。",
+    "runeEdge": {
+      "optional": true,
+      "extraCostRate": 0.5,
+      "extraCostRounding": "ceil",
+      "basisCost": "actual_main_attack_cost_before_rune_surcharge",
+      "damageRate": 0.3,
+      "damageBasis": "main_damage_after_hit_and_ordinary_defense_before_shields_and_resource_routing",
+      "additionalDamageMitigated": true,
+      "ordinaryDefenseAlreadyAccounted": true,
+      "lifeDamageOnly": true,
+      "includeShieldedMainDamage": true,
+      "excludeShieldStrip": true,
+      "activationUnit": "one_basic_or_one_skill_cast",
+      "partPolicy": "allocate_to_executed_hit_parts",
+      "targetPolicy": "allocate_to_main_target_shares",
+      "recursive": false,
+      "defenseResourceCostMultiplier": 2,
+      "defenseCostScope": "actual_on_hit_resource_cost_only",
+      "noRetroactiveShieldCastFees": true,
+      "zeroCostDefenseSurcharge": 0,
+      "multiplyCostOnlyOnce": true,
+      "elementSelection": {
+        "eligible": [
+          "金",
+          "木",
+          "水",
+          "火",
+          "土",
+          "毒",
+          "风",
+          "雷",
+          "光",
+          "暗",
+          "冰"
+        ],
+        "minimum": "effective_target_element_resistance",
+        "tiePriority": [
+          "风",
+          "金",
+          "木",
+          "水",
+          "火",
+          "土",
+          "毒",
+          "雷",
+          "光",
+          "暗",
+          "冰"
+        ],
+        "missingTableFallback": "neutral_energy_no_repeat_base_defense",
+        "mentalSlotEligible": false,
+        "ignoreImmunity": false
+      }
+    },
+    "secretOrigin": {
+      "maxMPMultiplier": 1.5,
+      "costBaseMPUnchanged": true,
+      "normalMaxMP": 5092,
+      "effectiveMaxMP": 7638,
+      "endTurnMPRecoveryRate": 0.05,
+      "damageToMPRecoveryRate": 0.2,
+      "poolLosses": [
+        "HP",
+        "SH"
+      ],
+      "exclude": [
+        "shield_loss",
+        "overkill",
+        "hp_cost",
+        "self_damage",
+        "resource_cost"
+      ],
+      "pendingExpires": "owner_turn_end",
+      "sealTags": [
+        "resource_seal",
+        "resource_prohibition"
+      ],
+      "discardPendingOnSeal": true,
+      "revives": false,
+      "endTurnRecoveryOrder": [
+        "max_mp_5percent",
+        "damage_conversion_20percent"
+      ],
+      "separateRecoveryEventIDs": true
+    },
+    "perception": {
+      "ignoreConcealmentAccuracyPenalty": true,
+      "ignoreNegativeAgilityDifference": true,
+      "canSelectInvisible": true,
+      "canSelectPhased": true,
+      "bypassHitRoll": false,
+      "bypassDamageImmunity": false,
+      "positiveHitCap": 0.97,
+      "negativeHitFloor": 0.05
+    },
+    "requiredAdapters": [
+      "optional_rune_payment",
+      "grouped_attack_budget",
+      "element_resistance_table",
+      "on_hit_defense_resource_fee",
+      "turn_end_recovery",
+      "actual_damage_ledger",
+      "resource_seal_tags",
+      "real_target_perception",
+      "charged_attack_modifier",
+      "interruptible_sword_dance",
+      "budgeted_area_attack"
+    ],
+    "notes": [
+      "符剑追踪整次施放标识；一击多段、群体攻击及符剑本身均不能递归征费或附伤。",
+      "免费攻击的本次费用为0时，符剑的50%附加费也为0；正数附加费向上取整。",
+      "默认不逐元素猜测抗性。缺少完整元素抗性数据时，附伤按中性能量附伤处理，不重复扣除主攻击已结算的普通防御，不臆造最低抗性或转为真实伤害、精神槽伤害。",
+      "倍耗只改变抵挡魂力的单价，不把同一笔伤害再复制一份。若某承伤机制原拟用90魂力抵挡90伤害，倍耗后需180魂力；仅余100魂力时最多抵挡50伤害，其余按原承伤规则回落。",
+      "幽行在护盾后的非精神伤害中转魂力承伤时会产生实际费用，可受倍耗；祥光等入场免费盾不因命中补扣魂力。此处只规定交互，不宣称必胜或抽空对手全部魂力。",
+      "魂力上限增幅只施加一次，保留原始baseMP作为魂技和普攻费用基数，不因上限扩大而再次抬高同一技能的费用。",
+      "秘元不是护盾、减伤或生命治疗；致命伤害造成退场后，不再执行回合末回魂。5%回复与20%凝元分别发出回复事件，能被明确拦截回魂的规则处理。",
+      "仅带真实封锁／禁绝标签并实际命中的效果可阻止该周期凝元；不能只凭技能名称含封、锁就判定封锁魂力。",
+      "化羽华的生命费用不纳入受伤凝元；回魂与附伤都不产生额外行动。"
+    ]
+  }
+}

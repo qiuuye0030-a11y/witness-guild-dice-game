@@ -633,7 +633,7 @@
       for(const [id,min,max]of fields){if(id==='customSides'&&c.sides!=='custom')continue;const v=Number($(id).value);const good=$(id).value.trim()!==''&&Number.isInteger(v)&&v>=min&&v<=max;$(id).classList.toggle('invalid',!good);if(!good)throw Error(`${id==='customSides'?'骰子面数':id==='count'?'同投数量':'总修正'}须为${min}至${max}的整数`);}
       sides=c.sides==='custom'?Number($('customSides').value):Number(c.sides);count=Number($('count').value);modifier=Number($('modifier').value);
       c.custom=Number($('customSides').value)||c.custom;c.count=count;c.modifier=modifier;
-    }else sides={tier:1000,soul:20,season:4,age:9,span:6,characterTime:9,characterSoul:1000,characterStats:21,characterRing:100}[c.preset];
+    }else sides={tier:1000,soul:catalog.filter(x=>x.tier===config.tier).length,season:4,age:9,span:6,characterTime:9,characterSoul:1000,characterStats:21,characterRing:100}[c.preset];
     return {c,sides,count,modifier};
   }
   function sync(){
@@ -641,7 +641,7 @@
     $('customSides').value=config.custom;$('count').value=config.count;$('modifier').value=config.modifier;
     $('freeFields').hidden=config.preset!=='free';$('customGroup').hidden=config.sides!=='custom';$('tierGroup').hidden=config.preset!=='soul';
     document.querySelectorAll('#dieChoices button').forEach(b=>{const a=b.dataset.sides===config.sides;b.classList.toggle('active',a);b.setAttribute('aria-pressed',String(a));});
-    const sides=config.preset==='free'?(config.sides==='custom'?config.custom:Number(config.sides)):{tier:1000,soul:20,season:4,age:9,span:6,characterTime:9,characterSoul:1000,characterStats:21,characterRing:100}[config.preset];
+    const sides=config.preset==='free'?(config.sides==='custom'?config.custom:Number(config.sides)):{tier:1000,soul:catalog.filter(x=>x.tier===config.tier).length,season:4,age:9,span:6,characterTime:9,characterSoul:1000,characterStats:21,characterRing:100}[config.preset];
     const count=config.preset==='free'?config.count:1,mod=config.preset==='free'?config.modifier:0;
     $('rollSummary').textContent=count+'d'+sides+(mod>0?' + '+mod:mod<0?' − '+Math.abs(mod):'');
     $('dieType').textContent='D'+sides+' · '+(config.preset==='free'?'等概率骰':modes[config.preset]);
@@ -752,7 +752,7 @@
     }
     if(c.preset==='characterSoul'){
       if(!next.time)throw Error('先确定角色时间');
-      const tier=tierFor(draw(1000,'武魂档位')),soul=catalog.filter(x=>x.tier===tier)[draw(20,'武魂候选')-1],styles=R.mainStyles(soul),releases=soul.release_options;
+      const tier=tierFor(draw(1000,'武魂档位')),soul=catalog.filter(x=>x.tier===tier)[draw(catalog.filter(x=>x.tier===tier).length,'武魂候选')-1],styles=R.mainStyles(soul),releases=soul.release_options;
       const style=styles[styles.length>1?draw(styles.length,'战斗类别')-1:0],release=releases[releases.length>1?draw(releases.length,'释放方式')-1:0];
       Object.assign(next,{soulId:soul.id,style,release,stats:null,deviations:null,rings:[]});
       title=soul.name+' · '+soul.tier+'档';description=`${soul.kind} · ${soul.attribute} · ${style} · ${release}`;
@@ -813,7 +813,6 @@
       sheet.append(node('p',`${character.level}级 · ${model.rings}个环位 · 本等级基准${model.benchmark} · 武魂系数${R.GRADE[soul.tier-1]} · 蓝耗降低${model.derived.costReduction}% · 读条缩短${model.derived.castReduction}% · 操纵训练收益×${model.derived.controlGrowth}`,'model-note'));
       const detail=node('details',undefined,'stat-breakdown');detail.append(node('summary','查看每项数值怎么得到'));
       detail.append(table(['能力','基准','类别%','形态%','精神专长%','武魂差分%','偏差%','结果'],R.KEYS.map(k=>{const b=model.breakdown[k];return [R.LABELS[k],b.base,b.style,b.shape,b.mental,b.weapon||0,b.deviation,model.stats[k]];})),node('p',`结果＝基准 × ${R.GRADE[soul.tier-1]} × (1＋四项修正之和) × (1＋个体偏差)。武魂差分是固定特征，个体偏差是骰子结果；精神稳定按${R.benchmark(character.level).stability}＋${character.wDeviation}计算。`,'micro'));
-      const trait=WitnessTraitRegistry.getBySoulId(soul.id);if(trait){const box=node('aside',undefined,'camp-soul-trait');box.append(node('small','武魂特性','camp-soul-trait-label'),node('strong',trait.name,'camp-soul-trait-name'),node('p',WitnessTraits.brief(trait),'camp-soul-trait-brief'));sheet.append(box);}
       sheet.append(detail);
     }
     const ringList=$('ringList');ringList.replaceChildren();

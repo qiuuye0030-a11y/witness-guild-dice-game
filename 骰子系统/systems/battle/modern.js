@@ -97,7 +97,7 @@ function plan(u,cast,pre){
 }
 function applyDamage(t,amount,channel,source,fx){
   // A successful phase swap avoids one direct life packet, not poison ticks.
-  if(channel!=='精神'&&!this._periodic&&this.value(t,'phaseSwap')){t.statuses=t.statuses.filter(s=>s.type!=='phaseSwap');this.addLog(t.name+'以极光置换避开一次直接生命伤害。',{type:'phaseSwap',target:t.id});return;}
+  if(!source?.scarred&&channel!=='精神'&&!this._periodic&&this.value(t,'phaseSwap')){t.statuses=t.statuses.filter(s=>s.type!=='phaseSwap');this.addLog(t.name+'以极光置换避开一次直接生命伤害。',{type:'phaseSwap',target:t.id});return;}
   const hp=t.hp;ShieldActions.methods.applyDamage.call(this,t,amount,channel,source,fx);
   if(t.hp<hp&&t.cast?.skill?.modernEffect==='qinyanSwap'){t.cast=null;this.endTurn(t,false);this.addLog(t.name+'的置换准备被伤害打断。',{type:'interrupt',target:t.id});}
   this.onResourceChange(t);

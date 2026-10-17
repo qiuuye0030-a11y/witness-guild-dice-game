@@ -54,7 +54,8 @@
       if(s.phase==='ending'&&s.result?.winner===0&&s.challenge?.completed?.includes('guildmaster:xuejidong'))this.unlock('guildmaster_clear',s);
       const defeats=(s.examDefeats||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=11);
       if(defeats.length)this.data.defeats[s.characterId]=[...new Set([...(this.data.defeats[s.characterId]||[]),...defeats])];
-      const highest=Math.max(s.promotionState?.highestRatingIndex??-1,currentRatingIndex);
+      const revision=root.WitnessRules?.ratingRulesVersion||2;
+      const highest=Math.max(s.promotionState?.ratingRulesVersion===revision?s.promotionState.highestRatingIndex:-1,currentRatingIndex);
       if(highest>=4)this.unlock('rating_crazy',s);if(highest>=5)this.unlock('rating_divine',s);
       if(s.phase==='ending'&&s.result?.winner===0&&s.journal.some(j=>j.type==='ending')){
         const initial=s.character.initialPotential??s.draft?.results?.tier;

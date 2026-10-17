@@ -13,10 +13,6 @@ wrapper='''(function(host){
 '''+engine+'''
   // END V13 PLAYER ENGINE
   host.WitnessRules=globalThis.WitnessRules;
-  host.WitnessTraits=globalThis.WitnessTraits;
-  host.WitnessTraitBalance=globalThis.WitnessTraitBalance;
-  host.WitnessTraitRegistry=globalThis.WitnessTraitRegistry;
-  host.WitnessTraitRuntime=globalThis.WitnessTraitRuntime;
   host.WitnessBattle=globalThis.WitnessBattle;
   host.WitnessTemplates=globalThis.WitnessTemplates;
   host.WitnessV13Rules=globalThis.WitnessRules;
@@ -26,6 +22,9 @@ wrapper='''(function(host){
   host.WitnessMechanicsV14=globalThis.WitnessMechanicsV14;
   host.WitnessProjectionV14=globalThis.WitnessProjectionV14;
   host.WitnessAIV14=globalThis.WitnessAIV14;
+  host.WitnessScarredChallenge=globalThis.WitnessScarredChallenge;
+  host.WitnessV12=globalThis.WitnessV12;
+  host.WitnessV12Live=globalThis.WitnessV12Live;
 })(window);
 '''
 (p/'battle-v13-browser.js').write_text(wrapper,encoding='utf-8')

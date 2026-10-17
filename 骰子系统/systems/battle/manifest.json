@@ -1,13 +1,8 @@
 {
-  "version": "v11",
+  "version": "v12",
   "combatRulesVersion": 17,
   "modules": [
     "../dice/engine.js",
-    "../traits/tables.js",
-    "../traits/balance.js",
-    "../traits/naming.js",
-    "../traits/index.js",
-    "../traits/traits-data.js",
     "rules.js",
     "examiners.js",
     "../challenge/battle.js",
@@ -24,11 +19,16 @@
     "shields.js",
     "modern.js",
     "mechanics-fix.js",
-    "traits.js",
+    "actor-state.js",
+    "scarred-woman.js",
     "projection.js",
     "unified-decision.js",
+    "../v12/modules-bundle.js",
+    "../v12/battle.js",
     "compose.js",
-    "models.js"
+    "models.js",
+    "../v12/models.js"
   ],
-  "publicMethods": 77
+  "publicMethods": 77,
+  "soulTraits": false
 }

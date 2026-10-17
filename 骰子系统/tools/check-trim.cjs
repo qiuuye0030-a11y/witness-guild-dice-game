@@ -1,0 +1,5 @@
+const fs=require('fs'),path=require('path'),{spawnSync}=require('child_process'),root=path.resolve(__dirname,'..');
+for(const dir of ['output/v11','output/catalog','output/1008/数值回调验算'])fs.mkdirSync(path.join(root,dir),{recursive:true});
+const tests=['tools/verify-trim-catalog.cjs','tools/verify-scarred-challenge.cjs','tools/verify-merged-v11.cjs','tools/verify-quests-v11.cjs','tools/verify-growth-1008.cjs','tools/verify-achievements-1008.cjs','tools/verify-cultivation-1008.cjs'],rows=[];
+for(const test of tests){const r=spawnSync(process.execPath,[test],{cwd:root,encoding:'utf8',maxBuffer:8*1024*1024});rows.push({test,passed:r.status===0,output:r.stdout,error:r.stderr});console.log(test+' '+(r.status===0?'PASS':'FAIL'));if(r.status!==0){console.error(r.stdout,r.stderr);break;}}
+const passed=rows.length===tests.length&&rows.every(r=>r.passed);fs.writeFileSync(path.join(root,'output/catalog/最终回归.json'),JSON.stringify({passed,gameVersion:'v11.01武魂精简版',catalogRulesVersion:1,soulTraits:false,browserVisualQA:false,tests:rows},null,2));if(!passed)process.exitCode=1;

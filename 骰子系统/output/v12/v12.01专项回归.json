@@ -1,0 +1,18 @@
+{
+  "passed": 12,
+  "tests": [
+    "submitted report proves hidden runtime states; restored display reads same real stacks",
+    "reported encounter replays under revised rules without a forced loss and Cheng gains real mana",
+    "Cheng 5% maxMP returns once per normal turn, clamps at max and cannot heal after defeat",
+    "untimed hunts preserve full-battle buffs/shields beyond180; timed effects still expire",
+    "true resource deadlock lasts10s; wait and repeated display reads do not reset it; draw reload remains draw",
+    "future cast prevents false deadlock; one restored affordable action clears timer",
+    "three attempts total survive reload; target/allies stay fixed, sessions distinct and fourth denied",
+    "second-attempt victory grants exactly one reward and makes retries unavailable",
+    "frog immunity includes statDownA; long fight ordinary timed statuses are not mislabeled permanent",
+    "display covers ice field, tide stacks, fee, lamps and charges with no extra mechanical statuses",
+    "permanent beast moss survives retries; ordinary and field slow immunity agree",
+    "simultaneous full-team defeat is a draw and never creates hunt rewards"
+  ],
+  "visualReview": false
+}

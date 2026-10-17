@@ -37,7 +37,7 @@ const caps={};
   const setBuff=function(u,type,value,skill,extra={}){
     const source=extra.source||skill.id,actionsRemaining=skill.burstActions||undefined;
     u.statuses=u.statuses.filter(s=>!(s.type===type&&s.source===source));
-    u.statuses.push({type,value,until:180001,actionsRemaining,...extra,source});
+    u.statuses.push({type,value,until:this.v12Battle?Number.MAX_SAFE_INTEGER:180001,actionsRemaining,...extra,source});
   };
 
   // A DOT stores pre-defence power and persistent cast modifiers. Recalculate

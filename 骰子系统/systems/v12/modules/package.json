@@ -1,0 +1,17 @@
+{
+  "name": "witness-hunt-soulbone-modules",
+  "version": "0.2.0-beasts.1",
+  "private": true,
+  "description": "v12主游戏已接入的讨伐与魂骨模块快照；实时战斗适配在上级 battle.js。",
+  "main": "src/splice/compose.js",
+  "scripts": {
+    "check": "node tools/check.cjs",
+    "demo": "node tools/demo.cjs",
+    "extract-texts": "node tools/extract-texts.cjs",
+    "sync-npc": "node tools/sync-npc.cjs",
+    "build-beasts": "node tools/build-beasts.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

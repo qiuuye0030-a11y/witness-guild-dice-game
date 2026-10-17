@@ -8,7 +8,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,16 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Rebuild the trait catalog from the source catalog
-        working-directory: 骰子系统
-        run: node systems/traits/build.cjs
-      # The regression suites read the generated engine bundles and themes.
       - name: Build both standalone themes
         working-directory: 骰子系统
-        run: python -X utf8 _full_package.py
-      - name: Twelve regression suites for trait cards, saves, growth and naming
+        run: python -X utf8 _build_v12.py
+      # Both checks read the generated themes and the build manifest.
+      - name: Verify the packaged themes and build manifest
         working-directory: 骰子系统
-        run: node tools/check-v11.cjs
-      - name: Verify the share archive and write both release ZIPs
+        run: node tools/verify-v12-package.cjs
+      - name: Release regressions (v12.01, v12, UI and the 188-check module package)
         working-directory: 骰子系统
-        run: python -X utf8 tools/package-v11.py
+        run: python -X utf8 tools/verify-v12-release.py

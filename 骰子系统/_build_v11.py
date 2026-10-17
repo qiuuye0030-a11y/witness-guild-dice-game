@@ -21,7 +21,7 @@ styles='\n'.join((p/name).read_text(encoding='utf-8') for name in ['campaign.css
 shared=''.join(script(name) for name in ['achievements.js','campaign-creation.js','story-data.js','campaign-events.js','campaign.js','systems/challenge/state.js','systems/challenge/ui.js'])
 outputs={}
 for theme,label in [('classic','经典深靛版'),('chenxi','晨曦朝阳版')]:
-    html=base.replace('<title>见证者公会 · 转正战试玩</title>',f'<title>见证者公会 v11版 · {label}</title>',1)
+    html=base.replace('<title>见证者公会 · 转正战试玩</title>',f'<title>见证者公会 v11.01武魂精简版 · {label}</title>',1)
     html=html.replace('<body>',f'<body class="campaign-mode {"chenxi-mode" if theme=="chenxi" else "classic-mode"}">',1)
     part=markup;extraStyles='';adapter=''
     if theme=='chenxi':
@@ -45,11 +45,11 @@ for theme,label in [('classic','经典深靛版'),('chenxi','晨曦朝阳版')]:
     html=html.replace('<main>','<main>'+part,1).replace('</body>',shared+adapter+gameUI+'</body>',1)
     assert not re.search(r'<(?:script|link)[^>]+(?:src|href)=["\']https?://',html)
     assert len(re.findall(r'class\s+Battle\s*\{',html))==1
-    file=root/f'见证者公会_v11版_{label}.html';file.write_text(html,encoding='utf-8');outputs[label]={'file':str(file),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
-folder=root/'v11版双前端分享';folder.mkdir(exist_ok=True)
+    file=root/f'见证者公会_v11.01版_{label}.html';file.write_text(html,encoding='utf-8');outputs[label]={'file':str(file),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
+folder=root/'v11.01版双前端分享';folder.mkdir(exist_ok=True)
 for label,meta in outputs.items():shutil.copyfile(meta['file'],folder/(label+'.html'))
 
-readme="""见证者公会 · v11版（成长规则10081）
+readme="""见证者公会 · v11.01武魂精简版（成长规则10081）
 
 解压后用浏览器打开任一主题HTML；全部资源内置，支持离线游玩。
 两主题采用相同规则。可通过保存到文件、读取存档交换完整旅程。
@@ -58,24 +58,18 @@ readme="""见证者公会 · v11版（成长规则10081）
 旧V13及V14的兼容战斗存档可继续；原有更早规则迁移保持。
 """
 (folder/'请先阅读.txt').write_text(readme,encoding='utf-8-sig')
-for name in ['v11版_更新说明.md','v11版_数值与验收报告.md','特性命名程序使用说明.md','v11版_特性卡修订说明.md']:
-    if (root/name).exists():shutil.copyfile(root/name,folder/name)
-shutil.copyfile(p/'systems/traits/魂性谱.html',folder/'魂性谱_特性查询.html')
-shutil.copyfile(p/'systems/traits/命名映射.csv',folder/'特性命名映射.csv')
-for name in ['特性配对战斗对比.json','特性战斗逐场.csv','特性配对成长对比.json','特性成长覆盖补充.json','会员调整对比.json']:
-    shutil.copyfile(p/'output/v11'/name,folder/name)
-with (folder/'请先阅读.txt').open('a',encoding='utf-8-sig') as f:
-    f.write('\n选择经典深靛版或晨曦朝阳版开始游戏；魂性谱_特性查询仅供查阅特性。\n挑战结束后可查看本场战报；旅程结束页保留最近30场挑战历史及导出入口。\n数值与验收报告包含配对结果和样本限制。重命名程序在另附开发源码包中，使用前阅读命名说明。\n')
-manifest={'gameVersion':'v11','cultivationRulesVersion':10081,'combatRulesVersion':17,'traitBudgetVersion':3,'traitNamingVersion':2,'baselineSHA256':'644d2829b99a0e52140b235e159d1738ff7a1fd35855016dddcdb4a01b40145b','editions':outputs,'sources':{}}
-manifest.update({'traitCardRevision':2,'legacyGenericPassives':False,'characterTraitBindingVersion':2,'balanceResultsStatus':'历史结果，删除旧通用被动后需重算战斗双方基线'})
+for name in ['武魂精简版_更新说明.md','精简武魂阅读清单.md','精简武魂总表.csv','武魂删留映射.csv']:
+    shutil.copyfile(root/name,folder/name)
+manifest={'gameVersion':'v11.01','cultivationRulesVersion':10081,'combatRulesVersion':17,'soulTraits':False,'catalogRulesVersion':1,'baselineSHA256':'644d2829b99a0e52140b235e159d1738ff7a1fd35855016dddcdb4a01b40145b','editions':outputs,'sources':{}}
+manifest.update({'ratingRulesVersion':2,'ratingCurveAmplitude':1.8,'scarredChallengeVersion':1,'soulTraits':False})
 for f in sorted((p/'systems').rglob('*')):
     if f.is_file():manifest['sources'][str(f.relative_to(p))]=hashlib.sha256(f.read_bytes()).hexdigest()
 for name in ['achievements.js','campaign-ui.js','skill-text.js','battle-ui-v13.js','campaign-creation.js','journey.css','_build_v11.py']:
     manifest['sources'][name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
 (folder/'构建清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
-with zipfile.ZipFile(root/'见证者公会_v11版_双前端分享包.zip','w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+with zipfile.ZipFile(root/'见证者公会_v11.01版_双前端分享包.zip','w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
     for f in folder.iterdir():
-        if f.is_file():z.write(f,'见证者公会v11/'+f.name)
-with zipfile.ZipFile(root/'见证者公会_v11版_双前端分享包.zip') as z:assert z.testzip() is None
-(p/'output/v11版封装核对.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+        if f.is_file():z.write(f,'见证者公会v11.01/'+f.name)
+with zipfile.ZipFile(root/'见证者公会_v11.01版_双前端分享包.zip') as z:assert z.testzip() is None
+(p/'output/v11.01版封装核对.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(outputs,ensure_ascii=False))

@@ -1,0 +1,40 @@
+{
+  "rosterVersion": 1,
+  "copiedFrom": "../../../../../友方npc/characters",
+  "sourceNote": "友方npc 名录为独立规范，尚未接入主游戏战斗；本目录只保存只读快照。",
+  "files": [
+    {
+      "id": "chengliang",
+      "name": "程良",
+      "file": "chengliang.json",
+      "sha256": "1fc780214649005e0af03dc6db7b99d5e4a387807e9426f98fd5e676dec87633",
+      "bytes": 18313,
+      "level": 81,
+      "rating": "狂级",
+      "traitCount": 3,
+      "skillCount": 8
+    },
+    {
+      "id": "sailiya_fengzhi",
+      "name": "赛利亚·风织",
+      "file": "sailiya_fengzhi.json",
+      "sha256": "6713b447ef674e01bff431bb3d5823144fc8e653f236e5d0f4fe2dfb5a1fad87",
+      "bytes": 19834,
+      "level": 81,
+      "rating": "强级",
+      "traitCount": 2,
+      "skillCount": 8
+    },
+    {
+      "id": "xutaiping",
+      "name": "徐太平",
+      "file": "xutaiping.json",
+      "sha256": "5717eae771ae4027f04291489cefd942a1c8c18868d4f8db8d30a093fcc2c850",
+      "bytes": 17969,
+      "level": 81,
+      "rating": "强级",
+      "traitCount": 2,
+      "skillCount": 8
+    }
+  ]
+}

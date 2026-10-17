@@ -4,6 +4,7 @@ const ChallengeBattle=(function(root){
 const copy=x=>JSON.parse(JSON.stringify(x));
 const id='guildmaster_xuejidong';
 function initialize(b,challengeId){
+  if(challengeId==='mysterious_scarred_woman')return root.WitnessScarredChallenge.initialize(b);
   if(challengeId!==id)throw Error('未知的独立挑战');
   const original=root.WitnessTemplates.find(t=>t.id==='xuejidong');
   const data=copy(original);
@@ -20,6 +21,7 @@ function initialize(b,challengeId){
   b.addLog('独立会长挑战：95级封号斗罗·凶级，九魂技与头部魂骨；原设97级独立保留。',{type:'challengeStart'});
 }
 function restore(b){
+  if(b.challengeId==='mysterious_scarred_woman')return root.WitnessScarredChallenge.validate(b);
   if(!b.challengeId)return;
   if(b.challengeId!==id)throw Error('未知挑战快照');
   const u=b.unit('enemy'),p=u?.guildmaster;

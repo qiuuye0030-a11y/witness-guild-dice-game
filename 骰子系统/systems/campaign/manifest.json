@@ -4,12 +4,13 @@
     "quests.js",
     "journey.js",
     "modern.js",
-    "traits.js",
+    "v12.js",
     "compose.js"
   ],
   "publicMethods": 79,
   "definitionsBefore": 96,
   "liveDefinitions": 93,
-  "version": "v11",
-  "cultivationRulesVersion": 10081
+  "version": "v12",
+  "cultivationRulesVersion": 10081,
+  "soulTraits": false
 }

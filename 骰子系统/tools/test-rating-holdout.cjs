@@ -1,0 +1,6 @@
+'use strict';
+const fs=require('fs'),path=require('path'),{run,summarize}=require('./calibrate-rating-curve.cjs'),rows=[],configs=[];
+for(let slot=100;slot<300;slot++)configs.push({group:'natural',policy:['P','C','B','cycle'][slot%4],slot,style:['强攻','敏攻','控制','防御','辅助'][slot%5],seed:'rating-holdout-natural-'+slot});
+for(let slot=0;slot<100;slot++)configs.push({group:'favored',tier:[1,3,5,7,9][slot%5],rank:[1,3][slot%2],policy:['P','C'][Math.floor(slot/2)%2],slot:slot+300,style:['强攻','控制','辅助'][slot%3],seed:'rating-holdout-low-talent-'+slot});
+for(const config of configs){rows.push(run(config));if(rows.length%50===0)console.log('rating holdout',rows.length,'/300');}
+const report={n:rows.length,amplitude:1.8,note:'选定曲线后的独立种子：200条自然开局+100条低天赋、高资源、偏科培养压力旅程；不使用真实玩家总体权重。',before:summarize(rows,0),after:summarize(rows,1.8),byGroup:Object.fromEntries(['natural','favored'].map(group=>{const rs=rows.filter(r=>r.config.group===group);return [group,{before:summarize(rs,0),after:summarize(rs,1.8)}];})),rows};fs.writeFileSync(path.join(__dirname,'../output/v11/评级曲线_独立验证.json'),JSON.stringify(report,null,2));console.log('HOLDOUT COMPLETE',JSON.stringify({before:report.before,after:report.after,byGroup:report.byGroup}));

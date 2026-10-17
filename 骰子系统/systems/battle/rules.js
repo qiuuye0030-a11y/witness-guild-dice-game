@@ -107,11 +107,18 @@
     else fraction=.08;
     return Math.max(1,Math.ceil((model.derived.baseMP||model.derived.MP)*fraction*(s.costMultiplier||1)*(1-model.derived.costReduction/100)));
   }
+  const ratingRulesVersion=2;
+  function ratingThresholds(level,{npc=false}={}){
+    const rings=benchmark(level).rings,z=clamp((level-1)/60,0,1);
+    const multiplier=npc?1:1+1.8*(1-z*z*(3-2*z));
+    return {version:ratingRulesVersion,rings,multiplier,crazy:1.75*multiplier,divine:2.10*multiplier,phase:npc?'独立档案':rings<4?'低环校准':rings===4?'四环过渡':rings===5?'五环回落':'原有标准'};
+  }
   function rating(model){
     const standard=benchmark(model.level).base,score=Math.round(KEYS.reduce((sum,k)=>sum+model.stats[k],0)/6/standard*10000)/10000;
-    const title=score<1?'纸':score<1.35?'并':score<1.60?'强':score<1.75?'凶':score<2.10?'狂':'神';
-    return {score:round2(score),label:title+'级',basis:'六维均值 / 同等级标准 '+standard+'；并级为合格线，不含临时增益'};
+    const thresholds=ratingThresholds(model.level,{npc:model.ratingProfile==='npc'});
+    const title=score<1?'纸':score<1.35?'并':score<1.60?'强':score<thresholds.crazy?'凶':score<thresholds.divine?'狂':'神';
+    return {score:round2(score),label:title+'级',thresholds,basis:'六维均值 / 同等级标准 '+standard+'；当前狂级≥'+round2(thresholds.crazy)+'倍、神级≥'+round2(thresholds.divine)+'倍，不含临时增益'};
   }
-  const api={calculationVersion:11,ringFloor,ringRange,soulControl,setResourceConfig,getResourceConfig:()=>({...resourceConfig}),skillBudget,rating,KEYS,LABELS,BASE,GRADE,STYLE,CAPS,BAND_LIMITS,BANDS,QS,WEIGHTS,CATEGORIES,benchmark,shapeMods,mainStyles,isMental,derive,buildStats,controlEffect,band,pickCategory,makeSkill,round2};
+  const api={calculationVersion:11,ratingRulesVersion,ratingThresholds,ringFloor,ringRange,soulControl,setResourceConfig,getResourceConfig:()=>({...resourceConfig}),skillBudget,rating,KEYS,LABELS,BASE,GRADE,STYLE,CAPS,BAND_LIMITS,BANDS,QS,WEIGHTS,CATEGORIES,benchmark,shapeMods,mainStyles,isMental,derive,buildStats,controlEffect,band,pickCategory,makeSkill,round2};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessRules=api;
 })(typeof globalThis==='undefined'?this:globalThis);

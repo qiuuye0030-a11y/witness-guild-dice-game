@@ -12,9 +12,13 @@ Thumbs.db
 *成就档案*.json
 
 # Built deliverables ship as release attachments.
+见证者公会_v12.01版_*.html
+见证者公会_v12版_*.html
 见证者公会_v11版_*.html
 见证者公会_10.*版_*.html
 见证者公会_完整游戏.html
+v12.01版双前端分享/
+v12版双前端分享/
 v11版双前端分享/
 10.*版双前端分享/
 完整版分享/
@@ -25,18 +29,17 @@ v11版双前端分享/
 # Local-only development and acceptance copies.
 发布源码独立验收/
 合并前v11备份/
-10.08数值回调开发/
 历史完整游戏/
+10.08数值回调开发/
+10.08开发/
+10.07开发/
 排查记录_*/
 V14战斗系统优化_跨电脑交接_*/
 
 # Generated verification output; the reviewed evidence files stay tracked.
 骰子系统/output/*
+!骰子系统/output/v12/
 !骰子系统/output/v11/
 !骰子系统/output/1008/
-骰子系统/output/1008/*
-!骰子系统/output/1008/培养与读档验证.json
-!骰子系统/output/1008/隐藏成就验证.json
-!骰子系统/output/1008/数值回调验算/
-!骰子系统/output/1008/数值回调验算/公式与边界验证.json
+!骰子系统/output/v13接入版本核对.json
 !骰子系统/output/*封装核对.json

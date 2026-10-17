@@ -1,0 +1,96 @@
+{
+  "allPassed": true,
+  "visualReview": false,
+  "checks": [
+    {
+      "script": "verify-v1201.cjs",
+      "exitCode": 0,
+      "seconds": 0.55,
+      "lastLines": [
+        "PASS permanent beast moss survives retries; ordinary and field slow immunity agree",
+        "PASS simultaneous full-team defeat is a draw and never creates hunt rewards",
+        "ALL V1201 12"
+      ]
+    },
+    {
+      "script": "verify-v12.cjs",
+      "exitCode": 0,
+      "seconds": 0.78,
+      "lastLines": [
+        "PASS confirmed ordinary hunt records luck-based drop once, auto-absorbs and can keep or replace conflicts",
+        "PASS thousand-year rings never drop; luck thresholds range from1% to15%",
+        "ALL V12 31"
+      ]
+    },
+    {
+      "script": "verify-v12-ui.cjs",
+      "exitCode": 0,
+      "seconds": 0.23,
+      "lastLines": [
+        "PASS bone conflicts offer separate replace / keep buttons",
+        "PASS defeat screen retries using the remaining real allowance; re-entry remains visible after leaving",
+        "ALL COMPONENT 9"
+      ]
+    },
+    {
+      "script": "verify-merged-v11.cjs",
+      "exitCode": 0,
+      "seconds": 0.78,
+      "lastLines": [
+        "PASS 30 reports, single/all JSON export, ledger only summaries, old missing log honest",
+        "PASS complete old finished battle untouched; ongoing short states migrate from release log",
+        "ALL MERGED 7"
+      ]
+    },
+    {
+      "script": "verify-scarred-challenge.cjs",
+      "exitCode": 0,
+      "seconds": 0.5,
+      "lastLines": [
+        "PASS ongoing ghost/veil snapshot restores without refilling shield or mana and advances identically",
+        "PASS postgame start uses same playerlevel; new mode settles and report survives save/reload",
+        "PASS three automated full battles terminate and conserve finite resources; boss cannot lose a single-pool timeout"
+      ]
+    },
+    {
+      "script": "verify-cultivation-1008.cjs",
+      "exitCode": 0,
+      "seconds": 0.23,
+      "lastLines": [
+        "PASS preview and reload cannot grant scaled XP a second time",
+        "PASS conservative ordinary-event upper bounds exclude non-double90 and low-talent fifth rings",
+        "ALL 7 normal-event additional-level bound 8.7175"
+      ]
+    },
+    {
+      "script": "verify-achievements-1008.cjs",
+      "exitCode": 0,
+      "seconds": 0.16,
+      "lastLines": [
+        "PASS simultaneous achievements queue once and old v1 archive merges",
+        "PASS corrupt imported archive does not replace valid data",
+        "PASS summoned-unit condition follows displayed total HP and fallen player excluded"
+      ]
+    },
+    {
+      "script": "verify-growth-1008.cjs",
+      "exitCode": 0,
+      "seconds": 5.25,
+      "lastLines": [
+        "growth journeys 50",
+        "growth journeys 60",
+        "PASS 7094 514 { periodic: 35, direct: 81, multi: 16, pursuit: 7 }"
+      ]
+    },
+    {
+      "script": "../systems/v12/modules/tools/check.cjs",
+      "exitCode": 0,
+      "seconds": 0.36,
+      "lastLines": [
+        "  ✓ 旧档技能刷新覆盖旧标签，不改变成长、费用与技能内容；预留环同步刷新",
+        "",
+        "全部通过：188 项"
+      ]
+    }
+  ]
+}

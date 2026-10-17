@@ -1,0 +1,10 @@
+{
+  "version": "v12.01",
+  "zipVerified": true,
+  "regressionProcessesPassed": 9,
+  "targetedTests": 12,
+  "htmlScriptCompilePassed": true,
+  "visualReview": false,
+  "sha256": "8f263a5e2b2d66000da5f7a86ade6ff4de46f574c175505a5c2b5571ff8b7e38",
+  "bytes": 14002833
+}
