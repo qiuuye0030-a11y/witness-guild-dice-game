@@ -48,7 +48,8 @@ function createModules(options = {}) {
   const roster = options.roster || createRoster(options.rosterDir ? { dir: options.rosterDir } : undefined);
   const ratingFn = options.ratingFn || activeBridge.rating;
   const library = options.library || createBeastLibrary(options.libraryPath ? { dataPath: options.libraryPath } : undefined);
-  const registry = options.registry || createHandlerRegistry(options.handlers || {});
+  const beastHandlers=Object.fromEntries(library.available().flatMap(b=>b.traits.map(t=>[t.inherit.handler,event=>{if(!event?.battle||!['effective','tryControl','applyDamage','onActionComplete'].includes(event.method)||typeof event.battle[event.method]!=='function')throw Error('继承特性须由已接入的战斗宿主分发');return event.battle[event.method](...(event.args||[]));}])));
+  const registry = options.registry || createHandlerRegistry({ ...beastHandlers, ...require('../soulbone/trait-effects').handlers, ...(options.handlers || {}) });
   const traitPool = options.traitPool || createTraitPool({ dataPath: options.poolPath, registry });
   const controller = createHuntController({ roster, ratingFn, library, config: options.config });
 
@@ -80,7 +81,7 @@ function createModules(options = {}) {
     hunt: { conditions: huntConditions, allies: huntAllies, ledger: huntLedger, battle: huntBattle, texts: huntTexts, flow: huntFlow, controller },
     npc: npcCombat,
     beast: { library },
-    soulbone: { drop: boneDrop, instance: soulboneInstance, tenThousand: soulboneTenThousand, traitPool, absorption: soulboneAbsorption, migrate: soulboneMigrate },
+    soulbone: { registry, effects: require('../soulbone/trait-effects'), drop: boneDrop, instance: soulboneInstance, tenThousand: soulboneTenThousand, traitPool, absorption: soulboneAbsorption, migrate: soulboneMigrate },
     reward: { ring: require('../reward/ring'), inheritance, transaction: rewardTransaction, createRunner: makeRewardRunner },
     battle: { hooks: battleHooks, equipment: battleEquipment, skillAttributes },
     bridge: activeBridge,

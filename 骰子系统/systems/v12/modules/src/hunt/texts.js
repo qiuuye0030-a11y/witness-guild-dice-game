@@ -39,7 +39,7 @@ function acceptedView() {
 
 /** 到场正文。必须传入已保存的顺序；0位/1位/2位由名录决定。 */
 function arrivalView(roster, npcIds) {
-  if (!Array.isArray(npcIds) || npcIds.length > 2) throw new Error('到场阵容须为0—2位友方NPC');
+  if (!Array.isArray(npcIds) || npcIds.length > 3) throw new Error('到场阵容须为0—3位友方NPC');
   return {
     npcIds: npcIds.slice(),
     paragraphs: roster.arrivalParagraphs(npcIds),

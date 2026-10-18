@@ -3,7 +3,7 @@
 /**
  * 家境判定友方NPC（交接文档第五节）。
  *
- * 已定：高于5档才有概率；8—9档必有1位；10档必有2位。
+ * v12.04：3/4/5档25/50/75%；6—7档1位；8—9档2位；10档3位。
  * 6、7档的50%／75%是交接文档标注的“建议值”，实现里单独带 suggested:true，
  * 方便确认后只改一条表，不改抽取与落盘逻辑。
  *
@@ -15,17 +15,12 @@ const { clone, requireInteger, uniqueIds } = require('../util');
 const { VERSIONS } = require('../versions');
 const { drawIndex } = require('../rng');
 
+const LEGACY_ALLY_RULES = Object.freeze({1:{count:0,roll:null},2:{count:0,roll:null},3:{count:0,roll:null},4:{count:0,roll:null},5:{count:0,roll:null},6:{count:1,roll:50,threshold:50},7:{count:1,roll:75,threshold:75},8:{count:1,roll:null},9:{count:1,roll:null},10:{count:2,roll:null}});
+// v12.04：新邀请按此表；已接受的旧邀请保持原阵容，不重抽。
 const ALLY_RULES = Object.freeze({
-  1: { count: 0, roll: null },
-  2: { count: 0, roll: null },
-  3: { count: 0, roll: null },
-  4: { count: 0, roll: null },
-  5: { count: 0, roll: null },
-  6: { count: 1, roll: 50, threshold: 50, suggested: true },
-  7: { count: 1, roll: 75, threshold: 75, suggested: true },
-  8: { count: 1, roll: null },
-  9: { count: 1, roll: null },
-  10: { count: 2, roll: null }
+  1:{count:0,roll:null},2:{count:0,roll:null},
+  3:{count:1,roll:25,threshold:25},4:{count:1,roll:50,threshold:50},5:{count:1,roll:75,threshold:75},
+  6:{count:1,roll:null},7:{count:1,roll:null},8:{count:2,roll:null},9:{count:2,roll:null},10:{count:3,roll:null}
 });
 
 function ruleFor(originRank) {
@@ -90,26 +85,24 @@ function ensureAllies(input) {
  */
 function validateAllies(allies, roster, originRank) {
   if (!allies || typeof allies !== 'object') throw new Error('友方阵容数据无效');
-  if (allies.rulesVersion !== VERSIONS.allyRules) {
+  if (![1, VERSIONS.allyRules].includes(allies.rulesVersion)) {
     throw new Error('友方阵容规则版本不一致：存档 ' + allies.rulesVersion + '，当前 ' + VERSIONS.allyRules + '；须显式迁移，不能重抽');
   }
   if (originRank !== undefined && allies.originRank !== originRank) throw new Error('友方阵容家境档位与当前存档不一致');
   if (!Array.isArray(allies.npcIds) || !Number.isInteger(allies.count) || allies.count !== allies.npcIds.length) {
     throw new Error('友方阵容人数与名单不一致');
   }
-  if (allies.count < 0 || allies.count > 2) throw new Error('友方阵容人数须为0—2');
-  if (allies.count === 2) {
-    if (new Set(allies.npcIds).size !== 2) throw new Error('两位友方NPC不得重复（别名不算第二位）');
-  }
+  if (allies.count < 0 || allies.count > 3) throw new Error('友方阵容人数须为0—3');
+  if (new Set(allies.npcIds).size !== allies.count) throw new Error('友方NPC不得重复');
   for (const id of allies.npcIds) {
     const record = roster.get(id);
     if (!record) throw new Error('友方NPC不存在：' + id);
   }
-  const rule = ruleFor(allies.originRank);
+  requireInteger(allies.originRank, '家境档位', 1, 10);
+  const rule = allies.rulesVersion === 1 ? LEGACY_ALLY_RULES[allies.originRank] : ruleFor(allies.originRank);
   if (rule.roll === null && allies.count !== rule.count) throw new Error('必定到场的友方NPC人数不符合家境规则');
   if (allies.count > rule.count) throw new Error('家境' + allies.originRank + '档最多' + rule.count + '位友方NPC');
-  if (allies.count === 1 && rule.count === 0) throw new Error('家境1—5档不应有友方NPC');
-  if (allies.count === 2 && allies.originRank !== 10) throw new Error('只有家境10档必有两位友方NPC');
+
   return Object.freeze(clone(allies));
 }
 

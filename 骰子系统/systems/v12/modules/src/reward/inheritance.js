@@ -12,6 +12,7 @@
  */
 
 const { clone, isPlainObject, requireInteger } = require('../util');
+const { attributeTags } = require('../battle/skill-attributes');
 const { VERSIONS } = require('../versions');
 
 const DEFAULT_CONFIG = Object.freeze({
@@ -30,6 +31,8 @@ function validateTraits(traits) {
   return ids;
 }
 
+function matchingAttributes(player,beast){const asTags=x=>Array.isArray(x)?attributeTags({elements:x}):attributeTags(x);const playerTags=asTags(player),beastTags=asTags(beast);return playerTags.filter(t=>t!=='无'&&beastTags.includes(t));}
+
 function rollInheritance(input) {
   const config = { ...DEFAULT_CONFIG, ...(input.config || {}) };
   requireInteger(config.sides, '继承骰面数', 2, 100000);
@@ -37,6 +40,9 @@ function rollInheritance(input) {
   const traits = input.traits;
   const ids = validateTraits(traits);
   if (!input.rng || typeof input.rng.die !== 'function') throw new Error('继承骰须使用游戏确定性投骰器');
+
+  const matchedAttributes=matchingAttributes(input.characterAttributes,input.beastAttributes);
+  if(matchedAttributes.length)return Object.freeze({version:config.version,configVersion:config.version,beastId:input.beastId||null,face:null,sides:config.sides,mode:'all',selectedTraitIds:ids.slice(),probabilityAll:1,probabilityOne:0,matchedAttributes,reason:'attribute-match',frozen:true,suggestedConfig:false});
 
   const face = input.rng.die(config.sides, '十万年魂骨特性继承', { beastId: input.beastId || null });
   if (face <= config.allThreshold) {
@@ -74,7 +80,7 @@ function rollInheritance(input) {
 /** 已验证的继承结果（读档时只用它，不重投）。 */
 function validateInheritance(result, traits) {
   if (!isPlainObject(result) || result.frozen !== true) throw new Error('魂骨继承结果未冻结');
-  if (result.version !== VERSIONS.tenThousandInheritance) throw new Error('魂骨继承规则版本不一致');
+  if (![1, VERSIONS.tenThousandInheritance].includes(result.version)) throw new Error('魂骨继承规则版本不一致');
   const ids = validateTraits(traits);
   if (!Array.isArray(result.selectedTraitIds) || !result.selectedTraitIds.length) throw new Error('继承结果缺少选中特性');
   if (!['all', 'one'].includes(result.mode)) throw new Error('继承模式无效');
@@ -93,4 +99,4 @@ function theoreticalDistribution(count) {
   return { all, perTrait: all + perOne, selectedOnlyPerTrait: perOne, count };
 }
 
-module.exports = { DEFAULT_CONFIG, rollInheritance, validateInheritance, validateTraits, theoreticalDistribution };
+module.exports = { DEFAULT_CONFIG, rollInheritance, validateInheritance, validateTraits, theoreticalDistribution, matchingAttributes };

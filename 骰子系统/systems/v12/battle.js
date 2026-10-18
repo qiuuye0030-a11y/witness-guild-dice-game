@@ -6,6 +6,15 @@ const has=(u,id)=>(u.v12Traits||[]).some(t=>t.id===id||t.traitId===id);
 const state=u=>{if(!u.v12State||u.v12State.version!==1)u.v12State={turns:0,mossStacks:0,iceAgility:0,tides:{},shellFirst:false,shellSerial:0,shellAbsorbed:{},overflow:0,...(u.v12State||{}),version:1};return u.v12State;};
 const elements=u=>API.battle.skillAttributes.attributeTags(u.soul||u);
 const enemies=(b,u)=>b.units.filter(t=>t.team!==u.team&&b.alive(t));
+// v12.03.01：冰壳改为开战时一次性护盾，霜域改为按自身回合推进的三档领域。
+// 霜苔封寒仍以“原始生命”为基数：讨伐血量倍率不放大封寒护盾。
+// v12.03.02：两条特性的数值集中到 tuning 对象，便于平衡模拟与后续调参；机制不变。
+// 三人讨伐模拟（每档 48 颗种子）中，旧值 0.7／0.15／0.05／0.15／0.12／0.10 会全灭；本组数值把三人战压到“较轻松”。
+const baseHealth=u=>u&&u.beastId&&u.huntHealth&&u.huntHealth.baseHP>0?u.huntHealth.baseHP:u.model.derived.HP;
+const tuning={iceShellRate:.4,domainMaxTier:3,domainAllyAgility:.04,domainEnemyAgility:.02,domainEnemyGauge:.04,domainShieldRate:.02,domainDamageRate:.02};
+const domainTier=u=>Math.max(0,Math.min(tuning.domainMaxTier,(state(u).domainTier||0)));
+const focusSeconds=3,focusMPRate=.10;
+function focusReason(b,u){if(!u)return '单位不存在';if(!b.v12Battle)return '仅讨伐战可以聚能';if(u.id!=='player'||u.npcId||u.beastId)return '只有玩家本人可以聚能';if(!b.alive(u))return '已退场';if(u.cast)return '正在读条';if(u.v12Channel)return '正在维持天阑舞';if(u.bonusAttack)return '自身增益后仅能补一发普攻或放弃';if(state(u).sealed)return '魂力被封锁，无法聚能';if(!b.canAct(u))return '等待敏捷行动回合';if(u.mp>=u.model.derived.MP)return '魂力已满';return '';}
 const battleDuration=9007199254; // finite, JSON-safe lifetime beyond practical battle time
 const battleEnd=Number.MAX_SAFE_INTEGER;
 function runtime(unit){const u=copy(unit),d=u.model.derived;Object.assign(u,{progress:0,queuedAt:null,queueOrder:0,actions:0,hp:d.HP,mp:d.MP,sh:d.SH,cast:null,readyAt:0,cooldowns:{},uses:{},statuses:[],dots:[],shieldLayers:[],shieldHP:0,shieldSH:0,shieldUntil:0,oneHit:false,guard:0,immuneUntil:0,rage:0,tuneUses:0,calmUses:0,manaGiftUses:0,firstHit:false,fallen:false,modern:{sequence:0,overheat:[0,0]}});if(u.release==='召唤'){u.bodyHP=Math.round(d.HP*.45);u.petHP=d.HP-u.bodyHP;u.petMax=u.petHP;u.bodyMax=u.bodyHP;u.petAlive=true;}return u;}
@@ -17,23 +26,49 @@ function initializeBattle(b,{huntPlan,seed}){
 function initTraits(b){
  for(const u of b.units){
   u.skills=u.skills.map(s=>API.battle.skillAttributes.tagSkill(s,u.soul));if(u.npcId==='chengliang'){const current=API.roster.combatSpec('chengliang').traits.find(t=>t.name==='六库仙贼');u.traits=(u.traits||[]).map(t=>t.name==='六库仙贼'?copy(current):t);}
-  u.v12Traits||=[];if(has(u,'frost-moss-immunity'))u.statuses=u.statuses.filter(st=>!['slow','freeze','sluggish','agilityDown','statDownA','frostCastSlow'].includes(st.type));const fresh=!u.v12State;state(u);if(fresh&&u.beastId)state(u).mossStacks=u.v12InitialMossStacks||0;if(fresh){const moss=u.v12Traits.find(t=>(t.id||t.traitId)==='moss-armor-accumulation');if(moss?.ownerBoneId)state(u).mossStacks=u.v12Permanent?.[moss.ownerBoneId]?.mossStacks||0;}u.lifeType||='生活';
+  u.v12Traits||=[];if(has(u,'frost-moss-immunity'))u.statuses=u.statuses.filter(st=>!['slow','freeze','sluggish','agilityDown','statDownA','frostCastSlow'].includes(st.type));const fresh=!u.v12State;state(u);if(u.v12State.shellGranted===undefined)u.v12State.shellGranted=!!u.v12State.shellFirst;if(u.v12State.domainTier===undefined)u.v12State.domainTier=0;if(fresh&&u.beastId)state(u).mossStacks=u.v12InitialMossStacks||0;if(fresh){const moss=u.v12Traits.find(t=>(t.id||t.traitId)==='moss-armor-accumulation');if(moss?.ownerBoneId)state(u).mossStacks=u.v12Permanent?.[moss.ownerBoneId]?.mossStacks||0;}u.lifeType||='生活';
   if(u.npcId==='chengliang'&&!u.v12NPC)u.v12NPC=API.npc.TRAITS.chengliang.createState({maxHP:u.model.derived.HP,permanentProgress:u.permanentProgress});
   if(u.npcId==='xutaiping'&&!u.v12NPC)u.v12NPC=API.npc.TRAITS.xutaiping.createState();
   if(u.npcId==='sailiya_fengzhi'&&!u.v12NPC)u.v12NPC=API.npc.TRAITS.sailiya_fengzhi.createState();
   if(!u.v12BaseStats)u.v12BaseStats=copy(u.model.stats);
   if(u.npcId==='chengliang'&&!u.bodyMultiplierApplied&&u.permanentProgress?.thiefQiStacks)bodyProgress(b,u,u.permanentProgress.thiefQiStacks);
+  if(has(u,'ice-shell-preservation'))shell(b,u,true);
  }
 }
 function traitEffects(b,u,effects){for(const e of effects||[]){if(e.op==='heal')b.heal(u,e.amount,'生命');else if(e.op==='restoreMP')restoreMP(b,u,e.amount,e.reason);else if(e.op==='permanentProgress'){u.permanentProgress||={};u.permanentProgress[e.key]=e.value;}else if(e.op==='bodyBonus')bodyProgress(b,u,e.stacks);else if(e.op==='addStatus')b.setStatus(b.unit(e.targetId),e.type,e.value,e.duration==='battle'?battleDuration:e.duration,{source:u.id+':'+e.type,label:'黑蚀',v12Caster:u.id});else if(e.op==='log')b.addLog(e.text,{type:'trait',actor:u.id});}}
 function bodyProgress(b,u,stacks){const priorHP=u.model.derived.HP,prior=u.model.stats.B;u.model.stats.B=u.v12BaseStats.B*(1+.1*stacks);const derived=R.derive(u.model.stats);for(const k of ['HP','PA','DEF'])u.model.derived[k]=derived[k];u.hp=Math.min(u.model.derived.HP,u.hp);u.bodyMultiplierApplied=true;if(prior!==u.model.stats.B)b.addLog(u.name+'盗气'+stacks+'层，肉体强度提升。',{type:'trait',actor:u.id});}
-function benefit(b,t,kind,value,actual=value){let n=value;for(const owner of b.units.filter(u=>u.npcId==='xutaiping'&&u.team!==t.team&&b.alive(u))){state(owner).benefitSerial=(state(owner).benefitSerial||0)+1;const x=API.npc.TRAITS.xutaiping.applyBenefit(owner.v12NPC,{targetId:t.id,kind,value:n,actualBenefit:Math.min(actual,n),groupId:b._v12Group||b._effectKey||('resource:'+b.now+':'+state(owner).benefitSerial)});owner.v12NPC=x.state;n=x.outcome.value;traitEffects(b,owner,x.effects);}return Math.max(0,n);}
+function benefit(b,t,kind,value,actual=value){let n=V125Beasts.benefit(b,t,kind,V12BoneTraits.benefit(b,t,kind,value));for(const owner of b.units.filter(u=>u.npcId==='xutaiping'&&u.team!==t.team&&b.alive(u))){state(owner).benefitSerial=(state(owner).benefitSerial||0)+1;const x=API.npc.TRAITS.xutaiping.applyBenefit(owner.v12NPC,{targetId:t.id,kind,value:n,actualBenefit:Math.min(actual,n),groupId:b._v12Group||b._effectKey||('resource:'+b.now+':'+state(owner).benefitSerial)});owner.v12NPC=x.state;n=x.outcome.value;traitEffects(b,owner,x.effects);}return Math.max(0,n);}
 function restoreMP(b,u,amount,label){if(!b.alive(u)||!(amount>0))return;const gap=Math.max(0,u.model.derived.MP-u.mp),actual=benefit(b,u,'mp-restore',Math.min(gap,amount));u.mp=Math.min(u.model.derived.MP,u.mp+actual);if(actual)b.addLog(u.name+'回魂 '+Math.round(actual)+' · '+label,{type:'mpRestore',target:u.id,amount:actual});const overflow=Math.max(0,amount-gap);if(has(u,'devouring-soul-recovery')&&!b._v12Siphon){const shield=Math.min(overflow,u.model.derived.HP*.1-state(u).overflow);if(shield>0){state(u).overflow+=shield;b.addShieldLayer(u,{source:u.id+':overflow',label:'吞噬回魂·溢出',amount:(u.shieldLayers.find(s=>s.source===u.id+':overflow')?.amount||0)+shield,channel:'生命',until:battleEnd});}}return overflow;}
 function absorbManaSpent(b,spender,amount){if(!(amount>0)||b._v12Siphon)return;b._v12Siphon=true;try{for(const u of b.units.filter(u=>has(u,'devouring-soul-recovery')&&b.alive(u)&&!state(u).sealed)){const gain=amount*.3,gap=u.model.derived.MP-u.mp;restoreMP(b,u,gain,'吞噬回魂');const overflow=Math.max(0,gain-gap),room=u.model.derived.HP*.1-state(u).overflow,shield=Math.min(room,overflow);if(shield>0){state(u).overflow+=shield;b.addShieldLayer(u,{source:u.id+':overflow',label:'吞噬回魂·溢出',amount:(u.shieldLayers.find(s=>s.source===u.id+':overflow')?.amount||0)+shield,channel:'生命',until:battleEnd});}}}finally{b._v12Siphon=false;}}
-function shell(b,u){const layers=(u.shieldLayers||[]).filter(s=>s.label==='冰壳护生');if(layers.length>=2)return;const id=u.id+':shell:'+(++state(u).shellSerial);state(u).shellAbsorbed[id]=0;b.addShieldLayer(u,{source:id,label:'冰壳护生',amount:u.model.derived.HP*.8,channel:'生命',until:battleEnd});}
+// 冰壳护生：战斗开始时按自身生命值百分比结一次盾；
+// 击破时的30%反伤、越盾真伤与穿透护盾规则保持不变。旧存档以 shellFirst 迁移，不重复补盾。
+function shell(b,u,quiet){const s=state(u);if(s.shellGranted===true)return;s.shellGranted=true;
+ const amount=Math.round(u.model.derived.HP*tuning.iceShellRate),id=u.id+':shell:'+(++s.shellSerial);
+ s.shellAbsorbed[id]=0;b.addShieldLayer(u,{source:id,label:'冰壳护生',amount,channel:'生命',until:battleEnd});
+ if(!quiet)b.addLog(u.name+'张开冰壳，获得'+amount+'护盾（自身生命值'+Math.round(tuning.iceShellRate*100)+'%）。',{type:'trait',actor:u.id,target:u.id});}
+// 霜域：展开后整场不可驱散；每个自身回合加深一档，最多三档。
+// 达到三档后，每次加深改为：友方（含自身）获得生命上限2%的寒冰护盾，敌方承受生命上限2%的伤害（不经过防御衰减）。
+function domainPulse(b,owner,first){
+ b.addLog(owner.name+(first?'的霜域凝至三档：寒冰成形，敌方承受侵蚀。':'的霜域三档脉冲：寒冰重凝，敌方再受侵蚀。'),{type:'trait',actor:owner.id});
+ for(const t of b.units.filter(t=>t.team===owner.team&&b.alive(t))){
+  const amount=Math.round(t.model.derived.HP*tuning.domainShieldRate);
+  b.addShieldLayer(t,{source:owner.id+':domain',label:'霜域·寒冰',amount,channel:'生命',until:battleEnd});
+  b.addLog(t.name+'凝出霜域寒冰护盾'+amount+'（生命上限'+Math.round(tuning.domainShieldRate*100)+'%）。',{type:'shield',actor:owner.id,target:t.id});
+ }
+ for(const t of b.units.filter(t=>t.team!==owner.team&&b.alive(t))){
+  const amount=Math.round(t.model.derived.HP*tuning.domainDamageRate);
+  b.addLog(t.name+'被霜域侵蚀'+amount+'（生命上限'+Math.round(tuning.domainDamageRate*100)+'%，不经过防御衰减）。',{type:'trait',actor:owner.id,target:t.id});
+  b.applyDamage(t,amount,'能量',owner,'ice');
+ }
+}
+function deepenDomain(b,owner){const s=state(owner);if(s.domainSuppressed)return;
+ const before=domainTier(owner),tier=Math.min(tuning.domainMaxTier,before+1);s.domainTier=tier;
+ if(tier>=tuning.domainMaxTier)domainPulse(b,owner,before<tuning.domainMaxTier);
+ else b.addLog(owner.name+'的霜域加深至'+tier+'档：敌方敏捷下降'+Math.round(tuning.domainEnemyAgility*tier*100)+'%、行动条速度下降'+Math.round(tuning.domainEnemyGauge*tier*100)+'%，友方敏捷提高'+Math.round(tuning.domainAllyAgility*tier*100)+'%。',{type:'trait',actor:owner.id});
+}
 function beginTurn(b,u){if(u.bonusAttack||u.v12TurnOpen||!b.alive(u))return;u.v12TurnOpen=true;state(u).turns++;state(u).overflow=0;
- if(has(u,'ice-shell-preservation')){if(state(u).shellFirst)shell(b,u);else{shell(b,u);state(u).shellFirst=true;}}
- for(const owner of b.units.filter(o=>has(o,'frost-domain')&&b.alive(o))){if(owner===u&&!state(owner).domainSuppressed&&elements(u).includes('冰'))state(u).iceAgility++;else if(owner!==u&&!state(owner).domainSuppressed&&elements(u).includes('冰'))state(u).iceAgility++;}
+ if(has(u,'ice-shell-preservation'))shell(b,u);
+ for(const owner of b.units.filter(o=>has(o,'frost-domain')&&b.alive(o)))if(owner===u)deepenDomain(b,owner);
  if(u.npcId==='chengliang'){const t=API.npc.TRAITS.chengliang;const out=t.handle(u.v12NPC,{type:'turn-start',controlled:!!b.value(u,'control'),livingEnemyIds:enemies(b,u).filter(v=>!has(v,'frost-moss-immunity')).map(v=>v.id)});u.v12NPC=out.state;traitEffects(b,u,out.effects);const target=enemies(b,u)[0];if(target)u.v12NPC=t.handle(u.v12NPC,{type:'gaze-select',targetId:target.id}).state;}
  if(u.npcId==='xutaiping')u.v12NPC=API.npc.TRAITS.xutaiping.beginTurn(u.v12NPC);
 }
@@ -44,7 +79,10 @@ function endAction(b,u,cast){if(cast?.bonus||u.v12Channel)return;state(u).costPr
  if(u.npcId==='sailiya_fengzhi'){const out=API.npc.TRAITS.sailiya_fengzhi.endTurn(u.v12NPC,{maxMP:u.model.derived.MP,lethal:!b.alive(u)});u.v12NPC=out.state;traitEffects(b,u,out.effects);}
  state(u).sealed=false;if(state(u).domainSuppressed)state(u).domainSuppressed=false;
 }
-function tideRates(b,u){if(has(u,'frost-moss-immunity'))return {cast:0,action:0};let cast=0,action=0;for(const t of Object.values(state(u).tides||{}))if(t.until>b.now){cast=Math.min(.9,cast+.2*t.stacks);action=Math.min(.9,action+.15*t.stacks);}for(const owner of b.units.filter(o=>has(o,'frost-domain')&&b.alive(o)&&!state(o).domainSuppressed)){if(elements(u).includes('冰'))continue;const tier=Math.min(2,Math.floor((state(owner).turns||0)/2));cast=Math.min(.9,cast+[.2,.275,.35][tier]);action=Math.min(.9,action+[.15,.2,.25][tier]);}return {cast,action};}
+function tideRates(b,u){if(has(u,'frost-moss-immunity'))return {cast:0,action:0};let cast=0,action=0;for(const t of Object.values(state(u).tides||{}))if(t.until>b.now){cast=Math.min(.9,cast+.2*t.stacks);action=Math.min(.9,action+.15*t.stacks);}
+ // 霜域只对敌方生效：行动条速度每档15%，最多三档；减速不叠加到读条（v12.03.01 口径）。
+ for(const owner of b.units.filter(o=>has(o,'frost-domain')&&b.alive(o)&&!state(o).domainSuppressed))if(owner.team!==u.team){action=Math.min(.9,action+tuning.domainEnemyGauge*domainTier(owner));}
+ return {cast,action};}
 function pulse(b){
  for(const u of b.units){
   if(!b.alive(u))continue;
@@ -82,7 +120,7 @@ function execute(b,u,t,s,ops){
  case 'channeled_partitioned_attack':u.v12Channel={target:t.id,skill:copy(s),factor:(op.factor||1)/(op.parts||6),channel:op.channel||s.channel,left:op.parts||6,interval:Math.round((op.intervalSeconds||.5)*1000),next:b.now+Math.round((op.intervalSeconds||.5)*1000)};break;
  case 'budgeted_area_attack':{const targets=enemies(b,u);for(const target of targets)attack(b,u,target,s,(op.factor||1)/targets.length,op.channel||s.channel,ctx);break;}
  case 'periodic_attack':{const hit=b.hit(u,t,op.channel||s.channel);if(!hit.success)break;const eff=b.effective(u),channel=op.channel||s.channel,power=channel==='物理'?eff.PA:eff.SA,parts=op.parts||3;const pre=Object.fromEntries(b.units.map(x=>[x.id,b.effective(x)]));const raw=op.factor*s.Q*power/parts;const damage=b.damageValue(u,t,raw,channel,pre);const key=u.id+'-'+s.id;t.dots=t.dots.filter(d=>d.key!==key);t.dots.push({key,source:u.id,skill:copy(s),channel,baseDamage:damage,damage,next:b.now+3000,rawPerTick:raw,ticks:parts,fx:s.fx||'ice',damageNature:'residual'});break;}
- case 'shield':b.addShieldLayer(u,{source:u.id+':'+s.id,label:s.name,amount:(op.coefficient||.45)*s.Q*b.effective(u).SA,channel:op.channel||'生命',until:b.now+(op.ttlSeconds||8)*1000,casterId:u.id,skillId:s.id});break;
+ case 'shield':b.addShieldLayer(u,{source:u.id+':'+s.id,label:s.name,amount:(op.coefficient||.45)*s.Q*b.effective(u).SA,channel:op.channel||'生命',until:op.lifetime==='battle'?battleEnd:b.now+(op.ttlSeconds||8)*1000,casterId:u.id,skillId:s.id});break;
  case 'heal':b.heal(u,(op.coefficient||.4)*s.Q*b.effective(u).SA,'生命');break;
  case 'control_contest':b.tryControl(u,t,s,op.baseSeconds);break;
  case 'conditional_control_contest':if(t.cast&&ctx.lastHit)b.tryControl(u,t,s,op.baseSeconds);break;
@@ -114,11 +152,15 @@ function wrap(original){const base={...original};
  return {
  initializeActorState(){base.initializeActorState.call(this);initTraits(this);if(this.v12Battle&&this.v12BattleVersion!==2){for(const u of this.units){for(const st of u.statuses)if(st.until===180001)st.until=battleEnd;for(const sh of u.shieldLayers||[])if(sh.until===180001)sh.until=battleEnd;}this.v12BattleVersion=2;}},
  forkProjectionState(){const fork=base.forkProjectionState.call(this);for(const u of fork.units)if(u.npcId||u.v12Traits?.length)u.model=copy(u.model);return fork;},
- snapshot(){return {...base.snapshot.call(this),v12Battle:!!this.v12Battle,v12Session:this.v12Session||null,v12BattleVersion:2,v12StalledSince:this.v12StalledSince??null};},
+ snapshot(){if(this.v12Battle&&!this.result&&this.log.length>600){const full=this.log;this.log=full.slice(-600);try{return {...base.snapshot.call(this),v12Battle:true,v12Session:this.v12Session||null,v12BattleVersion:2,v12StalledSince:this.v12StalledSince??null,v12LogTrimmed:full.length-600};}finally{this.log=full;}}return {...base.snapshot.call(this),v12Battle:!!this.v12Battle,v12Session:this.v12Session||null,v12BattleVersion:2,v12StalledSince:this.v12StalledSince??null};},
  selectActor(){const before=this.activeId;base.selectActor.call(this);const u=this.unit(this.activeId);if(u&&u.id!==before)beginTurn(this,u);},
  effective(u){let out=base.effective.call(this,u);const q={...out},s=state(u);let B=1,D=1,A=1;
   if(has(u,'moss-armor-accumulation')){B+=.05*s.mossStacks;D+=.1*s.mossStacks;}
-  A+=.05*s.iceAgility;
+  // 霜域：友方（含自身）每档敏捷＋15%，敌方每档敏捷−5%，最多三档；被驱散压住时不生效。
+  for(const owner of this.units.filter(o=>has(o,'frost-domain')&&this.alive(o)&&!state(o).domainSuppressed)){
+   const tier=domainTier(owner);if(!tier)continue;
+   A*=owner.team===u.team?1+tuning.domainAllyAgility*tier:1-tuning.domainEnemyAgility*tier;
+  }
   if(u.npcId==='chengliang')B=1; // permanent body is applied once to the source model
   for(const owner of this.units.filter(o=>o.npcId==='chengliang'&&this.alive(o))){const stacks=owner.v12NPC?.grid?.enemies?.[u.id]||0;if(!has(u,'frost-moss-immunity'))A*=1-.05*stacks;}
   for(const st of this.status(u,'v12Stats')){const scale=st.value??1;B*=1+(st.values?.B||0)*scale;D*=1+(st.values?.D||0)*scale;A*=1+(st.values?.A||0)*scale;for(const k of ['S','C','P'])q[k]*=1+(st.values?.[k]||0)*scale;}
@@ -128,17 +170,18 @@ function wrap(original){const base={...original};
  actionRate(u){return u.v12Channel?0:base.actionRate.call(this,u)*(1-tideRates(this,u).action);},
  cost(u,s){return Math.ceil(base.cost.call(this,u,s)*(state(u).costPressure?1.3:1));},
  basicCost(u){return Math.ceil(base.basicCost.call(this,u)*(state(u).costPressure?1.3:1));},
- targetOptions(u,action){const s=u.skills.find(s=>s.id===action);if(s?.target==='另一名队友')return this.units.filter(t=>t.team===u.team&&t.id!==u.id&&this.alive(t));return base.targetOptions.call(this,u,action);},
+ targetOptions(u,action){if(action==='focus')return [u];const s=u.skills.find(s=>s.id===action);if(s?.target==='另一名队友')return this.units.filter(t=>t.team===u.team&&t.id!==u.id&&this.alive(t));return base.targetOptions.call(this,u,action);},
  hitChance(u,t,ch,bonus=0){let result=base.hitChance.call(this,u,t,ch,bonus);if(ch!=='精神'&&['chengliang','sailiya_fengzhi'].includes(u.npcId)){const a=this.effective(u),z=this.effective(t),controlled=!!this.value(t,'control'),c=this.dodgeConfig||{coefficient:.4,bonus:.35,cap:.9},active=!controlled&&this.value(t,'activeDodge'),diff=Math.max(0,a.A/Math.max(20,u.model.benchmark)-(controlled?0:z.A/Math.max(20,t.model.benchmark)));result=Math.max(.6,Math.min(.97,.9+diff*(active?c.coefficient:.12)));if(!controlled)result-=this.value(t,'evasion');if(active)result-=c.bonus;result=Math.max(active?1-c.cap:.4,result);if(u.npcId==='chengliang')result=Math.max(.6,result)+(u.v12NPC?.vision.gazeTargetId===t.id?.08:0);result=Math.min(.97,result+bonus)-this.value(u,'accuracyDown');}if(ch!=='精神'&&!this._packetSkill?.spaceLock)result-=this.value(t,'v12Evasion');return Math.max(.05,Math.min(.97,result));},
  hit(u,t,ch,bonus=0){const out=(u.npcId==='chengliang'?ControlActions.methods.hit:base.hit).call(this,u,t,ch,bonus);if(ch!=='精神')t.statuses=t.statuses.filter(st=>st.type!=='v12Evasion');return out;},
  tryControl(u,t,s,duration){if(has(t,'frost-moss-immunity')&&API.battle.skillAttributes.attributeTags(s).includes('冰')){this.addLog(t.name+'免疫冻结。');return;}return base.tryControl.call(this,u,t,s,duration);},
- actionReason(u,action){if(u.v12Channel)return '正在维持天阑舞';return base.actionReason.call(this,u,action);},
- command(id,action,target){const u=this.unit(id),before=u?.mp||0;const err=base.command.call(this,id,action,target);if(err)return err;const paid=Math.max(0,before-u.mp);absorbManaSpent(this,u,paid);if(u.cast?.skill?.category==='攻击')u.statuses=u.statuses.filter(st=>st.type!=='v12Cast');if(action==='attack'||u.cast?.skill?.category==='攻击')u.statuses=u.statuses.filter(st=>st.type!=='phaseSwap');if(u.npcId==='sailiya_fengzhi'&&(action==='attack'||['攻击','持续伤害'].includes(u.cast?.skill?.category))){const out=API.npc.TRAITS.sailiya_fengzhi.activateRune(u.v12NPC,{castId:u.cast?.eventId||id+':'+u.actions,paidMainCost:paid,mpAvailable:u.mp});u.v12NPC=out.state;if(out.activated){u.mp-=out.extraCost;absorbManaSpent(this,u,out.extraCost);this.addLog(u.name+'附上符剑，额外魂力消耗'+out.extraCost+'。',{type:'trait',actor:id});}}return '';},
- plan(u,cast,pre){const ops=cast.skill?.npcOperations||cast.skill?.v12Operations;if(ops){const t=this.unit(cast.target);return {u,t,cast,s:cast.skill,damage:0,heal:0,channel:cast.skill.channel,effects:[()=>{if(cast.skill.target==='敌方全体'&&!ops.some(op=>op.type==='budgeted_area_attack'))for(const target of enemies(this,u))execute(this,u,target,cast.skill,ops);else execute(this,u,t,cast.skill,ops);}]};}return base.plan.call(this,u,cast,pre);},
+ actionReason(u,action){if(action==='focus')return focusReason(this,u);if(u.v12Channel)return '正在维持天阑舞';return base.actionReason.call(this,u,action);},
+ command(id,action,target){if(action==='focus'){const u=this.unit(id),reason=this.actionReason(u,action);if(reason)return reason;u.cast={bonus:false,action:'focus',target:u.id,end:this.now+focusSeconds*1000,start:this.now,skill:null,rage:0};u.progress=0;u.queuedAt=null;this.activeId=null;this.addLog(u.name+'开始聚能（'+focusSeconds+'秒）',{type:'cast',actor:u.id,target:u.id,fx:'restore'});return '';}
+  const u=this.unit(id),before=u?.mp||0;const err=base.command.call(this,id,action,target);if(err)return err;const paid=Math.max(0,before-u.mp);absorbManaSpent(this,u,paid);if(u.cast?.skill?.category==='攻击')u.statuses=u.statuses.filter(st=>st.type!=='v12Cast');if(action==='attack'||u.cast?.skill?.category==='攻击')u.statuses=u.statuses.filter(st=>st.type!=='phaseSwap');if(u.npcId==='sailiya_fengzhi'&&(action==='attack'||['攻击','持续伤害'].includes(u.cast?.skill?.category))){const out=API.npc.TRAITS.sailiya_fengzhi.activateRune(u.v12NPC,{castId:u.cast?.eventId||id+':'+u.actions,paidMainCost:paid,mpAvailable:u.mp});u.v12NPC=out.state;if(out.activated){u.mp-=out.extraCost;absorbManaSpent(this,u,out.extraCost);this.addLog(u.name+'附上符剑，额外魂力消耗'+out.extraCost+'。',{type:'trait',actor:id});}}return '';},
+ plan(u,cast,pre){if(cast.action==='focus'){const amount=Math.round(u.model.derived.MP*focusMPRate);return {u,t:u,cast,s:null,damage:0,heal:0,channel:'魂力',effects:[()=>{if(!this.alive(u)){this.addLog(u.name+'已退场，聚能未结算。',{type:'mpRestore',target:u.id,amount:0});return;}restoreMP(this,u,amount,'聚能');}]};}const ops=cast.skill?.npcOperations||cast.skill?.v12Operations;if(ops){const t=this.unit(cast.target);return {u,t,cast,s:cast.skill,damage:0,heal:0,channel:cast.skill.channel,effects:[()=>{if(cast.skill.target==='敌方全体'&&!ops.some(op=>op.type==='budgeted_area_attack'))for(const target of enemies(this,u))execute(this,u,target,cast.skill,ops);else execute(this,u,t,cast.skill,ops);}]};}return base.plan.call(this,u,cast,pre);},
  onActionComplete(u,cast){base.onActionComplete.call(this,u,cast);endAction(this,u,cast);},
  nextTime(){let next=base.nextTime.call(this);if(this.v12Battle){next=Math.min(next,this.now+250);for(const u of this.units)if(u.v12Channel)next=Math.min(next,u.v12Channel.next);}return next;},
  v12Pulse(){pulse(this);},
- v12CanPerform(u){if(this.value(u,'control'))return false;const active=this.activeId,ready=u.readyAt,cast=u.cast;this.activeId=u.id;u.readyAt=this.now;u.cast=null;try{return ['attack',...u.skills.map(s=>s.id)].some(action=>!this.actionReason(u,action)&&this.targetOptions(u,action).length>0);}finally{this.activeId=active;u.readyAt=ready;u.cast=cast;}},
+ v12CanPerform(u){if(this.value(u,'control'))return false;const active=this.activeId,ready=u.readyAt,cast=u.cast;this.activeId=u.id;u.readyAt=this.now;u.cast=null;try{const actions=['attack',...u.skills.map(s=>s.id)];if(u.id==='player'&&!u.npcId&&!u.beastId)actions.push('focus');return actions.some(action=>!this.actionReason(u,action)&&this.targetOptions(u,action).length>0);}finally{this.activeId=active;u.readyAt=ready;u.cast=cast;}},
  heal(t,amount,ch){if(!(amount>0)||!this.alive(t))return;const max=ch==='精神'?t.model.derived.SH:t.model.derived.HP,gap=max-(ch==='精神'?t.sh:t.hp);return base.heal.call(this,t,benefit(this,t,'heal',Math.min(amount,gap)),ch);},
  addShieldLayer(t,spec){const amount=benefit(this,t,'shield',spec.amount||0);if(spec.amount>0&&amount===0)return null;return base.addShieldLayer.call(this,t,{...spec,amount,until:this.v12Battle&&spec.until===180001?battleEnd:spec.until});},
  setStatus(u,type,value,duration,extra={}){if(!u)return;
@@ -152,8 +195,8 @@ function wrap(original){const base={...original};
  previewProtection(t,damage,ch,source){let out=base.previewProtection.call(this,t,damage,ch,source);if(this._v12BypassShield){return {...out,nextLayers:copy(t.shieldLayers||[]),blocked:0,guardBlocked:0,absorbed:0,mpCost:0,healthDamage:damage};}if(this._v12DoubleDefense&&out.mpCost>0){const absorption=Math.min(out.absorbed||out.mpCost,Math.floor(t.mp/2));return {...out,absorbed:absorption,mpCost:absorption*2,healthDamage:out.afterShields-absorption};}return out;},
  applyDamage(t,amount,ch,source,fx){if(!this.alive(t)||amount<=0)return;
   const tags=API.battle.skillAttributes.attributeTags(this._packetSkill||source?.soul),ice=tags.includes('冰');
-  if(has(t,'frost-moss-immunity')){const key=t.id+':cold',old=t.shieldLayers?.find(s=>s.source===key)?.amount||0;this.addShieldLayer(t,{source:key,label:'封寒',amount:Math.min(t.model.derived.HP*.5,old+t.model.derived.HP*.05*(ice?2:1)),channel:'生命',until:battleEnd});if(ice){this.heal(t,amount,'生命');this.addLog(t.name+'霜苔不侵：冰伤转为生命。',{type:'trait',target:t.id});return;}}
-  if(has(t,'ice-shell-preservation')&&!state(t).shellFirst){shell(this,t);state(t).shellFirst=true;}
+  if(has(t,'frost-moss-immunity')){const key=t.id+':cold',old=t.shieldLayers?.find(s=>s.source===key)?.amount||0,coldBase=baseHealth(t);this.addShieldLayer(t,{source:key,label:'封寒',amount:Math.min(coldBase*.5,old+coldBase*.05*(ice?2:1)),channel:'生命',until:battleEnd});if(ice){this.heal(t,amount,'生命');this.addLog(t.name+'霜苔不侵：冰伤转为生命。',{type:'trait',target:t.id});return;}}
+  if(has(t,'ice-shell-preservation'))shell(this,t);
   const hp=t.hp,sh=t.sh,mp=t.mp,layers=copy(t.shieldLayers||[]);
   const basicRune=source?.npcId==='sailiya_fengzhi'&&source.v12NPC?.rune?.active&&!this._packetSkill&&!this._periodic&&!this._v12NoRune,priorDouble=this._v12DoubleDefense;if(basicRune)this._v12DoubleDefense=true;
   try{base.applyDamage.call(this,t,amount,ch,source,fx);}finally{this._v12DoubleDefense=priorDouble;}absorbManaSpent(this,t,Math.max(0,mp-t.mp));
@@ -166,11 +209,12 @@ function wrap(original){const base={...original};
   if(basicRune&&this.alive(t)){this._v12NoRune=true;try{this.applyDamage(t,Math.round(amount*.3),'能量',source,'rune');}finally{this._v12NoRune=false;}}
   if(has(t,'ice-shell-preservation')&&source&&!this._v12Reflection){for(const layer of layers.filter(l=>l.label==='冰壳护生')){const after=t.shieldLayers?.find(l=>l.source===layer.source);const absorbed=Math.max(0,layer.amount-(after?.amount||0));state(t).shellAbsorbed[layer.source]=(state(t).shellAbsorbed[layer.source]||0)+absorbed;if(!after&&absorbed>0){const reflected=Math.round(state(t).shellAbsorbed[layer.source]*.3);this._v12Reflection=true;this._v12BypassShield=true;try{this.applyDamage(source,reflected,'能量',t,'ice');}finally{this._v12Reflection=false;this._v12BypassShield=false;}}}}
  },
- aiChoice(u){if(!this.v12Battle&&!u.npcId&&!u.beastId)return base.aiChoice.call(this,u);const ts=enemies(this,u).sort((a,b)=>a.hp/a.model.derived.HP-b.hp/b.model.derived.HP),t=ts[0];if(!t)return null;if(u.bonusAttack)return {action:u.mp>=this.basicCost(u)?'attack':'skipBonus',target:t.id};const skills=u.skills.filter(s=>!this.actionReason(u,s.id));let best={action:!this.actionReason(u,'attack')?'attack':'wait',target:t.id,score:2};for(const s of skills){const self=['强化','防御','治疗'].includes(s.category),target=s.target==='另一名队友'?this.targetOptions(u,s.id)[0]:(self?u:t);if(!target)continue;let score=['攻击','持续伤害'].includes(s.category)?8:s.category==='控制'?(t.cast?11:5):s.category==='减益'?4:s.category==='防御'?(u.shieldHP<u.model.derived.HP*.15?6:-1):s.category==='治疗'?(u.hp<u.model.derived.HP*.7?10:-1):u.statuses.some(st=>st.source===u.id+':'+s.id||st.source===u.id+'-'+s.id||st.label===s.name)?-1:7;if((s.damageMode==='periodic'||s.category==='持续伤害')&&t.dots.some(d=>d.key===u.id+'-'+s.id))score=-1;if(score>best.score)best={action:s.id,target:target.id,score};}return best;},
+ aiChoice(u){if(!this.v12Battle&&!u.npcId&&!u.beastId)return base.aiChoice.call(this,u);const ts=enemies(this,u).sort((a,b)=>a.hp/a.model.derived.HP-b.hp/b.model.derived.HP),t=ts[0];if(!t)return null;if(u.bonusAttack)return {action:u.mp>=this.basicCost(u)?'attack':'skipBonus',target:t.id};const skills=u.skills.filter(s=>!this.actionReason(u,s.id));let best={action:!this.actionReason(u,'attack')?'attack':'wait',target:t.id,score:2};for(const s of skills){const self=['强化','防御','治疗'].includes(s.category),target=s.target==='另一名队友'?this.targetOptions(u,s.id)[0]:(self?u:t);if(!target)continue;let score=['攻击','持续伤害'].includes(s.category)?8:s.category==='控制'?(t.cast?11:5):s.category==='减益'?4:s.category==='防御'?(u.shieldHP<u.model.derived.HP*.15?6:-1):s.category==='治疗'?(u.hp<u.model.derived.HP*.7?10:-1):u.statuses.some(st=>st.source===u.id+':'+s.id||st.source===u.id+'-'+s.id||st.label===s.name)?-1:7;if((s.damageMode==='periodic'||s.category==='持续伤害')&&t.dots.some(d=>d.key===u.id+'-'+s.id))score=-1;if(score>best.score)best={action:s.id,target:target.id,score};}if(best.action==='wait'&&u.id==='player'&&!u.npcId&&!u.beastId&&!focusReason(this,u))best={action:'focus',target:u.id,score:3};return best;},
  checkResult(){if(!this.v12Battle)return base.checkResult.call(this);for(const u of this.units){if(!u.fallen&&!this.alive(u)){u.fallen=true;u.cast=null;u.v12Channel=null;if(u.npcId==='chengliang')u.v12NPC=API.npc.TRAITS.chengliang.handle(u.v12NPC,{type:'defeat'}).state;if(u.npcId==='xutaiping')u.v12NPC=API.npc.TRAITS.xutaiping.onOwnerDefeat(u.v12NPC);this.addLog(u.name+'退场。',{type:'fall',target:u.id});}}const friend=this.units.some(u=>u.team===0&&this.alive(u)),enemy=this.units.some(u=>u.team===1&&this.alive(u));if(!enemy||!friend){this.result={winner:!friend&&!enemy?null:friend&&!enemy?0:1,reason:!friend&&!enemy?'双方同时退场':friend&&!enemy?'魂兽实际退场':'讨伐队伍全灭',time:this.now,huntOutcome:!friend&&!enemy?'draw':friend&&!enemy?'victory':'loss'};this.addLog(this.result.reason,{type:'huntResult'});return;}const capable=this.units.some(u=>this.alive(u)&&((u.cast&&u.cast.action!=='wait')||u.v12Channel||this.v12CanPerform(u)));if(capable)this.v12StalledSince=null;else this.v12StalledSince??=this.now;if(this.v12StalledSince!==null&&this.now-this.v12StalledSince>=10000){this.result={winner:null,reason:'连续10秒无人能行动，讨伐中止',time:this.now,huntOutcome:'draw'};this.addLog(this.result.reason,{type:'huntResult'});}},
  resolveDraw(reason){if(!this.v12Battle)return base.resolveDraw.call(this,reason);this.result={winner:null,reason:'讨伐平局：'+reason,time:this.now,huntOutcome:'draw'};},
  finishByTime(){if(!this.v12Battle)return base.finishByTime.call(this);this.checkResult();}
  };
 }
-return {wrap,initializeBattle,runtime,initTraits,restoreMP,has,state};
+root.WitnessV12Tuning=tuning;
+return {wrap,initializeBattle,runtime,initTraits,restoreMP,has,state,tuning};
 })(globalThis);

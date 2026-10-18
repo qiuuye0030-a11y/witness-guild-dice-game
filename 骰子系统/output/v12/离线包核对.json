@@ -2,19 +2,19 @@
   "passed": true,
   "visualReview": false,
   "externalAssets": false,
-  "gameVersion": "v12.01",
+  "gameVersion": "v12.05.01",
   "results": [
     {
       "edition": "经典深靛版",
-      "scriptsCompiled": 21,
-      "sha256": "846f6e834ff33057e6fba1bd78c23f733ec6826e2493b8beb70512b852fe1a89",
-      "bytes": 11060272
+      "scriptsCompiled": 22,
+      "sha256": "750eb22bc0c5447073e180972904a8b680a475f430f5b7cc42bb57b4904f9f0e",
+      "bytes": 11253275
     },
     {
       "edition": "晨曦朝阳版",
-      "scriptsCompiled": 23,
-      "sha256": "fedf3e7052c4f7c2d5c70feb8da7ecc1c73b5caf2660203286f12454235d56ab",
-      "bytes": 11093579
+      "scriptsCompiled": 24,
+      "sha256": "a4b50655baef369d2c1372d79d4ee4ce779a99c50c834af47d723f736c51e0f4",
+      "bytes": 11286582
     }
   ]
 }

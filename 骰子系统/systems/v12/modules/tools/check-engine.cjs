@@ -94,7 +94,7 @@ module.exports = function engineChecks(ctx) {
     }
   });
 
-  test('用真实评级驱动固定触发：80级狂级触发、80级强级等待、79级狂级不触发', () => {
+  test('用真实评级驱动固定触发：80级狂级触发、80级强级触发、79级狂级不触发', () => {
     const chengliang = ctx.roster.combatSpec('chengliang');
     const xutaiping = ctx.roster.combatSpec('xutaiping');
     const at80 = (stats) => ({ level: 80, stats, rings: 8 });
@@ -103,8 +103,8 @@ module.exports = function engineChecks(ctx) {
     ctx.assert.equal(crazy.eligible, true);
     const strong = conditions.evaluateCondition({ level: 80, model: at80(xutaiping.stats), ratingFn: bridge.rating });
     ctx.assert.equal(strong.rating.label, '强级');
-    ctx.assert.equal(strong.eligible, false);
-    ctx.assert.equal(strong.reason, 'rating-below-xiong');
+    ctx.assert.equal(strong.eligible, true);
+    ctx.assert.equal(strong.reason, 'eligible');
     const under = conditions.evaluateCondition({ level: 79, model: { level: 79, stats: chengliang.stats, rings: 7 }, ratingFn: bridge.rating });
     ctx.assert.equal(under.rating.label, '狂级');
     ctx.assert.equal(under.eligible, false);

@@ -7,8 +7,8 @@
  * 不能在界面展示完整特性却实际无效。所以池里每条特性的 handler 必须在这里有实现，
  * 否则该条不进入候选，只在 unavailable 中报告原因。
  *
- * 本包不预置任何正式魂骨特性处理器：特性效果由用户后续编写的池决定，
- * 参考实现不等于默认授予。拼接层可用 register() 注册真实处理器。
+ * 本文件只提供登记器；v12.04由compose注册trait-effects.js中的20条正式处理器，
+ * 额外实现仍可通过拼接层register()注册；仅登记名称不能令未实现的效果生效。
  */
 
 function createHandlerRegistry(initial) {

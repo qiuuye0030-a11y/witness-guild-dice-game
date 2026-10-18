@@ -164,8 +164,8 @@ module.exports = function numberChecks(ctx) {
 
   section('家境判定友方NPC（交接文档第五节）');
 
-  test('1—5档无援军且不投概率骰', () => {
-    for (let rank = 1; rank <= 5; rank++) {
+  test('1—2档无援军且不投概率骰', () => {
+    for (let rank = 1; rank <= 2; rank++) {
       const rng = new RollLog('rank' + rank);
       const result = allies.ensureAllies({ originRank: rank, roster: ctx.roster, rng });
       ctx.assert.equal(result.count, 0);
@@ -175,22 +175,22 @@ module.exports = function numberChecks(ctx) {
     }
   });
 
-  test('8—9档必1位、10档必2位且不投是否到场骰', () => {
-    for (const rank of [8, 9]) {
+  test('6—7档必1位、8—9档必2位、10档必3位且不投是否到场骰', () => {
+    for (const rank of [6,7,8,9]) {
       const rng = new RollLog('must' + rank);
       const result = allies.ensureAllies({ originRank: rank, roster: ctx.roster, rng });
-      ctx.assert.equal(result.count, 1);
+      ctx.assert.equal(result.count,rank>=8?2:1);
       ctx.assert.equal(result.rolls.filter((roll) => roll.sides === 100).length, 0);
     }
     const rng = new RollLog('must10');
     const ten = allies.ensureAllies({ originRank: 10, roster: ctx.roster, rng });
-    ctx.assert.equal(ten.count, 2);
-    ctx.assert.equal(new Set(ten.npcIds).size, 2);
+    ctx.assert.equal(ten.count, 3);
+    ctx.assert.equal(new Set(ten.npcIds).size, 3);
     ctx.assert.equal(ten.rolls.filter((roll) => roll.sides === 100).length, 0);
   });
 
-  test('6档约50%、7档约75%（各2000次）', () => {
-    for (const [rank, expected] of [[6, 0.5], [7, 0.75]]) {
+  test('3档约25%、4档约50%、5档约75%（各2000次）', () => {
+    for (const [rank, expected] of [[3,.25],[4,.5],[5,.75]]) {
       const rng = new RollLog('prob' + rank);
       let attended = 0;
       for (let i = 0; i < 2000; i++) if (allies.ensureAllies({ originRank: rank, roster: ctx.roster, rng }).count === 1) attended++;
@@ -215,10 +215,10 @@ module.exports = function numberChecks(ctx) {
     ctx.assert.equal(result.reason, 'level-below-80');
   });
 
-  test('80级强级不触发；80级凶/狂/神触发', () => {
+  test('80级强级触发；80级凶/狂/神触发', () => {
     const strong = conditions.evaluateCondition({ level: 80, model: model(80, {}), ratingFn: ratingFn('强级') });
-    ctx.assert.equal(strong.eligible, false);
-    ctx.assert.equal(strong.reason, 'rating-below-xiong');
+    ctx.assert.equal(strong.eligible, true);
+    ctx.assert.equal(strong.reason, 'eligible');
     for (const label of ['凶级', '狂级', '神级']) {
       const result = conditions.evaluateCondition({ level: 80, model: model(80, {}), ratingFn: ratingFn(label) });
       ctx.assert.equal(result.eligible, true, label);

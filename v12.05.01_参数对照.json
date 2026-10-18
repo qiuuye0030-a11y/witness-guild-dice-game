@@ -1,0 +1,28 @@
+{
+  "gameVersion": "v12.05.01",
+  "baseline": "v12.05",
+  "miasma": {
+    "damageTakenUpPerStack": 0.08,
+    "damageScope": "all",
+    "maxStacks": 6,
+    "agilityDownPerStack": 0.05,
+    "controlDownPerStack": 0.05,
+    "manaRegenDownPerStack": 0.1
+  },
+  "blazeArmorBreak": {
+    "damageScope": "all",
+    "defenseIgnoreRate": 0.35,
+    "excludeShield": true,
+    "extraCurrentManaCostRate": 0.15,
+    "selfDamageTakenUp": 0.1
+  },
+  "huntTargetSelection": {
+    "choices": 7,
+    "availableBeforeFirstBattle": true,
+    "frozenOnForward": true,
+    "retrySameTarget": true
+  },
+  "oldSaveMigration": "preserve IDs, rolls, attributes and battle resources",
+  "boneCopyStyleVersion": 2,
+  "visualReview": false
+}

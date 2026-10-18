@@ -1,13 +1,68 @@
 {
   "schemaVersion": 1,
-  "libraryVersion": 2,
-  "note": "三例正式魂兽资料已编目；四个主动技能统一最低万年档。available表示可选取定义，实际战斗与六条被动/继承处理器仍需宿主实现，不能将编目完成视作实战接入完成。",
+  "libraryVersion": 4,
+  "note": "七例正式魂兽资料，四技按魂力强度S分档、增益与减益持续本场；v12.05宿主已接入十四条被动及魂骨继承处理器，独立模块执行战斗仍需宿主。",
   "source": {
-    "file": "魂兽资料_三例.txt",
-    "sha256": "5f339647ac7859f6db9afa78ec43f0f8042a4f04e7b62fc4b773f51eeb6f603c",
+    "file": "魂兽资料_七例.txt",
+    "sha256": "95c923b0cd3efafb9605f4ae06815d55543c07dcffaa4134e1981a28c392aab7",
     "rulesVersion": 11,
     "ratingRulesVersion": 2,
-    "skillYears": 10000,
+    "skillYears": null,
+    "skillTierPolicy": {
+      "version": 1,
+      "basis": "single-stat-S-over-same-level-benchmark",
+      "ratingProfile": "npc",
+      "note": "按魂力强度S单项相对同级基准判档，不按六维平均总评；只决定魂兽四技威力，不改变十万年魂环与魂骨年限。",
+      "bands": [
+        {
+          "rating": "纸级",
+          "label": "万年第一档",
+          "years": 10000,
+          "q": 2.8
+        },
+        {
+          "rating": "并级",
+          "label": "万年第二档",
+          "years": 30000,
+          "q": 3.15
+        },
+        {
+          "rating": "强级",
+          "label": "万年第三档",
+          "years": 50000,
+          "q": 3.5
+        },
+        {
+          "rating": "凶级",
+          "label": "万年第四档",
+          "years": 70000,
+          "q": 3.8
+        },
+        {
+          "rating": "狂级",
+          "label": "万年第五档",
+          "years": 90000,
+          "q": 4
+        },
+        {
+          "rating": "神级",
+          "label": "十万年档",
+          "years": 100000,
+          "q": 4.5
+        }
+      ]
+    },
+    "statusPolicy": {
+      "version": 1,
+      "numericBuffLifetime": "battle",
+      "numericDebuffLifetime": "battle",
+      "shieldLifetime": "battle",
+      "sameSourcePolicy": "refresh-not-stack-unless-explicit",
+      "controlLifetime": "original-contest-seconds",
+      "periodicDamageSchedule": "original-parts-and-interval",
+      "persistentCombatStacks": "battle-only",
+      "note": "数值增益、削弱与防御盾持续本场；控制时长、控制后免疫窗口、持续伤害跳数/间隔及单次触发不改成无限时长。"
+    },
     "generatedBy": "tools/build-beasts.cjs"
   },
   "beasts": [
@@ -68,50 +123,22 @@
           "category": "防御",
           "channel": "生命",
           "target": "自己",
-          "effect": "生命护盾 575，持续8秒",
-          "q": 2.8,
+          "effect": "生命护盾 647，持续整场战斗",
+          "q": 3.15,
           "K": 1,
-          "Q": 2.8,
+          "Q": 3.15,
           "cost": 145,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.28,
+          "cooldown": 8.5,
           "ring": 1,
-          "years": 10000,
+          "years": 30000,
           "previewCost": 145,
-          "previewCast": 1.23,
+          "previewCast": 1.28,
           "previewRulesVersion": 17,
-          "id": "frost-moss-frog-skill-1",
-          "skillIndex": 1,
-          "element": "木／冰",
-          "description": "苔甲吸寒凝霜，在体表结成生命护盾。",
-          "factor": 1,
-          "budgetFactor": 1,
-          "cooldownGroup": "frost-moss-frog:skill:1",
-          "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
-            "K": 1,
-            "Q": 2.8,
-            "bloodlineMultiplier": false
-          },
-          "operations": [
-            {
-              "type": "shield",
-              "channel": "生命",
-              "coefficient": 0.45,
-              "power": "Q*SA",
-              "ttlSeconds": 8,
-              "element": "木／冰",
-              "elements": [
-                "木",
-                "冰"
-              ]
-            }
-          ],
           "attribute": "木／冰",
+          "element": "木／冰",
           "elements": [
             "木",
             "冰"
@@ -120,46 +147,89 @@
             "木",
             "冰"
           ],
-          "attributeRulesVersion": 1
+          "attributeRulesVersion": 1,
+          "id": "frost-moss-frog-skill-1",
+          "skillIndex": 1,
+          "description": "苔甲吸寒凝霜，在体表结成生命护盾。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "frost-moss-frog:skill:1",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "lifetime": "battle",
+              "element": "木／冰",
+              "elements": [
+                "木",
+                "冰"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
         },
         {
           "name": "霜沼拖拽",
           "category": "控制",
           "channel": "物理",
           "target": "一名敌人",
-          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
-          "q": 2.8,
+          "effect": "基础控制 2.58秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 3.15,
           "K": 1,
-          "Q": 2.8,
-          "cost": 159,
+          "Q": 3.15,
+          "cost": 164,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
+          "cast": 1.28,
           "cooldown": 10,
           "ring": 2,
-          "years": 10000,
-          "previewCost": 159,
-          "previewCast": 1.23,
+          "years": 30000,
+          "previewCost": 164,
+          "previewCast": 1.28,
           "previewRulesVersion": 17,
+          "attribute": "木／冰",
+          "element": "木／冰",
+          "elements": [
+            "木",
+            "冰"
+          ],
+          "attributeTags": [
+            "木",
+            "冰"
+          ],
+          "attributeRulesVersion": 1,
           "id": "frost-moss-frog-skill-2",
           "skillIndex": 2,
-          "element": "木／冰",
           "description": "寒泥攀住目标四肢；控制成功后短暂冻结并打断蓄力。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-moss-frog:skill:2",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.15,
             "bloodlineMultiplier": false
           },
           "operations": [
             {
               "type": "control_contest",
-              "baseSeconds": 2.4,
+              "baseSeconds": 2.575,
               "interrupt": true,
               "immunitySeconds": 4,
               "element": "木／冰",
@@ -169,8 +239,33 @@
               ]
             }
           ],
-          "baseControl": 2.4,
+          "baseControl": 2.575
+        },
+        {
+          "name": "冻沼撞击",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 2131；命中后按防御力减伤",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 253,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 3,
+          "years": 30000,
+          "effectSeed": "|3|30000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 253,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
           "attribute": "木／冰",
+          "element": "木／冰",
           "elements": [
             "木",
             "冰"
@@ -179,44 +274,20 @@
             "木",
             "冰"
           ],
-          "attributeRulesVersion": 1
-        },
-        {
-          "name": "冻沼撞击",
-          "category": "攻击",
-          "channel": "物理",
-          "target": "一名敌人",
-          "effect": "物理原始伤害 1894；命中后按防御力减伤",
-          "q": 2.8,
-          "K": 1,
-          "Q": 2.8,
-          "cost": 234,
-          "costFraction": 0.1,
-          "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
-          "ring": 3,
-          "years": 10000,
-          "effectSeed": "|3|10000|0",
-          "damageMode": "direct",
-          "attackSubtype": "direct",
-          "generationVersion": 1007,
-          "previewCost": 234,
-          "previewCast": 1.23,
-          "previewRulesVersion": 17,
+          "attributeRulesVersion": 1,
           "id": "frost-moss-frog-skill-3",
           "skillIndex": 3,
-          "element": "木／冰",
           "description": "以覆满苔甲的庞大身躯猛撞目标，造成单次物理伤害。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-moss-frog:skill:3",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.15,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -230,8 +301,29 @@
                 "冰"
               ]
             }
-          ],
+          ]
+        },
+        {
+          "name": "生苔回息",
+          "category": "治疗",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "回复生命 575，不超过最大值",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 145,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 10,
+          "ring": 4,
+          "years": 30000,
+          "previewCost": 145,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
           "attribute": "木／冰",
+          "element": "木／冰",
           "elements": [
             "木",
             "冰"
@@ -240,40 +332,20 @@
             "木",
             "冰"
           ],
-          "attributeRulesVersion": 1
-        },
-        {
-          "name": "生苔回息",
-          "category": "治疗",
-          "channel": "生命",
-          "target": "自己",
-          "effect": "回复生命 511，不超过最大值",
-          "q": 2.8,
-          "K": 1,
-          "Q": 2.8,
-          "cost": 145,
-          "costFraction": 0.15,
-          "highest": false,
-          "cast": 1.23,
-          "cooldown": 10,
-          "ring": 4,
-          "years": 10000,
-          "previewCost": 145,
-          "previewCast": 1.23,
-          "previewRulesVersion": 17,
+          "attributeRulesVersion": 1,
           "id": "frost-moss-frog-skill-4",
           "skillIndex": 4,
-          "element": "木／冰",
           "description": "苔层汲取沼中生机，回复自身生命。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-moss-frog:skill:4",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.15,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -290,24 +362,14 @@
                 "冰"
               ]
             }
-          ],
-          "attribute": "木／冰",
-          "elements": [
-            "木",
-            "冰"
-          ],
-          "attributeTags": [
-            "木",
-            "冰"
-          ],
-          "attributeRulesVersion": 1
+          ]
         }
       ],
       "traits": [
         {
           "id": "frost-moss-immunity",
           "name": "霜苔不侵",
-          "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供最大生命5%的护盾，上限10层。非冰属性越盾真伤不受减免。",
+          "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供原始生命5%的护盾，累计不超过原始生命的50%。原始生命指魂兽定义面板，不含讨伐血量倍率；玩家继承时按自身最大生命计算。非冰属性越盾真伤不受减免。",
           "params": {
             "iceDamageImmunity": true,
             "iceDamageToHealing": 1,
@@ -318,21 +380,23 @@
             ],
             "iceHitStacks": 2,
             "otherHitStacks": 1,
-            "shieldPerStackMaxHP": 0.05,
+            "shieldPerStackBaseHealth": 0.05,
+            "shieldCapBaseHealth": 0.5,
+            "shieldBasis": "original-panel-hp",
             "maxStacks": 10,
             "shieldMode": "stack-capacity"
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:frost-moss-immunity",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:frost-moss-immunity",
             "implementationVersion": 1,
             "name": "霜苔不侵",
-            "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供最大生命5%的护盾，上限10层。非冰属性越盾真伤不受减免。",
+            "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供原始生命5%的护盾，累计不超过原始生命的50%。原始生命指魂兽定义面板，不含讨伐血量倍率；玩家继承时按自身最大生命计算。非冰属性越盾真伤不受减免。",
             "params": {
               "iceDamageImmunity": true,
               "iceDamageToHealing": 1,
@@ -343,13 +407,15 @@
               ],
               "iceHitStacks": 2,
               "otherHitStacks": 1,
-              "shieldPerStackMaxHP": 0.05,
+              "shieldPerStackBaseHealth": 0.05,
+              "shieldCapBaseHealth": 0.5,
+              "shieldBasis": "original-panel-hp",
               "maxStacks": 10,
               "shieldMode": "stack-capacity",
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": []
@@ -377,10 +443,10 @@
             ]
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:moss-armor-accumulation",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:moss-armor-accumulation",
@@ -404,8 +470,8 @@
               ],
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": [
@@ -468,6 +534,16 @@
         "bloodlineModifiesStats": false,
         "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
       },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 525,
+        "benchmark": 500,
+        "ratio": 1.05,
+        "rating": "并级",
+        "label": "万年第二档",
+        "years": 30000,
+        "q": 3.15
+      },
       "traitInheritanceVersion": 1,
       "ringReward": {
         "years": 100000,
@@ -475,16 +551,16 @@
       },
       "bone": {
         "slot": "random",
-        "slotPolicy": "uniform-six",
-        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
       },
       "exitRule": "hp-or-spirit-zero",
       "implementation": {
-        "status": "catalogued",
-        "hostIntegrated": false,
-        "skills": "operations-spec",
-        "traits": "spec-only",
-        "inheritanceHandlers": "spec-only"
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
       }
     },
     {
@@ -542,37 +618,46 @@
           "category": "攻击",
           "channel": "物理",
           "target": "一名敌人",
-          "effect": "物理原始伤害 2957；命中后按防御力减伤",
-          "q": 2.8,
+          "effect": "物理原始伤害 4013；命中后按防御力减伤",
+          "q": 3.8,
           "K": 1,
-          "Q": 2.8,
-          "cost": 361,
+          "Q": 3.8,
+          "cost": 444,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.37,
+          "cooldown": 9.5,
           "ring": 1,
-          "years": 10000,
-          "effectSeed": "|1|10000|0",
+          "years": 70000,
+          "effectSeed": "|1|70000|0",
           "damageMode": "direct",
           "attackSubtype": "direct",
           "generationVersion": 1007,
-          "previewCost": 361,
-          "previewCast": 1.23,
+          "previewCost": 444,
+          "previewCast": 1.37,
           "previewRulesVersion": 17,
+          "attribute": "冰",
+          "element": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1,
           "id": "frost-gnat-skill-1",
           "skillIndex": 1,
-          "element": "冰",
           "description": "掠近目标，以冰针般的口器完成一次迅疾刺击。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-gnat:skill:1",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.8,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -585,55 +670,56 @@
                 "冰"
               ]
             }
-          ],
-          "attribute": "冰",
-          "elements": [
-            "冰"
-          ],
-          "attributeTags": [
-            "冰"
-          ],
-          "attributeRulesVersion": 1
+          ]
         },
         {
           "name": "雪屑掩形",
           "category": "强化",
           "channel": "物理",
           "target": "自己",
-          "effect": "自身敏捷提高33.6%，持续整场，同技能不叠加",
-          "q": 2.8,
+          "effect": "自身敏捷提高45.6%，持续整场，同技能不叠加",
+          "q": 3.8,
           "K": 1,
-          "Q": 2.8,
-          "cost": 215,
+          "Q": 3.8,
+          "cost": 232,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.37,
+          "cooldown": 9.5,
           "ring": 2,
-          "years": 10000,
-          "previewCost": 215,
-          "previewCast": 1.23,
+          "years": 70000,
+          "previewCost": 232,
+          "previewCast": 1.37,
           "previewRulesVersion": 17,
+          "attribute": "冰",
+          "element": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1,
           "id": "frost-gnat-skill-2",
           "skillIndex": 2,
-          "element": "冰",
           "description": "翅膜散霜，借细雪遮掩行迹，提高自身敏捷。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-gnat:skill:2",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.8,
             "bloodlineMultiplier": false
           },
           "operations": [
             {
               "type": "battle_stat_up",
               "values": {
-                "A": 0.336
+                "A": 0.456
               },
               "lifetime": "battle",
               "sameSourcePolicy": "refresh-not-stack",
@@ -644,53 +730,56 @@
               ]
             }
           ],
-          "agility": 0.336,
-          "attribute": "冰",
-          "elements": [
-            "冰"
-          ],
-          "attributeTags": [
-            "冰"
-          ],
-          "attributeRulesVersion": 1
+          "agility": 0.456,
+          "statusLifetime": "battle",
+          "duration": null
         },
         {
           "name": "寒痕入骨",
           "category": "持续伤害",
           "channel": "物理",
           "target": "一名敌人",
-          "effect": "物理总原始伤害 3450，分3次每3秒一跳，同技能不叠层",
-          "q": 2.8,
+          "effect": "物理总原始伤害 4682，分3次每3秒一跳，同技能不叠层",
+          "q": 3.8,
           "K": 1,
-          "Q": 2.8,
-          "cost": 400,
+          "Q": 3.8,
+          "cost": 497,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.37,
+          "cooldown": 9.5,
           "ring": 3,
-          "years": 10000,
+          "years": 70000,
           "damageNature": "residual",
-          "effectSeed": "|3|10000|0",
+          "effectSeed": "|3|70000|0",
           "damageMode": "periodic",
           "attackSubtype": "periodic",
           "generationVersion": 1007,
-          "previewCost": 400,
-          "previewCast": 1.23,
+          "previewCost": 497,
+          "previewCast": 1.37,
           "previewRulesVersion": 17,
+          "attribute": "冰",
+          "element": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1,
           "id": "frost-gnat-skill-3",
           "skillIndex": 3,
-          "element": "冰",
           "description": "将寒气留在创口，分三次侵蚀目标，不重复叠加同一寒痕。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-gnat:skill:3",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.8,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -706,54 +795,55 @@
                 "冰"
               ]
             }
-          ],
-          "attribute": "冰",
-          "elements": [
-            "冰"
-          ],
-          "attributeTags": [
-            "冰"
-          ],
-          "attributeRulesVersion": 1
+          ]
         },
         {
           "name": "掠影断脉",
           "category": "控制",
           "channel": "物理",
           "target": "一名敌人",
-          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
-          "q": 2.8,
+          "effect": "基础控制 2.9秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 3.8,
           "K": 1,
-          "Q": 2.8,
-          "cost": 244,
+          "Q": 3.8,
+          "cost": 267,
           "costFraction": 0.15,
           "highest": false,
-          "cast": 1.23,
+          "cast": 1.37,
           "cooldown": 10,
           "ring": 4,
-          "years": 10000,
-          "previewCost": 244,
-          "previewCast": 1.23,
+          "years": 70000,
+          "previewCost": 267,
+          "previewCast": 1.37,
           "previewRulesVersion": 17,
+          "attribute": "冰",
+          "element": "冰",
+          "elements": [
+            "冰"
+          ],
+          "attributeTags": [
+            "冰"
+          ],
+          "attributeRulesVersion": 1,
           "id": "frost-gnat-skill-4",
           "skillIndex": 4,
-          "element": "冰",
           "description": "疾掠时刺向魂力流转的间隙；判定成功后短暂打断并控制目标。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "frost-gnat:skill:4",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
             "K": 1,
-            "Q": 2.8,
+            "Q": 3.8,
             "bloodlineMultiplier": false
           },
           "operations": [
             {
               "type": "control_contest",
-              "baseSeconds": 2.4,
+              "baseSeconds": 2.9,
               "interrupt": true,
               "immunitySeconds": 4,
               "element": "冰",
@@ -762,26 +852,18 @@
               ]
             }
           ],
-          "baseControl": 2.4,
-          "attribute": "冰",
-          "elements": [
-            "冰"
-          ],
-          "attributeTags": [
-            "冰"
-          ],
-          "attributeRulesVersion": 1
+          "baseControl": 2.9
         }
       ],
       "traits": [
         {
           "id": "ice-shell-preservation",
           "name": "冰壳护生",
-          "effect": "受击时先生成最大生命80%的冰壳护盾，每回合自行重结一次；未破可叠加，最多两层。冰壳击破时，向攻击者反弹该层已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。",
+          "effect": "战斗开始时，获得相当于自身生命值40%的护盾。护盾被击破时，向攻击者反弹该护盾已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。护盾只结一次，不会自行重结或叠加。",
           "params": {
-            "preHitShieldMaxHP": 0.8,
-            "renewPerOwnerTurn": 1,
-            "maxLayers": 2,
+            "battleStartShieldMaxHPRate": 0.4,
+            "shieldBasis": "own-max-hp",
+            "maxLayers": 1,
             "reflectionRate": 0.3,
             "reflectionElement": "冰",
             "reflectionBypassShield": true,
@@ -790,20 +872,20 @@
             ]
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:ice-shell-preservation",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:ice-shell-preservation",
             "implementationVersion": 1,
             "name": "冰壳护生",
-            "effect": "受击时先生成最大生命80%的冰壳护盾，每回合自行重结一次；未破可叠加，最多两层。冰壳击破时，向攻击者反弹该层已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。",
+            "effect": "战斗开始时，获得相当于自身生命值40%的护盾。护盾被击破时，向攻击者反弹该护盾已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。护盾只结一次，不会自行重结或叠加。",
             "params": {
-              "preHitShieldMaxHP": 0.8,
-              "renewPerOwnerTurn": 1,
-              "maxLayers": 2,
+              "battleStartShieldMaxHPRate": 0.4,
+              "shieldBasis": "own-max-hp",
+              "maxLayers": 1,
               "reflectionRate": 0.3,
               "reflectionElement": "冰",
               "reflectionBypassShield": true,
@@ -812,8 +894,8 @@
               ],
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": []
@@ -823,67 +905,49 @@
         {
           "id": "frost-domain",
           "name": "霜域",
-          "effect": "展开不可驱散的霜域，持续整场。非冰属性单位读条速度降低20%、行动条速度降低15%；冰属性单位（含自身）每回合敏捷提高5%。每2回合加深一档，最多3档，最终读条速度降低35%、行动条速度降低25%。驱散技能可压住霜域一回合。",
+          "effect": "展开不可驱散的霜域，持续整场。每档使敌方单位敏捷降低2%、行动条速度降低4%，友方单位（含自身）敏捷提高4%；每1个自身回合加深一档，最多3档。达到3档后，每次加深不再提高这些数值，改为：友方单位（含自身）获得相当于其生命上限2%的寒冰护盾，敌方单位承受相当于其生命上限2%的伤害（按生命上限计算，不经过防御衰减）。驱散技能可压住霜域一个自身回合。",
           "params": {
             "lifetime": "battle",
             "dispellable": false,
             "suppressibleByDispelOwnerTurns": 1,
-            "tiers": [
-              {
-                "castSpeedDown": 0.2,
-                "gaugeSpeedDown": 0.15
-              },
-              {
-                "castSpeedDown": 0.275,
-                "gaugeSpeedDown": 0.2
-              },
-              {
-                "castSpeedDown": 0.35,
-                "gaugeSpeedDown": 0.25
-              }
-            ],
-            "deepenEveryOwnerTurns": 2,
-            "iceUnitAgilityPerTurn": 0.05,
-            "iceAgilityStackLifetime": "battle",
-            "tierInterpolation": "中间档按两端线性取值；待后续调数值"
+            "enemyAgilityDownPerTier": 0.02,
+            "enemyGaugeSpeedDownPerTier": 0.04,
+            "allyAgilityUpPerTier": 0.04,
+            "maxTier": 3,
+            "deepenEveryOwnerTurns": 1,
+            "tierThreeAllyShieldMaxHPRate": 0.02,
+            "tierThreeEnemyDamageMaxHPRate": 0.02,
+            "tierThreeDamageBasis": "max-hp",
+            "tierThreeDamageMitigation": "none"
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:frost-domain",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:frost-domain",
             "implementationVersion": 1,
             "name": "霜域",
-            "effect": "展开不可驱散的霜域，持续整场。非冰属性单位读条速度降低20%、行动条速度降低15%；冰属性单位（含自身）每回合敏捷提高5%。每2回合加深一档，最多3档，最终读条速度降低35%、行动条速度降低25%。驱散技能可压住霜域一回合。",
+            "effect": "展开不可驱散的霜域，持续整场。每档使敌方单位敏捷降低2%、行动条速度降低4%，友方单位（含自身）敏捷提高4%；每1个自身回合加深一档，最多3档。达到3档后，每次加深不再提高这些数值，改为：友方单位（含自身）获得相当于其生命上限2%的寒冰护盾，敌方单位承受相当于其生命上限2%的伤害（按生命上限计算，不经过防御衰减）。驱散技能可压住霜域一个自身回合。",
             "params": {
               "lifetime": "battle",
               "dispellable": false,
               "suppressibleByDispelOwnerTurns": 1,
-              "tiers": [
-                {
-                  "castSpeedDown": 0.2,
-                  "gaugeSpeedDown": 0.15
-                },
-                {
-                  "castSpeedDown": 0.275,
-                  "gaugeSpeedDown": 0.2
-                },
-                {
-                  "castSpeedDown": 0.35,
-                  "gaugeSpeedDown": 0.25
-                }
-              ],
-              "deepenEveryOwnerTurns": 2,
-              "iceUnitAgilityPerTurn": 0.05,
-              "iceAgilityStackLifetime": "battle",
-              "tierInterpolation": "中间档按两端线性取值；待后续调数值",
+              "enemyAgilityDownPerTier": 0.02,
+              "enemyGaugeSpeedDownPerTier": 0.04,
+              "allyAgilityUpPerTier": 0.04,
+              "maxTier": 3,
+              "deepenEveryOwnerTurns": 1,
+              "tierThreeAllyShieldMaxHPRate": 0.02,
+              "tierThreeEnemyDamageMaxHPRate": 0.02,
+              "tierThreeDamageBasis": "max-hp",
+              "tierThreeDamageMitigation": "none",
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": []
@@ -944,6 +1008,16 @@
         "bloodlineModifiesStats": false,
         "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
       },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 815,
+        "benchmark": 500,
+        "ratio": 1.63,
+        "rating": "凶级",
+        "label": "万年第四档",
+        "years": 70000,
+        "q": 3.8
+      },
       "traitInheritanceVersion": 1,
       "ringReward": {
         "years": 100000,
@@ -951,16 +1025,16 @@
       },
       "bone": {
         "slot": "random",
-        "slotPolicy": "uniform-six",
-        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
       },
       "exitRule": "hp-or-spirit-zero",
       "implementation": {
-        "status": "catalogued",
-        "hostIntegrated": false,
-        "skills": "operations-spec",
-        "traits": "spec-only",
-        "inheritanceHandlers": "spec-only"
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
       }
     },
     {
@@ -1018,39 +1092,48 @@
           "category": "控制",
           "channel": "能量",
           "target": "一名敌人",
-          "effect": "基础控制 2.4秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
-          "q": 2.8,
+          "effect": "基础控制 3秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 4.5,
           "K": 1,
-          "Q": 2.8,
-          "cost": 299,
+          "Q": 4.5,
+          "cost": 345,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 10,
+          "cast": 1.47,
+          "cooldown": 12,
           "ring": 1,
-          "years": 10000,
-          "previewCost": 299,
-          "previewCast": 1.23,
+          "years": 100000,
+          "previewCost": 345,
+          "previewCast": 1.47,
           "previewRulesVersion": 17,
+          "attribute": "水",
+          "element": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1,
           "id": "abyss-imperial-salamander-skill-1",
           "skillIndex": 1,
-          "element": "水",
           "description": "将水压收束在一名敌人身上，控制成功后打断其行动。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "abyss-imperial-salamander:skill:1",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 100000,
+            "band": "十万年档",
+            "rating": "神级",
+            "q": 4.5,
             "K": 1,
-            "Q": 2.8,
+            "Q": 4.5,
             "bloodlineMultiplier": false
           },
           "operations": [
             {
               "type": "control_contest",
-              "baseSeconds": 2.4,
+              "baseSeconds": 3,
               "interrupt": true,
               "immunitySeconds": 4,
               "element": "水",
@@ -1059,52 +1142,53 @@
               ]
             }
           ],
-          "baseControl": 2.4,
-          "attribute": "水",
-          "elements": [
-            "水"
-          ],
-          "attributeTags": [
-            "水"
-          ],
-          "attributeRulesVersion": 1
+          "baseControl": 3
         },
         {
           "name": "潭流冲击",
           "category": "攻击",
           "channel": "能量",
           "target": "一名敌人",
-          "effect": "能量原始伤害 3247；命中后按防御力减伤",
-          "q": 2.8,
+          "effect": "能量原始伤害 5218；命中后按防御力减伤",
+          "q": 4.5,
           "K": 1,
-          "Q": 2.8,
-          "cost": 441,
+          "Q": 4.5,
+          "cost": 614,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.47,
+          "cooldown": 12,
           "ring": 2,
-          "years": 10000,
-          "effectSeed": "|2|10000|0",
+          "years": 100000,
+          "effectSeed": "|2|100000|0",
           "damageMode": "direct",
           "attackSubtype": "direct",
           "generationVersion": 1007,
-          "previewCost": 441,
-          "previewCast": 1.23,
+          "previewCost": 614,
+          "previewCast": 1.47,
           "previewRulesVersion": 17,
+          "attribute": "水",
+          "element": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1,
           "id": "abyss-imperial-salamander-skill-2",
           "skillIndex": 2,
-          "element": "水",
           "description": "释放一道沉重水流，造成单次能量伤害。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "abyss-imperial-salamander:skill:2",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 100000,
+            "band": "十万年档",
+            "rating": "神级",
+            "q": 4.5,
             "K": 1,
-            "Q": 2.8,
+            "Q": 4.5,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -1117,106 +1201,110 @@
                 "水"
               ]
             }
-          ],
-          "attribute": "水",
-          "elements": [
-            "水"
-          ],
-          "attributeTags": [
-            "水"
-          ],
-          "attributeRulesVersion": 1
+          ]
         },
         {
           "name": "滞水缠身",
           "category": "减益",
           "channel": "能量",
           "target": "一名敌人",
-          "effect": "目标敏捷降低28%，持续6秒；按双方精神力与稳定进行减益判定",
-          "q": 2.8,
+          "effect": "目标敏捷降低45%，持续整场战斗；按双方精神力与稳定进行减益判定",
+          "q": 4.5,
           "K": 1,
-          "Q": 2.8,
-          "cost": 262,
+          "Q": 4.5,
+          "cost": 297,
           "costFraction": 0.1,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.47,
+          "cooldown": 12,
           "ring": 3,
-          "years": 10000,
-          "previewCost": 262,
-          "previewCast": 1.23,
+          "years": 100000,
+          "previewCost": 297,
+          "previewCast": 1.47,
           "previewRulesVersion": 17,
-          "id": "abyss-imperial-salamander-skill-3",
-          "skillIndex": 3,
-          "element": "水",
-          "description": "黏滞水流缠住目标，精神对抗成功后降低其敏捷。",
-          "factor": 1,
-          "budgetFactor": 1,
-          "cooldownGroup": "abyss-imperial-salamander:skill:3",
-          "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
-            "K": 1,
-            "Q": 2.8,
-            "bloodlineMultiplier": false
-          },
-          "operations": [
-            {
-              "type": "numeric_debuff",
-              "values": {
-                "A": 0.28
-              },
-              "ttlSeconds": 6,
-              "sameSourcePolicy": "refresh-not-stack",
-              "contest": "spirit-and-stability",
-              "element": "水",
-              "elements": [
-                "水"
-              ]
-            }
-          ],
           "attribute": "水",
+          "element": "水",
           "elements": [
             "水"
           ],
           "attributeTags": [
             "水"
           ],
-          "attributeRulesVersion": 1
+          "attributeRulesVersion": 1,
+          "id": "abyss-imperial-salamander-skill-3",
+          "skillIndex": 3,
+          "description": "黏滞水流缠住目标，精神对抗成功后降低其敏捷。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "abyss-imperial-salamander:skill:3",
+          "strengthReference": {
+            "years": 100000,
+            "band": "十万年档",
+            "rating": "神级",
+            "q": 4.5,
+            "K": 1,
+            "Q": 4.5,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "numeric_debuff",
+              "values": {
+                "A": 0.45
+              },
+              "sameSourcePolicy": "refresh-not-stack",
+              "contest": "spirit-and-stability",
+              "lifetime": "battle",
+              "element": "水",
+              "elements": [
+                "水"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null
         },
         {
           "name": "回潮护身",
           "category": "防御",
           "channel": "生命",
           "target": "自己",
-          "effect": "生命护盾 1217，持续8秒",
-          "q": 2.8,
+          "effect": "生命护盾 1957，持续整场战斗",
+          "q": 4.5,
           "K": 1,
-          "Q": 2.8,
+          "Q": 4.5,
           "cost": 273,
           "costFraction": 0.15,
           "highest": false,
-          "cast": 1.23,
-          "cooldown": 8,
+          "cast": 1.47,
+          "cooldown": 12,
           "ring": 4,
-          "years": 10000,
+          "years": 100000,
           "previewCost": 273,
-          "previewCast": 1.23,
+          "previewCast": 1.47,
           "previewRulesVersion": 17,
+          "attribute": "水",
+          "element": "水",
+          "elements": [
+            "水"
+          ],
+          "attributeTags": [
+            "水"
+          ],
+          "attributeRulesVersion": 1,
           "id": "abyss-imperial-salamander-skill-4",
           "skillIndex": 4,
-          "element": "水",
           "description": "以回旋水流包覆身体，生成生命护盾。",
           "factor": 1,
           "budgetFactor": 1,
           "cooldownGroup": "abyss-imperial-salamander:skill:4",
           "strengthReference": {
-            "years": 10000,
-            "band": "万年最低档",
-            "q": 2.8,
+            "years": 100000,
+            "band": "十万年档",
+            "rating": "神级",
+            "q": 4.5,
             "K": 1,
-            "Q": 2.8,
+            "Q": 4.5,
             "bloodlineMultiplier": false
           },
           "operations": [
@@ -1225,21 +1313,16 @@
               "channel": "生命",
               "coefficient": 0.45,
               "power": "Q*SA",
-              "ttlSeconds": 8,
+              "lifetime": "battle",
               "element": "水",
               "elements": [
                 "水"
               ]
             }
           ],
-          "attribute": "水",
-          "elements": [
-            "水"
-          ],
-          "attributeTags": [
-            "水"
-          ],
-          "attributeRulesVersion": 1
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
         }
       ],
       "traits": [
@@ -1258,10 +1341,10 @@
             "excludeResourceFreeUnits": true
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:oppressive-tides",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:oppressive-tides",
@@ -1279,8 +1362,8 @@
               "excludeResourceFreeUnits": true,
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": []
@@ -1305,10 +1388,10 @@
             "resourceRecoveryTriggersSiphon": false
           },
           "implementation": {
-            "status": "spec-only",
+            "status": "live",
             "handler": "beast:devouring-soul-recovery",
             "version": 1,
-            "requiresHostAdapter": true
+            "requiresHostAdapter": false
           },
           "inherit": {
             "handler": "inherit:devouring-soul-recovery",
@@ -1329,8 +1412,8 @@
               "resourceRecoveryTriggersSiphon": false,
               "sourceOwner": "equipped-bone-owner"
             },
-            "implementationStatus": "spec-only",
-            "requiresHostAdapter": true,
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
             "save": {
               "schemaVersion": 1,
               "fields": []
@@ -1391,6 +1474,16 @@
         "bloodlineModifiesStats": false,
         "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
       },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 1125,
+        "benchmark": 500,
+        "ratio": 2.25,
+        "rating": "神级",
+        "label": "十万年档",
+        "years": 100000,
+        "q": 4.5
+      },
       "traitInheritanceVersion": 1,
       "ringReward": {
         "years": 100000,
@@ -1398,16 +1491,2009 @@
       },
       "bone": {
         "slot": "random",
-        "slotPolicy": "uniform-six",
-        "description": "胜利后从六个常规部位等概率抽取一次，不采用原表部位，不生成外附骨；抽中结果随奖励事务保存"
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
       },
       "exitRule": "hp-or-spirit-zero",
       "implementation": {
-        "status": "catalogued",
-        "hostIntegrated": false,
-        "skills": "operations-spec",
-        "traits": "spec-only",
-        "inheritanceHandlers": "spec-only"
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
+      }
+    },
+    {
+      "id": "fu-yue-ju-rong-yuan",
+      "name": "负岳蝾螈",
+      "version": 2,
+      "style": "防御",
+      "elements": [
+        "土"
+      ],
+      "statDice": [
+        8,
+        2,
+        3,
+        8,
+        1,
+        9
+      ],
+      "statRatios": [
+        1.82,
+        1.05,
+        1.3,
+        1.82,
+        0.85,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 6,
+        "name": "灵血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·巨型蝾螈",
+      "size": "大（象鲸级）",
+      "sociality": "成对",
+      "actualAge": "约十八万年",
+      "habitat": "西极地脉裂谷尽头的泥沼——沼底压着一条断掉的龙脉，泥水终年温热。",
+      "appearance": "一头放大了上千倍的蝾螈。头骨宽扁，口裂横贯半张脸，眼退成两点浑浊的琥珀；四肢短粗，趾间厚蹼，尾侧扁如桨。背脊覆着一层层土黄的岩甲，甲缝嵌着碎石与苔，远看就是一座伏在沼里的石丘。皮肤终年渗着温热的泥浆，它爬过的地方会留下一条慢慢合拢的沟。",
+      "habits": "极慢。伏在沼底时与一块长苔的礁石没有分别，靠皮肤与岩甲一点点汲取地脉之气。不捕不猎，十万年里只做一件事——把背上那层越积越厚的岩甲负稳。它不追人，只把路“坐断”。",
+      "role": "敌方——地脉守门兽。站在必经之路上，绕不过，也推不动。",
+      "battleText": "整片泥沼忽然下沉半尺。背甲上的苔土层层剥落，一座山的影子从沼底缓缓升起——负岳蝾螈抬起头，泥水顺着宽扁的头骨往下淌，像一道倒流的瀑布。",
+      "defeatText": "背上的岳影终于崩散，碎石如雨落回泥沼。负岳蝾螈伏低宽扁的头，十万年不肯放下的那口气，随一声闷响散进地脉。",
+      "talents": [
+        {
+          "name": "岳甲覆身",
+          "effect": "甲缝渗出的黄雾裹住躯体，土石自行攀附，结成一层越来越厚的甲。"
+        },
+        {
+          "name": "裂地摆尾",
+          "effect": "扁尾横扫，沼底的地脉被整条掀了起来。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "岳甲覆身",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 647，持续整场战斗",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 129,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 1,
+          "years": 30000,
+          "previewCost": 129,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "土",
+          "element": "土",
+          "elements": [
+            "土"
+          ],
+          "attributeTags": [
+            "土"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fu-yue-ju-rong-yuan-skill-1",
+          "skillIndex": 1,
+          "description": "甲缝涌出的黄雾裹住全身，土石层层攀附，结成一面越来越厚的生命护盾。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fu-yue-ju-rong-yuan:skill:1",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "lifetime": "battle",
+              "element": "土",
+              "elements": [
+                "土"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
+        },
+        {
+          "name": "地脉贯石",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 2770；命中后按防御力减伤",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 225,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 2,
+          "years": 30000,
+          "effectSeed": "|2|30000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 225,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "土",
+          "element": "土",
+          "elements": [
+            "土"
+          ],
+          "attributeTags": [
+            "土"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fu-yue-ju-rong-yuan-skill-2",
+          "skillIndex": 2,
+          "description": "前肢往沼底一按，地脉自目标足下暴起，碎石穿身而过，造成单次物理伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fu-yue-ju-rong-yuan:skill:2",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "物理",
+              "factor": 1.2,
+              "element": "土",
+              "elements": [
+                "土"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "镇岳",
+          "category": "减益",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "目标敏捷降低31.5%，持续整场战斗；按双方精神力与稳定进行减益判定",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 128,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 3,
+          "years": 30000,
+          "previewCost": 128,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "土",
+          "element": "土",
+          "elements": [
+            "土"
+          ],
+          "attributeTags": [
+            "土"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fu-yue-ju-rong-yuan-skill-3",
+          "skillIndex": 3,
+          "description": "山岳之势压落，目标举步维艰，敏捷被一寸寸拖低。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fu-yue-ju-rong-yuan:skill:3",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "numeric_debuff",
+              "values": {
+                "A": 0.315
+              },
+              "sameSourcePolicy": "refresh-not-stack",
+              "contest": "spirit-and-stability",
+              "lifetime": "battle",
+              "element": "土",
+              "elements": [
+                "土"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null
+        },
+        {
+          "name": "山崩余震",
+          "category": "持续伤害",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理总原始伤害 3231，分3次每3秒一跳，同技能不叠层",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 251,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 4,
+          "years": 30000,
+          "damageNature": "residual",
+          "effectSeed": "|4|30000|0",
+          "damageMode": "periodic",
+          "attackSubtype": "periodic",
+          "generationVersion": 1007,
+          "previewCost": 251,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "土",
+          "element": "土",
+          "elements": [
+            "土"
+          ],
+          "attributeTags": [
+            "土"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fu-yue-ju-rong-yuan-skill-4",
+          "skillIndex": 4,
+          "description": "一击之后地裂未止，余震分三次从脚底翻上来。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fu-yue-ju-rong-yuan:skill:4",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "periodic_attack",
+              "channel": "物理",
+              "factor": 1.4,
+              "parts": 3,
+              "intervalSeconds": 3,
+              "element": "土",
+              "sameSourcePolicy": "refresh-not-stack",
+              "elements": [
+                "土"
+              ]
+            }
+          ]
+        }
+      ],
+      "traits": [
+        {
+          "id": "bearing-mountain",
+          "name": "负岳",
+          "effect": "战斗开始时，背上的山影凝成护盾，值等于自身最大生命80%。自身受到的伤害有40%先由山影承担；山影每承担一次伤害，叠1层“山重”，每层使自身防御素质提高6%、受到的伤害降低2%，最多10层。山影被击破时，立即回复自身最大生命20%，山重层数不清空。越盾真伤不转嫁、不叠层。",
+          "params": {
+            "battleStartShieldMaxHPRate": 0.8,
+            "transferRate": 0.4,
+            "defensePerStack": 0.06,
+            "damageTakenDownPerStack": 0.02,
+            "maxStacks": 10,
+            "breakHealMaxHPRate": 0.2,
+            "stackLifetime": "battle",
+            "bypassTags": [
+              "shield-bypass-true-damage"
+            ],
+            "saveFields": [
+              "yueStacks"
+            ],
+            "statusLifetime": "battle"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:bearing-mountain",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:bearing-mountain",
+            "implementationVersion": 1,
+            "name": "负岳",
+            "effect": "战斗开始时，背上的山影凝成护盾，值等于自身最大生命80%。自身受到的伤害有40%先由山影承担；山影每承担一次伤害，叠1层“山重”，每层使自身防御素质提高6%、受到的伤害降低2%，最多10层。山影被击破时，立即回复自身最大生命20%，山重层数不清空。越盾真伤不转嫁、不叠层。",
+            "params": {
+              "battleStartShieldMaxHPRate": 0.8,
+              "transferRate": 0.4,
+              "defensePerStack": 0.06,
+              "damageTakenDownPerStack": 0.02,
+              "maxStacks": 10,
+              "breakHealMaxHPRate": 0.2,
+              "stackLifetime": "battle",
+              "bypassTags": [
+                "shield-bypass-true-damage"
+              ],
+              "saveFields": [
+                "yueStacks"
+              ],
+              "statusLifetime": "battle",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": [
+                "yueStacks"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ley-line-pierce",
+          "name": "山根透地",
+          "effect": "负岳蝾螈的攻击循地脉自目标足下穿出：无视目标40%防御素质，并无视护盾直接伤及本体。代价是每次攻击后自身行动条速度降低15%，持续整场战斗，可叠2层。对悬空或无形体的目标，只无视防御，不无视护盾。",
+          "params": {
+            "defenseIgnoreRate": 0.4,
+            "ignoreShield": true,
+            "selfGaugeSpeedDown": 0.15,
+            "maxStacks": 2,
+            "exceptions": [
+              "airborne",
+              "incorporeal"
+            ],
+            "duration": "battle",
+            "statusLifetime": "battle"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:ley-line-pierce",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:ley-line-pierce",
+            "implementationVersion": 1,
+            "name": "山根透地",
+            "effect": "负岳蝾螈的攻击循地脉自目标足下穿出：无视目标40%防御素质，并无视护盾直接伤及本体。代价是每次攻击后自身行动条速度降低15%，持续整场战斗，可叠2层。对悬空或无形体的目标，只无视防御，不无视护盾。",
+            "params": {
+              "defenseIgnoreRate": 0.4,
+              "ignoreShield": true,
+              "selfGaugeSpeedDown": 0.15,
+              "maxStacks": 2,
+              "exceptions": [
+                "airborne",
+                "incorporeal"
+              ],
+              "duration": "battle",
+              "statusLifetime": "battle",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 910,
+          "S": 525,
+          "C": 650,
+          "D": 910,
+          "A": 425,
+          "P": 1025,
+          "W": 77
+        },
+        "derived": {
+          "HP": 6590,
+          "baseMP": 2685,
+          "MP": 4028,
+          "SH": 8420,
+          "PA": 732.75,
+          "SA": 456.25,
+          "MA": 830,
+          "DEF": 647,
+          "MDEF": 545.6,
+          "costReduction": 40,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "强级",
+        "ratingScore": 1.48
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          1.82,
+          1.05,
+          1.3,
+          1.82,
+          0.85,
+          2.05
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 525,
+        "benchmark": 500,
+        "ratio": 1.05,
+        "rating": "并级",
+        "label": "万年第二档",
+        "years": 30000,
+        "q": 3.15
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
+      }
+    },
+    {
+      "id": "zhe-tian-du-zhen",
+      "name": "遮天毒鸩",
+      "version": 2,
+      "style": "防御",
+      "elements": [
+        "毒"
+      ],
+      "statDice": [
+        6,
+        2,
+        4,
+        7,
+        5,
+        1
+      ],
+      "statRatios": [
+        1.63,
+        1.05,
+        1.4,
+        1.72,
+        1.55,
+        0.85
+      ],
+      "bloodline": {
+        "roll": 5,
+        "name": "异血",
+        "modifiesStats": false
+      },
+      "species": "鸟纲·猛禽（鸩，表外补充）",
+      "size": "巨（楼舍级）",
+      "sociality": "独居",
+      "actualAge": "约十一万年（换过九次羽）",
+      "habitat": "南疆瘴泽上空终年不散的毒云——云底垂着紫黑色的雨丝。",
+      "appearance": "形如巨雕，双翼展开遮住半座楼舍；羽色墨绿近黑，羽尖凝着暗紫的毒露，飞过处落下一阵细如针的毒雨。喙如弯钩，颈侧生着九枚肉冠，每枚冠里封着一口颜色不同的瘴。翅骨细，撑不住楼舍般的身子，所以它飞不高，也飞不久。",
+      "habits": "不筑巢，随瘴云迁徙。以腐尸与毒虫为食，越毒越壮；寻常猛禽避之不及的腐肉，是它的正餐。它落在哪里，哪里的水十年不能饮。因为太重，多数时候蹲在毒云里等风来推；一旦真动起来，是整片云一起压下去。",
+      "role": "异种·首领——瘴泽上空的活灾。它落在哪里，哪里十年不长草。",
+      "battleText": "毒云低垂，楼舍般的黑影从云里坠下来。遮天毒鸩抖开墨绿的双翼，羽尖滴落的毒露在落地前就蒸成了一片紫雾。",
+      "defeatText": "最后一枚肉冠裂开又合上，毒云失了主心，四散而去。遮天毒鸩重重跌进泽地，腐羽间升起一枚猩红魂环。",
+      "talents": [
+        {
+          "name": "瘴羽覆身",
+          "effect": "抖落一层毒羽，在身周结成腐绿色的雾甲。"
+        },
+        {
+          "name": "九冠吐瘴",
+          "effect": "九枚肉冠依次裂开，喷出九道颜色各异的瘴气，合起来是一堵墙。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "腐羽裹身",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 647，持续整场战斗",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 129,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 1,
+          "years": 30000,
+          "previewCost": 129,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "毒",
+          "element": "毒",
+          "elements": [
+            "毒"
+          ],
+          "attributeTags": [
+            "毒"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "zhe-tian-du-zhen-skill-1",
+          "skillIndex": 1,
+          "description": "抖落腐羽，毒雾在体表凝成一层黏腻的雾甲。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "zhe-tian-du-zhen:skill:1",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "lifetime": "battle",
+              "element": "毒",
+              "elements": [
+                "毒"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
+        },
+        {
+          "name": "毒喙贯骨",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 2536；命中后按防御力减伤",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 225,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 2,
+          "years": 30000,
+          "effectSeed": "|2|30000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 225,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "毒",
+          "element": "毒",
+          "elements": [
+            "毒"
+          ],
+          "attributeTags": [
+            "毒"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "zhe-tian-du-zhen-skill-2",
+          "skillIndex": 2,
+          "description": "弯钩般的喙自高处凿下，毒液随创口灌入，造成单次物理伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "zhe-tian-du-zhen:skill:2",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "物理",
+              "factor": 1.2,
+              "element": "毒",
+              "elements": [
+                "毒"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "弥天瘴",
+          "category": "减益",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "目标敏捷降低31.5%，持续整场战斗；按双方精神力与稳定进行减益判定",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 128,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 3,
+          "years": 30000,
+          "previewCost": 128,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "毒",
+          "element": "毒",
+          "elements": [
+            "毒"
+          ],
+          "attributeTags": [
+            "毒"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "zhe-tian-du-zhen-skill-3",
+          "skillIndex": 3,
+          "description": "瘴羽漫天，目标四肢发沉，敏捷被一层层拖低。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "zhe-tian-du-zhen:skill:3",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "numeric_debuff",
+              "values": {
+                "A": 0.315
+              },
+              "sameSourcePolicy": "refresh-not-stack",
+              "contest": "spirit-and-stability",
+              "lifetime": "battle",
+              "element": "毒",
+              "elements": [
+                "毒"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null
+        },
+        {
+          "name": "百瘴蚀骨",
+          "category": "持续伤害",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理总原始伤害 2959，分3次每3秒一跳，同技能不叠层",
+          "q": 3.15,
+          "K": 1,
+          "Q": 3.15,
+          "cost": 251,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.28,
+          "cooldown": 8.5,
+          "ring": 4,
+          "years": 30000,
+          "damageNature": "poison",
+          "effectSeed": "|4|30000|0",
+          "damageMode": "periodic",
+          "attackSubtype": "periodic",
+          "generationVersion": 1007,
+          "previewCost": 251,
+          "previewCast": 1.28,
+          "previewRulesVersion": 17,
+          "attribute": "毒",
+          "element": "毒",
+          "elements": [
+            "毒"
+          ],
+          "attributeTags": [
+            "毒"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "zhe-tian-du-zhen-skill-4",
+          "skillIndex": 4,
+          "description": "腐毒留在创口，分三次由内向外蚀空。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "zhe-tian-du-zhen:skill:4",
+          "strengthReference": {
+            "years": 30000,
+            "band": "万年第二档",
+            "rating": "并级",
+            "q": 3.15,
+            "K": 1,
+            "Q": 3.15,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "periodic_attack",
+              "channel": "物理",
+              "factor": 1.4,
+              "parts": 3,
+              "intervalSeconds": 3,
+              "element": "毒",
+              "sameSourcePolicy": "refresh-not-stack",
+              "elements": [
+                "毒"
+              ]
+            }
+          ]
+        }
+      ],
+      "traits": [
+        {
+          "id": "twin-sac-frame",
+          "name": "双囊之躯",
+          "effect": "腐毒在体内结成第二副脏腑。生命之外另有一条“毒囊”，容量等于自身最大生命50%，受到伤害时毒囊优先承伤，毒囊见底后才扣生命。毒囊每回合结束回复8%，见底即进入“破囊”：受到的伤害提高25%。毒囊被击破的瞬间，向全场敌人喷散腐毒，各叠2层“瘴羽”。两槽俱空才败。反制：毒囊不挡精神伤害，精神攻击直取本体。",
+          "params": {
+            "secondPool": "toxin-sac",
+            "secondPoolMaxHPRate": 0.5,
+            "damagePriority": "toxin-sac-first",
+            "regenPerTurn": 0.08,
+            "brokenDamageTakenUp": 0.25,
+            "breakSpreadStacks": 2,
+            "defeatWhenBothEmpty": true,
+            "mentalDamageBypassPool": true,
+            "saveFields": [
+              "toxinSac"
+            ],
+            "statusLifetime": "battle"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:twin-sac-frame",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:twin-sac-frame",
+            "implementationVersion": 1,
+            "name": "双囊之躯",
+            "effect": "腐毒在体内结成第二副脏腑。生命之外另有一条“毒囊”，容量等于自身最大生命50%，受到伤害时毒囊优先承伤，毒囊见底后才扣生命。毒囊每回合结束回复8%，见底即进入“破囊”：受到的伤害提高25%。毒囊被击破的瞬间，向全场敌人喷散腐毒，各叠2层“瘴羽”。两槽俱空才败。反制：毒囊不挡精神伤害，精神攻击直取本体。",
+            "params": {
+              "secondPool": "toxin-sac",
+              "secondPoolMaxHPRate": 0.5,
+              "damagePriority": "toxin-sac-first",
+              "regenPerTurn": 0.08,
+              "brokenDamageTakenUp": 0.25,
+              "breakSpreadStacks": 2,
+              "defeatWhenBothEmpty": true,
+              "mentalDamageBypassPool": true,
+              "saveFields": [
+                "toxinSac"
+              ],
+              "statusLifetime": "battle",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": [
+                "toxinSac"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sky-full-of-miasma",
+          "name": "弥天瘴羽",
+          "effect": "每回合结束时，向所有敌人各撒1层“瘴羽”，最多6层：每层使目标敏捷降低5%、魂力操纵降低5%、魂力回复降低10%、受到的伤害提高8%。敌人每消耗一次魂力，额外叠1层。叠满6层时，该目标下一次获得的护盾、治疗、回魂完全失效一次，随后层数清零。净化类技能一次可剥除2层。",
+          "params": {
+            "stacksPerTurn": 1,
+            "maxStacks": 6,
+            "agilityDownPerStack": 0.05,
+            "manaRegenDownPerStack": 0.1,
+            "extraStackOnManaSpend": 1,
+            "purgeStacks": 2,
+            "lockoutAtMax": true,
+            "lockoutScope": [
+              "shield",
+              "heal",
+              "mana-recovery"
+            ],
+            "statusLifetime": "battle",
+            "controlDownPerStack": 0.05,
+            "damageTakenUpPerStack": 0.08,
+            "damageScope": "all"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:sky-full-of-miasma",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:sky-full-of-miasma",
+            "implementationVersion": 1,
+            "name": "弥天瘴羽",
+            "effect": "每回合结束时，向所有敌人各撒1层“瘴羽”，最多6层：每层使目标敏捷降低5%、魂力操纵降低5%、魂力回复降低10%、受到的伤害提高8%。敌人每消耗一次魂力，额外叠1层。叠满6层时，该目标下一次获得的护盾、治疗、回魂完全失效一次，随后层数清零。净化类技能一次可剥除2层。",
+            "params": {
+              "stacksPerTurn": 1,
+              "maxStacks": 6,
+              "agilityDownPerStack": 0.05,
+              "manaRegenDownPerStack": 0.1,
+              "extraStackOnManaSpend": 1,
+              "purgeStacks": 2,
+              "lockoutAtMax": true,
+              "lockoutScope": [
+                "shield",
+                "heal",
+                "mana-recovery"
+              ],
+              "statusLifetime": "battle",
+              "controlDownPerStack": 0.05,
+              "damageTakenUpPerStack": 0.08,
+              "damageScope": "all",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 815,
+          "S": 525,
+          "C": 700,
+          "D": 860,
+          "A": 775,
+          "P": 425,
+          "W": 77
+        },
+        "derived": {
+          "HP": 5925,
+          "baseMP": 2685,
+          "MP": 4028,
+          "SH": 3620,
+          "PA": 671,
+          "SA": 456.25,
+          "MA": 350,
+          "DEF": 603,
+          "MDEF": 245.6,
+          "costReduction": 40,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "强级",
+        "ratingScore": 1.37
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          1.63,
+          1.05,
+          1.4,
+          1.72,
+          1.55,
+          0.85
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 525,
+        "benchmark": 500,
+        "ratio": 1.05,
+        "rating": "并级",
+        "label": "万年第二档",
+        "years": 30000,
+        "q": 3.15
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
+      }
+    },
+    {
+      "id": "jin-lin-zhen-hun-chi",
+      "name": "金鳞镇魂螭",
+      "version": 2,
+      "style": "控制",
+      "elements": [
+        "金"
+      ],
+      "statDice": [
+        4,
+        7,
+        3,
+        10,
+        5,
+        9
+      ],
+      "statRatios": [
+        1.4,
+        1.72,
+        1.3,
+        2.25,
+        1.55,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 2,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "龙属·亚龙（螭，无角之龙）",
+      "size": "大（象鲸级）",
+      "sociality": "独居",
+      "actualAge": "约十万年整（刚满）",
+      "habitat": "西极金铁矿脉最深处——洞壁被它的鳞刮得发亮，像一面走不到头的镜子。",
+      "appearance": "无角之龙，身长如鲸，通体覆着层层叠叠的金鳞，每一片的边缘都能割开岩石。腹下四爪扣住矿脉，脊背生一道锯齿状的铁脊。眼如熔金，不眨——与它对视超过三息，体内的魂力会自己往下沉。它游过矿洞时，鳞与岩壁相击，声如千万柄刀同时出鞘。",
+      "habits": "守着一座金山，不吃不喝，只以金气淬鳞。凡带兵刃入山者，它额前的金鳞会先一步发烫——不是预警，是记住了这个人。它的目光落在谁身上，谁的魂力就开始滞；所以识相的猎魂者都低着头进山。十万年里它的鳞磨掉一层、长一层，越磨越硬。",
+      "role": "首领——金山之主。不追人，但凡带兵刃入山者，它都记得。",
+      "battleText": "矿洞深处传来鳞甲相击的脆响，像千万柄刀同时出鞘。金鳞镇魂螭盘在脉心，熔金般的双眼睁开，整座金山的金气随之一沉。",
+      "defeatText": "金鳞一片片黯淡、卷起，像烧尽的纸。金鳞镇魂螭松开扣住矿脉的爪，脊背的锯齿缓缓伏平，一枚红环从矿尘里浮起。",
+      "talents": [
+        {
+          "name": "金鳞共鸣",
+          "effect": "周身金鳞震颤，方圆内的兵刃与魂力运转一并滞涩。"
+        },
+        {
+          "name": "削金吐息",
+          "effect": "喷出一道金灰色的气，所过之处甲胄如泥。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "金气贯岳",
+          "category": "攻击",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "能量原始伤害 3379；命中后按防御力减伤",
+          "q": 3.8,
+          "K": 1,
+          "Q": 3.8,
+          "cost": 416,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.37,
+          "cooldown": 9.5,
+          "ring": 1,
+          "years": 70000,
+          "effectSeed": "|1|70000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 416,
+          "previewCast": 1.37,
+          "previewRulesVersion": 17,
+          "attribute": "金",
+          "element": "金",
+          "elements": [
+            "金"
+          ],
+          "attributeTags": [
+            "金"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "jin-lin-zhen-hun-chi-skill-1",
+          "skillIndex": 1,
+          "description": "一道金灰色的气自口中吐出，贯石穿岳，造成单次能量伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "jin-lin-zhen-hun-chi:skill:1",
+          "strengthReference": {
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
+            "K": 1,
+            "Q": 3.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "能量",
+              "factor": 1.2,
+              "element": "金",
+              "elements": [
+                "金"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "金枷锁脉",
+          "category": "减益",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "目标敏捷降低38%，持续整场战斗；按双方精神力与稳定进行减益判定",
+          "q": 3.8,
+          "K": 1,
+          "Q": 3.8,
+          "cost": 217,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.37,
+          "cooldown": 9.5,
+          "ring": 2,
+          "years": 70000,
+          "previewCost": 217,
+          "previewCast": 1.37,
+          "previewRulesVersion": 17,
+          "attribute": "金",
+          "element": "金",
+          "elements": [
+            "金"
+          ],
+          "attributeTags": [
+            "金"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "jin-lin-zhen-hun-chi-skill-2",
+          "skillIndex": 2,
+          "description": "金气凝成枷锁，锁住目标魂力流转与四肢。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "jin-lin-zhen-hun-chi:skill:2",
+          "strengthReference": {
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
+            "K": 1,
+            "Q": 3.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "numeric_debuff",
+              "values": {
+                "A": 0.38
+              },
+              "sameSourcePolicy": "refresh-not-stack",
+              "contest": "spirit-and-stability",
+              "lifetime": "battle",
+              "element": "金",
+              "elements": [
+                "金"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null
+        },
+        {
+          "name": "螭纹锁魂",
+          "category": "控制",
+          "channel": "能量",
+          "target": "一名敌人",
+          "effect": "基础控制 2.9秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 3.8,
+          "K": 1,
+          "Q": 3.8,
+          "cost": 250,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.37,
+          "cooldown": 10,
+          "ring": 3,
+          "years": 70000,
+          "previewCost": 250,
+          "previewCast": 1.37,
+          "previewRulesVersion": 17,
+          "attribute": "金",
+          "element": "金",
+          "elements": [
+            "金"
+          ],
+          "attributeTags": [
+            "金"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "jin-lin-zhen-hun-chi-skill-3",
+          "skillIndex": 3,
+          "description": "螭纹自地面爬起，缠住目标魂力流转的间隙。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "jin-lin-zhen-hun-chi:skill:3",
+          "strengthReference": {
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
+            "K": 1,
+            "Q": 3.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "control_contest",
+              "baseSeconds": 2.9,
+              "interrupt": true,
+              "immunitySeconds": 4,
+              "element": "金",
+              "elements": [
+                "金"
+              ]
+            }
+          ],
+          "baseControl": 2.9
+        },
+        {
+          "name": "鎏金鳞甲",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 1267，持续整场战斗",
+          "q": 3.8,
+          "K": 1,
+          "Q": 3.8,
+          "cost": 210,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.37,
+          "cooldown": 9.5,
+          "ring": 4,
+          "years": 70000,
+          "previewCost": 210,
+          "previewCast": 1.37,
+          "previewRulesVersion": 17,
+          "attribute": "金",
+          "element": "金",
+          "elements": [
+            "金"
+          ],
+          "attributeTags": [
+            "金"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "jin-lin-zhen-hun-chi-skill-4",
+          "skillIndex": 4,
+          "description": "金鳞层叠合拢，结成一面临时甲盾。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "jin-lin-zhen-hun-chi:skill:4",
+          "strengthReference": {
+            "years": 70000,
+            "band": "万年第四档",
+            "rating": "凶级",
+            "q": 3.8,
+            "K": 1,
+            "Q": 3.8,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "lifetime": "battle",
+              "element": "金",
+              "elements": [
+                "金"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
+        }
+      ],
+      "traits": [
+        {
+          "id": "metal-breath-carve",
+          "name": "金气削骨",
+          "effect": "金鳞镇魂螭的攻击与魂技无视目标30%防御素质；命中时额外越盾扣除目标最大生命的3%，每回合最多触发2次；目标带有护盾时改为6%。每次触发使目标叠1层“削金”：防御素质降低4%，最多5层。反制：对无生命或构装类目标，越盾部分减半。",
+          "params": {
+            "defenseIgnoreRate": 0.3,
+            "bypassMaxHPRate": 0.03,
+            "perTurnMax": 2,
+            "vsShieldRate": 0.06,
+            "defenseDownPerStack": 0.04,
+            "maxStacks": 5,
+            "exemptAgainst": [
+              "non-living",
+              "construct"
+            ],
+            "statusLifetime": "battle"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:metal-breath-carve",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:metal-breath-carve",
+            "implementationVersion": 1,
+            "name": "金气削骨",
+            "effect": "金鳞镇魂螭的攻击与魂技无视目标30%防御素质；命中时额外越盾扣除目标最大生命的3%，每回合最多触发2次；目标带有护盾时改为6%。每次触发使目标叠1层“削金”：防御素质降低4%，最多5层。反制：对无生命或构装类目标，越盾部分减半。",
+            "params": {
+              "defenseIgnoreRate": 0.3,
+              "bypassMaxHPRate": 0.03,
+              "perTurnMax": 2,
+              "vsShieldRate": 0.06,
+              "defenseDownPerStack": 0.04,
+              "maxStacks": 5,
+              "exemptAgainst": [
+                "non-living",
+                "construct"
+              ],
+              "statusLifetime": "battle",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        },
+        {
+          "id": "chi-pattern-suppress",
+          "name": "螭纹压魂",
+          "effect": "自身获得3层传奇抗性：前三次可施加的控制效果固定被免疫，不进行豁免检定，每次消耗1层，战斗中不恢复。每次受到攻击，对攻击者施加1层“螭纹”：敏捷降低6%、魂力消耗提高8%，持续整场战斗，最多6层。叠满6层时，攻击者下一次行动无法获得任何增益、护盾、治疗与回魂，且读条速度降低20%，持续整场战斗。无魂力单位只受减速，不受费用惩罚。",
+          "params": {
+            "trigger": "attack-received",
+            "agilityDownPerStack": 0.06,
+            "costUpPerStack": 0.08,
+            "maxStacks": 6,
+            "lockoutAtMax": true,
+            "lockoutScope": [
+              "buff",
+              "shield",
+              "heal",
+              "mana-recovery"
+            ],
+            "castSpeedDownOnLockout": 0.2,
+            "excludeResourceFreeUnits": true,
+            "duration": "battle",
+            "statusLifetime": "battle",
+            "legendaryResistanceCharges": 3,
+            "legendaryControlBlockMode": "before-save-no-roll",
+            "legendaryRefresh": "battle-start-only",
+            "castSpeedDownLifetime": "battle",
+            "saveFields": [
+              "legendaryRemaining",
+              "chiStacksByActor"
+            ]
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:chi-pattern-suppress",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:chi-pattern-suppress",
+            "implementationVersion": 1,
+            "name": "螭纹压魂",
+            "effect": "自身获得3层传奇抗性：前三次可施加的控制效果固定被免疫，不进行豁免检定，每次消耗1层，战斗中不恢复。每次受到攻击，对攻击者施加1层“螭纹”：敏捷降低6%、魂力消耗提高8%，持续整场战斗，最多6层。叠满6层时，攻击者下一次行动无法获得任何增益、护盾、治疗与回魂，且读条速度降低20%，持续整场战斗。无魂力单位只受减速，不受费用惩罚。",
+            "params": {
+              "trigger": "attack-received",
+              "agilityDownPerStack": 0.06,
+              "costUpPerStack": 0.08,
+              "maxStacks": 6,
+              "lockoutAtMax": true,
+              "lockoutScope": [
+                "buff",
+                "shield",
+                "heal",
+                "mana-recovery"
+              ],
+              "castSpeedDownOnLockout": 0.2,
+              "excludeResourceFreeUnits": true,
+              "duration": "battle",
+              "statusLifetime": "battle",
+              "legendaryResistanceCharges": 3,
+              "legendaryControlBlockMode": "before-save-no-roll",
+              "legendaryRefresh": "battle-start-only",
+              "castSpeedDownLifetime": "battle",
+              "saveFields": [
+                "legendaryRemaining",
+                "chiStacksByActor"
+              ],
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": [
+                "legendaryRemaining",
+                "chiStacksByActor"
+              ]
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 700,
+          "S": 860,
+          "C": 650,
+          "D": 1125,
+          "A": 775,
+          "P": 1025,
+          "W": 77
+        },
+        "derived": {
+          "HP": 5120,
+          "baseMP": 4360,
+          "MP": 6540,
+          "SH": 8420,
+          "PA": 680,
+          "SA": 741,
+          "MA": 830,
+          "DEF": 712.5,
+          "MDEF": 545.6,
+          "costReduction": 40,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "凶级",
+        "ratingScore": 1.71
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          1.4,
+          1.72,
+          1.3,
+          2.25,
+          1.55,
+          2.05
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 860,
+        "benchmark": 500,
+        "ratio": 1.72,
+        "rating": "凶级",
+        "label": "万年第四档",
+        "years": 70000,
+        "q": 3.8
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
+      }
+    },
+    {
+      "id": "fen-tian-chi-yan-long",
+      "name": "焚天赤烛龙",
+      "version": 2,
+      "style": "强攻",
+      "elements": [
+        "火"
+      ],
+      "statDice": [
+        10,
+        8,
+        10,
+        7,
+        5,
+        5
+      ],
+      "statRatios": [
+        2.25,
+        1.82,
+        2.25,
+        1.72,
+        1.55,
+        1.55
+      ],
+      "bloodline": {
+        "roll": 3,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "融合体·双龙嵌合（表外补充：两条火龙熔为一体）",
+      "size": "中（马牛级）",
+      "sociality": "独居",
+      "actualAge": "约十三万年",
+      "habitat": "极西火脉尽头，岩浆河分岔处的黑曜石台——台下是烧了十万年的火。",
+      "appearance": "只有马牛大小，却是两条火龙熔在一起：一具身子，两颗头，左首赤如熔金、右首黑如焦炭；颈下的鳞各自生长，到胸前熔成一片烧红的铁。四足两尾，脊背裂着一道始终不灭的火缝。火缝亮时四周如白昼，火缝闭时连影子都被烤化。",
+      "habits": "两条龙争一副身子，争了十万年，谁也吞不掉谁。不动时火缝半明半灭，像在呼吸；双首同时睁眼，身周百步的火属性魂力会被抽干，连空气都烧成白焰。它不喜欢光——它自己就是光。",
+      "role": "首领——火脉尽头的双生凶物。两条龙共用一副身子，也共用一份杀意。",
+      "battleText": "黑曜石台上的火缝忽然大亮，照得整条岩浆河都失了颜色。焚天赤烛龙双首同时抬起，一赤一黑，四只眼睛里各烧着一条不肯认输的龙。",
+      "defeatText": "火缝熄了一半，两个头终于不再争了。焚天赤烛龙伏在黑曜石上，赤首阖眼，黑首吐出最后一缕烟，红环在余烬中缓缓转亮。",
+      "talents": [
+        {
+          "name": "火缝照夜",
+          "effect": "脊背火缝大亮，照见一切隐匿；光本身即是灼。"
+        },
+        {
+          "name": "双龙绞",
+          "effect": "两首各吐一道火，交缠成一根绞索。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "赤炎贯天",
+          "category": "攻击",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理原始伤害 4650；命中后按防御力减伤",
+          "q": 4,
+          "K": 1,
+          "Q": 4,
+          "cost": 457,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.4,
+          "cooldown": 10,
+          "ring": 1,
+          "years": 90000,
+          "effectSeed": "|1|90000|0",
+          "damageMode": "direct",
+          "attackSubtype": "direct",
+          "generationVersion": 1007,
+          "previewCost": 457,
+          "previewCast": 1.4,
+          "previewRulesVersion": 17,
+          "attribute": "火",
+          "element": "火",
+          "elements": [
+            "火"
+          ],
+          "attributeTags": [
+            "火"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fen-tian-chi-yan-long-skill-1",
+          "skillIndex": 1,
+          "description": "火缝大亮，一道赤炎直贯而出，造成单次物理伤害。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fen-tian-chi-yan-long:skill:1",
+          "strengthReference": {
+            "years": 90000,
+            "band": "万年第五档",
+            "rating": "狂级",
+            "q": 4,
+            "K": 1,
+            "Q": 4,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "direct_attack",
+              "channel": "物理",
+              "factor": 1.2,
+              "element": "火",
+              "elements": [
+                "火"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "焚天吐息",
+          "category": "持续伤害",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "物理总原始伤害 5425，分3次每3秒一跳，同技能不叠层",
+          "q": 4,
+          "K": 1,
+          "Q": 4,
+          "cost": 512,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.4,
+          "cooldown": 10,
+          "ring": 2,
+          "years": 90000,
+          "damageNature": "residual",
+          "effectSeed": "|2|90000|0",
+          "damageMode": "periodic",
+          "attackSubtype": "periodic",
+          "generationVersion": 1007,
+          "previewCost": 512,
+          "previewCast": 1.4,
+          "previewRulesVersion": 17,
+          "attribute": "火",
+          "element": "火",
+          "elements": [
+            "火"
+          ],
+          "attributeTags": [
+            "火"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fen-tian-chi-yan-long-skill-2",
+          "skillIndex": 2,
+          "description": "两首同吐，火舌在目标身上分三次爆开。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fen-tian-chi-yan-long:skill:2",
+          "strengthReference": {
+            "years": 90000,
+            "band": "万年第五档",
+            "rating": "狂级",
+            "q": 4,
+            "K": 1,
+            "Q": 4,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "periodic_attack",
+              "channel": "物理",
+              "factor": 1.4,
+              "parts": 3,
+              "intervalSeconds": 3,
+              "element": "火",
+              "sameSourcePolicy": "refresh-not-stack",
+              "elements": [
+                "火"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "双龙绞",
+          "category": "控制",
+          "channel": "物理",
+          "target": "一名敌人",
+          "effect": "基础控制 3秒；实际成功率与时长受双方精神力影响，结束后4秒免控",
+          "q": 4,
+          "K": 1,
+          "Q": 4,
+          "cost": 269,
+          "costFraction": 0.1,
+          "highest": false,
+          "cast": 1.4,
+          "cooldown": 10,
+          "ring": 3,
+          "years": 90000,
+          "previewCost": 269,
+          "previewCast": 1.4,
+          "previewRulesVersion": 17,
+          "attribute": "火",
+          "element": "火",
+          "elements": [
+            "火"
+          ],
+          "attributeTags": [
+            "火"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fen-tian-chi-yan-long-skill-3",
+          "skillIndex": 3,
+          "description": "两道火索交缠，将目标捆在原地。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fen-tian-chi-yan-long:skill:3",
+          "strengthReference": {
+            "years": 90000,
+            "band": "万年第五档",
+            "rating": "狂级",
+            "q": 4,
+            "K": 1,
+            "Q": 4,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "control_contest",
+              "baseSeconds": 3,
+              "interrupt": true,
+              "immunitySeconds": 4,
+              "element": "火",
+              "elements": [
+                "火"
+              ]
+            }
+          ],
+          "baseControl": 3
+        },
+        {
+          "name": "逆鳞火甲",
+          "category": "防御",
+          "channel": "生命",
+          "target": "自己",
+          "effect": "生命护盾 1410，持续整场战斗",
+          "q": 4,
+          "K": 1,
+          "Q": 4,
+          "cost": 222,
+          "costFraction": 0.15,
+          "highest": false,
+          "cast": 1.4,
+          "cooldown": 10,
+          "ring": 4,
+          "years": 90000,
+          "previewCost": 222,
+          "previewCast": 1.4,
+          "previewRulesVersion": 17,
+          "attribute": "火",
+          "element": "火",
+          "elements": [
+            "火"
+          ],
+          "attributeTags": [
+            "火"
+          ],
+          "attributeRulesVersion": 1,
+          "id": "fen-tian-chi-yan-long-skill-4",
+          "skillIndex": 4,
+          "description": "逆鳞倒竖，火幕合拢成甲。",
+          "factor": 1,
+          "budgetFactor": 1,
+          "cooldownGroup": "fen-tian-chi-yan-long:skill:4",
+          "strengthReference": {
+            "years": 90000,
+            "band": "万年第五档",
+            "rating": "狂级",
+            "q": 4,
+            "K": 1,
+            "Q": 4,
+            "bloodlineMultiplier": false
+          },
+          "operations": [
+            {
+              "type": "shield",
+              "channel": "生命",
+              "coefficient": 0.45,
+              "power": "Q*SA",
+              "lifetime": "battle",
+              "element": "火",
+              "elements": [
+                "火"
+              ]
+            }
+          ],
+          "statusLifetime": "battle",
+          "duration": null,
+          "shieldDuration": null
+        }
+      ],
+      "traits": [
+        {
+          "id": "blaze-armor-break",
+          "name": "焚龙破甲",
+          "effect": "火光所照，甲胄如纸。自身造成的伤害无视目标35%防御素质，并无视全部减伤与防守状态（不含护盾）。代价：每次攻击额外消耗当前魂力的15%，且自身受到的伤害提高10%，持续整场战斗。反制：护盾仍按原值吸收，穿透不等于必中。",
+          "params": {
+            "defenseIgnoreRate": 0.35,
+            "ignoreMitigation": true,
+            "ignoreDefensiveStates": true,
+            "excludeShield": true,
+            "extraManaCostRate": 0.15,
+            "selfDamageTakenUp": 0.1,
+            "duration": "battle",
+            "statusLifetime": "battle",
+            "damageScope": "all"
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:blaze-armor-break",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:blaze-armor-break",
+            "implementationVersion": 1,
+            "name": "焚龙破甲",
+            "effect": "火光所照，甲胄如纸。自身造成的伤害无视目标35%防御素质，并无视全部减伤与防守状态（不含护盾）。代价：每次攻击额外消耗当前魂力的15%，且自身受到的伤害提高10%，持续整场战斗。反制：护盾仍按原值吸收，穿透不等于必中。",
+            "params": {
+              "defenseIgnoreRate": 0.35,
+              "ignoreMitigation": true,
+              "ignoreDefensiveStates": true,
+              "excludeShield": true,
+              "extraManaCostRate": 0.15,
+              "selfDamageTakenUp": 0.1,
+              "duration": "battle",
+              "statusLifetime": "battle",
+              "damageScope": "all",
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": []
+            }
+          }
+        },
+        {
+          "id": "reverse-scale-unburned",
+          "name": "赤烛不焚",
+          "effect": "首次受到某属性伤害时正常承受100%伤害，结算后获得该属性50%抗性，第二次及后续该属性伤害固定减半，不再继续减半。受到有属性伤害或被施加有属性减益时，叠1层“烛炎”并获得对应属性抗性；减益本身仍按原幅度结算。每层烛炎使自身魂技伤害提高10%，最多10层，层数与抗性持续整场战斗；无属性伤害与减益不记录、不叠层。被控制后的免控期由4秒延长至8秒；控制期间每回合对控制者造成其最大生命4%的火属性伤害。",
+          "params": {
+            "trigger": "attributed-damage-or-debuff-received",
+            "stackName": "烛炎",
+            "stackPerDamagePacket": 1,
+            "maxStacks": 10,
+            "stackLifetime": "battle",
+            "recordAttributeHits": true,
+            "resistanceAtHitCount": 1,
+            "resistanceDamageMultiplier": 0.5,
+            "resistanceIncludesThresholdHit": false,
+            "resistanceLifetime": "battle",
+            "recordNeutralDamage": false,
+            "stackOnNeutralDamage": false,
+            "compositeHitRecord": "each-non-neutral-tag-once-per-packet",
+            "compositeDamageStackCount": 1,
+            "repeatedResistancePolicy": "one-half-once-no-repeated-halving",
+            "controlImmunitySeconds": 8,
+            "controlReflectMaxHPRate": 0.04,
+            "controlReflectElement": "火",
+            "controlReflectCadence": "once-per-logical-turn-while-controlled",
+            "controlReflectTarget": "current-controller",
+            "controlReflectBypassShield": false,
+            "fireDamageImmunity": false,
+            "fireDamageToHealing": 0,
+            "saveFields": [
+              "candleFlameStacks",
+              "attributeHitCounts",
+              "resistedAttributes",
+              "currentControllerId",
+              "lastControlReflectTurn"
+            ],
+            "skillDamageUpPerStack": 0.1,
+            "resistanceAppliesToDebuffMagnitude": false
+          },
+          "implementation": {
+            "status": "live",
+            "handler": "beast:reverse-scale-unburned",
+            "version": 1,
+            "requiresHostAdapter": false
+          },
+          "inherit": {
+            "handler": "inherit:reverse-scale-unburned",
+            "implementationVersion": 1,
+            "name": "赤烛不焚",
+            "effect": "首次受到某属性伤害时正常承受100%伤害，结算后获得该属性50%抗性，第二次及后续该属性伤害固定减半，不再继续减半。受到有属性伤害或被施加有属性减益时，叠1层“烛炎”并获得对应属性抗性；减益本身仍按原幅度结算。每层烛炎使自身魂技伤害提高10%，最多10层，层数与抗性持续整场战斗；无属性伤害与减益不记录、不叠层。被控制后的免控期由4秒延长至8秒；控制期间每回合对控制者造成其最大生命4%的火属性伤害。",
+            "params": {
+              "trigger": "attributed-damage-or-debuff-received",
+              "stackName": "烛炎",
+              "stackPerDamagePacket": 1,
+              "maxStacks": 10,
+              "stackLifetime": "battle",
+              "recordAttributeHits": true,
+              "resistanceAtHitCount": 1,
+              "resistanceDamageMultiplier": 0.5,
+              "resistanceIncludesThresholdHit": false,
+              "resistanceLifetime": "battle",
+              "recordNeutralDamage": false,
+              "stackOnNeutralDamage": false,
+              "compositeHitRecord": "each-non-neutral-tag-once-per-packet",
+              "compositeDamageStackCount": 1,
+              "repeatedResistancePolicy": "one-half-once-no-repeated-halving",
+              "controlImmunitySeconds": 8,
+              "controlReflectMaxHPRate": 0.04,
+              "controlReflectElement": "火",
+              "controlReflectCadence": "once-per-logical-turn-while-controlled",
+              "controlReflectTarget": "current-controller",
+              "controlReflectBypassShield": false,
+              "fireDamageImmunity": false,
+              "fireDamageToHealing": 0,
+              "saveFields": [
+                "candleFlameStacks",
+                "attributeHitCounts",
+                "resistedAttributes",
+                "currentControllerId",
+                "lastControlReflectTurn"
+              ],
+              "skillDamageUpPerStack": 0.1,
+              "resistanceAppliesToDebuffMagnitude": false,
+              "sourceOwner": "equipped-bone-owner"
+            },
+            "implementationStatus": "live",
+            "requiresHostAdapter": false,
+            "save": {
+              "schemaVersion": 1,
+              "fields": [
+                "candleFlameStacks",
+                "attributeHitCounts",
+                "resistedAttributes",
+                "currentControllerId",
+                "lastControlReflectTurn"
+              ]
+            }
+          }
+        }
+      ],
+      "years": 100000,
+      "available": true,
+      "battleTags": [
+        "hunt"
+      ],
+      "lifeType": "生活",
+      "level": 91,
+      "panel": {
+        "level": 91,
+        "rings": 9,
+        "benchmark": 500,
+        "ratingProfile": "npc",
+        "stats": {
+          "B": 1125,
+          "S": 910,
+          "C": 1125,
+          "D": 860,
+          "A": 775,
+          "P": 775,
+          "W": 77
+        },
+        "derived": {
+          "HP": 8095,
+          "baseMP": 4610,
+          "MP": 6915,
+          "SH": 6420,
+          "PA": 968.75,
+          "SA": 783.5,
+          "MA": 630,
+          "DEF": 665,
+          "MDEF": 420.6,
+          "costReduction": 40,
+          "castReduction": 30,
+          "controlGrowth": 2.5
+        },
+        "rating": "狂级",
+        "ratingScore": 1.86
+      },
+      "statBasis": {
+        "level": 91,
+        "benchmark": 500,
+        "W": 77,
+        "ratios": [
+          2.25,
+          1.82,
+          2.25,
+          1.72,
+          1.55,
+          1.55
+        ],
+        "bloodlineModifiesStats": false,
+        "note": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。"
+      },
+      "skillPowerBasis": {
+        "stat": "S",
+        "value": 910,
+        "benchmark": 500,
+        "ratio": 1.82,
+        "rating": "狂级",
+        "label": "万年第五档",
+        "years": 90000,
+        "q": 4
+      },
+      "traitInheritanceVersion": 1,
+      "ringReward": {
+        "years": 100000,
+        "description": "十万年红色魂环，沿用现有第九环双技生成接口；魂兽四技不直接复制为魂环四技"
+      },
+      "bone": {
+        "slot": "random",
+        "slotPolicy": "prefer-unoccupied-six",
+        "description": "胜利后优先在未装备且未携带的常规部位中等概率抽取，六部位齐备才在全部六部位抽取；不生成外附骨，结果随奖励事务保存"
+      },
+      "exitRule": "hp-or-spirit-zero",
+      "implementation": {
+        "status": "host-integrated-v1205",
+        "hostIntegrated": true,
+        "skills": "operations-live",
+        "traits": "live",
+        "inheritanceHandlers": "live"
       }
     }
   ]

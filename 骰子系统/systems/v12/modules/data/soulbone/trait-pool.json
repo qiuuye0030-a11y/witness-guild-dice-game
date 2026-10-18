@@ -1,6 +1,881 @@
 {
   "schemaVersion": 1,
-  "poolVersion": 1,
-  "note": "空池。按《v12重大更新交接文档》第十二节，魂骨特性由用户后续编写；池为空或处理器缺失时，魂骨保留实例与待装配标记，不显示为“特性已生效”，也不为凑数发放旧武魂特性。字段说明见同目录 README.md。",
-  "traits": []
+  "poolVersion": 3,
+  "note": "v12.04.01万年池：有利参数约为v12.04的200%；分类出目、代价、触发、层数不变。",
+  "traits": [
+    {
+      "id": "tt-essence",
+      "name": "养元",
+      "effect": "吸收后魂力上限提高25%；面板与战斗共用此上限。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-essence",
+      "params": {
+        "maxMP": 0.25
+      },
+      "weight": 9,
+      "rRanges": [
+        {
+          "category": "A1",
+          "min": 1,
+          "max": 8
+        },
+        {
+          "category": "F3",
+          "min": 94,
+          "max": 94
+        }
+      ],
+      "stackGroup": "tt-essence",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-dragon",
+      "name": "潜鳞",
+      "effect": "生命不高于一半时，物攻、魂攻与精神攻击提高15%；恢复后退去。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-dragon",
+      "params": {
+        "phasePower": 0.15
+      },
+      "weight": 4,
+      "rRanges": [
+        {
+          "category": "A2",
+          "min": 9,
+          "max": 12
+        }
+      ],
+      "stackGroup": "tt-dragon",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-thorn",
+      "name": "霜棘",
+      "effect": "攻击魂技命中后凝一层霜棘，每个自身回合至多一层；每层伤害提高5%，上限三层，本场保留。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-thorn",
+      "params": {
+        "stackDamage": 0.05,
+        "stackCap": 3
+      },
+      "weight": 6,
+      "rRanges": [
+        {
+          "category": "A3",
+          "min": 13,
+          "max": 18
+        }
+      ],
+      "stackGroup": "tt-thorn",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-rune",
+      "name": "符锋",
+      "effect": "攻击魂技的直接伤害提高15%；普攻与持续伤害不受此增幅。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-rune",
+      "params": {
+        "skillDamage": 0.15
+      },
+      "weight": 4,
+      "rRanges": [
+        {
+          "category": "A4",
+          "min": 19,
+          "max": 22
+        }
+      ],
+      "stackGroup": "tt-rune",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-erosion",
+      "name": "蚀痕",
+      "effect": "自身魂技施加的数值削弱幅度提高25%；不延长控制、时长或增加层数。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-erosion",
+      "params": {
+        "debuffAmp": 0.25
+      },
+      "weight": 2,
+      "rRanges": [
+        {
+          "category": "A5",
+          "min": 23,
+          "max": 24
+        }
+      ],
+      "stackGroup": "tt-erosion",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-frost",
+      "name": "迟霜",
+      "effect": "攻击魂技造成伤害后，目标敏捷降低5%，每个自身回合至多叠一层，上限三层；本场保留。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-frost",
+      "params": {
+        "enemyAgilityStack": 0.05,
+        "stackCap": 3
+      },
+      "weight": 7,
+      "rRanges": [
+        {
+          "category": "B1",
+          "min": 25,
+          "max": 31
+        }
+      ],
+      "stackGroup": "tt-frost",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-shadow",
+      "name": "影缠",
+      "effect": "攻击魂技造成伤害后，目标行动速度降低5%、命中降低5个百分点，持续6秒；同源刷新。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-shadow",
+      "params": {
+        "enemyGauge": 0.05,
+        "enemyAccuracy": 0.05,
+        "seconds": 6
+      },
+      "weight": 9,
+      "rRanges": [
+        {
+          "category": "B2",
+          "min": 32,
+          "max": 36
+        },
+        {
+          "category": "B4",
+          "min": 40,
+          "max": 43
+        }
+      ],
+      "stackGroup": "tt-shadow",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-gap",
+      "name": "透障",
+      "effect": "攻击魂技的50%直接伤害越过护盾，仍受普通防御、魂力抵挡与承伤特性约束。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-gap",
+      "params": {
+        "shieldPierce": 0.5
+      },
+      "weight": 6,
+      "rRanges": [
+        {
+          "category": "B3",
+          "min": 37,
+          "max": 39
+        },
+        {
+          "category": "D2",
+          "min": 70,
+          "max": 72
+        }
+      ],
+      "stackGroup": "tt-gap",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-lamp",
+      "name": "晦灯",
+      "effect": "每个自身回合，令每名敌人的首次增益、治疗、护盾或回魂收益降低25%；不叠层、不禁绝。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-lamp",
+      "params": {
+        "benefitDown": 0.25
+      },
+      "weight": 1,
+      "rRanges": [
+        {
+          "category": "B5",
+          "min": 44,
+          "max": 44
+        }
+      ],
+      "stackGroup": "tt-lamp",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-shell",
+      "name": "霜衣",
+      "effect": "开战时获得最大生命20%的生命护盾，每场一次；读档不重复生成。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-shell",
+      "params": {
+        "openingShield": 0.2
+      },
+      "weight": 6,
+      "rRanges": [
+        {
+          "category": "C1",
+          "min": 45,
+          "max": 50
+        }
+      ],
+      "stackGroup": "tt-shell",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-ghost",
+      "name": "幽息",
+      "effect": "非精神伤害经过通常防护后，再将剩余伤害的45%转由魂力承担；一点魂力抵一点伤害。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-ghost",
+      "params": {
+        "manaGuard": 0.45
+      },
+      "weight": 3,
+      "rRanges": [
+        {
+          "category": "C2",
+          "min": 51,
+          "max": 53
+        }
+      ],
+      "stackGroup": "tt-ghost",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-reserve",
+      "name": "借神",
+      "effect": "生命首次归零时，以精神抵偿本次致死伤害，最多消耗精神上限50%；精神须仍有余量，每场一次。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-reserve",
+      "params": {
+        "lifeReserve": 0.5
+      },
+      "weight": 5,
+      "rRanges": [
+        {
+          "category": "C3",
+          "min": 54,
+          "max": 57
+        },
+        {
+          "category": "E4",
+          "min": 87,
+          "max": 87
+        }
+      ],
+      "stackGroup": "tt-reserve",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-spring",
+      "name": "回春",
+      "effect": "每个正常自身回合结束时，回复最大生命2.5%；退场后无效，附赠普攻不触发。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-spring",
+      "params": {
+        "regen": 0.025
+      },
+      "weight": 7,
+      "rRanges": [
+        {
+          "category": "C4",
+          "min": 58,
+          "max": 64
+        }
+      ],
+      "stackGroup": "tt-spring",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-armor",
+      "name": "裂甲",
+      "effect": "攻击魂技结算直接伤害时，无视目标50%的普通防御或精神防御；不影响护盾。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-armor",
+      "params": {
+        "armorPierce": 0.5
+      },
+      "weight": 5,
+      "rRanges": [
+        {
+          "category": "D1",
+          "min": 65,
+          "max": 69
+        }
+      ],
+      "stackGroup": "tt-armor",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-sacrifice",
+      "name": "舍魂",
+      "effect": "攻击魂技耗魂提高5%；直接伤害中有50%不受防御前额外减伤影响，普通防御与护盾仍有效。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-sacrifice",
+      "params": {
+        "extraCost": 0.05,
+        "wardPierce": 0.5
+      },
+      "weight": 4,
+      "rRanges": [
+        {
+          "category": "D3",
+          "min": 73,
+          "max": 75
+        },
+        {
+          "category": "D4",
+          "min": 76,
+          "max": 76
+        }
+      ],
+      "stackGroup": "tt-sacrifice",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-clarity",
+      "name": "清心",
+      "effect": "每次受到控制时，实际受控时间缩短50%；不抵消命中、不延长免控窗口。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-clarity",
+      "params": {
+        "controlShorten": 0.5
+      },
+      "weight": 7,
+      "rRanges": [
+        {
+          "category": "E1",
+          "min": 77,
+          "max": 80
+        },
+        {
+          "category": "E2",
+          "min": 81,
+          "max": 83
+        }
+      ],
+      "stackGroup": "tt-clarity",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-iceward",
+      "name": "冰御",
+      "effect": "受到冰属性伤害时，进入通常防护前伤害降低50%；不免疫冻结。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-iceward",
+      "params": {
+        "iceResist": 0.5
+      },
+      "weight": 3,
+      "rRanges": [
+        {
+          "category": "E3",
+          "min": 84,
+          "max": 86
+        }
+      ],
+      "stackGroup": "tt-iceward",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-sight",
+      "name": "洞微",
+      "effect": "非精神攻击命中低于50%时，最多回补10个百分点；不突破高端闪避或空间规则。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-sight",
+      "params": {
+        "hitFloor": 0.5,
+        "hitBonusCap": 0.1
+      },
+      "weight": 1,
+      "rRanges": [
+        {
+          "category": "E5",
+          "min": 88,
+          "max": 88
+        }
+      ],
+      "stackGroup": "tt-sight",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-flow",
+      "name": "归流",
+      "effect": "魂技耗魂降低10%；每个正常自身回合结束回复最大魂力2.5%，受回魂削弱影响。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-flow",
+      "params": {
+        "mpRegen": 0.025,
+        "costDiscount": 0.1
+      },
+      "weight": 5,
+      "rRanges": [
+        {
+          "category": "F1",
+          "min": 89,
+          "max": 91
+        },
+        {
+          "category": "F2",
+          "min": 92,
+          "max": 93
+        }
+      ],
+      "stackGroup": "tt-flow",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    },
+    {
+      "id": "tt-field",
+      "name": "薄霜",
+      "effect": "在场时，友方敏捷提高6%，敌方敏捷降低3%、行动速度降低6%；同名场域只取一份，退场失效。",
+      "years": [
+        10000,
+        99999
+      ],
+      "slots": [
+        "头部",
+        "躯干",
+        "左臂",
+        "右臂",
+        "左腿",
+        "右腿"
+      ],
+      "handler": "tt-field",
+      "params": {
+        "allyAgility": 0.06,
+        "enemyAgility": 0.03,
+        "enemyAction": 0.06
+      },
+      "weight": 6,
+      "rRanges": [
+        {
+          "category": "G1",
+          "min": 95,
+          "max": 97
+        },
+        {
+          "category": "G2",
+          "min": 98,
+          "max": 99
+        },
+        {
+          "category": "G3",
+          "min": 100,
+          "max": 100
+        }
+      ],
+      "stackGroup": "tt-field",
+      "maxStacks": 1,
+      "implementationVersion": 2,
+      "save": {
+        "schemaVersion": 1,
+        "fields": [
+          "ttState"
+        ]
+      },
+      "dependsOn": [
+        "battle-v1204"
+      ]
+    }
+  ]
 }

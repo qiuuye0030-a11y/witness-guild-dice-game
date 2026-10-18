@@ -1,0 +1,26 @@
+{
+  "passed": 20,
+  "tests": [
+    "new formal creation uses one shared d10 for talent and innate level; no level roll",
+    "unfinished legacy creation retains independent completed innate roll and old completed characters do not rewrite level",
+    "high talent coefficients increase modestly, low four untouched; no XP awarded by loading",
+    "invitation is level80 and strong+, without changing beast skill-tier rules",
+    "seven actual beasts: each four skills, at least one attack, S-single-stat tier and battle buffs",
+    "candle damage 100,50,50,50; independent second attribute starts full, neutral never counts",
+    "attributed debuff grants resistance and candle, without halving the debuff magnitude",
+    "candle cap10 increases all skill damage, not basic or passive damage; composite never repeated-halves",
+    "legendary resistance cancels exactly3 controls without save RNG; reload does not refill",
+    "candle control lasts ordinary duration but immunity lasts8 after release; source gets one 4% packet per own turn",
+    "mountain starts80% HP, shares40% of damage, caps10 stacks, reload preserves shield; ordinary shield bypasses grounded only",
+    "toxin pool absorbs before life, mental bypasses, HP0 remains alive with sac and SH; both empty loses",
+    "miasma reduces agility AND control, regeneration, poison resistance; cleanse removes2; full6 rejects one benefit",
+    "drop happens before absorption; popup queues real slot; abandoning ring preserves carried bone across reload",
+    "candidate repeated view/read/drop checks do not reroll; accepting ring absorbs carried bone once",
+    "slot selection avoids both equipped and carried slots; independent kill attempt has independent result",
+    "all new innate passives can be inherited into actual normal combat, and state badges display them",
+    "seven automatic battles advance with finite resources and restore their exact persisted runtime",
+    "battle shield and numerical debuff survive past180 seconds, while timed control expires",
+    "carried kill bones cannot be consumed by the old manual or event fusion path before ring absorption"
+  ],
+  "visualReview": false
+}

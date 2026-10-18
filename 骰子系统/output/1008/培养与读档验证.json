@@ -1,54 +1,54 @@
 {
   "journeys": 60,
-  "actions": 7094,
-  "reloads": 514,
-  "refusals": 10,
+  "actions": 7102,
+  "reloads": 515,
+  "refusals": 22,
   "subtypes": {
-    "periodic": 35,
-    "direct": 81,
-    "multi": 16,
+    "direct": 85,
+    "periodic": 32,
+    "multi": 20,
     "pursuit": 7
   },
   "rows": [
     {
       "seed": 0,
-      "level": 59,
+      "level": 63,
       "style": "强攻",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 1,
-      "level": 62,
+      "level": 68,
       "style": "敏攻",
       "rings": 6
     },
     {
       "seed": 2,
-      "level": 34,
+      "level": 32,
       "style": "控制",
       "rings": 3
     },
     {
       "seed": 3,
-      "level": 28,
+      "level": 26,
       "style": "防御",
       "rings": 2
     },
     {
       "seed": 4,
-      "level": 58,
+      "level": 62,
       "style": "辅助",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 5,
-      "level": 57,
+      "level": 60,
       "style": "强攻",
       "rings": 5
     },
     {
       "seed": 6,
-      "level": 55,
+      "level": 58,
       "style": "敏攻",
       "rings": 5
     },
@@ -60,25 +60,25 @@
     },
     {
       "seed": 8,
-      "level": 28,
+      "level": 26,
       "style": "防御",
       "rings": 2
     },
     {
       "seed": 9,
-      "level": 30,
+      "level": 29,
       "style": "辅助",
       "rings": 2
     },
     {
       "seed": 10,
-      "level": 28,
+      "level": 27,
       "style": "强攻",
       "rings": 2
     },
     {
       "seed": 11,
-      "level": 32,
+      "level": 31,
       "style": "敏攻",
       "rings": 3
     },
@@ -90,13 +90,13 @@
     },
     {
       "seed": 13,
-      "level": 33,
+      "level": 31,
       "style": "防御",
       "rings": 3
     },
     {
       "seed": 14,
-      "level": 61,
+      "level": 63,
       "style": "辅助",
       "rings": 6
     },
@@ -108,7 +108,7 @@
     },
     {
       "seed": 16,
-      "level": 29,
+      "level": 27,
       "style": "敏攻",
       "rings": 2
     },
@@ -120,13 +120,13 @@
     },
     {
       "seed": 18,
-      "level": 57,
+      "level": 60,
       "style": "防御",
       "rings": 5
     },
     {
       "seed": 19,
-      "level": 73,
+      "level": 75,
       "style": "辅助",
       "rings": 7
     },
@@ -138,21 +138,21 @@
     },
     {
       "seed": 21,
-      "level": 64,
+      "level": 70,
       "style": "敏攻",
       "rings": 6
     },
     {
       "seed": 22,
-      "level": 60,
+      "level": 64,
       "style": "控制",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 23,
-      "level": 60,
+      "level": 63,
       "style": "防御",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 24,
@@ -162,61 +162,61 @@
     },
     {
       "seed": 25,
-      "level": 55,
+      "level": 57,
       "style": "强攻",
       "rings": 5
     },
     {
       "seed": 26,
-      "level": 30,
+      "level": 29,
       "style": "敏攻",
       "rings": 2
     },
     {
       "seed": 27,
-      "level": 28,
+      "level": 29,
       "style": "控制",
       "rings": 2
     },
     {
       "seed": 28,
-      "level": 28,
+      "level": 29,
       "style": "防御",
       "rings": 2
     },
     {
       "seed": 29,
-      "level": 30,
+      "level": 29,
       "style": "辅助",
       "rings": 2
     },
     {
       "seed": 30,
-      "level": 30,
+      "level": 29,
       "style": "强攻",
       "rings": 2
     },
     {
       "seed": 31,
-      "level": 33,
+      "level": 32,
       "style": "敏攻",
       "rings": 3
     },
     {
       "seed": 32,
-      "level": 72,
+      "level": 74,
       "style": "控制",
       "rings": 7
     },
     {
       "seed": 33,
-      "level": 32,
+      "level": 31,
       "style": "防御",
       "rings": 3
     },
     {
       "seed": 34,
-      "level": 56,
+      "level": 57,
       "style": "辅助",
       "rings": 5
     },
@@ -228,49 +228,49 @@
     },
     {
       "seed": 36,
-      "level": 30,
+      "level": 29,
       "style": "敏攻",
       "rings": 2
     },
     {
       "seed": 37,
-      "level": 61,
+      "level": 65,
       "style": "控制",
       "rings": 6
     },
     {
       "seed": 38,
-      "level": 29,
+      "level": 28,
       "style": "防御",
       "rings": 2
     },
     {
       "seed": 39,
-      "level": 31,
+      "level": 30,
       "style": "辅助",
-      "rings": 3
+      "rings": 2
     },
     {
       "seed": 40,
-      "level": 33,
+      "level": 31,
       "style": "强攻",
       "rings": 3
     },
     {
       "seed": 41,
-      "level": 29,
+      "level": 28,
       "style": "敏攻",
       "rings": 2
     },
     {
       "seed": 42,
-      "level": 59,
+      "level": 63,
       "style": "控制",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 43,
-      "level": 63,
+      "level": 66,
       "style": "防御",
       "rings": 6
     },
@@ -282,15 +282,15 @@
     },
     {
       "seed": 45,
-      "level": 75,
+      "level": 77,
       "style": "强攻",
       "rings": 7
     },
     {
       "seed": 46,
-      "level": 60,
+      "level": 64,
       "style": "敏攻",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 47,
@@ -300,31 +300,31 @@
     },
     {
       "seed": 48,
-      "level": 73,
+      "level": 75,
       "style": "防御",
       "rings": 7
     },
     {
       "seed": 49,
-      "level": 58,
+      "level": 59,
       "style": "辅助",
       "rings": 5
     },
     {
       "seed": 50,
-      "level": 62,
+      "level": 66,
       "style": "强攻",
       "rings": 6
     },
     {
       "seed": 51,
-      "level": 58,
+      "level": 62,
       "style": "敏攻",
-      "rings": 5
+      "rings": 6
     },
     {
       "seed": 52,
-      "level": 33,
+      "level": 32,
       "style": "控制",
       "rings": 3
     },
@@ -336,7 +336,7 @@
     },
     {
       "seed": 54,
-      "level": 66,
+      "level": 70,
       "style": "辅助",
       "rings": 6
     },
@@ -348,25 +348,25 @@
     },
     {
       "seed": 56,
-      "level": 31,
+      "level": 32,
       "style": "敏攻",
       "rings": 3
     },
     {
       "seed": 57,
-      "level": 61,
+      "level": 64,
       "style": "控制",
       "rings": 6
     },
     {
       "seed": 58,
-      "level": 62,
+      "level": 68,
       "style": "防御",
       "rings": 6
     },
     {
       "seed": 59,
-      "level": 53,
+      "level": 56,
       "style": "辅助",
       "rings": 5
     }

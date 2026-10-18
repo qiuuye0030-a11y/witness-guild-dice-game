@@ -24,7 +24,9 @@ wrapper='''(function(host){
   host.WitnessAIV14=globalThis.WitnessAIV14;
   host.WitnessScarredChallenge=globalThis.WitnessScarredChallenge;
   host.WitnessV12=globalThis.WitnessV12;
+  host.WitnessV12Tuning=globalThis.WitnessV12Tuning;
   host.WitnessV12Live=globalThis.WitnessV12Live;
+  host.WitnessV125Beasts=globalThis.WitnessV125Beasts;
 })(window);
 '''
 (p/'battle-v13-browser.js').write_text(wrapper,encoding='utf-8')

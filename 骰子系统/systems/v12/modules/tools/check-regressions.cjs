@@ -281,7 +281,7 @@ module.exports = function regressions(ctx) {
     assert.equal(modules.bridge.rating({}).label, '强级');
     assert.equal(modules.status().npcCombat.hostIntegrated, false);
     const condition = modules.hunt.controller.evaluate({ level: 80, model: { level: 80, stats: {} } });
-    assert.equal(condition.eligible, false);
+    assert.equal(condition.eligible, true);
   });
 
   section('独立审查回归：首胜奖励断点与冻结');

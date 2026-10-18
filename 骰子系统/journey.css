@@ -110,3 +110,24 @@
 @keyframes legendary-light{to{transform:rotate(360deg)}}
 @keyframes legendary-snow{0%,100%{opacity:.15;transform:translateY(-16px)}50%{opacity:1;transform:translateY(12px)}}
 @media(prefers-reduced-motion:reduce){.achievement-legendary *{animation:none!important;}.legendary-halo i{opacity:.55;}}
+
+/* v12.04: advanced hunt / ghost witnesses, same native effect budget as Silver Ridge. */
+.achievement-legendary{overflow:auto;overflow-x:hidden}
+.achievement-hunt{background:radial-gradient(ellipse at top,#385c43,#142821 72%)!important}
+.achievement-hunt .legendary-halo{filter:hue-rotate(30deg)}
+.achievement-ghost{background:radial-gradient(ellipse at top,#5b416c,#1b182f 72%)!important;border-color:#cab2e7!important;box-shadow:0 0 35px #bca0e777,0 0 100px #8ed6ff44!important}
+.achievement-ghost .legendary-halo{filter:hue-rotate(190deg)}
+.achievement-ghost h2{color:#ece0ff;text-shadow:0 0 18px #cba9f0aa}
+.achievement-legendary .achievement-condition,.achievement-legendary .micro,.achievement-legendary .achievement-person{color:inherit}
+
+/* v12.05 contextual copy and cultivation hierarchy */
+.campaign-root .camp-note,.campaign-root .micro{background:transparent;border-left:0;padding-left:0;color:#bfc9db;font-size:13px;line-height:1.85}
+.chenxi-mode .campaign-root .camp-note,.chenxi-mode .campaign-root .micro{color:#756743;background:transparent;border:0}
+.campaign-root details>summary{color:inherit;padding:12px 0;font-size:15px;line-height:1.7}
+.cultivation-talent{margin:20px 0;padding:18px;border:1px solid #d4b46988;border-radius:12px;background:linear-gradient(135deg,#d4b46918,transparent)}
+.cultivation-talent>strong{display:block;font-size:22px;line-height:1.65;color:var(--gold,#e8c584)}
+.cultivation-talent .talent-detail{color:inherit;font-size:14px;line-height:1.8;margin-bottom:0}
+.chenxi-mode .cultivation-talent{background:linear-gradient(135deg,#edce8433,#fff9e7);border-color:#b8924680}
+.chenxi-mode .cultivation-talent>strong{color:#876123}
+.chenxi-mode .v12-bones,.chenxi-mode .v12-reports{border-color:#c4ad7b66}
+.bone-drop-notice strong,.hunt-bone-found{color:var(--gold,#b78b2e);font-size:18px;font-weight:700}

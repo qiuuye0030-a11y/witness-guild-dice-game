@@ -10,7 +10,7 @@
     "conservative ordinary-event upper bounds exclude non-double90 and low-talent fifth rings"
   ],
   "configuration": {
-    "version": 10081,
+    "version": 10082,
     "journeyXP": 4800,
     "eventMultiplier": 0.15,
     "initialRetention": 0.25,
@@ -19,12 +19,12 @@
       0.53,
       0.56,
       0.59,
-      1.12,
-      1.17,
-      1.21,
-      1.24,
-      1.27,
-      1.53
+      1.15,
+      1.22,
+      1.28,
+      1.32,
+      1.35,
+      1.56
     ],
     "weapon": [
       0.875,
@@ -248,302 +248,302 @@
     {
       "rank": 5,
       "tier": 1,
-      "upper": 62.0087
+      "upper": 63.2663
     },
     {
       "rank": 5,
       "tier": 2,
-      "upper": 62.8151
+      "upper": 64.0967
     },
     {
       "rank": 5,
       "tier": 3,
-      "upper": 63.3527
+      "upper": 64.6463
     },
     {
       "rank": 5,
       "tier": 4,
-      "upper": 63.890299999999996
+      "upper": 65.2007
     },
     {
       "rank": 5,
       "tier": 5,
-      "upper": 64.4279
+      "upper": 65.7527
     },
     {
       "rank": 5,
       "tier": 6,
-      "upper": 65.50309999999999
+      "upper": 66.8567
     },
     {
       "rank": 5,
       "tier": 7,
-      "upper": 66.5783
+      "upper": 67.9607
     },
     {
       "rank": 5,
       "tier": 8,
-      "upper": 67.65350000000001
+      "upper": 69.06230000000001
     },
     {
       "rank": 5,
       "tier": 9,
+      "upper": 70.1663
+    },
+    {
+      "rank": 5,
+      "tier": 10,
+      "upper": 78.44630000000001
+    },
+    {
+      "rank": 6,
+      "tier": 1,
+      "upper": 66.2087
+    },
+    {
+      "rank": 6,
+      "tier": 2,
+      "upper": 67.08709999999999
+    },
+    {
+      "rank": 6,
+      "tier": 3,
+      "upper": 67.67269999999999
+    },
+    {
+      "rank": 6,
+      "tier": 4,
+      "upper": 68.25829999999999
+    },
+    {
+      "rank": 6,
+      "tier": 5,
+      "upper": 68.8439
+    },
+    {
+      "rank": 6,
+      "tier": 6,
+      "upper": 70.0151
+    },
+    {
+      "rank": 6,
+      "tier": 7,
+      "upper": 71.1863
+    },
+    {
+      "rank": 6,
+      "tier": 8,
+      "upper": 72.3575
+    },
+    {
+      "rank": 6,
+      "tier": 9,
+      "upper": 73.5287
+    },
+    {
+      "rank": 6,
+      "tier": 10,
+      "upper": 82.31030000000001
+    },
+    {
+      "rank": 7,
+      "tier": 1,
       "upper": 68.7287
     },
     {
-      "rank": 5,
-      "tier": 10,
-      "upper": 76.7903
-    },
-    {
-      "rank": 6,
-      "tier": 1,
-      "upper": 64.1087
-    },
-    {
-      "rank": 6,
-      "tier": 2,
-      "upper": 64.9511
-    },
-    {
-      "rank": 6,
-      "tier": 3,
-      "upper": 65.5127
-    },
-    {
-      "rank": 6,
-      "tier": 4,
-      "upper": 66.0743
-    },
-    {
-      "rank": 6,
-      "tier": 5,
-      "upper": 66.6335
-    },
-    {
-      "rank": 6,
-      "tier": 6,
-      "upper": 67.7567
-    },
-    {
-      "rank": 6,
-      "tier": 7,
-      "upper": 68.88230000000001
-    },
-    {
-      "rank": 6,
-      "tier": 8,
-      "upper": 70.00549999999998
-    },
-    {
-      "rank": 6,
-      "tier": 9,
-      "upper": 71.12870000000001
-    },
-    {
-      "rank": 6,
-      "tier": 10,
-      "upper": 79.5503
-    },
-    {
-      "rank": 7,
-      "tier": 1,
-      "upper": 65.7887
-    },
-    {
       "rank": 7,
       "tier": 2,
-      "upper": 66.6599
+      "upper": 69.65029999999999
     },
     {
       "rank": 7,
       "tier": 3,
-      "upper": 67.2407
+      "upper": 70.2647
     },
     {
       "rank": 7,
       "tier": 4,
-      "upper": 67.82149999999999
+      "upper": 70.8791
     },
     {
       "rank": 7,
       "tier": 5,
-      "upper": 68.4023
+      "upper": 71.49350000000001
     },
     {
       "rank": 7,
       "tier": 6,
-      "upper": 69.5639
+      "upper": 72.7223
     },
     {
       "rank": 7,
       "tier": 7,
-      "upper": 70.72549999999998
+      "upper": 73.9511
     },
     {
       "rank": 7,
       "tier": 8,
-      "upper": 71.8871
+      "upper": 75.1799
     },
     {
       "rank": 7,
       "tier": 9,
-      "upper": 73.0487
+      "upper": 76.4087
     },
     {
       "rank": 7,
       "tier": 10,
-      "upper": 81.7583
+      "upper": 85.6223
     },
     {
       "rank": 8,
       "tier": 1,
-      "upper": 67.0487
+      "upper": 70.4087
     },
     {
       "rank": 8,
       "tier": 2,
-      "upper": 67.94149999999999
+      "upper": 71.3591
     },
     {
       "rank": 8,
       "tier": 3,
-      "upper": 68.5367
+      "upper": 71.99269999999999
     },
     {
       "rank": 8,
       "tier": 4,
-      "upper": 69.1319
+      "upper": 72.6263
     },
     {
       "rank": 8,
       "tier": 5,
-      "upper": 69.72710000000001
+      "upper": 73.25989999999999
     },
     {
       "rank": 8,
       "tier": 6,
-      "upper": 70.91749999999999
+      "upper": 74.5271
     },
     {
       "rank": 8,
       "tier": 7,
-      "upper": 72.1079
+      "upper": 75.7943
     },
     {
       "rank": 8,
       "tier": 8,
-      "upper": 73.2983
+      "upper": 77.0615
     },
     {
       "rank": 8,
       "tier": 9,
-      "upper": 74.4887
+      "upper": 78.3287
     },
     {
       "rank": 8,
       "tier": 10,
-      "upper": 83.4167
+      "upper": 87.83030000000001
     },
     {
       "rank": 9,
       "tier": 1,
-      "upper": 68.3087
+      "upper": 71.6687
     },
     {
       "rank": 9,
       "tier": 2,
-      "upper": 69.22309999999999
+      "upper": 72.6407
     },
     {
       "rank": 9,
       "tier": 3,
-      "upper": 69.83269999999999
+      "upper": 73.2887
     },
     {
       "rank": 9,
       "tier": 4,
-      "upper": 70.4423
+      "upper": 73.9367
     },
     {
       "rank": 9,
       "tier": 5,
-      "upper": 71.0519
+      "upper": 74.5847
     },
     {
       "rank": 9,
       "tier": 6,
-      "upper": 72.27109999999999
+      "upper": 75.88069999999999
     },
     {
       "rank": 9,
       "tier": 7,
-      "upper": 73.49029999999999
+      "upper": 77.1767
     },
     {
       "rank": 9,
       "tier": 8,
-      "upper": 74.7095
+      "upper": 78.47269999999999
     },
     {
       "rank": 9,
       "tier": 9,
-      "upper": 75.92869999999999
+      "upper": 79.7687
     },
     {
       "rank": 9,
       "tier": 10,
-      "upper": 85.0703
+      "upper": 89.4887
     },
     {
       "rank": 10,
       "tier": 1,
-      "upper": 79.2287
+      "upper": 80.4887
     },
     {
       "rank": 10,
       "tier": 2,
-      "upper": 80.33030000000001
+      "upper": 81.6119
     },
     {
       "rank": 10,
       "tier": 3,
-      "upper": 81.0623
+      "upper": 82.3607
     },
     {
       "rank": 10,
       "tier": 4,
-      "upper": 81.7967
+      "upper": 83.10950000000001
     },
     {
       "rank": 10,
       "tier": 5,
-      "upper": 82.53349999999999
+      "upper": 83.8583
     },
     {
       "rank": 10,
       "tier": 6,
-      "upper": 84.00229999999999
+      "upper": 85.3559
     },
     {
       "rank": 10,
       "tier": 7,
-      "upper": 85.47109999999999
+      "upper": 86.8535
     },
     {
       "rank": 10,
       "tier": 8,
-      "upper": 86.9399
+      "upper": 88.3511
     },
     {
       "rank": 10,
       "tier": 9,
-      "upper": 88.4087
+      "upper": 89.8487
     },
     {
       "rank": 10,
       "tier": 10,
-      "upper": 99.42469999999999
+      "upper": 101.0783
     }
   ]
 }

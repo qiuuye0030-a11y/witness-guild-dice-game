@@ -10,6 +10,7 @@
 
 const { clone, isPlainObject } = require('../util');
 const { ensureTransaction, settleTransaction, freezeBeastReward } = require('./transaction');
+const { attributeTags } = require('../battle/skill-attributes');
 const { rollInheritance } = require('./inheritance');
 const { createHundredThousandRing, handleNinthRing } = require('./ring');
 const { createBoneInstance } = require('../soulbone/instance');
@@ -45,6 +46,7 @@ function createHuntRewardRunner(input) {
     const tx = ensured.transaction;
     if (!tx.beastSnapshot) tx.beastSnapshot = clone(beast);
     beast = tx.beastSnapshot;
+    if(!tx.characterAttributes)tx.characterAttributes=attributeTags(character.soul); // 首胜结算起点锁定，断点重试不改适配结果。
     // 每一步使用同一份持久化骰序。失败步骤的骰序回滚；成功步骤随事务一起保存。
     if (!tx.rngSnapshot) {
       if (!runInput.rng || typeof runInput.rng.snapshot !== 'function') throw new Error('奖励骰须支持可存档快照');
@@ -71,7 +73,7 @@ function createHuntRewardRunner(input) {
       },
       bone: ({ results }) => {
         const frozen = results['freeze-reward'];
-        const slotRoll = frozen.bone.slot === 'random' ? rollBoneSlot({ rng: rewardRng }) : null;
+        const slotRoll = frozen.bone.slot === 'random' ? rollBoneSlot({ rng: rewardRng, availableSlots: (()=>{const occupied=new Set([...(character.bones||[]),...(character.inventory||[])].map(b=>b.base?.slot||b.slot));const empty=SLOTS.filter(s=>!occupied.has(s));return empty.length?empty:SLOTS;})() }) : null;
         const slot = slotRoll ? slotRoll.slot : frozen.bone.slot;
         if (!SLOTS.includes(slot)) throw new Error('魂兽魂骨部位规则无效：' + frozen.bone.slot);
         return createBoneInstance({
@@ -86,7 +88,7 @@ function createHuntRewardRunner(input) {
       },
       inheritance: ({ results }) => {
         const frozen = results['freeze-reward'];
-        const inheritance = rollInheritance({ traits: frozen.traits, rng: rewardRng, beastId: beast.id, config: runInput.inheritanceConfig });
+        const inheritance = rollInheritance({ traits: frozen.traits, rng: rewardRng, beastId: beast.id, config: runInput.inheritanceConfig, characterAttributes: tx.characterAttributes, beastAttributes: beast.elements });
         const chosen = frozen.traits.filter((trait) => inheritance.selectedTraitIds.includes(trait.id));
         const bone = results.bone;
         const inherited = chosen.map((trait) => ({
@@ -110,7 +112,7 @@ function createHuntRewardRunner(input) {
           base: bone.base,
           attributes: bone.attributes,
           traits: inherited,
-          rolls: { ...bone.rolls, inheritance: { face: inheritance.face, mode: inheritance.mode, selectedTraitIds: inheritance.selectedTraitIds, configVersion: inheritance.configVersion } }
+          rolls: { ...bone.rolls, inheritance: { face: inheritance.face, mode: inheritance.mode, selectedTraitIds: inheritance.selectedTraitIds, configVersion: inheritance.configVersion, matchedAttributes: inheritance.matchedAttributes || [], reason: inheritance.reason || 'roll' } }
         });
         return { inheritance, bone: nextBone, traits: inherited };
       },

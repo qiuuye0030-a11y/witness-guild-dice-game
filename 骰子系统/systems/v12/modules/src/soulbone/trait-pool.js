@@ -47,6 +47,11 @@ function validateTraitDefinition(trait) {
   if (trait.stackGroup !== undefined && (typeof trait.stackGroup !== 'string' || !trait.stackGroup)) throw new Error(trait.id + ' 叠加组无效');
   if (trait.maxStacks !== undefined) requireInteger(trait.maxStacks, trait.id + ' 叠加上限', 1, 99);
   if (trait.implementationVersion !== undefined) requireInteger(trait.implementationVersion, trait.id + ' 实现版本', 1, 1000);
+  if(trait.rRanges!==undefined){
+    if(!Array.isArray(trait.rRanges)||!trait.rRanges.length)throw new Error(trait.id+' R目录须非空');
+    const faces=new Set();for(const r of trait.rRanges){requireInteger(r.min,'R下限',1,100);requireInteger(r.max,'R上限',r.min,100);if(typeof r.category!=='string'||!/^[A-G][1-5]$/.test(r.category))throw new Error(trait.id+' R分类无效');for(let i=r.min;i<=r.max;i++){if(faces.has(i))throw new Error(trait.id+' R出目重复');faces.add(i);}}
+    if(trait.weight!==faces.size)throw new Error(trait.id+' 权重与R出目数不一致');
+  }
   if (trait.params !== undefined && !isPlainObject(trait.params)) throw new Error(trait.id + ' 参数须为对象');
   return true;
 }
@@ -119,16 +124,17 @@ function createTraitPool(options = {}) {
     if (!legal.length) {
       return { status: 'pending', reason: PENDING.NO_LEGAL_TRAIT, trait: null, candidates: 0, unavailable, roll: null };
     }
-    const weights = legal.map((trait) => trait.weight || 1);
-    const total = weights.reduce((a, b) => a + b, 0);
-    const face = legal.length === 1 ? total : drawWeightedFace(input.rng, total, '魂骨特性装配', { boneId: input.boneId, years: input.years, slot: input.slot });
-    let cursor = face;
-    let index = 0;
-    for (; index < legal.length; index++) {
-      cursor -= weights[index];
-      if (cursor <= 0) break;
+    const mapped=legal.every(t=>Array.isArray(t.rRanges)&&t.rRanges.length);
+    let chosen,face,total,sourceFace=null,category=null;
+    if(mapped){
+      const tickets=legal.flatMap(t=>t.rRanges.flatMap(r=>Array.from({length:r.max-r.min+1},(_,i)=>({trait:t,sourceFace:r.min+i,category:r.category})))).sort((a,b)=>a.sourceFace-b.sourceFace);
+      if(new Set(tickets.map(t=>t.sourceFace)).size!==tickets.length)throw new Error('特性池中R出目存在跨定义重复');
+      total=tickets.length;face=total===1?1:drawWeightedFace(input.rng,total,'魂骨特性1d100分类',{boneId:input.boneId});
+      const ticket=tickets[face-1];chosen=ticket.trait;sourceFace=ticket.sourceFace;category=ticket.category;
+    }else{
+      const weights=legal.map(t=>t.weight||1);total=weights.reduce((a,b)=>a+b,0);face=legal.length===1?total:drawWeightedFace(input.rng,total,'魂骨特性装配',{boneId:input.boneId});
+      let cursor=face,index=0;for(;index<legal.length;index++){cursor-=weights[index];if(cursor<=0)break;}chosen=legal[index];
     }
-    const chosen = legal[index];
     const assembled = {
       traitId: chosen.id,
       name: chosen.name,
@@ -150,7 +156,7 @@ function createTraitPool(options = {}) {
       trait: deepFreeze(assembled),
       candidates: legal.length,
       unavailable,
-      roll: { sides: total, face, label: '魂骨特性装配', weighted: true, degenerate: legal.length === 1 }
+      roll: { sides: total, face, label: '魂骨特性装配', weighted: true, sourceFace, category, conditional: mapped && total!==100, degenerate: legal.length === 1 }
     });
   }
 

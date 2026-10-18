@@ -25,6 +25,8 @@
     "unified-decision.js",
     "../v12/modules-bundle.js",
     "../v12/battle.js",
+    "../v12/bone-traits.js",
+    "../v12/beasts-v125.js",
     "compose.js",
     "models.js",
     "../v12/models.js"

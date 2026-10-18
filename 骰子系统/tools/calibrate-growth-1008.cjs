@@ -38,6 +38,7 @@ function run(x,rank,seed,preset,policy){
    case'growth':if(s.character.boneInventory.length){c.fuseStoredBone();delete s.boneReport;}c.startQuarter('C');break;
    case'event':{c.chooseEvent(choose(c,policy,events+(parseInt(seed.match(/\d+$/)?.[0]||'0'))));events++;for(const r of s.pending.receipts||[])if(r.kind==='xp'){if(r.context==='season')seasonXP+=r.amount;else if(r.context==='quest')questXP+=r.amount;else eventXP+=r.amount;}if(s.pending.bias===20)opportunities++;break;}
    case'eventResult':c.finishEvent();break;
+   case'v12Hunt':c.v12Choose('拒绝');break;
    default:throw Error('unexpected '+s.phase);
   }
   while(c.currentPromotion())c.acknowledgePromotion();

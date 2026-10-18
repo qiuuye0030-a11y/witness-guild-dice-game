@@ -220,7 +220,7 @@ const acknowledgePromotion=function(id){
       this.state.promotionState.acknowledged[p.id]=true;this.state.promotions.shift();return true;
     };
 
-const fuseStoredBone=function(){const s=this.state;if(s.phase!=='growth'||!s.character.boneInventory.length)throw Error('当前没有可融合的魂骨');
+const fuseStoredBone=function(){const s=this.state;if(s.phase!=='growth'||!s.character.boneInventory.some(b=>!b.awaitingRingAbsorption))throw Error('当前没有可融合的魂骨');
       const oldLevel=s.character.level,oldRating=R.rating(s.character.stats).label,p={training:'C',receipts:[],reward:[],PStart:s.character.stats.stats.P};
       this.absorbBone(true,false,p);this.refresh();this.recordPromotion(oldLevel,oldRating);s.boneReport=p;this.sync();return {roll:s.rolls.at(-1)};
     };
@@ -370,7 +370,7 @@ const grantBone=function(p){
     };
 
 const absorbBone=function(success,excellent,p){
-      const c=this.state.character,bone=c.boneInventory.shift();if(!bone)return;
+      const c=this.state.character,index=c.boneInventory.findIndex(b=>!b.awaitingRingAbsorption);if(index<0)return;const bone=c.boneInventory.splice(index,1)[0];
       if(c.bones.some(x=>x.slot===bone.slot)){c.boneInventory.unshift(bone);p.reward.push('该部位已有魂骨，暂不融合');return;}
       bone.absorbed=true;c.bones.push(bone);this.receipt(p,'bone',bone.name,null,null,null,'已融合 · 魂骨技留空');p.reward.push('融合 '+bone.name+'；魂骨技留空');
       const tier=this.soul().tier,bases=[75,75,60,60,45,45,25,25,10,0];
@@ -549,7 +549,7 @@ const static_validate=function(s,catalog){
         if(!h.legacyFloor&&h.years!==undefined&&h.years<R.ringFloor(R.CAPS[h.index-1]))throw Error('候选年限低于保底');
       }
       if(['arrival','battle','ending'].includes(s.phase)&&(s.completed!==c.time.quarters||s.date.year!==6102||s.date.month!==c.time.month||s.date.age!==c.time.age))throw Error('入会时间无效');
-      if(c.talent&&(!Number.isInteger(c.talent.rank)||c.talent.rank<1||c.talent.rank>10||![Creation.TALENTS[c.talent.rank-1].xpMultiplier,R.round2(1+.06*(c.talent.rank-1)),R.round2(c.talent.rank<5?1+.06*(c.talent.rank-1):1.40+.16*(c.talent.rank-5))].includes(c.talent.xpMultiplier)||c.talent.attributeMultiplier!==Creation.TALENTS[c.talent.rank-1].attributeMultiplier))throw Error('天赋数据无效');
+      if(c.talent&&(!Number.isInteger(c.talent.rank)||c.talent.rank<1||c.talent.rank>10||![[.50,.53,.56,.59,1.12,1.17,1.21,1.24,1.27,1.53][c.talent.rank-1],Creation.TALENTS[c.talent.rank-1].xpMultiplier,R.round2(1+.06*(c.talent.rank-1)),R.round2(c.talent.rank<5?1+.06*(c.talent.rank-1):1.40+.16*(c.talent.rank-5))].includes(c.talent.xpMultiplier)||c.talent.attributeMultiplier!==Creation.TALENTS[c.talent.rank-1].attributeMultiplier))throw Error('天赋数据无效');
       if(s.growthPlan&&(!Number.isFinite(s.growthPlan.baseXP)||s.growthPlan.baseXP<0||s.growthPlan.baseXP>2000))throw Error('成长路线无效');
       if(s.version>=4){
         if(!Number.isInteger(c.luck)||c.luck<1||c.luck>10||!c.eventFlags||!Array.isArray(c.bones)||!Array.isArray(c.boneInventory)||c.bones.length>6||c.boneInventory.length>100||!Array.isArray(c.mutations)||c.mutations.length>20)throw Error('培养数据无效');

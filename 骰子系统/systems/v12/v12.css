@@ -2,4 +2,9 @@
 .v12-trait-card p:last-child{margin-bottom:0}.v12-sponsor{margin-top:24px;padding:18px;border:1px solid currentColor;border-radius:12px;color:inherit}
 .v12-sponsor select{display:block;width:100%;max-width:32rem;margin:12px 0;color:inherit;background:var(--panel,#fff8e2)}
 body:not(.chenxi-mode) .v12-sponsor select{background:#19213b}.v12-report-log{max-height:30rem;overflow:auto;padding:12px;border:1px solid currentColor;border-radius:8px}.v12-bones,.v12-reports{margin:20px 0;color:inherit}.v12-trait-card .camp-note{color:inherit}
-body.campaign-battle #battleStage{display:block}body.campaign-battle #battleStage .actor-card{min-width:0}#teamFriendly:has(.actor-card:nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:800px){#teamFriendly:has(.actor-card:nth-child(3)){grid-template-columns:1fr}}
+body.campaign-battle #battleStage{display:block}body.campaign-battle #battleStage .actor-card{min-width:0}#teamFriendly:has(.actor-card:nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))}#teamFriendly:has(.actor-card:nth-child(4)){grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:800px){#teamFriendly:has(.actor-card:nth-child(3)),#teamFriendly:has(.actor-card:nth-child(4)){grid-template-columns:1fr}}
+
+/* v12.05.01: bone descriptions are ordinary themed prose, never generic grey hint slabs. */
+body.campaign-mode .v12-bones .v12-bone-copy{color:var(--ink);background:transparent;border:0;box-shadow:none;padding:0;margin:10px 0;font-size:14px;line-height:1.9;opacity:1}
+body.chenxi-mode :is(#campBody,#campSidebar) .v12-bones .v12-bone-copy{color:#244b4c;background:transparent;border:0}
+.hunt-target-choice{margin:20px 0}.hunt-target-choice label{display:block;font-weight:700;margin-bottom:10px}.hunt-target-choice select{display:block;width:100%;max-width:36rem;padding:12px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px}.hunt-target-help{color:var(--ink);font-size:13px;line-height:1.8;margin:10px 0;opacity:.85}

@@ -99,7 +99,7 @@ function createRoster(options = {}) {
    */
   function arrivalParagraphs(npcIds) {
     if (!Array.isArray(npcIds)) throw new Error('到场阵容须为稳定ID数组');
-    if (npcIds.length < 0 || npcIds.length > 2) throw new Error('讨伐队伍最多两位友方NPC');
+    if (npcIds.length < 0 || npcIds.length > 3) throw new Error('讨伐队伍最多三位友方NPC');
     const resolved = npcIds.map(resolve);
     if (new Set(resolved).size !== resolved.length) throw new Error('到场阵容出现重复角色，别名不构成第二位NPC');
     if (!resolved.length) return TEXTS.noNpc.slice();

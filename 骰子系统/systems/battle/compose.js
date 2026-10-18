@@ -81,6 +81,8 @@
     gainRage:MemberActions.methods.gainRage
   };
   Object.assign(methods,V12Battle.wrap(methods));
+  Object.assign(methods,V12BoneTraits.wrap(methods));
+  Object.assign(methods,V125Beasts.wrap(methods));
   Object.defineProperties(root.WitnessBattle.Battle.prototype,Object.fromEntries(Object.entries(methods).map(([key,value])=>[key,{value,writable:true,configurable:true}])));
   root.WitnessRules.makeSkill=function(args){const skill=AttributeActions.methods.makeSkill(args);const b=Object.create(root.WitnessBattle.Battle.prototype),u={id:'preview',model:args.stats,soul:args.soul,style:args.style,level:args.stats.level,statuses:[],modern:{sequence:0,overheat:[0,0]}};Object.assign(b,{now:0,units:[u],resourceConfig:root.WitnessRules.getResourceConfig(),log:[],events:[]});return {...skill,previewCost:b.cost(u,skill),previewCast:root.WitnessRules.round2(b.castTime(u,skill)*(skill.castMultiplier||1)),previewRulesVersion:17};};
 })(globalThis);

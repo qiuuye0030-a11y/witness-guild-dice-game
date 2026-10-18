@@ -1,17 +1,18 @@
 (function(root){
 'use strict';
+const tuning=root.WitnessV12Tuning||{domainAllyAgility:.04,domainEnemyAgility:.02,domainEnemyGauge:.04};
 const pct=n=>Math.round(n*10000)/100+'%',has=(u,id)=>(u.v12Traits||[]).some(t=>(t.id||t.traitId)===id);
 // Read the actual runtime state. These rows never add a status or apply a modifier.
 function badges(b,u){
- const ice=(root.WitnessV12.battle.skillAttributes.attributeTags(u.soul)).includes('冰'),rows=[],s=u.v12State||{},add=(key,name,tip,bad=false)=>rows.push({key:'v1201:'+key,name,tip,bad}),time=until=>Math.max(0,(until-b.now)/1000).toFixed(1)+'秒';
+ const rows=[],s=u.v12State||{},add=(key,name,tip,bad=false)=>rows.push({key:'v1201:'+key,name,tip,bad}),time=until=>Math.max(0,(until-b.now)/1000).toFixed(1)+'秒';
  if(!b.alive(u))return rows;
  if(has(u,'frost-moss-immunity'))add('mossImmune','霜苔不侵','冰属性伤害转为生命；免疫迟缓与冻结。');
  if(has(u,'moss-armor-accumulation')&&s.mossStacks)add('moss','苔凝 '+s.mossStacks+'层','苔甲凝积：肉体＋'+pct(.05*s.mossStacks)+'，防御＋'+pct(.1*s.mossStacks)+'，额外减伤'+pct(Math.min(.15,.05*Math.floor(s.mossStacks/4)))+'；层数跨战斗保留。');
- for(const layer of u.shieldLayers||[])if(layer.label==='冰壳护生'&&(s.shellAbsorbed?.[layer.source]||0)>0)add('shell:'+layer.source,'冰壳·蓄反'+Math.round(s.shellAbsorbed[layer.source]*.3),'此层已吸收'+Math.round(s.shellAbsorbed[layer.source])+'伤害；破碎时反伤'+Math.round(s.shellAbsorbed[layer.source]*.3)+'，无视护盾。');
- if(s.iceAgility)add('iceSpeed','霜域·冰敏＋'+pct(s.iceAgility*.05),'本单位在霜域中累计'+s.iceAgility+'次个人回合，敏捷提高'+pct(s.iceAgility*.05)+'，持续本场。');
- if(has(u,'frost-domain'))add('domain',s.domainSuppressed?'霜域·暂止':'霜域',s.domainSuppressed?'霜域被驱散，暂停至本次个人回合结束。':'场地持续生效：冰属性积累敏捷；非冰属性承受行动与读条减速。',!!s.domainSuppressed);
+ for(const layer of u.shieldLayers||[])if(layer.label==='冰壳护生'&&(s.shellAbsorbed?.[layer.source]||0)>0)add('shell:'+layer.source,'冰壳·蓄反'+Math.round(s.shellAbsorbed[layer.source]*.3),'开战时凝成的冰壳已吸收'+Math.round(s.shellAbsorbed[layer.source])+'伤害；击破时反伤'+Math.round(s.shellAbsorbed[layer.source]*.3)+'，无视护盾。');
+ const tierOf=owner=>Math.max(0,Math.min(3,(owner.v12State?.domainTier||0)));
+ if(has(u,'frost-domain')){const tier=tierOf(u);add('domain',s.domainSuppressed?'霜域·暂止':'霜域 '+tier+'/3档',s.domainSuppressed?'霜域被驱散压住，暂停至本次个人回合结束。':tier?'当前三档数值：敌方敏捷−'+pct(tuning.domainEnemyAgility*tier)+'、行动条速度−'+pct(tuning.domainEnemyGauge*tier)+'，友方敏捷＋'+pct(tuning.domainAllyAgility*tier)+'；'+(tier>=3?'已达三档，每次加深改为友方2%生命上限寒冰护盾、敌方2%生命上限伤害。':'再加深'+(3-tier)+'档到达上限。'):'霜域已展开：每个自身回合加深一档（敌方敏捷−2%、行动条速度−4%，友方敏捷＋4%）；三档后每次加深改为友方2%生命上限寒冰护盾、敌方2%生命上限伤害。',!!s.domainSuppressed);}
  for(const owner of b.units.filter(o=>b.alive(o))){
-  if(has(owner,'frost-domain')&&!owner.v12State?.domainSuppressed&&!ice&&!has(u,'frost-moss-immunity')){const tier=Math.min(2,Math.floor((owner.v12State?.turns||0)/2));add('domain:'+owner.id,'霜域·迟滞','来源 '+owner.name+'；读条速度降低'+pct([.2,.275,.35][tier])+'，行动速度降低'+pct([.15,.2,.25][tier])+'；随其个人回合增强。',true);}
+  if(has(owner,'frost-domain')&&!owner.v12State?.domainSuppressed&&owner!==u){const tier=tierOf(owner);if(tier){if(owner.team===u.team)add('domain:'+owner.id,'霜域·疾行＋'+pct(tuning.domainAllyAgility*tier),'来源 '+owner.name+'；友方敏捷提高'+pct(tuning.domainAllyAgility*tier)+'（每档4%），三档后每次加深提供2%生命上限寒冰护盾。');else add('domain:'+owner.id,'霜域·迟滞','来源 '+owner.name+'；敏捷降低'+pct(tuning.domainEnemyAgility*tier)+'，行动条速度降低'+pct(tuning.domainEnemyGauge*tier)+'（每档敏捷2%、行动条4%，最多三档）；三档后每次加深额外承受2%生命上限伤害。',true);}}
   if(owner.npcId==='chengliang'){
    const n=owner.v12NPC?.grid?.enemies?.[u.id]||0;if(n&&!has(u,'frost-moss-immunity'))add('grid:'+owner.id,'困阵 '+n+'层','来源 '+owner.name+'·周天格阵；敏捷降低'+pct(.05*n)+'；每3个有效个人回合随阵法转位折半。',true);
    if(owner.v12NPC?.vision?.gazeTargetId===u.id)add('gaze:'+owner.id,'日月凝视','来源 '+owner.name+'；其对你命中＋8个百分点，你对其伤害＋10%。',true);
@@ -29,6 +30,17 @@ function badges(b,u){
  const labels={v12Accuracy:'后续攻击命中',v12Cast:'后续攻击读条倍率',v12Evasion:'一次闪避',v12Vulnerability:'队友追击易伤'};
  for(const st of b.status(u,'v12Stats'))add('stats:'+st.source,st.label||'属性增幅',Object.entries(st.values||{}).map(([key,n])=>(root.WitnessRules.LABELS[key]||key)+'＋'+pct(n*(st.value??1))).join('、')+'；来源 '+(st.from||st.source)+'。');
  for(const [type,label]of Object.entries(labels))for(const st of b.status(u,type))add(type+':'+st.source,label+(type==='v12Cast'?'×'+st.value:' '+pct(st.value)),(st.label||label)+'；来源 '+(st.from||st.source)+'；'+(st.until>1e12?'本场有效':'剩余'+time(st.until)),type==='v12Vulnerability');
+ const ordinary=(u.v12Traits||[]).filter(t=>(t.traitId||t.id||'').startsWith('tt-'));
+ for(const raw of ordinary){const trait=root.WitnessV12.soulbone.effects.upgrade(raw);const id=trait.traitId||trait.id,ts=u.ttState||{};let name=trait.name;
+  if(id==='tt-thorn')name+=' '+(ts.stacks||0)+'/3';
+  if(id==='tt-dragon')name+=u.hp<=u.model.derived.HP*.5?'·生效':'·潜伏';
+  if(id==='tt-reserve')name+=ts.reserveUsed?'·已消耗':'·待命';
+  if(id==='tt-shell')continue; // Actual shield layer already has its own displayed value.
+  add(id,name,trait.effect);
+ }
+ const fieldOwners=b.units.filter(o=>b.alive(o)&&has(o,'tt-field'));for(const team of [u.team,1-u.team]){const owner=fieldOwners.find(o=>o.team===team);if(owner&&owner!==u)add('tt-field:'+team,team===u.team?'薄霜·疾行':'薄霜·迟滞','来源 '+owner.name+'；'+(team===u.team?'敏捷提高6%。':'敏捷降低3%，行动速度降低6%。'),team!==u.team);}
+ for(const st of b.status(u,'ttGaugeDown'))add('tt-shadow:'+st.source,'影缠·迟行','行动速度降低5%；剩余'+time(st.until)+'。',true);
+ rows.push(...(root.WitnessV125Beasts?.badges(b,u)||[]));
  return rows;
 }
 root.WitnessV12Effects={badges};

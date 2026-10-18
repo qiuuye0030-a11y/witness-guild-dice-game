@@ -1,7 +1,7 @@
 {
   "passed": 31,
   "tests": [
-    "v12 has 555 souls, three beasts, twelve lowest-band skills and no random soul registry",
+    "v12 has 555 souls, seven beasts, twenty-eight S-tiered skills and no random soul registry",
     "79 cannot trigger; 80 current weak rating waits; later strong enough triggers once",
     "refusal has no event/XP/month/ring gain and never asks again",
     "family 1 creates exact hunt teams, no automatic enemy support",
@@ -17,9 +17,9 @@
     "draw gives no loot and a readable report",
     "NPC final blow / player down still wins once, reserves ring below90 and randomizes one bone",
     "reserved ninth absorbs at90, panel and actual battle read all nine; no tenth at91",
-    "all six inherited passives enter normal battles as equipped-source traits",
+    "all fourteen inherited passives enter normal battles as equipped-source traits",
     "frost frog ice immunity heals and adds cold shield; other direct damage adds moss, DOT does not",
-    "ice shell is bounded to two layers and reflected damage bypasses shield",
+    "ice shell is a single battle-start layer (40% own HP), never re-granted, reflection bypasses shield",
     "tides stack three times, expire at6s, spending restores boss mana without charging attacker twice",
     "chengliang all eight skill operations execute through real timeline without unsupported op",
     "xutaiping all eight skill operations execute through real timeline without unsupported op",

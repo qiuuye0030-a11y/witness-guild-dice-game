@@ -22,7 +22,7 @@ function validate(b){const u=b.unit('enemy'),p=u?.scarred;if(!p||p.version!==1||
 function basicCost(u){return u.scarred?base.basicCost.call(this,u)*2:base.basicCost.call(this,u);}
 function cost(u,s){if(!u.scarred)return base.cost.call(this,u,s);if(u.hp<=0)return 0;return base.cost.call(this,u,s)*(s.category==='攻击'?2:1);}
 function effective(u){return base.effective.call(this,u);}
-function damageValue(u,t,raw,ch,pre){return u.scarred?Math.max(1,Math.round(raw)):base.damageValue.call(this,u,t,raw,ch,pre);}
+function damageValue(u,t,raw,ch,pre){return u.scarred?Math.max(1,Math.round(raw*.3)):base.damageValue.call(this,u,t,raw,ch,pre);}
 function previewProtection(t,damage,ch,source){
  if(source?.scarred){const out=ShieldActions.methods.previewShieldDamage.call(this,t,0,ch,null),reduction=this.value(source,'damageDown');const amount=Math.max(0,Math.round(damage*(1-reduction)));return {...out,beforeShields:amount,afterShields:amount,blocked:0,guardBlocked:0,absorbed:0,mpCost:0,healthDamage:amount,bypassShield:true};}
  if(t.scarred&&ch!=='精神'){const out=this.previewShieldDamage(t,damage,ch,source),mpCost=Math.min(Math.max(0,t.mp),Math.floor(out.afterShields*.90));return {...out,absorbed:mpCost,mpCost,healthDamage:out.afterShields-mpCost,shadowWalk:true};}

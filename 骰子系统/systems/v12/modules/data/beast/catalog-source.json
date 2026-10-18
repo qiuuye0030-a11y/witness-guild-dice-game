@@ -1,83 +1,911 @@
 {
   "schemaVersion": 1,
-  "libraryVersion": 2,
-  "sourceFile": "魂兽资料_三例.txt",
+  "libraryVersion": 4,
+  "sourceFile": "魂兽资料_七例.txt",
   "baselineLevel": 91,
   "baselineNote": "资料未指定战斗等级，暂以九环最低等级91级、基准500换算六维；不是把十万年当作100级。血脉不修正六维。",
-  "skillYears": 10000,
   "skillPotencyMultiplier": 1,
   "beasts": [
     {
-      "id": "frost-moss-frog", "name": "霜苔巨蛙", "version": 2, "originalName": "霜苔巨螈",
-      "style": "防御", "elements": ["木", "冰"],
-      "statDice": [3, 2, 1, 10, 9, 9], "statRatios": [1.30, 1.05, 0.85, 2.25, 2.05, 2.05],
-      "bloodline": {"roll": 3, "name": "凡血", "modifiesStats": false},
-      "species": "两栖纲·蛙类", "size": "大（象鲸级）", "sociality": "成对", "actualAge": "约十四万年",
+      "id": "frost-moss-frog",
+      "name": "霜苔巨蛙",
+      "version": 2,
+      "originalName": "霜苔巨螈",
+      "style": "防御",
+      "elements": [
+        "木",
+        "冰"
+      ],
+      "statDice": [
+        3,
+        2,
+        1,
+        10,
+        9,
+        9
+      ],
+      "statRatios": [
+        1.3,
+        1.05,
+        0.85,
+        2.25,
+        2.05,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 3,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·蛙类",
+      "size": "大（象鲸级）",
+      "sociality": "成对",
+      "actualAge": "约十四万年",
       "habitat": "极北冻林最深处的活水沼——水面结壳，底下永远不冻。",
       "appearance": "体形如伏地的巨蛙，背阔腹沉，通体覆一层会结霜的青苔。苔甲沿背脊木质化成脊板，板缝嵌冰壳；前肢短粗，后肢壮硕，趾间有蹼。头骨宽扁，口裂极大，双眼半埋苔层，只露出暗黄光点。它不动的时候，整只兽就是沼面上一块长苔的石头。",
       "habits": "一年里大半时间伏在沼底不动，靠皮肤与苔甲缓慢吸取周围生机。它几乎不运使魂力，可被惊动时暴起极快。",
       "role": "敌方——冻林守地兽。不主动离沼，但踏进它的沼面就别想走出来。",
       "battleText": "沼面的青苔忽然隆起，冰壳沿着脊板接连崩裂。霜苔巨蛙睁开暗黄的眼，粗壮的后肢一撑，庞大的身躯便封住了退路。",
       "defeatText": "苔甲层层剥落，巨蛙终于伏回冻沼。寒雾散去，一枚猩红魂环缓缓升起。",
-      "talents": [{"name":"苔甲覆霜","effect":"体表苔层吸寒变硬，短时间几乎吃不下物理攻击。"},{"name":"霜沼拖拽","effect":"四肢陷泥时不能移动，但周围寒气会把靠近者一并冻住。"}],
+      "talents": [
+        {
+          "name": "苔甲覆霜",
+          "effect": "体表苔层吸寒变硬，短时间几乎吃不下物理攻击。"
+        },
+        {
+          "name": "霜沼拖拽",
+          "effect": "四肢陷泥时不能移动，但周围寒气会把靠近者一并冻住。"
+        }
+      ],
       "skills": [
-        {"name":"苔甲覆霜","category":"防御","element":"冰","description":"苔甲吸寒凝霜，在体表结成生命护盾。"},
-        {"name":"霜沼拖拽","category":"控制","element":"冰","description":"寒泥攀住目标四肢；控制成功后短暂冻结并打断蓄力。"},
-        {"name":"冻沼撞击","category":"攻击","element":"木","description":"以覆满苔甲的庞大身躯猛撞目标，造成单次物理伤害。"},
-        {"name":"生苔回息","category":"治疗","element":"木","description":"苔层汲取沼中生机，回复自身生命。"}
+        {
+          "name": "苔甲覆霜",
+          "category": "防御",
+          "element": "冰",
+          "description": "苔甲吸寒凝霜，在体表结成生命护盾。"
+        },
+        {
+          "name": "霜沼拖拽",
+          "category": "控制",
+          "element": "冰",
+          "description": "寒泥攀住目标四肢；控制成功后短暂冻结并打断蓄力。"
+        },
+        {
+          "name": "冻沼撞击",
+          "category": "攻击",
+          "element": "木",
+          "description": "以覆满苔甲的庞大身躯猛撞目标，造成单次物理伤害。"
+        },
+        {
+          "name": "生苔回息",
+          "category": "治疗",
+          "element": "木",
+          "description": "苔层汲取沼中生机，回复自身生命。"
+        }
       ],
       "traits": [
-        {"id":"frost-moss-immunity","name":"霜苔不侵","effect":"冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供最大生命5%的护盾，上限10层。非冰属性越盾真伤不受减免。","params":{"iceDamageImmunity":true,"iceDamageToHealing":1,"immuneTags":["slow","freeze","sluggish"],"iceHitStacks":2,"otherHitStacks":1,"shieldPerStackMaxHP":0.05,"maxStacks":10,"shieldMode":"stack-capacity"}},
-        {"id":"moss-armor-accumulation","name":"苔甲凝积","effect":"每次实际受创叠1层苔凝，每层永久提高防御素质10%、肉体强度5%，上限12层；每满4层额外获得5%固定减伤，最多15%。持续伤害不叠层。","params":{"trigger":"actual-damage-received","excludeDamageTags":["dot"],"defensePerStack":0.10,"bodyPerStack":0.05,"maxStacks":12,"reductionEveryStacks":4,"reductionPerStep":0.05,"maxReduction":0.15,"stackLifetime":"permanent","saveFields":["mossStacks"]}}
+        {
+          "id": "frost-moss-immunity",
+          "name": "霜苔不侵",
+          "effect": "冰属性伤害完全免疫，并改为回复等量生命；免疫全部减速、冻结、迟缓类效果，不参与判定。受击时叠加封寒：冰属性攻击叠2层，非冰攻击叠1层；每层提供原始生命5%的护盾，累计不超过原始生命的50%。原始生命指魂兽定义面板，不含讨伐血量倍率；玩家继承时按自身最大生命计算。非冰属性越盾真伤不受减免。",
+          "params": {
+            "iceDamageImmunity": true,
+            "iceDamageToHealing": 1,
+            "immuneTags": [
+              "slow",
+              "freeze",
+              "sluggish"
+            ],
+            "iceHitStacks": 2,
+            "otherHitStacks": 1,
+            "shieldPerStackBaseHealth": 0.05,
+            "shieldCapBaseHealth": 0.5,
+            "shieldBasis": "original-panel-hp",
+            "maxStacks": 10,
+            "shieldMode": "stack-capacity"
+          }
+        },
+        {
+          "id": "moss-armor-accumulation",
+          "name": "苔甲凝积",
+          "effect": "每次实际受创叠1层苔凝，每层永久提高防御素质10%、肉体强度5%，上限12层；每满4层额外获得5%固定减伤，最多15%。持续伤害不叠层。",
+          "params": {
+            "trigger": "actual-damage-received",
+            "excludeDamageTags": [
+              "dot"
+            ],
+            "defensePerStack": 0.1,
+            "bodyPerStack": 0.05,
+            "maxStacks": 12,
+            "reductionEveryStacks": 4,
+            "reductionPerStep": 0.05,
+            "maxReduction": 0.15,
+            "stackLifetime": "permanent",
+            "saveFields": [
+              "mossStacks"
+            ]
+          }
+        }
       ]
     },
     {
-      "id":"frost-gnat", "name":"霜蚋", "version": 1,
-      "style":"敏攻", "elements":["冰"],
-      "statDice":[9,6,1,5,10,8], "statRatios":[2.05,1.63,0.85,1.55,2.25,1.82],
-      "bloodline":{"roll":2,"name":"凡血","modifiesStats":false},
-      "species":"虫类·蚋（双翅目）", "size":"微（指掌以下）", "sociality":"独居", "actualAge":"不可考，换过太多次壳",
-      "habitat":"冰原裂隙与积雪层下的暖缝，那一线不结冰的缝就是它的领地。",
-      "appearance":"体长不足三分，通体冰蓝半透，翅薄如霜且几乎不反光。飞行时肉眼只能看到一点雪屑似的浮动。口器细长如针，腹末两根短刺。",
-      "habits":"终生独居，不结群、不筑巢。以极高速度在雪面跳点，用口针吸取体温与少量魂力；极惧光，日间深藏隙中。",
-      "role":"异种·首领——体型最小、最难打的十万年魂兽。",
-      "battleText":"一粒雪屑停在你的感知边缘，下一瞬却已掠至近前。冰蓝的薄翅无声展开，脚下的雪地渐渐凝成霜域。",
-      "defeatText":"薄翅终于停止震颤，最后一层冰壳碎成细雪。霜域消退，猩红魂环在雪面上凝聚。",
-      "talents":[{"name":"霜针","effect":"口器刺入时注入寒气，伤口不流血而是结霜。"},{"name":"雪屑掩形","effect":"高速移动时翅膜散出细霜，短时间内难以锁定其位置。"}],
-      "skills":[
-        {"name":"霜针","category":"攻击","element":"冰","description":"掠近目标，以冰针般的口器完成一次迅疾刺击。"},
-        {"name":"雪屑掩形","category":"强化","element":"冰","buffField":"A","description":"翅膜散霜，借细雪遮掩行迹，提高自身敏捷。"},
-        {"name":"寒痕入骨","category":"持续伤害","element":"冰","description":"将寒气留在创口，分三次侵蚀目标，不重复叠加同一寒痕。"},
-        {"name":"掠影断脉","category":"控制","element":"冰","description":"疾掠时刺向魂力流转的间隙；判定成功后短暂打断并控制目标。"}
+      "id": "frost-gnat",
+      "name": "霜蚋",
+      "version": 1,
+      "style": "敏攻",
+      "elements": [
+        "冰"
       ],
-      "traits":[
-        {"id":"ice-shell-preservation","name":"冰壳护生","effect":"受击时先生成最大生命80%的冰壳护盾，每回合自行重结一次；未破可叠加，最多两层。冰壳击破时，向攻击者反弹该层已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。","params":{"preHitShieldMaxHP":0.8,"renewPerOwnerTurn":1,"maxLayers":2,"reflectionRate":0.3,"reflectionElement":"冰","reflectionBypassShield":true,"bypassedByTags":["shield-bypass-true-damage"]}},
-        {"id":"frost-domain","name":"霜域","effect":"展开不可驱散的霜域，持续整场。非冰属性单位读条速度降低20%、行动条速度降低15%；冰属性单位（含自身）每回合敏捷提高5%。每2回合加深一档，最多3档，最终读条速度降低35%、行动条速度降低25%。驱散技能可压住霜域一回合。","params":{"lifetime":"battle","dispellable":false,"suppressibleByDispelOwnerTurns":1,"tiers":[{"castSpeedDown":0.20,"gaugeSpeedDown":0.15},{"castSpeedDown":0.275,"gaugeSpeedDown":0.20},{"castSpeedDown":0.35,"gaugeSpeedDown":0.25}],"deepenEveryOwnerTurns":2,"iceUnitAgilityPerTurn":0.05,"iceAgilityStackLifetime":"battle","tierInterpolation":"中间档按两端线性取值；待后续调数值"}}
+      "statDice": [
+        9,
+        6,
+        1,
+        5,
+        10,
+        8
+      ],
+      "statRatios": [
+        2.05,
+        1.63,
+        0.85,
+        1.55,
+        2.25,
+        1.82
+      ],
+      "bloodline": {
+        "roll": 2,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "虫类·蚋（双翅目）",
+      "size": "微（指掌以下）",
+      "sociality": "独居",
+      "actualAge": "不可考，换过太多次壳",
+      "habitat": "冰原裂隙与积雪层下的暖缝，那一线不结冰的缝就是它的领地。",
+      "appearance": "体长不足三分，通体冰蓝半透，翅薄如霜且几乎不反光。飞行时肉眼只能看到一点雪屑似的浮动。口器细长如针，腹末两根短刺。",
+      "habits": "终生独居，不结群、不筑巢。以极高速度在雪面跳点，用口针吸取体温与少量魂力；极惧光，日间深藏隙中。",
+      "role": "异种·首领——体型最小、最难打的十万年魂兽。",
+      "battleText": "一粒雪屑停在你的感知边缘，下一瞬却已掠至近前。冰蓝的薄翅无声展开，脚下的雪地渐渐凝成霜域。",
+      "defeatText": "薄翅终于停止震颤，最后一层冰壳碎成细雪。霜域消退，猩红魂环在雪面上凝聚。",
+      "talents": [
+        {
+          "name": "霜针",
+          "effect": "口器刺入时注入寒气，伤口不流血而是结霜。"
+        },
+        {
+          "name": "雪屑掩形",
+          "effect": "高速移动时翅膜散出细霜，短时间内难以锁定其位置。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "霜针",
+          "category": "攻击",
+          "element": "冰",
+          "description": "掠近目标，以冰针般的口器完成一次迅疾刺击。"
+        },
+        {
+          "name": "雪屑掩形",
+          "category": "强化",
+          "element": "冰",
+          "buffField": "A",
+          "description": "翅膜散霜，借细雪遮掩行迹，提高自身敏捷。"
+        },
+        {
+          "name": "寒痕入骨",
+          "category": "持续伤害",
+          "element": "冰",
+          "description": "将寒气留在创口，分三次侵蚀目标，不重复叠加同一寒痕。"
+        },
+        {
+          "name": "掠影断脉",
+          "category": "控制",
+          "element": "冰",
+          "description": "疾掠时刺向魂力流转的间隙；判定成功后短暂打断并控制目标。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "ice-shell-preservation",
+          "name": "冰壳护生",
+          "effect": "战斗开始时，获得相当于自身生命值40%的护盾。护盾被击破时，向攻击者反弹该护盾已吸收伤害的30%，冰屑穿透护盾；越盾真伤无视冰壳。护盾只结一次，不会自行重结或叠加。",
+          "params": {
+            "battleStartShieldMaxHPRate": 0.4,
+            "shieldBasis": "own-max-hp",
+            "maxLayers": 1,
+            "reflectionRate": 0.3,
+            "reflectionElement": "冰",
+            "reflectionBypassShield": true,
+            "bypassedByTags": [
+              "shield-bypass-true-damage"
+            ]
+          }
+        },
+        {
+          "id": "frost-domain",
+          "name": "霜域",
+          "effect": "展开不可驱散的霜域，持续整场。每档使敌方单位敏捷降低2%、行动条速度降低4%，友方单位（含自身）敏捷提高4%；每1个自身回合加深一档，最多3档。达到3档后，每次加深不再提高这些数值，改为：友方单位（含自身）获得相当于其生命上限2%的寒冰护盾，敌方单位承受相当于其生命上限2%的伤害（按生命上限计算，不经过防御衰减）。驱散技能可压住霜域一个自身回合。",
+          "params": {
+            "lifetime": "battle",
+            "dispellable": false,
+            "suppressibleByDispelOwnerTurns": 1,
+            "enemyAgilityDownPerTier": 0.02,
+            "enemyGaugeSpeedDownPerTier": 0.04,
+            "allyAgilityUpPerTier": 0.04,
+            "maxTier": 3,
+            "deepenEveryOwnerTurns": 1,
+            "tierThreeAllyShieldMaxHPRate": 0.02,
+            "tierThreeEnemyDamageMaxHPRate": 0.02,
+            "tierThreeDamageBasis": "max-hp",
+            "tierThreeDamageMitigation": "none"
+          }
+        }
       ]
     },
     {
-      "id":"abyss-imperial-salamander", "name":"沧渊帝螈", "version":1,
-      "style":"控制", "elements":["水"],
-      "statDice":[8,10,2,4,8,7], "statRatios":[1.82,2.25,1.05,1.40,1.82,1.72],
-      "bloodline":{"roll":9,"name":"帝血","modifiesStats":false},
-      "species":"两栖纲·鲵", "size":"中（马牛级）", "sociality":"独居", "actualAge":"约十二万年",
-      "habitat":"地下暗河汇成的深潭，水面常年浮一层不散的白气。",
-      "appearance":"大小如牛犊的鲵，通体青灰近墨，皮肤湿滑。头部两侧生有鳍状冠，冠缘不断逸出淡蓝色光雾。",
-      "habits":"独居且极静，魂力庞大而难以收束。泄露的魂力驱动附近水流，自行形成压迫与吸取。",
-      "role":"首领——深潭区域的唯一强敌，擅长把战斗拖长到自己回满。",
-      "battleText":"潭底亮起两道幽光，逸散的魂力令四周水汽骤然下沉。沧渊帝螈浮出暗河，鳍冠间的蓝雾正牵动整片深潭。",
-      "defeatText":"鳍冠间的蓝雾渐渐熄灭，沉重的水压终于散去。沧渊帝螈伏入浅水，猩红魂环随涟漪升起。",
-      "talents":[{"name":"沧澜压","effect":"潭水骤然加重，范围内所有单位的读条与行动被拖慢。"},{"name":"引潮","effect":"外泄魂力自行抽取周围单位逸散的魂力，补回自身。"}],
-      "skills":[
-        {"name":"沧澜压","category":"控制","element":"水","description":"将水压收束在一名敌人身上，控制成功后打断其行动。"},
-        {"name":"潭流冲击","category":"攻击","element":"水","description":"释放一道沉重水流，造成单次能量伤害。"},
-        {"name":"滞水缠身","category":"减益","element":"水","debuffField":"A","description":"黏滞水流缠住目标，精神对抗成功后降低其敏捷。"},
-        {"name":"回潮护身","category":"防御","element":"水","description":"以回旋水流包覆身体，生成生命护盾。"}
+      "id": "abyss-imperial-salamander",
+      "name": "沧渊帝螈",
+      "version": 1,
+      "style": "控制",
+      "elements": [
+        "水"
       ],
-      "traits":[
-        {"id":"oppressive-tides","name":"沧澜压境","effect":"每次受到攻击后，对攻击者施加滞流：读条速度降低20%、行动条速度降低15%，持续6秒，可叠3层；同时该目标本回合魂力消耗提高30%。无魂力单位只受减速，不受费用惩罚。","params":{"trigger":"attack-received","castSpeedDownPerStack":0.20,"gaugeSpeedDownPerStack":0.15,"maxStacks":3,"durationSeconds":6,"costUp":0.30,"costDuration":"target-current-turn","excludeResourceFreeUnits":true}},
-        {"id":"devouring-soul-recovery","name":"吞噬回魂","effect":"每回合结束回复最大魂力8%。场上任一单位消耗魂力时，吸收其实际消耗量的30%转为自身魂力。魂力满溢部分转为护盾，每回合最多生成最大生命10%的护盾。被封锁或禁绝效果命中时，该回合不吸收。","params":{"endTurnMaxMPRate":0.08,"manaSpentSiphonRate":0.30,"manaSpentScope":"all-units-including-self","overflowShieldRate":1,"overflowShieldPerTurnMaxHP":0.10,"sealTags":["resource_seal","resource_prohibition"],"siphonTransfersOpponentMana":false,"resourceRecoveryTriggersSiphon":false}}
+      "statDice": [
+        8,
+        10,
+        2,
+        4,
+        8,
+        7
+      ],
+      "statRatios": [
+        1.82,
+        2.25,
+        1.05,
+        1.4,
+        1.82,
+        1.72
+      ],
+      "bloodline": {
+        "roll": 9,
+        "name": "帝血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·鲵",
+      "size": "中（马牛级）",
+      "sociality": "独居",
+      "actualAge": "约十二万年",
+      "habitat": "地下暗河汇成的深潭，水面常年浮一层不散的白气。",
+      "appearance": "大小如牛犊的鲵，通体青灰近墨，皮肤湿滑。头部两侧生有鳍状冠，冠缘不断逸出淡蓝色光雾。",
+      "habits": "独居且极静，魂力庞大而难以收束。泄露的魂力驱动附近水流，自行形成压迫与吸取。",
+      "role": "首领——深潭区域的唯一强敌，擅长把战斗拖长到自己回满。",
+      "battleText": "潭底亮起两道幽光，逸散的魂力令四周水汽骤然下沉。沧渊帝螈浮出暗河，鳍冠间的蓝雾正牵动整片深潭。",
+      "defeatText": "鳍冠间的蓝雾渐渐熄灭，沉重的水压终于散去。沧渊帝螈伏入浅水，猩红魂环随涟漪升起。",
+      "talents": [
+        {
+          "name": "沧澜压",
+          "effect": "潭水骤然加重，范围内所有单位的读条与行动被拖慢。"
+        },
+        {
+          "name": "引潮",
+          "effect": "外泄魂力自行抽取周围单位逸散的魂力，补回自身。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "沧澜压",
+          "category": "控制",
+          "element": "水",
+          "description": "将水压收束在一名敌人身上，控制成功后打断其行动。"
+        },
+        {
+          "name": "潭流冲击",
+          "category": "攻击",
+          "element": "水",
+          "description": "释放一道沉重水流，造成单次能量伤害。"
+        },
+        {
+          "name": "滞水缠身",
+          "category": "减益",
+          "element": "水",
+          "debuffField": "A",
+          "description": "黏滞水流缠住目标，精神对抗成功后降低其敏捷。"
+        },
+        {
+          "name": "回潮护身",
+          "category": "防御",
+          "element": "水",
+          "description": "以回旋水流包覆身体，生成生命护盾。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "oppressive-tides",
+          "name": "沧澜压境",
+          "effect": "每次受到攻击后，对攻击者施加滞流：读条速度降低20%、行动条速度降低15%，持续6秒，可叠3层；同时该目标本回合魂力消耗提高30%。无魂力单位只受减速，不受费用惩罚。",
+          "params": {
+            "trigger": "attack-received",
+            "castSpeedDownPerStack": 0.2,
+            "gaugeSpeedDownPerStack": 0.15,
+            "maxStacks": 3,
+            "durationSeconds": 6,
+            "costUp": 0.3,
+            "costDuration": "target-current-turn",
+            "excludeResourceFreeUnits": true
+          }
+        },
+        {
+          "id": "devouring-soul-recovery",
+          "name": "吞噬回魂",
+          "effect": "每回合结束回复最大魂力8%。场上任一单位消耗魂力时，吸收其实际消耗量的30%转为自身魂力。魂力满溢部分转为护盾，每回合最多生成最大生命10%的护盾。被封锁或禁绝效果命中时，该回合不吸收。",
+          "params": {
+            "endTurnMaxMPRate": 0.08,
+            "manaSpentSiphonRate": 0.3,
+            "manaSpentScope": "all-units-including-self",
+            "overflowShieldRate": 1,
+            "overflowShieldPerTurnMaxHP": 0.1,
+            "sealTags": [
+              "resource_seal",
+              "resource_prohibition"
+            ],
+            "siphonTransfersOpponentMana": false,
+            "resourceRecoveryTriggersSiphon": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "fu-yue-ju-rong-yuan",
+      "name": "负岳蝾螈",
+      "version": 2,
+      "style": "防御",
+      "elements": [
+        "土"
+      ],
+      "statDice": [
+        8,
+        2,
+        3,
+        8,
+        1,
+        9
+      ],
+      "statRatios": [
+        1.82,
+        1.05,
+        1.3,
+        1.82,
+        0.85,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 6,
+        "name": "灵血",
+        "modifiesStats": false
+      },
+      "species": "两栖纲·巨型蝾螈",
+      "size": "大（象鲸级）",
+      "sociality": "成对",
+      "actualAge": "约十八万年",
+      "habitat": "西极地脉裂谷尽头的泥沼——沼底压着一条断掉的龙脉，泥水终年温热。",
+      "appearance": "一头放大了上千倍的蝾螈。头骨宽扁，口裂横贯半张脸，眼退成两点浑浊的琥珀；四肢短粗，趾间厚蹼，尾侧扁如桨。背脊覆着一层层土黄的岩甲，甲缝嵌着碎石与苔，远看就是一座伏在沼里的石丘。皮肤终年渗着温热的泥浆，它爬过的地方会留下一条慢慢合拢的沟。",
+      "habits": "极慢。伏在沼底时与一块长苔的礁石没有分别，靠皮肤与岩甲一点点汲取地脉之气。不捕不猎，十万年里只做一件事——把背上那层越积越厚的岩甲负稳。它不追人，只把路“坐断”。",
+      "role": "敌方——地脉守门兽。站在必经之路上，绕不过，也推不动。",
+      "battleText": "整片泥沼忽然下沉半尺。背甲上的苔土层层剥落，一座山的影子从沼底缓缓升起——负岳蝾螈抬起头，泥水顺着宽扁的头骨往下淌，像一道倒流的瀑布。",
+      "defeatText": "背上的岳影终于崩散，碎石如雨落回泥沼。负岳蝾螈伏低宽扁的头，十万年不肯放下的那口气，随一声闷响散进地脉。",
+      "talents": [
+        {
+          "name": "岳甲覆身",
+          "effect": "甲缝渗出的黄雾裹住躯体，土石自行攀附，结成一层越来越厚的甲。"
+        },
+        {
+          "name": "裂地摆尾",
+          "effect": "扁尾横扫，沼底的地脉被整条掀了起来。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "岳甲覆身",
+          "category": "防御",
+          "element": "土",
+          "description": "甲缝涌出的黄雾裹住全身，土石层层攀附，结成一面越来越厚的生命护盾。"
+        },
+        {
+          "name": "地脉贯石",
+          "category": "攻击",
+          "element": "土",
+          "description": "前肢往沼底一按，地脉自目标足下暴起，碎石穿身而过，造成单次物理伤害。"
+        },
+        {
+          "name": "镇岳",
+          "category": "减益",
+          "element": "土",
+          "debuffField": "A",
+          "description": "山岳之势压落，目标举步维艰，敏捷被一寸寸拖低。"
+        },
+        {
+          "name": "山崩余震",
+          "category": "持续伤害",
+          "element": "土",
+          "description": "一击之后地裂未止，余震分三次从脚底翻上来。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "bearing-mountain",
+          "name": "负岳",
+          "effect": "战斗开始时，背上的山影凝成护盾，值等于自身最大生命80%。自身受到的伤害有40%先由山影承担；山影每承担一次伤害，叠1层“山重”，每层使自身防御素质提高6%、受到的伤害降低2%，最多10层。山影被击破时，立即回复自身最大生命20%，山重层数不清空。越盾真伤不转嫁、不叠层。",
+          "params": {
+            "battleStartShieldMaxHPRate": 0.8,
+            "transferRate": 0.4,
+            "defensePerStack": 0.06,
+            "damageTakenDownPerStack": 0.02,
+            "maxStacks": 10,
+            "breakHealMaxHPRate": 0.2,
+            "stackLifetime": "battle",
+            "bypassTags": [
+              "shield-bypass-true-damage"
+            ],
+            "saveFields": [
+              "yueStacks"
+            ],
+            "statusLifetime": "battle"
+          }
+        },
+        {
+          "id": "ley-line-pierce",
+          "name": "山根透地",
+          "effect": "负岳蝾螈的攻击循地脉自目标足下穿出：无视目标40%防御素质，并无视护盾直接伤及本体。代价是每次攻击后自身行动条速度降低15%，持续整场战斗，可叠2层。对悬空或无形体的目标，只无视防御，不无视护盾。",
+          "params": {
+            "defenseIgnoreRate": 0.4,
+            "ignoreShield": true,
+            "selfGaugeSpeedDown": 0.15,
+            "maxStacks": 2,
+            "exceptions": [
+              "airborne",
+              "incorporeal"
+            ],
+            "duration": "battle",
+            "statusLifetime": "battle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "zhe-tian-du-zhen",
+      "name": "遮天毒鸩",
+      "version": 2,
+      "style": "防御",
+      "elements": [
+        "毒"
+      ],
+      "statDice": [
+        6,
+        2,
+        4,
+        7,
+        5,
+        1
+      ],
+      "statRatios": [
+        1.63,
+        1.05,
+        1.4,
+        1.72,
+        1.55,
+        0.85
+      ],
+      "bloodline": {
+        "roll": 5,
+        "name": "异血",
+        "modifiesStats": false
+      },
+      "species": "鸟纲·猛禽（鸩，表外补充）",
+      "size": "巨（楼舍级）",
+      "sociality": "独居",
+      "actualAge": "约十一万年（换过九次羽）",
+      "habitat": "南疆瘴泽上空终年不散的毒云——云底垂着紫黑色的雨丝。",
+      "appearance": "形如巨雕，双翼展开遮住半座楼舍；羽色墨绿近黑，羽尖凝着暗紫的毒露，飞过处落下一阵细如针的毒雨。喙如弯钩，颈侧生着九枚肉冠，每枚冠里封着一口颜色不同的瘴。翅骨细，撑不住楼舍般的身子，所以它飞不高，也飞不久。",
+      "habits": "不筑巢，随瘴云迁徙。以腐尸与毒虫为食，越毒越壮；寻常猛禽避之不及的腐肉，是它的正餐。它落在哪里，哪里的水十年不能饮。因为太重，多数时候蹲在毒云里等风来推；一旦真动起来，是整片云一起压下去。",
+      "role": "异种·首领——瘴泽上空的活灾。它落在哪里，哪里十年不长草。",
+      "battleText": "毒云低垂，楼舍般的黑影从云里坠下来。遮天毒鸩抖开墨绿的双翼，羽尖滴落的毒露在落地前就蒸成了一片紫雾。",
+      "defeatText": "最后一枚肉冠裂开又合上，毒云失了主心，四散而去。遮天毒鸩重重跌进泽地，腐羽间升起一枚猩红魂环。",
+      "talents": [
+        {
+          "name": "瘴羽覆身",
+          "effect": "抖落一层毒羽，在身周结成腐绿色的雾甲。"
+        },
+        {
+          "name": "九冠吐瘴",
+          "effect": "九枚肉冠依次裂开，喷出九道颜色各异的瘴气，合起来是一堵墙。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "腐羽裹身",
+          "category": "防御",
+          "element": "毒",
+          "description": "抖落腐羽，毒雾在体表凝成一层黏腻的雾甲。"
+        },
+        {
+          "name": "毒喙贯骨",
+          "category": "攻击",
+          "element": "毒",
+          "description": "弯钩般的喙自高处凿下，毒液随创口灌入，造成单次物理伤害。"
+        },
+        {
+          "name": "弥天瘴",
+          "category": "减益",
+          "element": "毒",
+          "debuffField": "A",
+          "description": "瘴羽漫天，目标四肢发沉，敏捷被一层层拖低。"
+        },
+        {
+          "name": "百瘴蚀骨",
+          "category": "持续伤害",
+          "element": "毒",
+          "description": "腐毒留在创口，分三次由内向外蚀空。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "twin-sac-frame",
+          "name": "双囊之躯",
+          "effect": "腐毒在体内结成第二副脏腑。生命之外另有一条“毒囊”，容量等于自身最大生命50%，受到伤害时毒囊优先承伤，毒囊见底后才扣生命。毒囊每回合结束回复8%，见底即进入“破囊”：受到的伤害提高25%。毒囊被击破的瞬间，向全场敌人喷散腐毒，各叠2层“瘴羽”。两槽俱空才败。反制：毒囊不挡精神伤害，精神攻击直取本体。",
+          "params": {
+            "secondPool": "toxin-sac",
+            "secondPoolMaxHPRate": 0.5,
+            "damagePriority": "toxin-sac-first",
+            "regenPerTurn": 0.08,
+            "brokenDamageTakenUp": 0.25,
+            "breakSpreadStacks": 2,
+            "defeatWhenBothEmpty": true,
+            "mentalDamageBypassPool": true,
+            "saveFields": [
+              "toxinSac"
+            ],
+            "statusLifetime": "battle"
+          }
+        },
+        {
+          "id": "sky-full-of-miasma",
+          "name": "弥天瘴羽",
+          "effect": "每回合结束时，向所有敌人各撒1层“瘴羽”，最多6层：每层使目标敏捷降低5%、魂力操纵降低5%、魂力回复降低10%、受到的伤害提高8%。敌人每消耗一次魂力，额外叠1层。叠满6层时，该目标下一次获得的护盾、治疗、回魂完全失效一次，随后层数清零。净化类技能一次可剥除2层。",
+          "params": {
+            "stacksPerTurn": 1,
+            "maxStacks": 6,
+            "agilityDownPerStack": 0.05,
+            "manaRegenDownPerStack": 0.1,
+            "extraStackOnManaSpend": 1,
+            "purgeStacks": 2,
+            "lockoutAtMax": true,
+            "lockoutScope": [
+              "shield",
+              "heal",
+              "mana-recovery"
+            ],
+            "statusLifetime": "battle",
+            "controlDownPerStack": 0.05,
+            "damageTakenUpPerStack": 0.08,
+            "damageScope": "all"
+          }
+        }
+      ]
+    },
+    {
+      "id": "jin-lin-zhen-hun-chi",
+      "name": "金鳞镇魂螭",
+      "version": 2,
+      "style": "控制",
+      "elements": [
+        "金"
+      ],
+      "statDice": [
+        4,
+        7,
+        3,
+        10,
+        5,
+        9
+      ],
+      "statRatios": [
+        1.4,
+        1.72,
+        1.3,
+        2.25,
+        1.55,
+        2.05
+      ],
+      "bloodline": {
+        "roll": 2,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "龙属·亚龙（螭，无角之龙）",
+      "size": "大（象鲸级）",
+      "sociality": "独居",
+      "actualAge": "约十万年整（刚满）",
+      "habitat": "西极金铁矿脉最深处——洞壁被它的鳞刮得发亮，像一面走不到头的镜子。",
+      "appearance": "无角之龙，身长如鲸，通体覆着层层叠叠的金鳞，每一片的边缘都能割开岩石。腹下四爪扣住矿脉，脊背生一道锯齿状的铁脊。眼如熔金，不眨——与它对视超过三息，体内的魂力会自己往下沉。它游过矿洞时，鳞与岩壁相击，声如千万柄刀同时出鞘。",
+      "habits": "守着一座金山，不吃不喝，只以金气淬鳞。凡带兵刃入山者，它额前的金鳞会先一步发烫——不是预警，是记住了这个人。它的目光落在谁身上，谁的魂力就开始滞；所以识相的猎魂者都低着头进山。十万年里它的鳞磨掉一层、长一层，越磨越硬。",
+      "role": "首领——金山之主。不追人，但凡带兵刃入山者，它都记得。",
+      "battleText": "矿洞深处传来鳞甲相击的脆响，像千万柄刀同时出鞘。金鳞镇魂螭盘在脉心，熔金般的双眼睁开，整座金山的金气随之一沉。",
+      "defeatText": "金鳞一片片黯淡、卷起，像烧尽的纸。金鳞镇魂螭松开扣住矿脉的爪，脊背的锯齿缓缓伏平，一枚红环从矿尘里浮起。",
+      "talents": [
+        {
+          "name": "金鳞共鸣",
+          "effect": "周身金鳞震颤，方圆内的兵刃与魂力运转一并滞涩。"
+        },
+        {
+          "name": "削金吐息",
+          "effect": "喷出一道金灰色的气，所过之处甲胄如泥。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "金气贯岳",
+          "category": "攻击",
+          "element": "金",
+          "description": "一道金灰色的气自口中吐出，贯石穿岳，造成单次能量伤害。"
+        },
+        {
+          "name": "金枷锁脉",
+          "category": "减益",
+          "element": "金",
+          "debuffField": "A",
+          "description": "金气凝成枷锁，锁住目标魂力流转与四肢。"
+        },
+        {
+          "name": "螭纹锁魂",
+          "category": "控制",
+          "element": "金",
+          "description": "螭纹自地面爬起，缠住目标魂力流转的间隙。"
+        },
+        {
+          "name": "鎏金鳞甲",
+          "category": "防御",
+          "element": "金",
+          "description": "金鳞层叠合拢，结成一面临时甲盾。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "metal-breath-carve",
+          "name": "金气削骨",
+          "effect": "金鳞镇魂螭的攻击与魂技无视目标30%防御素质；命中时额外越盾扣除目标最大生命的3%，每回合最多触发2次；目标带有护盾时改为6%。每次触发使目标叠1层“削金”：防御素质降低4%，最多5层。反制：对无生命或构装类目标，越盾部分减半。",
+          "params": {
+            "defenseIgnoreRate": 0.3,
+            "bypassMaxHPRate": 0.03,
+            "perTurnMax": 2,
+            "vsShieldRate": 0.06,
+            "defenseDownPerStack": 0.04,
+            "maxStacks": 5,
+            "exemptAgainst": [
+              "non-living",
+              "construct"
+            ],
+            "statusLifetime": "battle"
+          }
+        },
+        {
+          "id": "chi-pattern-suppress",
+          "name": "螭纹压魂",
+          "effect": "自身获得3层传奇抗性：前三次可施加的控制效果固定被免疫，不进行豁免检定，每次消耗1层，战斗中不恢复。每次受到攻击，对攻击者施加1层“螭纹”：敏捷降低6%、魂力消耗提高8%，持续整场战斗，最多6层。叠满6层时，攻击者下一次行动无法获得任何增益、护盾、治疗与回魂，且读条速度降低20%，持续整场战斗。无魂力单位只受减速，不受费用惩罚。",
+          "params": {
+            "trigger": "attack-received",
+            "agilityDownPerStack": 0.06,
+            "costUpPerStack": 0.08,
+            "maxStacks": 6,
+            "lockoutAtMax": true,
+            "lockoutScope": [
+              "buff",
+              "shield",
+              "heal",
+              "mana-recovery"
+            ],
+            "castSpeedDownOnLockout": 0.2,
+            "excludeResourceFreeUnits": true,
+            "duration": "battle",
+            "statusLifetime": "battle",
+            "legendaryResistanceCharges": 3,
+            "legendaryControlBlockMode": "before-save-no-roll",
+            "legendaryRefresh": "battle-start-only",
+            "castSpeedDownLifetime": "battle",
+            "saveFields": [
+              "legendaryRemaining",
+              "chiStacksByActor"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "fen-tian-chi-yan-long",
+      "name": "焚天赤烛龙",
+      "version": 2,
+      "style": "强攻",
+      "elements": [
+        "火"
+      ],
+      "statDice": [
+        10,
+        8,
+        10,
+        7,
+        5,
+        5
+      ],
+      "statRatios": [
+        2.25,
+        1.82,
+        2.25,
+        1.72,
+        1.55,
+        1.55
+      ],
+      "bloodline": {
+        "roll": 3,
+        "name": "凡血",
+        "modifiesStats": false
+      },
+      "species": "融合体·双龙嵌合（表外补充：两条火龙熔为一体）",
+      "size": "中（马牛级）",
+      "sociality": "独居",
+      "actualAge": "约十三万年",
+      "habitat": "极西火脉尽头，岩浆河分岔处的黑曜石台——台下是烧了十万年的火。",
+      "appearance": "只有马牛大小，却是两条火龙熔在一起：一具身子，两颗头，左首赤如熔金、右首黑如焦炭；颈下的鳞各自生长，到胸前熔成一片烧红的铁。四足两尾，脊背裂着一道始终不灭的火缝。火缝亮时四周如白昼，火缝闭时连影子都被烤化。",
+      "habits": "两条龙争一副身子，争了十万年，谁也吞不掉谁。不动时火缝半明半灭，像在呼吸；双首同时睁眼，身周百步的火属性魂力会被抽干，连空气都烧成白焰。它不喜欢光——它自己就是光。",
+      "role": "首领——火脉尽头的双生凶物。两条龙共用一副身子，也共用一份杀意。",
+      "battleText": "黑曜石台上的火缝忽然大亮，照得整条岩浆河都失了颜色。焚天赤烛龙双首同时抬起，一赤一黑，四只眼睛里各烧着一条不肯认输的龙。",
+      "defeatText": "火缝熄了一半，两个头终于不再争了。焚天赤烛龙伏在黑曜石上，赤首阖眼，黑首吐出最后一缕烟，红环在余烬中缓缓转亮。",
+      "talents": [
+        {
+          "name": "火缝照夜",
+          "effect": "脊背火缝大亮，照见一切隐匿；光本身即是灼。"
+        },
+        {
+          "name": "双龙绞",
+          "effect": "两首各吐一道火，交缠成一根绞索。"
+        }
+      ],
+      "skills": [
+        {
+          "name": "赤炎贯天",
+          "category": "攻击",
+          "element": "火",
+          "description": "火缝大亮，一道赤炎直贯而出，造成单次物理伤害。"
+        },
+        {
+          "name": "焚天吐息",
+          "category": "持续伤害",
+          "element": "火",
+          "description": "两首同吐，火舌在目标身上分三次爆开。"
+        },
+        {
+          "name": "双龙绞",
+          "category": "控制",
+          "element": "火",
+          "description": "两道火索交缠，将目标捆在原地。"
+        },
+        {
+          "name": "逆鳞火甲",
+          "category": "防御",
+          "element": "火",
+          "description": "逆鳞倒竖，火幕合拢成甲。"
+        }
+      ],
+      "traits": [
+        {
+          "id": "blaze-armor-break",
+          "name": "焚龙破甲",
+          "effect": "火光所照，甲胄如纸。自身造成的伤害无视目标35%防御素质，并无视全部减伤与防守状态（不含护盾）。代价：每次攻击额外消耗当前魂力的15%，且自身受到的伤害提高10%，持续整场战斗。反制：护盾仍按原值吸收，穿透不等于必中。",
+          "params": {
+            "defenseIgnoreRate": 0.35,
+            "ignoreMitigation": true,
+            "ignoreDefensiveStates": true,
+            "excludeShield": true,
+            "extraManaCostRate": 0.15,
+            "selfDamageTakenUp": 0.1,
+            "duration": "battle",
+            "statusLifetime": "battle",
+            "damageScope": "all"
+          }
+        },
+        {
+          "id": "reverse-scale-unburned",
+          "name": "赤烛不焚",
+          "effect": "首次受到某属性伤害时正常承受100%伤害，结算后获得该属性50%抗性，第二次及后续该属性伤害固定减半，不再继续减半。受到有属性伤害或被施加有属性减益时，叠1层“烛炎”并获得对应属性抗性；减益本身仍按原幅度结算。每层烛炎使自身魂技伤害提高10%，最多10层，层数与抗性持续整场战斗；无属性伤害与减益不记录、不叠层。被控制后的免控期由4秒延长至8秒；控制期间每回合对控制者造成其最大生命4%的火属性伤害。",
+          "params": {
+            "trigger": "attributed-damage-or-debuff-received",
+            "stackName": "烛炎",
+            "stackPerDamagePacket": 1,
+            "maxStacks": 10,
+            "stackLifetime": "battle",
+            "recordAttributeHits": true,
+            "resistanceAtHitCount": 1,
+            "resistanceDamageMultiplier": 0.5,
+            "resistanceIncludesThresholdHit": false,
+            "resistanceLifetime": "battle",
+            "recordNeutralDamage": false,
+            "stackOnNeutralDamage": false,
+            "compositeHitRecord": "each-non-neutral-tag-once-per-packet",
+            "compositeDamageStackCount": 1,
+            "repeatedResistancePolicy": "one-half-once-no-repeated-halving",
+            "controlImmunitySeconds": 8,
+            "controlReflectMaxHPRate": 0.04,
+            "controlReflectElement": "火",
+            "controlReflectCadence": "once-per-logical-turn-while-controlled",
+            "controlReflectTarget": "current-controller",
+            "controlReflectBypassShield": false,
+            "fireDamageImmunity": false,
+            "fireDamageToHealing": 0,
+            "saveFields": [
+              "candleFlameStacks",
+              "attributeHitCounts",
+              "resistedAttributes",
+              "currentControllerId",
+              "lastControlReflectTurn"
+            ],
+            "skillDamageUpPerStack": 0.1,
+            "resistanceAppliesToDebuffMagnitude": false
+          }
+        }
       ]
     }
-  ]
+  ],
+  "skillTierPolicy": {
+    "version": 1,
+    "basis": "single-stat-S-over-same-level-benchmark",
+    "ratingProfile": "npc",
+    "note": "按魂力强度S单项相对同级基准判档，不按六维平均总评；只决定魂兽四技威力，不改变十万年魂环与魂骨年限。",
+    "bands": [
+      {
+        "rating": "纸级",
+        "label": "万年第一档",
+        "years": 10000,
+        "q": 2.8
+      },
+      {
+        "rating": "并级",
+        "label": "万年第二档",
+        "years": 30000,
+        "q": 3.15
+      },
+      {
+        "rating": "强级",
+        "label": "万年第三档",
+        "years": 50000,
+        "q": 3.5
+      },
+      {
+        "rating": "凶级",
+        "label": "万年第四档",
+        "years": 70000,
+        "q": 3.8
+      },
+      {
+        "rating": "狂级",
+        "label": "万年第五档",
+        "years": 90000,
+        "q": 4
+      },
+      {
+        "rating": "神级",
+        "label": "十万年档",
+        "years": 100000,
+        "q": 4.5
+      }
+    ]
+  },
+  "statusPolicy": {
+    "version": 1,
+    "numericBuffLifetime": "battle",
+    "numericDebuffLifetime": "battle",
+    "shieldLifetime": "battle",
+    "sameSourcePolicy": "refresh-not-stack-unless-explicit",
+    "controlLifetime": "original-contest-seconds",
+    "periodicDamageSchedule": "original-parts-and-interval",
+    "persistentCombatStacks": "battle-only",
+    "note": "数值增益、削弱与防御盾持续本场；控制时长、控制后免疫窗口、持续伤害跳数/间隔及单次触发不改成无限时长。"
+  }
 }

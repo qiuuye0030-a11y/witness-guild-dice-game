@@ -17,12 +17,12 @@ module.exports = function beastChecks(ctx) {
   const root = path.resolve(__dirname, '..');
   const library = ctx.modules.beast.library;
   const source = JSON.parse(fs.readFileSync(path.join(root, 'data/beast/catalog-source.json'), 'utf8'));
-  section('正式魂兽三例与随机魂骨');
+  section('正式魂兽七例与随机魂骨');
 
-  test('正式库恰含用户三例，定义均可构建，红环十万年不受实际年龄影响', () => {
-    assert.equal(library.status().count, 3);
+  test('正式库恰含用户七例，定义均可构建，红环十万年不受实际年龄影响', () => {
+    assert.equal(library.status().count, 7);
     assert.deepEqual(library.status().errors, []);
-    assert.deepEqual(library.list().map((b) => b.name), ['霜苔巨蛙', '霜蚋', '沧渊帝螈']);
+    assert.deepEqual(library.list().map((b) => b.name), ['霜苔巨蛙','霜蚋','沧渊帝螈','负岳蝾螈','遮天毒鸩','金鳞镇魂螭','焚天赤烛龙']);
     assert.equal(library.definition('frost-moss-frog').species, '两栖纲·蛙类');
     for (const beast of library.available()) {
       const instance = library.buildInstance({ id: beast.id });
@@ -41,18 +41,18 @@ module.exports = function beastChecks(ctx) {
       assert.equal(beast.bloodline.modifiesStats, false);
       assert.equal(ctx.bridge.rating(beast.panel).label, beast.panel.rating);
     }
-    assert.deepEqual(library.available().map((b) => b.panel.rating), ['强级', '凶级', '凶级']);
+    assert.deepEqual(library.available().map((b) => b.panel.rating), ['强级','凶级','凶级','强级','强级','凶级','狂级']);
   });
-  test('每兽恰四技且至少一个攻击技；全部最低万年Q2.8、K1，费用调用战斗接口', () => {
+  test('每兽恰四技且至少一个攻击技；按S分档、K1，费用调用战斗接口', () => {
     for (const beast of library.available()) {
       assert.equal(beast.skills.length, 4);
       assert.equal(beast.skills.some((s) => s.category === '攻击'), true);
       assert.equal(new Set(beast.skills.map((s) => s.id)).size, 4);
       for (const skill of beast.skills) {
-        assert.equal(skill.years, 10000);
-        assert.equal(skill.q, 2.8);
+        assert.equal(skill.years, beast.skillPowerBasis.years);
+        assert.equal(skill.q, beast.skillPowerBasis.q);
         assert.equal(skill.K, 1);
-        assert.equal(skill.Q, 2.8);
+        assert.equal(skill.Q, beast.skillPowerBasis.q);
         assert.equal(skill.operations.length, 1);
         assert.equal(skill.cost, ctx.bridge.rules().skillBudget(beast.panel, skill));
         assert.equal(skill.cast > 0 && skill.cooldown > 0, true);
@@ -63,18 +63,18 @@ module.exports = function beastChecks(ctx) {
     const [tank, swift, control] = library.available();
     assert.equal(tank.skills.some((s) => s.category === '防御'), true);
     assert.equal(tank.skills.some((s) => s.category === '治疗'), true);
-    assert.equal(swift.skills.find((s) => s.name === '雪屑掩形').agility, 0.336);
+    assert.equal(swift.skills.find((s) => s.name === '雪屑掩形').agility, 0.456);
     assert.equal(swift.skills.some((s) => s.category === '持续伤害'), true);
     assert.equal(control.skills.find((s) => s.category === '攻击').channel, '能量');
     assert.equal(control.skills.some((s) => s.category === '控制'), true);
     assert.equal(control.skills.some((s) => s.category === '减益'), true);
   });
-  test('两条原被动及反制保留，永久苔凝有独立持久化字段，编目不伪装处理器已实现', () => {
-    const expected = [['霜苔不侵','苔甲凝积'],['冰壳护生','霜域'],['沧澜压境','吞噬回魂']];
+  test('两条原被动及反制保留，永久苔凝有独立持久化字段，接入标记与宿主操作一致', () => {
+    const expected = [['霜苔不侵','苔甲凝积'],['冰壳护生','霜域'],['沧澜压境','吞噬回魂'],['负岳','山根透地'],['双囊之躯','弥天瘴羽'],['金气削骨','螭纹压魂'],['焚龙破甲','赤烛不焚']];
     library.available().forEach((beast, i) => {
       assert.deepEqual(beast.traits.map((t) => t.name), expected[i]);
-      assert.equal(beast.implementation.hostIntegrated, false);
-      assert.equal(beast.traits.every((t) => t.implementation.status === 'spec-only' && t.inherit.requiresHostAdapter), true);
+      assert.equal(beast.implementation.hostIntegrated, true);
+      assert.equal(beast.traits.every((t) => t.implementation.status === 'live' && !t.inherit.requiresHostAdapter), true);
     });
     assert.equal(library.available()[0].traits[1].params.stackLifetime, 'permanent');
     assert.deepEqual(library.available()[0].traits[1].inherit.save.fields, ['mossStacks']);
@@ -84,10 +84,10 @@ module.exports = function beastChecks(ctx) {
     const rebuilt = compile(source, text);
     assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'data/beast/library.json'), 'utf8')), rebuilt);
   });
-  test('正式三例全为随机六部位，包含霜蚋也不生成外附骨', () => {
+  test('正式七例优先缺失部位，包含霜蚋也不生成外附骨', () => {
     for (const beast of library.available()) {
       assert.equal(beast.bone.slot, 'random');
-      assert.equal(beast.bone.slotPolicy, 'uniform-six');
+      assert.equal(beast.bone.slotPolicy, 'prefer-unoccupied-six');
     }
   });
   function reward(beast, seed, store = {}) {

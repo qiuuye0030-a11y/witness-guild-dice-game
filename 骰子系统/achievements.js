@@ -9,8 +9,21 @@
     persevering_clear:['百折成章','同一角色实际经历至少两次转正考核失利，最终取得会徽。']
   });
   definitions.guildmaster_clear=['银岭之巅','在结局后的会长挑战中，战胜95级凶级的公会会长——雪寂冬。'];
+  Object.assign(definitions,{
+    hunt_hundred_thousand:['讨伐十万年魂兽','在正式旅程中接受讨伐委托并获胜、结算战利品；赞助版事件测试不计。'],
+    scarred_clear:['复归幽界','在正式旅程结局后的挑战中，击败神秘伤疤女。'],
+    first_bone_trait:['骨蕴初醒','在正式旅程中，首次吸收具有特性的万年魂骨。'],
+    six_bones:['六骸齐鸣','在正式旅程中，同时吸收头部、躯干、左右臂与左右腿六个部位的魂骨。']
+  });
+  const advanced=new Set(['guildmaster_clear','hunt_hundred_thousand','scarred_clear']);
   const witnessText={guildmaster_clear:'冰雪敛去，会长向你颔首。此刻，银岭也见证了你的名字。',spark_clear:'最初只有一点微光，后来也照见了自己的名字。',spotless_clear:'掸去衣角的微尘，你从容接过了会徽。',intact_team:'会徽属于你，这场胜利也属于并肩的人。',persevering_clear:'失败留在前页，名字写在最后。',rating_crazy:'一路行来的脚印，终于抵达了新的境界。',rating_divine:'此后的行记，会记得今天的你。',all_styles_clear:'五条不同的道路，都留下了你的见证。',all_examiners_defeated:'每一次交锋，都成为了公会中的一段故事。'};
-  const empty=()=>({format:'witness-achievements',version:1,unlocked:{},styles:[],examiners:{},participants:{},defeats:{}});
+  Object.assign(witnessText,{
+    hunt_hundred_thousand:'林海重归寂静，赤色魂环缓缓升起。你握紧掌中的战利品，将这一战写入行记。',
+    scarred_clear:'轻纱下的嘴角泛起涟漪，长剑在魂力激荡下消散，她比起一个大拇指，身形如烟尘般飘散，其意不言而明——恭喜你。',
+    first_bone_trait:'骨中余韵融入血脉，未曾有过的力量，悄然回应了你的呼吸。',
+    six_bones:'六处魂光沿着经络相连，百战所获，终于在此刻归于一身。'
+  });
+  const empty=()=>({format:'witness-achievements',version:1,unlocked:{},notified:{},styles:[],examiners:{},participants:{},defeats:{}});
   const copy=x=>JSON.parse(JSON.stringify(x));
   function migrateIdentity(s){
     if(!s.characterId){
@@ -27,31 +40,57 @@
   }
   function newId(){return 'character-'+(root.crypto?.randomUUID?root.crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));}
   class Archive{
-    constructor(storage=null){this.storage=storage;this.data=empty();this.queue=[];this.error=null;try{const raw=storage?.getItem(KEY);if(raw)this.merge(JSON.parse(raw),false);}catch(e){this.error=e;}}
+    constructor(storage=null){this.storage=storage;this.data=empty();this.queue=[];this.error=null;try{const raw=storage?.getItem(KEY);if(raw)this.merge(JSON.parse(raw),false);}catch(e){this.error=e;}this.queue=this.pending();}
     save(){try{if(this.storage)this.storage.setItem(KEY,JSON.stringify(this.data));this.error=this.storage?null:Error('本机存储不可用');}catch(e){this.error=e;}}
+    // 待弹出的见证：已解锁但尚未被确认阅读。会长见证优先，其余按解锁时间先后。
+    pending(){
+      const rank=id=>(advanced.has(id)?0:1),time=id=>Date.parse(this.data.unlocked[id]?.at||0)||0;
+      return Object.keys(this.data.unlocked).filter(id=>!this.data.notified[id])
+        .sort((a,b)=>rank(a)-rank(b)||time(a)-time(b)||a.localeCompare(b));
+    }
+    markNotified(id){if(!this.data.unlocked[id])return;this.data.notified[id]=new Date().toISOString();this.queue=this.pending();this.save();}
     merge(raw,persist=true){
       if(raw?.format!=='witness-achievements'||raw.version!==1||!Array.isArray(raw.styles)||!raw.examiners||!raw.unlocked)throw Error('不是有效的成就档案');
-      const next=copy(this.data);
+      const localUnlocked=new Set(Object.keys(this.data.unlocked));const next=copy(this.data);
       for(const style of raw.styles)if(styles.includes(style)&&!next.styles.includes(style))next.styles.push(style);
       for(const [id,records]of Object.entries(raw.examiners)){if(!/^[a-z0-9_-]{1,80}$/i.test(id)||!Array.isArray(records))throw Error('考官记录无效');const ids=records.filter(x=>typeof x==='string'&&x.length<=160);next.examiners[id]=[...new Set([...(next.examiners[id]||[]),...ids])];}
       for(const id of Object.keys(definitions)){const item=raw.unlocked[id];if(!item)continue;if(typeof item.characterId!=='string'||typeof item.name!=='string'||!Number.isFinite(Date.parse(item.at)))throw Error('成就记录无效');if(!next.unlocked[id]||Date.parse(item.at)<Date.parse(next.unlocked[id].at))next.unlocked[id]={characterId:item.characterId,name:item.name.slice(0,40),at:item.at,...(typeof item.evidence==='string'?{evidence:item.evidence.slice(0,240)}:{})};}
+      if(persist){
+        // 导入他人/旧设备的成就档案属于历史记录，不再逐条重放弹窗。
+        if(!next.notified)next.notified={};
+        for(const id of Object.keys(next.unlocked))if(!localUnlocked.has(id)&&!next.notified[id])next.notified[id]=next.unlocked[id].at;
+      }else if(raw.notified===undefined){
+        // v12.03.01 之前的本机档案没有已读标记：除会长见证外不补放历史弹窗，避免一次性弹出全部旧成就。
+        if(!next.notified)next.notified={};
+        for(const id of Object.keys(next.unlocked))if(id!=='guildmaster_clear'&&!next.notified[id])next.notified[id]=next.unlocked[id].at;
+      }else for(const [id,at]of Object.entries(raw.notified||{}))if(next.unlocked[id]&&Number.isFinite(Date.parse(at))&&(!next.notified[id]||Date.parse(at)>Date.parse(next.notified[id])))next.notified[id]=at;
       for(const [id,item]of Object.entries(raw.participants||{}))if(/^(character|legacy)-[a-z0-9-]+$/i.test(id)&&typeof item.name==='string'&&Number.isFinite(Date.parse(item.at)))next.participants[id]={name:item.name.slice(0,40),at:item.at};
       for(const [id,attempts]of Object.entries(raw.defeats||{})){
         if(!/^(character|legacy)-[a-z0-9-]+$/i.test(id)||!Array.isArray(attempts))throw Error('考核经历无效');
         const valid=attempts.filter(n=>Number.isInteger(n)&&n>=1&&n<=11);
         next.defeats[id]=[...new Set([...(next.defeats[id]||[]),...valid])];
       }
-      this.data=next;if(persist)this.save();
+      this.data=next;this.queue=this.pending();if(persist)this.save();
     }
     unlock(id,s){
       if(this.data.unlocked[id])return;
       const player=s.battleSnapshot?.units?.find(u=>u.id==='player');
-      const evidence=id==='guildmaster_clear'?'会长挑战 · 95级凶级 · 雪寂冬':id==='spark_clear'?'开局潜力 · 1档':id==='spotless_clear'&&player?'结算生命 · '+player.hp+' / '+player.model.derived.HP+'（'+(player.hp/player.model.derived.HP*100).toFixed(1)+'%）':id==='intact_team'?'并肩成员 · '+s.battleSnapshot.units.filter(u=>u.team===0).map(u=>u.name||u.id).join('、'):id==='persevering_clear'?'经历失利 · '+(this.data.defeats[s.characterId]||[]).length+'次':'';
-      this.data.unlocked[id]={characterId:s.characterId,name:s.character.name,at:new Date().toISOString(),...(evidence?{evidence}: {})};this.queue.push(id);
+      const evidence=id==='hunt_hundred_thousand'?'正式讨伐 · '+(s.v12.hunt.target.snapshot.name||s.v12.hunt.target.id):id==='scarred_clear'?'神秘伤疤女 · 挑战胜利':id==='first_bone_trait'?'已吸收万年魂骨 · 特性生效':id==='six_bones'?'头部／躯干／左臂／右臂／左腿／右腿':id==='guildmaster_clear'?'会长挑战 · 95级凶级 · 雪寂冬':id==='spark_clear'?'开局潜力 · 1档':id==='spotless_clear'&&player?'结算生命 · '+player.hp+' / '+player.model.derived.HP+'（'+(player.hp/player.model.derived.HP*100).toFixed(1)+'%）':id==='intact_team'?'并肩成员 · '+s.battleSnapshot.units.filter(u=>u.team===0).map(u=>u.name||u.id).join('、'):id==='persevering_clear'?'经历失利 · '+(this.data.defeats[s.characterId]||[]).length+'次':'';
+      this.data.unlocked[id]={characterId:s.characterId,name:s.character.name,at:new Date().toISOString(),...(evidence?{evidence}: {})};this.queue=this.pending();
     }
     check(s,targets,currentRatingIndex=-1){
       if(!s?.character||s.source!=='formal')return;
-      if(s.phase==='ending'&&s.result?.winner===0&&s.challenge?.completed?.includes('guildmaster:xuejidong'))this.unlock('guildmaster_clear',s);
+      // 会长见证：优先读挑战完成列表；旧存档若只留下战报或最近一场记录，同样视为已战胜。
+      const challenge=s.challenge,reports=Array.isArray(challenge?.reports)?challenge.reports:[];
+      const guildmasterWon=!!challenge&&(challenge.completed?.includes('guildmaster:xuejidong')||reports.some(r=>r?.mode==='guildmaster'&&r?.result?.winner===0)||(challenge.last?.mode==='guildmaster'&&challenge.last?.result?.winner===0));
+      if(s.phase==='ending'&&s.result?.winner===0&&guildmasterWon)this.unlock('guildmaster_clear',s);
+      const scarredWon=!!challenge&&(challenge.completed?.includes('mysterious:xuejidong')||reports.some(r=>r?.mode==='mysterious'&&r?.result?.winner===0)||(challenge.last?.mode==='mysterious'&&challenge.last?.result?.winner===0));
+      if(s.phase==='ending'&&s.result?.winner===0&&scarredWon)this.unlock('scarred_clear',s);
+      const hunt=s.v12;if(hunt&&!hunt.test&&hunt.hunt?.status==='won'&&hunt.result?.winner===0&&hunt.reward?.bone?.source?.type==='hunt')this.unlock('hunt_hundred_thousand',s);
+      const ledger=s.character.v12Equipment||hunt?.equipment,absorbed=ledger?.absorbedBones||{},runtime=Object.values(ledger?.runtimeTraits||{});
+      if(runtime.some(t=>absorbed[t.ownerBoneId]?.years>=10000&&absorbed[t.ownerBoneId]?.years<100000))this.unlock('first_bone_trait',s);
+      const required=['头部','躯干','左臂','右臂','左腿','右腿'],slots=new Set((s.character.bones||[]).filter(b=>b.absorbed||absorbed[b.boneId||b.id]).map(b=>b.base?.slot||b.slot));
+      if(required.every(slot=>slots.has(slot)))this.unlock('six_bones',s);
       const defeats=(s.examDefeats||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=11);
       if(defeats.length)this.data.defeats[s.characterId]=[...new Set([...(this.data.defeats[s.characterId]||[]),...defeats])];
       const revision=root.WitnessRules?.ratingRulesVersion||2;
@@ -80,7 +119,7 @@
       this.save();
     }
     examinerProgress(templates){return templates.map(t=>{const ids=this.data.examiners[t.id]||[];return {id:t.id,name:t.name,style:t.style,weapon:t.weapon,defeated:ids.length>0,characters:ids.map(id=>this.data.participants[id]?.name||'旧旅程'),count:ids.length};});}
-    entries(){return Object.entries(this.data.unlocked).map(([id,item])=>({id,title:definitions[id][0],description:definitions[id][1],witness:witnessText[id],...item}));}
+    entries(){return Object.entries(this.data.unlocked).map(([id,item])=>({id,title:definitions[id][0],description:definitions[id][1],advanced:advanced.has(id),witness:witnessText[id],...item}));}
   }
   const api={Archive,migrateIdentity,newId,definitions,KEY};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WitnessAchievements=api;
 })(typeof globalThis==='undefined'?this:globalThis);

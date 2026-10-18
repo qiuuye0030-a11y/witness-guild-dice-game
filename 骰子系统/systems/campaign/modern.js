@@ -18,7 +18,7 @@ function refresh(){
   if(s.hunt?.selectedCategory==='回蓝'){s.hunt.selectedCategory='random';if(s.hunt.result){s.hunt.result=null;s.hunt.stage='category';}s.hunt.category=undefined;}
   if(s.hunt?.category==='回蓝')s.hunt.category='防御';if(s.hunt?.secondCategory==='回蓝')s.hunt.secondCategory=s.hunt.category==='防御'?'强化':'防御';
   if(s.phase==='battle'&&s.battleSnapshot&&![1007,1008,1100].includes(s.battleSnapshot.modernVersion)){s.legacyBattleReport=s.battleSnapshot;s.battleSnapshot=null;s.result=null;s.resultHandled=false;s.modernBattleRestart=true;s.pendingExamResume=true;s.phase='arrival';}
-  s.cultivationRulesVersion=10081;s.gameVersion='v11.01';
+  s.cultivationRulesVersion=10082;s.gameVersion='v11.01';
 }
 function static_validate(s,catalog){
   JourneyActions.methods.static_validate(s,catalog);const runtime=typeof module!=='undefined'&&module.exports?require('./v13-runtime.cjs'):globalThis;const challengeAPI=typeof module!=='undefined'&&module.exports?require('./systems/challenge/state.js'):globalThis.WitnessChallenge;challengeAPI?.validate(s.challenge);

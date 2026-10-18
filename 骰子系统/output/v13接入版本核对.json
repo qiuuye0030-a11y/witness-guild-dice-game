@@ -4,7 +4,7 @@
   "tacticsRulesVersion": 1007,
   "snapshotVersion": 10,
   "baseV12Sha256": "939892e8535cdf9dd4fb5decda9d57e755c8ab2ad0801903bb0019be062fc1e9",
-  "adaptedSha256": "c9ae5c9506847fe238daeeea0bcd7ffe5f7c88c328b147da56ccc696346af863",
+  "adaptedSha256": "f24ee13caa222d3e20ce4ab22c324afd88503b6999e9e3a256c1ffffb7bef518",
   "source": "canonical systems/battle modules; V14 canonical modular implementation",
   "modules": [
     "../dice/engine.js",
@@ -30,6 +30,8 @@
     "unified-decision.js",
     "../v12/modules-bundle.js",
     "../v12/battle.js",
+    "../v12/bone-traits.js",
+    "../v12/beasts-v125.js",
     "compose.js",
     "models.js",
     "../v12/models.js"

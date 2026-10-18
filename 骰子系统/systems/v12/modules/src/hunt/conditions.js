@@ -5,7 +5,7 @@
  *
  * 同时满足：
  *   1. 玩家等级 ≥ 80；
- *   2. 当前基础实力评级达到凶级或以上（凶／狂／神）；
+ *   2. 当前基础实力评级达到强级或以上（强／凶／狂／神）；
  *   3. 本角色尚未处理过该邀请，也未处于该任务流程中。
  *
  * 评级必须由角色面板与战斗共用的现行接口现算，采用实际基础面板；
@@ -60,7 +60,7 @@ function evaluateCondition(input) {
 
   let reason = 'eligible';
   if (!checks.level) reason = 'level-below-80';
-  else if (!checks.rating) reason = 'rating-below-xiong';
+  else if (!checks.rating) reason = 'rating-below-qiang';
   else if (!checks.notHandled) reason = 'already-handled';
 
   return {

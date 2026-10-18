@@ -13,7 +13,7 @@ const VERSIONS = Object.freeze({
   // 讨伐事件控制器
   huntController: 1,
   huntTexts: 1,
-  allyRules: 1,
+  allyRules: 2,
   huntLedger: 1,
   huntBattle: 1,
   // 名录与战斗适配
@@ -27,12 +27,12 @@ const VERSIONS = Object.freeze({
   soulboneInstance: 1,
   soulboneAttributeBudget: 0, // 0 = 预算未定，禁止写入具体数值
   boneDropRules: 1,
-  soulboneTraitPool: 1,
+  soulboneTraitPool: 3,
   soulboneTraitAssembly: 1,
   soulboneAbsorption: 1,
   // 奖励
   rewardTransaction: 1,
-  tenThousandInheritance: 1,
+  tenThousandInheritance: 2,
   // 战斗适配层
   battleHooks: 1,
   equipmentSource: 1,

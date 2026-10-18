@@ -15,13 +15,13 @@ const { EVENT_ID } = require('./conditions');
 const { VERSIONS } = require('../versions');
 const { tagUnitSkills } = require('../battle/skill-attributes');
 
-const MAX_ALLIES = 2;
+const MAX_ALLIES = 3;
 
 function buildHuntBattle(input) {
   let { player, enemy, allies = [], seed } = input;
   if (!player) throw new Error('讨伐战缺少玩家参战者');
   if (!enemy) throw new Error('讨伐战缺少十万年魂兽目标实例');
-  if (!Array.isArray(allies) || allies.length > MAX_ALLIES) throw new Error('讨伐战友方NPC须为0—2位');
+  if (!Array.isArray(allies) || allies.length > MAX_ALLIES) throw new Error('讨伐战友方NPC须为0—3位');
   if (typeof seed !== 'string' || !seed) throw new Error('讨伐战须带确定性种子');
   player = tagUnitSkills(player);
   enemy = tagUnitSkills(enemy);
@@ -49,7 +49,7 @@ function buildHuntBattle(input) {
       consumePromotionAttempts: false,
       consumeChallengeLedger: false,
       actionBar: 'engine',
-      timeLimitSeconds: 180
+      timeLimitSeconds: null
     },
     teams: { player: [player], allies: allies.map((ally) => ally), enemy: [enemy] },
     units,
@@ -62,8 +62,8 @@ function buildHuntBattle(input) {
 function validateHuntBattle(plan) {
   if (!plan || plan.mode !== 'hunt') throw new Error('不是讨伐战模式');
   const sizes = plan.sizes || {};
-  if (sizes.player !== 1 || sizes.enemy !== 1 || ![0, 1, 2].includes(sizes.allies)) {
-    throw new Error('讨伐战人数只能为1对1、2对1或3对1');
+  if (sizes.player !== 1 || sizes.enemy !== 1 || ![0, 1, 2, 3].includes(sizes.allies)) {
+    throw new Error('讨伐战人数只能为1对1、2对1、3对1或4对1');
   }
   if ((plan.units || []).length !== 2 + sizes.allies) throw new Error('讨伐战单位数与人数不一致');
   const rules = plan.rules || {};

@@ -2,7 +2,7 @@
   "passed": 9,
   "visualReview": false,
   "tests": [
-    "sponsor selector exposes three beasts, ten origins and five levels; button passes selected values",
+    "sponsor selector exposes seven beasts, ten origins and five levels; button passes selected values",
     "invitation displays exact accept/refuse choices and refusal returns to journey",
     "arrival 1 shows the frozen introductions and forward starts actual combat",
     "arrival 8 shows the frozen introductions and forward starts actual combat",

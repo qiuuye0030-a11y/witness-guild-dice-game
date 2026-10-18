@@ -1,0 +1,13 @@
+{
+  "passed": 7,
+  "tests": [
+    "miasma multiplies every element and neutral damage once, including mental and periodic packets",
+    "inherited blaze pierces DEF and defensive states for nonfire and neutral damage but keeps shields",
+    "saved inherited names and params migrate idempotently without changing IDs, rolls or attributes",
+    "formal invitation permits each of seven targets, selection survives reload and retry cannot switch it",
+    "invalid target is rejected before mutation; prebattle legacy saves can select without changing allies",
+    "real event UI selects target before accepting, keeps intro and forward, and starts chosen beast",
+    "bone status, attributes and passive text all use dedicated themed prose without generic hint blocks"
+  ],
+  "visualReview": false
+}

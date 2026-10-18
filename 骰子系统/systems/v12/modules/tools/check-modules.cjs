@@ -79,8 +79,8 @@ module.exports = function moduleChecks(ctx) {
     const rng = new RollLog('accept-seed');
     const chosen = controller.choose({ ledger: shown.ledger, option: '接受', originRank: 10, rng, at: 200 });
     ctx.assert.equal(chosen.ledger.status, 'arrival');
-    ctx.assert.equal(chosen.allies.count, 2);
-    ctx.assert.equal(chosen.arrival.paragraphs.length, 4);
+    ctx.assert.equal(chosen.allies.count, 3);
+    ctx.assert.equal(chosen.arrival.paragraphs.length, 6);
     ctx.assert.equal(chosen.acceptedText.paragraphs.length, 1);
     ctx.assert.equal(chosen.arrival.advanceOption, '前进');
     ctx.assert.ok(chosen.note.includes('接受本身不发'));
@@ -92,12 +92,12 @@ module.exports = function moduleChecks(ctx) {
     const flow = { phase: 'growth' };
     const low = controller.consider({ level: 80, model: { level: 80, stats: {} }, ledger: ledgerApi.createLedger(), flow, safeNode: 'growth-settled', key: 'o1' });
     const richSoul = F.characterFixture();
-    richSoul.identity = { originRank: 4 };
+    richSoul.identity = { originRank: 2 };
     richSoul.soul.tier = 10;
     richSoul.charm = 10;
     richSoul.luck = 10;
     const lowChosen = controller.choose({ ledger: low.ledger, option: '接受', character: richSoul, rng: new RollLog('o1') });
-    ctx.assert.equal(lowChosen.allies.count, 0, '4档不应因为武魂潜力/魅力/气运而出现援军');
+    ctx.assert.equal(lowChosen.allies.count, 0, '2档不应因为武魂潜力/魅力/气运而出现援军');
 
     const high = controller.consider({ level: 80, model: { level: 80, stats: {} }, ledger: ledgerApi.createLedger(), flow, safeNode: 'growth-settled', key: 'o2' });
     const poorSoul = F.characterFixture();
@@ -106,14 +106,14 @@ module.exports = function moduleChecks(ctx) {
     poorSoul.charm = 1;
     poorSoul.luck = 1;
     const highChosen = controller.choose({ ledger: high.ledger, option: '接受', character: poorSoul, rng: new RollLog('o2') });
-    ctx.assert.equal(highChosen.allies.count, 2);
+    ctx.assert.equal(highChosen.allies.count, 3);
 
     const missing = F.characterFixture();
     const shown = controller.consider({ level: 80, model: { level: 80, stats: {} }, ledger: ledgerApi.createLedger(), flow, safeNode: 'growth-settled', key: 'o3' });
     ctx.assert.throws(() => controller.choose({ ledger: shown.ledger, option: '接受', character: missing, rng: new RollLog('o3') }), /identity\.originRank/);
   });
 
-  test('前进：先冻结目标，再给出1对1/2对1/3对1队伍，不补敌方支援', () => {
+  test('前进：先冻结目标，再给出1对1/2对1/3对1/4对1队伍，不补敌方支援', () => {
     const library = fixtureLibrary();
     const controller = controllerWith(library);
     const flow = { phase: 'growth', completed: 1 };
@@ -123,9 +123,9 @@ module.exports = function moduleChecks(ctx) {
     const forward = controller.forward({ ledger: chosen.ledger, rng, seed: 'battle-seed', playerUnit: playerUnit(), allyUnits: allyUnits(chosen.allies.npcIds) });
     ctx.assert.equal(forward.pending, false);
     ctx.assert.equal(forward.target.id, 'fixture-leviathan');
-    ctx.assert.equal(forward.battlePlan.sizes.allies, 2);
+    ctx.assert.equal(forward.battlePlan.sizes.allies, 3);
     ctx.assert.equal(forward.battlePlan.sizes.enemy, 1);
-    ctx.assert.equal(forward.battlePlan.units.length, 4);
+    ctx.assert.equal(forward.battlePlan.units.length, 5);
     for (const key of ['autoSupport', 'enemySupport', 'supplementEnemyToTwo', 'consumeChallengeLedger']) ctx.assert.equal(forward.battlePlan.rules[key], false);
     ctx.assert.equal(forward.ledger.status, 'forwarded');
     ctx.assert.equal(forward.ledger.target.version, 1);
@@ -307,10 +307,12 @@ module.exports = function moduleChecks(ctx) {
 
   section('魂骨特性池与实例（交接文档第十一、十二节）');
 
-  test('正式池为空：装配返回待处理，不显示“特性已生效”', () => {
-    const status = ctx.modules.soulbone.traitPool.status();
+  test('正式池20条；自定义空池仍返回待处理，不显示“特性已生效”', () => {
+    ctx.assert.equal(ctx.modules.soulbone.traitPool.status().count,20);
+    const empty=createTraitPool({data:{schemaVersion:1,poolVersion:2,traits:[]},registry:createHandlerRegistry()});
+    const status = empty.status();
     ctx.assert.equal(status.empty, true);
-    const result = ctx.modules.soulbone.traitPool.assemble({ boneId: 'b1', years: 20000, slot: '躯干', rng: new RollLog('p') });
+    const result = empty.assemble({ boneId: 'b1', years: 20000, slot: '躯干', rng: new RollLog('p') });
     ctx.assert.equal(result.status, 'pending');
     ctx.assert.equal(result.reason, 'trait-pool-empty');
     ctx.assert.equal(result.trait, null);

@@ -5,7 +5,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 p=Path(__file__).resolve().parent
 out=p.parent/'output'/'v12';out.mkdir(parents=True,exist_ok=True)
 for folder in ['v11','1008/数值回调验算']:(p.parent/'output'/folder).mkdir(parents=True,exist_ok=True)
-scripts=['verify-v1201.cjs','verify-v12.cjs','verify-v12-ui.cjs','verify-merged-v11.cjs','verify-scarred-challenge.cjs','verify-cultivation-1008.cjs','verify-achievements-1008.cjs','verify-growth-1008.cjs','../systems/v12/modules/tools/check.cjs']
+scripts=['verify-v120501.cjs','verify-v1205.cjs','verify-v1204.cjs','verify-v1204-popup.cjs','verify-v120301.cjs','verify-v1203.cjs','verify-v1201.cjs','verify-v12.cjs','verify-v12-ui.cjs','verify-merged-v11.cjs','verify-scarred-challenge.cjs','verify-cultivation-1008.cjs','verify-achievements-1008.cjs','verify-growth-1008.cjs','../systems/v12/modules/tools/check.cjs']
 results=[]
 for script in scripts:
     start=time.monotonic()

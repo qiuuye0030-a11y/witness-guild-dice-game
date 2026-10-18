@@ -24,6 +24,6 @@ jobs:
       - name: Verify the packaged themes and build manifest
         working-directory: 骰子系统
         run: node tools/verify-v12-package.cjs
-      - name: Release regressions (v12.01, v12, UI and the 188-check module package)
+      - name: Release regressions (15 suites incl. the 188-check module package)
         working-directory: 骰子系统
         run: python -X utf8 tools/verify-v12-release.py

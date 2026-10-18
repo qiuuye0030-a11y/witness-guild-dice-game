@@ -19,10 +19,10 @@ base=re.sub(r'<script>(.*?)</script>',replace_shared,base,flags=re.S)
 base=base.replace('${s.description||s.effect}','${WitnessUIV14.cardDescription(s,u)}')
 markup=(p/'campaign.html').read_text(encoding='utf-8')
 styles='\n'.join((p/name).read_text(encoding='utf-8') for name in ['campaign.css','dawn.css','journey.css','systems/challenge/challenge.css','systems/v12/v12.css'])+'\n.journey-fortune-word{grid-column:1/-1;display:block;font-weight:700;margin:5px 0 9px;line-height:1.7;color:inherit}\n'
-shared=''.join(script(name) for name in ['achievements.js','campaign-creation.js','story-data.js','campaign-events.js','campaign.js','systems/challenge/state.js','systems/challenge/ui.js','systems/v12/ui.js'])
+shared=''.join(script(name) for name in ['achievements.js','campaign-creation.js','story-data.js','campaign-events.js','campaign.js','systems/v12/report-archive.js','systems/challenge/state.js','systems/challenge/ui.js','systems/v12/ui.js'])
 outputs={}
 for theme,label in [('classic','经典深靛版'),('chenxi','晨曦朝阳版')]:
-    html=base.replace('<title>见证者公会 · 转正战试玩</title>',f'<title>见证者公会 v12.01讨伐与魂骨版 · {label}</title>',1)
+    html=base.replace('<title>见证者公会 · 转正战试玩</title>',f'<title>见证者公会 v12.05.01讨伐与魂骨版 · {label}</title>',1)
     html=html.replace('<body>',f'<body class="campaign-mode {"chenxi-mode" if theme=="chenxi" else "classic-mode"}">',1)
     part=markup;extraStyles='';adapter=''
     if theme=='chenxi':
@@ -46,37 +46,46 @@ for theme,label in [('classic','经典深靛版'),('chenxi','晨曦朝阳版')]:
     html=html.replace('<main>','<main>'+part,1).replace('</body>',shared+adapter+gameUI+'</body>',1)
     assert not re.search(r'<(?:script|link)[^>]+(?:src|href)=["\']https?://',html)
     assert len(re.findall(r'class\s+Battle\s*\{',html))==1
-    file=root/f'见证者公会_v12.01版_{label}.html';file.write_text(html,encoding='utf-8');outputs[label]={'file':str(file),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
-folder=root/'v12.01版双前端分享';folder.mkdir(exist_ok=True)
+    file=root/f'见证者公会_v12.05.01版_{label}.html';file.write_text(html,encoding='utf-8');outputs[label]={'file':str(file),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
+folder=root/'v12.05.01版双前端分享'
+if folder.exists():
+    for old in folder.iterdir():
+        if old.is_file():old.unlink()
+else:folder.mkdir()
 for label,meta in outputs.items():shutil.copyfile(meta['file'],folder/(label+'.html'))
 
-readme="""见证者公会 · v12.01讨伐与魂骨版（成长规则10081）
+readme="""见证者公会 v12.05.01 双前端分享包
 
-解压后用浏览器打开任一主题HTML；全部资源内置，支持离线游玩。
-两主题采用相同规则。可通过保存到文件、读取存档交换完整旅程。
-赞助入口：主界面点击赞助，输入原口令；选择“赞助版 · 讨伐事件测试”即可直接体验。
-80级且当前评级达凶，正常旅程会固定触发一次讨伐邀请。
-新骨自动吸收、同部位保留待确认；胜负均可展开讨伐战报。
-万年骨特性池等待后续补充，当前显示特性待装配；十万年骨可继承魂兽被动。
-具体变更、暂定数值与验证范围见 v12.01_更新说明.md。
-旧版旅程可保存到文件后导入。已获得等级不回扣，后续成长采用回调曲线；完整体验新曲线请开启新旅程。
-旧V13及V14的兼容战斗存档可继续；原有更早规则迁移保持。
+解压后打开任一主题HTML，可离线游玩。
+弥天瘴羽每层使目标受到的所有伤害提高8%；焚龙破甲对自身造成的伤害生效，不再限定火属性，无属性伤害也适用。
+正式讨伐入口与援军到场页可选择七种魂兽，前进后锁定目标，失败重试保持同一目标。
+魂骨状态、属性加持及特性说明采用独立主题样式，去掉灰色提示底及侧线。
+旧存档中已获得的两条特性说明及规则同步更新，不重抽魂骨或变动已有属性。
+其他玩法沿用v12.05，入口仍为80级且强级以上。
+完整JSON可导入，本机存储键沿用v12.04。
+已进行战斗与界面组件、脚本、压缩包检查；未完成真实浏览器截图验收。
+详情见v12.05.01_更新说明.md。
 """
+
 (folder/'请先阅读.txt').write_text(readme,encoding='utf-8-sig')
-for name in ['v12.01_更新说明.md','v12.01_战报检视.md','精简武魂阅读清单.md','精简武魂总表.csv','武魂删留映射.csv']:
-    shutil.copyfile(root/name,folder/name)
-for name in ['发布回归汇总.json','核心回归.json','界面组件回归.json','v12.01专项回归.json','来件战报核对.json']:
+for name in ['v12.05.01_成长对照.md','v12.05.01_十万年魂兽库.md','v12.05.01_参数对照.json','v12.05.01_更新说明.md','v12.05.01_万年魂骨特性池.md','v12.05.01_平衡模拟.md','v12.03.01_更新说明.md','v12.03_更新说明.md','v12.03_卡顿修复与浏览器验收.md','DeepSeek_友方NPC与十万年魂兽接入指南_v12.03.md','精简武魂阅读清单.md','精简武魂总表.csv','武魂删留映射.csv']:
+    if (root/name).exists():shutil.copyfile(root/name,folder/name)
+for name in ['v12.05.01成长对照.json','v12.05.01专项回归.json','v12.05.01成就弹窗组件回归.json','发布回归汇总.json','核心回归.json','界面组件回归.json','v12.01专项回归.json','v12.03专项回归.json','v12.03.01专项回归.json','v12.05.01平衡回归.json','v12.05.01平衡模拟.json','v12.03浏览器验证.json','v12.05.01浏览器验证.json']:
     if (p/'output/v12'/name).exists():shutil.copyfile(p/'output/v12'/name,folder/name)
-manifest={'gameVersion':'v12.01','cultivationRulesVersion':10081,'combatRulesVersion':17,'soulTraits':False,'catalogRulesVersion':1,'baselineSHA256':'644d2829b99a0e52140b235e159d1738ff7a1fd35855016dddcdb4a01b40145b','editions':outputs,'sources':{}}
-manifest.update({'huntVersion':2,'huntAttemptLimit':3,'huntTimeLimit':None,'huntStalemateSeconds':10,'traitEffectViewVersion':1,'boneEquipmentVersion':1,'skillAttributesVersion':1,'ordinaryBoneTraitPoolReady':False,'ratingRulesVersion':2,'ratingCurveAmplitude':1.8,'scarredChallengeVersion':1,'soulTraits':False})
+for shot in sorted((p/'output/v12').glob('v12.05.01_*.png')):
+    shutil.copyfile(shot,folder/shot.name)
+for shot in sorted((p/'output/v12').glob('v12.05.01_*.png')):
+    shutil.copyfile(shot,folder/shot.name)
+manifest={'gameVersion':'v12.05.01','cultivationRulesVersion':10082,'combatRulesVersion':17,'soulTraits':False,'catalogRulesVersion':1,'baselineSHA256':'644d2829b99a0e52140b235e159d1738ff7a1fd35855016dddcdb4a01b40145b','editions':outputs,'sources':{}}
+manifest.update({'boneCopyStyleVersion':2,'huntTargetSelectionVersion':1,'inheritedDamageScopeVersion':120501,'beastLibraryCount':7,'beastSkillTierBy':'S','huntMinimumLevel':80,'huntMinimumRating':'强级','innateTalentBindingVersion':1,'huntDropBeforeAbsorption':True,'boneSlotPreference':'not-equipped-or-carried','huntHealthVersion':1,'huntHealthMultipliers':{'solo':1.5,'withAllies':2},'huntShieldBasis':'original-panel-hp','iceShellRate':0.4,'iceShellBasis':'own-max-hp','iceShellGrant':'battle-start','iceShellReflection':0.3,'frostMossColdRate':0.05,'frostMossColdCap':0.5,'frostDomainVersion':2,'frostDomainMaxTier':3,'frostDomainDeepenEveryOwnerTurns':1,'frostDomainEnemyAgilityDown':0.02,'frostDomainEnemyGaugeDown':0.04,'frostDomainAllyAgilityUp':0.04,'frostDomainTierThreeAllyShield':0.02,'frostDomainTierThreeEnemyDamage':0.02,'achievementNotifiedVersion':1,'guildmasterAchievementPriority':True,'huntFocusVersion':1,'huntFocusMPRate':0.1,'huntFocusSeconds':3,'reportArchiveVersion':1,'reportSummaryVersion':2,'huntVersion':2,'huntAttemptLimit':3,'huntTimeLimit':None,'huntStalemateSeconds':10,'traitEffectViewVersion':1,'boneEquipmentVersion':1,'skillAttributesVersion':1,'ordinaryBoneTraitPoolReady':True,'ordinaryBoneTraitPoolVersion':3,'ordinaryBoneTraitCount':20,'ordinaryBoneTraitBenefitMultiplier':2,'ordinaryBoneTraitImplementationVersion':2,'allyRulesVersion':2,'familyAllyChance':{'3':.25,'4':.5,'5':.75},'familyAllyFixed':{'1':0,'2':0,'6':1,'7':1,'8':2,'9':2,'10':3},'scarredAttackMultiplier':.3,'attributeMatchInheritanceVersion':2,'advancedAchievements':['guildmaster_clear','hunt_hundred_thousand','scarred_clear'],'visualReview':False,'ratingRulesVersion':2,'ratingCurveAmplitude':1.8,'scarredChallengeVersion':1,'soulTraits':False})
 for f in sorted((p/'systems').rglob('*')):
     if f.is_file():manifest['sources'][str(f.relative_to(p))]=hashlib.sha256(f.read_bytes()).hexdigest()
-for name in ['achievements.js','campaign-ui.js','skill-text.js','battle-ui-v13.js','campaign-creation.js','journey.css','_build_v12.py']:
+for name in ['achievements.js','campaign-ui.js','skill-text.js','battle-ui-v13.js','campaign-creation.js','journey.css','dawn.css','campaign.css','chenxi-game.css','_build_v12.py']:
     manifest['sources'][name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
 (folder/'构建清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
-with zipfile.ZipFile(root/'见证者公会_v12.01版_双前端分享包.zip','w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+with zipfile.ZipFile(root/'见证者公会_v12.05.01版_双前端分享包.zip','w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
     for f in folder.iterdir():
-        if f.is_file():z.write(f,'见证者公会v12.01/'+f.name)
-with zipfile.ZipFile(root/'见证者公会_v12.01版_双前端分享包.zip') as z:assert z.testzip() is None
-(p/'output/v12.01版封装核对.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+        if f.is_file():z.write(f,'见证者公会v12.05.01/'+f.name)
+with zipfile.ZipFile(root/'见证者公会_v12.05.01版_双前端分享包.zip') as z:assert z.testzip() is None
+(p/'output/v12.05.01版封装核对.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(outputs,ensure_ascii=False))

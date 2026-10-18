@@ -12,6 +12,7 @@ for(let i=0;i<60;i++){
    case'event':c.chooseEvent(i%2);break;
    case'eventResult':c.finishEvent();break;
    case'hunt':case'initialHunt':if(s.hunt.result){if(n%17===0&&s.hunt.attempt<=3){c.abandonHunt();refusals++;}else c.finishHunt();}else if(s.hunt.stage==='plan')c.huntPlan('balanced',i%2===0&&c.huntCategories().includes('攻击')?'攻击':c.huntCategories()[i%c.huntCategories().length]);else if(s.hunt.stage==='second')c.chooseSecond(c.huntCategories().find(k=>k!==s.hunt.category));else c.huntStep();break;
+   case'v12Hunt':c.v12Choose('拒绝');break;
    default:throw Error(s.phase);
   }
   actions++;for(;;){const p=c.currentPromotion();if(!p)break;c.acknowledgePromotion(p.id);}

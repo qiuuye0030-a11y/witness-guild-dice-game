@@ -1,15 +1,16 @@
 (() => {
   'use strict';
   const $=id=>document.getElementById(id),R=WitnessRules,B=WitnessBattle;
-  const KEY='witness-battle-combined-v1201',catalog=WITNESS_CATALOG;
+  const KEY='witness-battle-combined-v1203',catalog=WITNESS_CATALOG;
   let battle=null,initial=null,speed=2,auto=false,paused=false,moving=false,timer=0,uiTime=0,seenLog=0;
   const cards=new Map(),actionButtons=new Map();
   const stageHeading=$('battleStage').querySelector('.section-title h2'),stageEyebrow=$('battleStage').querySelector('.section-title .eyebrow'),stageRules=$('battleStage').querySelector('.battle-help p:last-child'),baseStageLabels={heading:stageHeading.textContent,eyebrow:stageEyebrow.textContent,rules:stageRules.textContent};
   const listeners=[];
-  const basic={skipBonus:'放弃附赠普攻',attack:'普攻',dodge:'闪避',defend:'生命防守',defendSH:'精神防守',calm:'安神'};
+  const basic={skipBonus:'放弃附赠普攻',attack:'普攻',dodge:'闪避',defend:'生命防守',defendSH:'精神防守',calm:'安神',focus:'聚能'};
   function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
   function hint(text){$('battleHint').textContent=text;}
-  function save(){if(!battle)return;try{localStorage.setItem(KEY,JSON.stringify({version:1,snapshot:battle.snapshot(),initial,speed,auto:false}));}catch{}}
+  // 讨伐战的状态由主存档保存；独立战斗页才使用本机战斗缓存，避免每次心跳都序列化整场日志。
+  function save(){if(!battle||document.body.classList.contains('campaign-mode')||battle.v12Battle)return;try{localStorage.setItem(KEY,JSON.stringify({version:1,snapshot:battle.snapshot(),initial,speed,auto:false}));}catch{}}
   function sample(type){
     const specs={strong:['烈火长戟','强攻',['攻击','强化','防御','攻击']],speed:['闪电隼','敏攻',['攻击','强化','控制','攻击']],control:['荆棘藤','控制',['控制','攻击','减益','持续伤害']],tank:['黄金鳄王','防御',['防御','攻击','强化','治疗']],mental:['灵眸','控制',['攻击','防御','控制','减益']],support:['三色琉璃塔','辅助',['治疗','强化','防御','回蓝']]};
     const [name,style,categories]=specs[type],soul=catalog.find(s=>s.name===name)||catalog.find(s=>s.tier===5&&s.elements?.includes(({strong:'火',speed:'雷',control:'木',tank:'土',mental:'光',support:'水'})[type])),rng=new WitnessDice.DiceEngine(WitnessCharacter.seed()+'-demo-'+type);
@@ -51,7 +52,7 @@
   }
   function makeActions(){
     actionButtons.clear();$('basicActions').replaceChildren();$('battleSkillButtons').replaceChildren();
-    for(const [id,name]of Object.entries(basic)){const b=el('button',name,'quiet');b.type='button';b.onclick=()=>action(id);$('basicActions').append(b);actionButtons.set(id,b);}
+    for(const [id,name]of Object.entries(basic)){if(id==='focus'&&!battle.v12Battle)continue;const b=el('button',name,'quiet');b.type='button';b.onclick=()=>action(id);$('basicActions').append(b);actionButtons.set(id,b);}
     for(const s of battle.unit('player').skills){const b=el('button',undefined,'battle-skill');b.type='button';const summary=el('small',WitnessSkillText.describe(s,{battle,unit:battle.unit('player')}));b.append(el('strong',s.name),summary);b._summary=summary;b.onclick=()=>action(s.id);const cooldown=el('em');b.append(cooldown);b._cooldown=cooldown;$('battleSkillButtons').append(b);actionButtons.set(s.id,b);}
     $('battleTarget').replaceChildren();for(const u of battle.units)$('battleTarget').append(new Option((u.team?'敌方 · ':'我方 · ')+u.name,u.id));$('battleTarget').value='enemy';$('battleTarget').disabled=false;$('battleTarget').onchange=()=>update();
   }
@@ -101,7 +102,7 @@
 
     }
     for(const u of battle.units){const ball=$('ball-'+u.id);ball.style.left=(8+u.progress*66)+'%';ball.style.top=(u.team?42:9)+'px';ball.classList.toggle('current',u.id===battle.activeId);ball.classList.toggle('fallen',!battle.alive(u));ball.title=u.name+' · 敏捷 '+Math.round(battle.effective(u).A)+' · '+(u.id===battle.activeId?'当前回合':u.progress>=1?'已准备':'积累行动');}
-    const player=battle.unit('player');for(const [id,b]of actionButtons){const reason=battle.actionReason(player,id);b.disabled=!!reason||!!battle.result||paused||auto;if(id==='dodge'){b.textContent='闪避 · '+battle.dodgeCost(player)+'魂力';b.title=reason||'占用行动机会，提高生命攻击回避率；精神攻击和已附着持续伤害不受影响。受控时失效。';}if(b._cooldown){const skill=player.skills.find(s=>s.id===id);const selected=battle.targetOptions(player,skill.id).find(t=>t.id===$('battleTarget').value);b._summary.textContent=WitnessSkillText.describe(skill,{battle,unit:player,target:selected});const remain=Math.max(0,battle.cooldownUntil(player,skill)-battle.now)/1000;b._cooldown.textContent=remain?'冷却 '+remain.toFixed(1)+'s':reason||'';}}
+    const player=battle.unit('player');for(const [id,b]of actionButtons){const reason=battle.actionReason(player,id);b.disabled=!!reason||!!battle.result||paused||auto;if(id==='dodge'){b.textContent='闪避 · '+battle.dodgeCost(player)+'魂力';b.title=reason||'占用行动机会，提高生命攻击回避率；精神攻击和已附着持续伤害不受影响。受控时失效。';}if(id==='focus'){b.textContent='聚能 · +'+Math.round(player.model.derived.MP*.1)+'魂力';b.title=reason||'0耗蓝，占一次正常行动，读条3秒，回复最大魂力的10%；满蓝、受控、读条中或魂力被封锁时不可用。';}if(b._cooldown){const skill=player.skills.find(s=>s.id===id);const selected=battle.targetOptions(player,skill.id).find(t=>t.id===$('battleTarget').value);b._summary.textContent=WitnessSkillText.describe(skill,{battle,unit:player,target:selected});const remain=Math.max(0,battle.cooldownUntil(player,skill)-battle.now)/1000;b._cooldown.textContent=remain?'冷却 '+remain.toFixed(1)+'s':reason||'';}}
     while(seenLog<battle.log.length){const l=battle.log[seenLog++],row=el('div',undefined,'battle-log-line');row.append(el('time',(l.time/1000).toFixed(1)+'s'),el('span',l.text));$('battleLog').append(row);displayFX(l);}
     $('battleLogCount').textContent=battle.log.length+' 条';$('battleLog').scrollTop=$('battleLog').scrollHeight;
     if(battle.result){moving=false;paused=false;auto=false;const result=battle.result;$('battleOutcome').hidden=false;$('battleOutcome').className='battle-outcome '+(result.winner===0?'victory':result.winner===1?'defeat':'draw');$('battleOutcome').replaceChildren(el('strong',battle.v12Battle?(result.winner===0?'讨伐成功':result.winner===null?'讨伐中止':'讨伐失利'):(battle.postGameChallenge||document.body.classList.contains('battle-lab'))?(result.winner===0?'切磋胜利':result.winner===1?'本场落败':'切磋平局'):(result.winner===0?'转正成功 · 领取会徽':result.winner===1?'本场未通过':'切磋平局')),el('p',`${(result.time/1000).toFixed(1)}秒 · ${result.reason}。${battle.v12Battle?'返回讨伐页查看剩余挑战次数与战报。':battle.postGameChallenge?'追加挑战已结算，返回结局查看剩余机会。':document.body.classList.contains('battle-lab')?'可原局重试，比较不同打法。':result.winner===0?'你已成为见证者公会正式会员。':'可以原局重试，改变释放顺序与目标。'}`));hint(battle.v12Battle?'本场已结束，请在讨伐页选择再次挑战或导出战报。':'本场已结束，可原局重试或导出战报。');save();}
@@ -142,7 +143,22 @@
   $('surrenderBattle').onclick=()=>{if(battle&&!battle.result){battle.surrender();update();save();}};
   $('exportBattle').onclick=()=>{if(!battle)return;const payload={format:'witness-battle-report',version:1,initial,snapshot:battle.snapshot()},blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=battle.v12Battle?'见证者讨伐战报.json':battle.postGameChallenge?'见证者挑战战报.json':document.body.classList.contains('battle-lab')?'见证者切磋战报.json':'见证者转正战报.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
   try{const stored=document.body.classList.contains('campaign-mode')?null:JSON.parse(localStorage.getItem(KEY)||'null');if(stored?.version===1&&stored.snapshot?.version===10&&stored.snapshot?.units&&stored.initial){initial=stored.initial;speed=[0,1,2,4,8].includes(stored.speed)?stored.speed:2;battle=new B.Battle({snapshot:stored.snapshot});paused=!battle.result;moving=!battle.result;seenLog=0;makeCards();makeActions();update();hint(battle.result?'已恢复上次战报。':'已恢复上次战斗，点击继续或原局重试。');}}catch{battle=null;initial=null;}
+  function leave(){
+    clearTimeout(timer);paused=true;moving=false;
+    const clearingV12=!!battle?.v12Battle;
+    battle=null;initial=null;seenLog=0;uiTime=0;cards.clear();actionButtons.clear();
+    if(clearingV12){try{localStorage.removeItem(KEY);}catch{}}
+    $('battleLog').replaceChildren();$('battleOutcome').hidden=true;$('battleOutcome').replaceChildren();
+    $('teamFriendly').replaceChildren();$('teamEnemy').replaceChildren();$('fxLayer').replaceChildren();
+    $('basicActions').replaceChildren();$('battleSkillButtons').replaceChildren();$('battleTarget').replaceChildren();
+    document.getElementById('actionRoller')?.remove();
+    $('battleArena').classList.remove('has-battle');
+    stageHeading.textContent=baseStageLabels.heading;stageEyebrow.textContent=baseStageLabels.eyebrow;stageRules.textContent=baseStageLabels.rules;
+    $('battleClock').textContent='0.0 / 180.0 秒';$('battleLogCount').textContent='0 条';
+    hint('战斗已离场；战报、结算与剩余挑战次数仍保留。');
+    renderToolbar();
+  }
   renderToolbar();
   window.addEventListener('pagehide',save);
-  window.WitnessBattleUI={get:()=>battle,sample,start,update,subscribe:fn=>listeners.push(fn),halt:()=>{clearTimeout(timer);paused=true;moving=false;},restore:(snapshot,options)=>{clearTimeout(timer);initial=JSON.parse(JSON.stringify(options));battle=new B.Battle({snapshot});auto=false;paused=!battle.result;moving=!battle.result;seenLog=0;$('battleLog').replaceChildren();$('battleOutcome').hidden=true;makeCards();makeActions();update();hint(battle.result?'已恢复战报。':'战斗已恢复，点击继续推进。');}};
+  window.WitnessBattleUI={get:()=>battle,sample,start,update,leave,subscribe:fn=>listeners.push(fn),halt:()=>{clearTimeout(timer);paused=true;moving=false;},restore:(snapshot,options)=>{clearTimeout(timer);initial=JSON.parse(JSON.stringify(options));battle=new B.Battle({snapshot});auto=false;paused=!battle.result;moving=!battle.result;seenLog=0;$('battleLog').replaceChildren();$('battleOutcome').hidden=true;makeCards();makeActions();update();hint(battle.result?'已恢复战报。':'战斗已恢复，点击继续推进。');}};
 })();

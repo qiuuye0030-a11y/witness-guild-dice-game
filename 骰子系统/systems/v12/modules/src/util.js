@@ -35,6 +35,6 @@ function uniqueIds(list, label) {
 }
 
 const RATING_ORDER = Object.freeze(['纸级', '并级', '强级', '凶级', '狂级', '神级']);
-const RATING_MIN_FOR_HUNT = '凶级';
+const RATING_MIN_FOR_HUNT = '强级';
 
 module.exports = { clone, deepFreeze, isPlainObject, requireInteger, requireString, uniqueIds, RATING_ORDER, RATING_MIN_FOR_HUNT };

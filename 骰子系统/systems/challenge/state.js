@@ -2,7 +2,8 @@
 'use strict';
 const runtime=typeof module!=='undefined'&&module.exports?require('../../v13-runtime.cjs'):root;
 const copy=x=>JSON.parse(JSON.stringify(x)),KEY='witness-postgame-challenges-v1',REPORT_LIMIT=30;
-const SAVE_KEY='witness-complete-game-v1201';
+// 主存档键随版本变化；挑战进度读取时按新到旧依次查找，避免把当前存档当成不存在。
+const SAVE_KEYS=['witness-complete-game-v1203','witness-complete-game-v1202','witness-complete-game-v1201','witness-complete-game-v12'];
 function identity(s){let h=2166136261;for(const c of [s.seed,s.character?.name,s.character?.soulId,s.character?.initialLevel,s.character?.time?.month].join('|'))h=Math.imul(h^c.charCodeAt(0),16777619);return 'journey-'+(h>>>0).toString(16);}
 function ledger(storage){const x=JSON.parse(storage?.getItem(KEY)||'{}');if(!x||typeof x!=='object'||Array.isArray(x))throw Error('挑战账本无效');return x;}
 function eligible(c){const s=c?.state;return !!(s?.phase==='ending'&&s.result?.winner===0&&!s.exam?.badEnding&&s.character&&s.journal?.some(x=>x.type==='ending'));}
@@ -40,7 +41,7 @@ function validate(q){
 function ensure(c,storage){
  if(!eligible(c))return null;
  const s=c.state,key=identity(s),records=ledger(storage),saved=records[key];
- let local;try{const previous=JSON.parse(storage?.getItem(SAVE_KEY)||'null');if(previous?.state?.challenge?.identity===key)local=previous.state.challenge;}catch{}
+ let local;for(const saveKey of SAVE_KEYS)try{const previous=JSON.parse(storage?.getItem(saveKey)||'null');if(previous?.state?.challenge?.identity===key){local=previous.state.challenge;break;}}catch{}
  s.challenge||={version:1,identity:key,failures:0,serial:0,completed:[],resolved:[],active:null,snapshot:null,options:null,reports:[]};
  let q=s.challenge;if(q.identity&&q.identity!==key)throw Error('挑战人物身份不一致');q.identity=key;
  const sources=[q,saved,local].filter(Boolean),reports=mergeReports(...sources.map(reportEntries));
