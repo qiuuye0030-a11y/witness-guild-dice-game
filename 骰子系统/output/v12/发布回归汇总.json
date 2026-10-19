@@ -3,9 +3,29 @@
   "visualReview": false,
   "checks": [
     {
+      "script": "verify-v120503.cjs",
+      "exitCode": 0,
+      "seconds": 0.33,
+      "lastLines": [
+        "PASS closing independent challenge records immediately opens a deferred bone achievement",
+        "PASS actual normal random examiner roll can land on Yiqiran and records her after victory",
+        "ALL V120503 13"
+      ]
+    },
+    {
+      "script": "verify-v120502.cjs",
+      "exitCode": 0,
+      "seconds": 0.12,
+      "lastLines": [
+        "PASS exporting and importing earned platinum retains note and does not replay imported historical notices",
+        "PASS formal check can earn final remaining prerequisite and platinum in the same collection pass; tests cannot",
+        "ALL V120502 6"
+      ]
+    },
+    {
       "script": "verify-v120501.cjs",
       "exitCode": 0,
-      "seconds": 0.3,
+      "seconds": 0.34,
       "lastLines": [
         "PASS real event UI selects target before accepting, keeps intro and forward, and starts chosen beast",
         "PASS bone status, attributes and passive text all use dedicated themed prose without generic hint blocks",
@@ -15,7 +35,7 @@
     {
       "script": "verify-v1205.cjs",
       "exitCode": 0,
-      "seconds": 1.0,
+      "seconds": 1.42,
       "lastLines": [
         "PASS battle shield and numerical debuff survive past180 seconds, while timed control expires",
         "PASS carried kill bones cannot be consumed by the old manual or event fusion path before ring absorption",
@@ -25,7 +45,7 @@
     {
       "script": "verify-v1204.cjs",
       "exitCode": 0,
-      "seconds": 0.41,
+      "seconds": 0.56,
       "lastLines": [
         "PASS legacy trait upgrades are idempotent, preserve identity and raise MP in both panel and active snapshot once",
         "PASS equipped v12.04 bone and ledger migrate together, preserving source ID and original roll",
@@ -35,17 +55,17 @@
     {
       "script": "verify-v1204-popup.cjs",
       "exitCode": 0,
-      "seconds": 0.16,
+      "seconds": 0.25,
       "lastLines": [
-        "PASS all three advanced achievements receive halo and correct theme classes",
-        "PASS bone drop modal shows real body slot, persists acknowledgment and does not consume game events",
-        "ALL POPUP 7"
+        "PASS platinum popup and achievement book both show small wish note with distinct platinum styling",
+        "PASS ordinary achievement notices do not display platinum reward text",
+        "ALL POPUP 9"
       ]
     },
     {
       "script": "verify-v120301.cjs",
       "exitCode": 0,
-      "seconds": 0.19,
+      "seconds": 0.34,
       "lastLines": [
         "PASS 旧版本机档案（无 notified）只补放会长见证，不重放其余成就",
         "PASS 导入他人成就档案只记录，不重放弹窗",
@@ -55,7 +75,7 @@
     {
       "script": "verify-v1203.cjs",
       "exitCode": 0,
-      "seconds": 0.72,
+      "seconds": 0.78,
       "lastLines": [
         "PASS 大日志分页：首屏200条，可继续加载",
         "PASS 战报归档可导出/导入完整日志",
@@ -65,7 +85,7 @@
     {
       "script": "verify-v1201.cjs",
       "exitCode": 0,
-      "seconds": 0.58,
+      "seconds": 0.81,
       "lastLines": [
         "PASS permanent beast moss survives retries; ordinary and field slow immunity agree",
         "PASS simultaneous full-team defeat is a draw and never creates hunt rewards",
@@ -75,7 +95,7 @@
     {
       "script": "verify-v12.cjs",
       "exitCode": 0,
-      "seconds": 1.33,
+      "seconds": 1.72,
       "lastLines": [
         "PASS confirmed ordinary hunt records luck-based drop once, auto-absorbs and can keep or replace conflicts",
         "PASS thousand-year rings never drop; luck thresholds range from1% to15%",
@@ -85,7 +105,7 @@
     {
       "script": "verify-v12-ui.cjs",
       "exitCode": 0,
-      "seconds": 0.3,
+      "seconds": 0.48,
       "lastLines": [
         "PASS bone conflicts offer separate replace / keep buttons",
         "PASS defeat screen retries using the remaining real allowance; re-entry remains visible after leaving",
@@ -95,7 +115,7 @@
     {
       "script": "verify-merged-v11.cjs",
       "exitCode": 0,
-      "seconds": 0.91,
+      "seconds": 1.52,
       "lastLines": [
         "PASS 30 reports, single/all JSON export, ledger only summaries, old missing log honest",
         "PASS complete old finished battle untouched; ongoing short states migrate from release log",
@@ -105,7 +125,7 @@
     {
       "script": "verify-scarred-challenge.cjs",
       "exitCode": 0,
-      "seconds": 0.78,
+      "seconds": 0.61,
       "lastLines": [
         "PASS ongoing ghost/veil snapshot restores without refilling shield or mana and advances identically",
         "PASS postgame start uses same playerlevel; new mode settles and report survives save/reload",
@@ -115,7 +135,7 @@
     {
       "script": "verify-cultivation-1008.cjs",
       "exitCode": 0,
-      "seconds": 0.31,
+      "seconds": 0.28,
       "lastLines": [
         "PASS preview and reload cannot grant scaled XP a second time",
         "PASS conservative ordinary-event upper bounds exclude non-double90 and low-talent fifth rings",
@@ -125,7 +145,7 @@
     {
       "script": "verify-achievements-1008.cjs",
       "exitCode": 0,
-      "seconds": 0.17,
+      "seconds": 0.14,
       "lastLines": [
         "PASS simultaneous achievements queue once and old v1 archive merges",
         "PASS corrupt imported archive does not replace valid data",
@@ -135,17 +155,17 @@
     {
       "script": "verify-growth-1008.cjs",
       "exitCode": 0,
-      "seconds": 7.77,
+      "seconds": 5.58,
       "lastLines": [
         "growth journeys 50",
         "growth journeys 60",
-        "PASS 7102 515 { direct: 85, periodic: 32, multi: 20, pursuit: 7 }"
+        "PASS 7145 518 { direct: 91, periodic: 33, multi: 15, pursuit: 8 }"
       ]
     },
     {
       "script": "../systems/v12/modules/tools/check.cjs",
       "exitCode": 0,
-      "seconds": 0.41,
+      "seconds": 0.39,
       "lastLines": [
         "  ✓ 旧档技能刷新覆盖旧标签，不改变成长、费用与技能内容；预留环同步刷新",
         "",

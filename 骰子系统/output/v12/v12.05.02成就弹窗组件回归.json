@@ -1,5 +1,5 @@
 {
-  "passed": 7,
+  "passed": 9,
   "tests": [
     "full campaign UI script parses before component extraction",
     "closing achievement book removes it and opens pending notice immediately",
@@ -7,7 +7,9 @@
     "notice queue survives rerenders, confirms one only, advances focus, then empties",
     "promotion, rolling, busy, other modal and live hunt delay notifications without consuming them",
     "all three advanced achievements receive halo and correct theme classes",
-    "bone drop modal shows real body slot, persists acknowledgment and does not consume game events"
+    "bone drop modal shows real body slot, persists acknowledgment and does not consume game events",
+    "platinum popup and achievement book both show small wish note with distinct platinum styling",
+    "ordinary achievement notices do not display platinum reward text"
   ],
   "visualReview": false
 }

@@ -6,7 +6,7 @@
 (function(){
 (function(root) {
   'use strict';
-  const TIERS = [138,304,469,607,717,800,892,954,985,1000];
+  const TIERS = [100,200,300,400,500,600,700,800,900,1000];
   function hashSeed(seed) {
     let h=2166136261;
     for (const c of String(seed)) { h^=c.codePointAt(0); h=Math.imul(h,16777619); }
@@ -1909,9 +1909,19 @@ function runtime(unit){
       this.result={winner:delta>0?0:1,reason:'180秒裁判',time:this.now};this.addLog('180秒结束，按存活人数与生命／精神剩余比例裁判。');
     };
 
+  const settleManualExhaustion=function({manual=false,campaignExam=false}={}){
+      if(!manual||!campaignExam||this.v12Battle||this.postGameChallenge||this.result)return false;
+      const u=this.unit('player');if(!u||!this.canAct(u)||u.mp>=this.basicCost(u))return false;
+      if(this.actionReason(u,'defend')||this.actionReason(u,'defendSH'))return false;
+      const others=['skipBonus','attack','dodge','calm',...u.skills.map(s=>s.id)];if(others.some(id=>!this.actionReason(u,id)))return false;
+      const teams=[0,1].map(team=>{const us=this.units.filter(u=>u.team===team&&this.alive(u));return {count:us.length,score:us.reduce((n,u)=>n+Math.min(u.hp/u.model.derived.HP,u.sh/u.model.derived.SH),0)};});
+      const delta=teams[0].count-teams[1].count||teams[0].score-teams[1].score,reason='魂力不足，仅剩防守 · 提前裁判';
+      if(Math.abs(delta)<1e-9)this.resolveDraw(reason);else{this.result={winner:delta>0?0:1,reason,time:this.now};this.addLog('玩家仅余生命与精神防守，按存活人数及生命／精神剩余比例提前裁判。',{type:'resourceVerdict'});}return true;
+    };
+
   const surrender=function(){this.result={winner:1,reason:'认输',time:this.now};this.addLog('你选择结束这场切磋。');};
 
-  return {methods:{unit,alive,status,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
+  return {methods:{unit,alive,status,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender,settleManualExhaustion}};
 })(globalThis);
 
 // ControlActions: live V13 behavior; composed once by systems/battle/compose.js.
@@ -8977,6 +8987,7 @@ root.WitnessV125Beasts={badges};return {wrap,benefit};
     checkResult:BattleCore.methods.checkResult,
     finishByTime:ScarredActions.methods.finishByTime,
     surrender:BattleCore.methods.surrender,
+    settleManualExhaustion:BattleCore.methods.settleManualExhaustion,
     hitChance:AttributeActions.methods.hitChance,
     controlNumbers:MemberActions.methods.controlNumbers,
     forecastDamage:BattleProjection.methods.forecastDamage,
@@ -9027,7 +9038,7 @@ R.buildStats=function(args){const out=baseBuild(args),ledger=args.v12Equipment;i
 R.makeSkill=args=>A.battle.skillAttributes.tagSkill(baseMake(args),args.soul);
 const B=root.WitnessBattle,player=B.playerUnit;B.playerUnit=function(character,soul){const u=player(character,soul);u.v12Traits=Object.values(character.v12Equipment?.runtimeTraits||{}).map(t=>({...A.soulbone.effects.upgrade(copy(t)),id:t.traitId}));u.v12Permanent=copy(character.v12TraitProgress||{});return u;};
 function persist(character,battle){const u=battle.unit('player');if(!u)return;character.v12TraitProgress||={};for(const trait of u.v12Traits||[])if((trait.id||trait.traitId)==='moss-armor-accumulation'&&trait.ownerBoneId)character.v12TraitProgress[trait.ownerBoneId]={mossStacks:Math.min(12,Math.max(0,u.v12State?.mossStacks||0))};}
-root.WitnessV12Live={version:1,gameVersion:'v12.05.01',persist,traitHandlers:['frost-moss-immunity','moss-armor-accumulation','ice-shell-preservation','frost-domain','oppressive-tides','devouring-soul-recovery',...Object.keys(A.soulbone.effects.handlers),...A.beast.library.available().flatMap(b=>b.traits.map(t=>t.id))],npcIds:['chengliang','xutaiping','sailiya_fengzhi']};
+root.WitnessV12Live={version:1,gameVersion:'v12.05.03',persist,traitHandlers:['frost-moss-immunity','moss-armor-accumulation','ice-shell-preservation','frost-domain','oppressive-tides','devouring-soul-recovery',...Object.keys(A.soulbone.effects.handlers),...A.beast.library.available().flatMap(b=>b.traits.map(t=>t.id))],npcIds:['chengliang','xutaiping','sailiya_fengzhi']};
 })(globalThis);
 
 })();

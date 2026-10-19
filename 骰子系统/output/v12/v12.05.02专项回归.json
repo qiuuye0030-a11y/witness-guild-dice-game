@@ -1,0 +1,12 @@
+{
+  "passed": 6,
+  "tests": [
+    "14 achievements, platinum excludes itself and all13 prerequisites are required individually",
+    "last normal achievement immediately unlocks platinum across different characters once, prioritized with small wish note",
+    "old all13 local archive upgrades immediately, persists once and acknowledgment survives reload",
+    "two partial imported archives combine to grant platinum; incomplete forged meta is discarded",
+    "exporting and importing earned platinum retains note and does not replay imported historical notices",
+    "formal check can earn final remaining prerequisite and platinum in the same collection pass; tests cannot"
+  ],
+  "visualReview": false
+}

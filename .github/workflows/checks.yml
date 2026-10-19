@@ -20,10 +20,11 @@ jobs:
       - name: Build both standalone themes
         working-directory: 骰子系统
         run: python -X utf8 _build_v12.py
-      # Both checks read the generated themes and the build manifest.
+      # Both checks read the generated themes and the build manifest under
+      # v12.05.03版双前端分享/资料与校验/.
       - name: Verify the packaged themes and build manifest
         working-directory: 骰子系统
         run: node tools/verify-v12-package.cjs
-      - name: Release regressions (15 suites incl. the 188-check module package)
+      - name: Release regressions (17 suites incl. the 188-check module package)
         working-directory: 骰子系统
         run: python -X utf8 tools/verify-v12-release.py

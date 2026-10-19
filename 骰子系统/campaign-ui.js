@@ -20,7 +20,7 @@
     if(record.starts>s.exam.starts){s.exam.starts=record.starts;s.exam.mode=record.mode;s.exam.opponent=record.opponent||s.exam.opponent;}
     if(record.exhausted&&s.result?.winner!==0){if(!s.character)throw Error('这段旅程的考核机会已用尽，请开始新旅程。');campaign.forceAdmission('这段旅程的考核机会已用尽，旧备份仍可查看。');s.exam.badEnding=true;s.phase='ending';s.result={winner:1,time:0,reason:'本次旅程机会已用尽'};s.resultHandled=true;}
   }
-  function save(){if(!campaign)return;collectAchievements();try{const s=campaign.state,records=JSON.parse(localStorage.getItem(EXAM_KEY)||'{}'),old=records[s.characterId];if(!old||s.exam.starts>=old.starts)records[s.characterId]={mode:s.exam.mode,starts:s.exam.starts,opponent:s.exam.opponent,exhausted:!!s.exam.badEnding};localStorage.setItem(EXAM_KEY,JSON.stringify(records));localStorage.setItem(KEY,JSON.stringify({format:'witness-complete-game',version:9,gameVersion:'v12.05.01',speed,training,state:campaign.snapshot()}));saveOK=true;}catch{saveOK=false;notice('本机存储暂不可用，请保存到文件保留旅程。');}}
+  function save(){if(!campaign)return;collectAchievements();try{const s=campaign.state,records=JSON.parse(localStorage.getItem(EXAM_KEY)||'{}'),old=records[s.characterId];if(!old||s.exam.starts>=old.starts)records[s.characterId]={mode:s.exam.mode,starts:s.exam.starts,opponent:s.exam.opponent,exhausted:!!s.exam.badEnding};localStorage.setItem(EXAM_KEY,JSON.stringify(records));localStorage.setItem(KEY,JSON.stringify({format:'witness-complete-game',version:9,gameVersion:'v12.05.03',speed,training,state:campaign.snapshot()}));saveOK=true;}catch{saveOK=false;notice('本机存储暂不可用，请保存到文件保留旅程。');}}
   function download(data,name){const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})),a=el('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200);}
   const reportArchive=()=>window.WitnessV12Reports||null;
   function migrateReports(state){const api=reportArchive();if(!api||!state)return {moved:0};try{return api.migrate(state);}catch{return {moved:0};}}
@@ -123,7 +123,7 @@
     row.append(confirm,exit);form.append(wrap,row);dialog.append(form);dialog.showModal();code.focus();
   }
   function renderWelcome(body){
-    paragraph(body,'v12.05.01 · '+(document.body.classList.contains('chenxi-mode')?'晨曦朝阳界面':'经典深靛界面'),'journey-version');heading(body,'斗罗大陆同人 · 单人文字游戏','在6102年，成为见证者。','骰子决定你的起点。从6岁武魂觉醒开始，走过自己的成长岁月。最后，带着自己的武魂走进晨曦城，赢得一枚见证者会徽。');
+    paragraph(body,'v12.05.03 · '+(document.body.classList.contains('chenxi-mode')?'晨曦朝阳界面':'经典深靛界面'),'journey-version');heading(body,'斗罗大陆同人 · 单人文字游戏','在6102年，成为见证者。','骰子决定你的起点。从6岁武魂觉醒开始，走过自己的成长岁月。最后，带着自己的武魂走进晨曦城，赢得一枚见证者会徽。');
     const form=el('div',undefined,'camp-form'),name=formField(form,'姓名（留空则立即暗骰生成）','campName','text','你想叫什么？');name.maxLength=40;
     const genderWrap=el('div');genderWrap.append(el('label','性别'));const gender=el('select');gender.id='campGender';['随机','男','女','无性别'].forEach(v=>gender.append(new Option(v,v)));genderWrap.append(gender);form.append(genderWrap);
     const seed=formField(form,'旅程种子','campSeed','text');seed.value=freshSeed();seed.maxLength=120;body.append(form);
@@ -230,7 +230,10 @@
   }
   function renderTriggerTags(parent,tags){if(!tags?.length)return;const row=el('div',undefined,'journey-trigger-tags');row.append(el('small','这次相遇缘于'));for(const t of tags)row.append(el('span',t));parent.append(row);}
   function renderPromotion(){
-    const existing=document.getElementById('campPromotion'),p=campaign?.state.character?campaign.currentPromotion():null;if(existing&&p&&existing.dataset.promotionId===p.id)return;existing?.remove();if(!p){if(renderBoneNotice())return;renderAchievementNotice();return;}document.getElementById('campAchievement')?.remove();if(!quickAuto)stopAuto();
+    if(document.querySelector('dialog[open]'))return;
+    const existing=document.getElementById('campPromotion'),p=campaign?.state.character?campaign.currentPromotion():null;
+    if(archive.queue.some(id=>['first_bone_trait','six_bones'].includes(id))){existing?.remove();renderAchievementNotice(true);if($('campAchievement'))return;}
+    if(existing&&p&&existing.dataset.promotionId===p.id)return;existing?.remove();if(!p){if(renderBoneNotice())return;renderAchievementNotice();return;}if(!quickAuto)stopAuto();
     const overlay=el('div',undefined,'journey-promotion-overlay');overlay.id='campPromotion';overlay.dataset.promotionId=p.id;overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','成长突破');const card=el('section',undefined,'journey-promotion');
     card.append(el('div','✦','journey-promotion-star'),el('p',p.ratingUp?'实力晋升！':'魂力突破！','eyebrow'));
     if(p.toLevel>p.fromLevel)card.append(el('h1',p.fromLevel+' → '+p.toLevel+' 级'));
@@ -262,32 +265,41 @@
     const wrapper=el('div');wrapper.append(summary,detail);return wrapper;
   }
   function renderBoneNotice(){const n=campaign?.state.v12?.boneNotifications?.find(n=>!n.read);if(!n||busy||document.querySelector('dialog[open]')||$('campPromotion'))return false;stopAuto();const dialog=el('dialog',undefined,'achievement-witness bone-drop-notice');dialog.id='campBoneDrop';dialog.setAttribute('aria-label','发现魂骨');const card=el('section',undefined,'achievement-witness-card');card.append(el('p','猎杀所得','eyebrow'),el('h2','发现魂骨'),el('strong',n.slot+'魂骨'),el('p',n.name+' · '+n.years+'年'));paragraph(card,'已收入行囊。是否吸收当前魂环都不会丢失；吸收魂环后将统一尝试融合。','camp-note');const close=()=>{campaign.v125AcknowledgeBone(n.boneId);save();dialog.close();dialog.remove();render();};card.append(button('收好魂骨',close));dialog.oncancel=e=>{e.preventDefault();close();};dialog.append(card);document.body.append(dialog);dialog.showModal();card.querySelector('button').focus();return true;}
-  function renderAchievementNotice(){
-    const id=archive.queue[0],existing=$('campAchievement');
+  function renderAchievementNotice(prioritizeBones=false){
+    const id=prioritizeBones?archive.queue.find(id=>['first_bone_trait','six_bones'].includes(id))||archive.queue[0]:archive.queue[0],existing=$('campAchievement');
     if(existing?.open&&existing.dataset.achievementId===id)return;
     existing?.close();existing?.remove();if(!id||campaign?.state.phase==='battle'&&!campaign.state.result)return;
-    if(busy||animRoll||campaign?.currentPromotion()||$('campPromotion')||document.querySelector('dialog[open]')||campaign?.state.challenge?.active&&!campaign.state.challenge.result||campaign?.state.phase==='v12Hunt'&&campaign.state.v12?.hunt.status==='battle')return; // 正在翻阅成就册时不要盖在上面，关闭后会补弹。
+    if(busy||animRoll||(!prioritizeBones&&campaign?.currentPromotion())||$('campPromotion')||document.querySelector('dialog[open]')||campaign?.state.challenge?.active&&!campaign.state.challenge.result||campaign?.state.phase==='v12Hunt'&&campaign.state.v12?.hunt.status==='battle')return; // 正在翻阅成就册时不要盖在上面，关闭后会补弹。
     stopAuto();const previous=document.activeElement,item=archive.entries().find(x=>x.id===id);if(!item)return;
-    const dialog=el('dialog',undefined,'achievement-witness');dialog.id='campAchievement';dialog.dataset.achievementId=id;if(item.advanced){dialog.classList.add('achievement-legendary');if(id==='scarred_clear')dialog.classList.add('achievement-ghost');if(id==='hunt_hundred_thousand')dialog.classList.add('achievement-hunt');const halo=el('div',undefined,'legendary-halo');halo.setAttribute('aria-hidden','true');for(let n=0;n<20;n++){const spark=el('i');spark.style.setProperty('--i',n);halo.append(spark);}dialog.append(halo);}
+    const dialog=el('dialog',undefined,'achievement-witness');dialog.id='campAchievement';dialog.dataset.achievementId=id;if(item.advanced){dialog.classList.add('achievement-legendary');if(item.platinum)dialog.classList.add('achievement-platinum');if(id==='scarred_clear')dialog.classList.add('achievement-ghost');if(id==='hunt_hundred_thousand')dialog.classList.add('achievement-hunt');const halo=el('div',undefined,'legendary-halo');halo.setAttribute('aria-hidden','true');for(let n=0;n<20;n++){const spark=el('i');spark.style.setProperty('--i',n);halo.append(spark);}dialog.append(halo);}
     dialog.setAttribute('aria-labelledby','achievementTitle');dialog.setAttribute('aria-describedby','achievementStory');
     const card=el('section',undefined,'achievement-witness-card');
-    const seal=el('span','见证','achievement-seal');seal.setAttribute('aria-hidden','true');
+    const seal=el('span',item.platinum?'白金':'见证','achievement-seal');seal.setAttribute('aria-hidden','true');
     const title=el('h2',item.title);title.id='achievementTitle';const story=el('p',item.witness,'achievement-story');story.id='achievementStory';
-    card.append(el('p','公会行记 · 新的见证','eyebrow'),seal,title,story,el('p',item.description,'achievement-condition'));
+    card.append(el('p',item.platinum?'公会行记 · 高级白金成就':'公会行记 · 新的见证','eyebrow'),seal,title,story,el('p',item.description,'achievement-condition'));
+    if(item.rewardNote)card.append(el('small',item.rewardNote,'achievement-reward-note'));
     if(item.evidence)paragraph(card,item.evidence,'achievement-evidence');paragraph(card,'达成人物 · '+item.name,'achievement-person');paragraph(card,new Date(item.at).toLocaleString('zh-CN'),'micro');
     if(archive.queue.length>1)paragraph(card,'还有 '+(archive.queue.length-1)+' 份见证待收录','micro');
-    const close=()=>{if(archive.queue[0]!==id)return;archive.markNotified(id);dialog.close();dialog.remove();render();if(!$('campAchievement')&&previous?.isConnected)previous.focus();};
+    const close=()=>{if(!archive.queue.includes(id))return;archive.markNotified(id);dialog.close();dialog.remove();render();if(!$('campAchievement')&&previous?.isConnected)previous.focus();};
     card.append(button('记下这份见证',close));dialog.oncancel=e=>{e.preventDefault();close();};dialog.append(card);document.body.append(dialog);dialog.showModal();card.querySelector('button').focus();
   }
   function openAchievements(){
     archive.reconcile(examinerIds());
     let dialog=$('campAchievements');if(!dialog){dialog=el('dialog');dialog.id='campAchievements';document.body.append(dialog);}dialog.replaceChildren(el('h2','已获成就'));
-    const cards=el('div',undefined,'journey-achievement-cards');for(const item of archive.entries()){const card=el('section');card.append(el('h3',item.title));paragraph(card,item.witness,'achievement-story');paragraph(card,item.description);if(item.evidence)paragraph(card,item.evidence,'micro');paragraph(card,item.name+' · '+new Date(item.at).toLocaleString('zh-CN'),'micro');cards.append(card);}if(!cards.childElementCount)paragraph(cards,'旅途中留下的见证，会在获得后出现在这里。');dialog.append(cards);
-    const progress=archive.examinerProgress(WitnessTemplates),records=el('section',undefined,'journey-examiner-records');records.setAttribute('aria-label','考官战胜记录');records.append(el('h2','考官战胜记录'));paragraph(records,'已击败 '+progress.filter(x=>x.defeated).length+' / '+progress.length+' 位会员考官');paragraph(records,'记录保存在当前浏览器，新旅程不会清空。换设备或换浏览器时，可导出并合并成就档案。','micro');const list=el('div',undefined,'journey-achievement-cards');for(const item of progress){const card=el('section');card.append(el('h3',(item.defeated?'✓ 已击败 · ':'○ 未击败 · ')+item.name));paragraph(card,item.style+'系 · 武魂：'+item.weapon,'micro');if(item.defeated)paragraph(card,'完成人物：'+item.characters.join('、'),'micro');list.append(card);}records.append(list);dialog.append(records);
+    const cards=el('div',undefined,'journey-achievement-cards');for(const item of archive.entries()){const card=el('section');if(item.platinum)card.classList.add('achievement-platinum-record');card.append(el('h3',item.title));if(item.platinum)paragraph(card,'高级白金成就','achievement-grade');paragraph(card,item.witness,'achievement-story');paragraph(card,item.description);if(item.rewardNote)card.append(el('small',item.rewardNote,'achievement-reward-note'));if(item.evidence)paragraph(card,item.evidence,'micro');paragraph(card,item.name+' · '+new Date(item.at).toLocaleString('zh-CN'),'micro');cards.append(card);}if(!cards.childElementCount)paragraph(cards,'旅途中留下的见证，会在获得后出现在这里。');dialog.append(cards);
     const input=el('input');input.type='file';input.accept='.json,application/json';input.hidden=true;input.onchange=async()=>{try{const file=input.files[0];if(!file)return;if(file.size>3*1024*1024)throw Error('档案文件过大');archive.merge(JSON.parse(await file.text()));collectAchievements();openAchievements();notice('成就档案已合并，原有记录已保留。');}catch(e){notice('无法合并：'+e.message);}};
     const row=el('div',undefined,'camp-action-row');row.append(button('导出成就档案',()=>download(archive.data,'见证者公会_成就档案.json'),'quiet'),button('导入并合并档案',()=>input.click(),'quiet'),button('返回旅程',()=>{dialog.close();dialog.remove();render();}));dialog.oncancel=e=>{e.preventDefault();dialog.close();dialog.remove();render();};dialog.append(row,input);if(!dialog.open)dialog.showModal();const title=dialog.querySelector('h2');title.tabIndex=-1;title.focus({preventScroll:true});dialog.scrollTop=0;
   }
+  function openChallengeRecords(){
+    collectAchievements();let dialog=$('campChallenges');if(!dialog){dialog=el('dialog');dialog.id='campChallenges';document.body.append(dialog);}dialog.replaceChildren(el('h2','挑战完成记录'));paragraph(dialog,'按目录分开记录，未完成的对手优先显示。赞助及测试角色的胜利可记录挑战进度，不替代正式成就条件。','collection-copy');
+    const rows=archive.challengeProgress(WitnessTemplates);for(const [label,modes]of [['转正考核',['admission']],['会员切磋',['member']],['进阶试炼',['advanced']],['高难挑战',['guildmaster','mysterious']]]){const section=el('section');section.append(el('h3',label));const list=el('div',undefined,'journey-achievement-cards');for(const row of rows.filter(r=>modes.includes(r.mode))){const card=el('section');card.append(el('strong',(row.completed?'✓ 已完成 · ':'○ 未完成 · ')+row.name));if(row.style!=='高难')paragraph(card,row.style+'系','collection-copy');list.append(card);}section.append(list);dialog.append(section);}
+    const close=()=>{dialog.close();dialog.remove();render();};dialog.append(button('返回旅程',close,'quiet'));dialog.oncancel=e=>{e.preventDefault();close();};dialog.showModal();
+  }
+  function openBeastCatalog(){
+    let dialog=$('campBeasts');if(!dialog){dialog=el('dialog');dialog.id='campBeasts';document.body.append(dialog);}dialog.replaceChildren(el('h2','十万年魂兽图录'));for(const beast of WitnessV12.beast.library.available()){const card=el('section',undefined,'v12-trait-card');card.append(el('h3',beast.name));for(const trait of beast.traits){card.append(el('strong',trait.name));paragraph(card,trait.effect,'collection-copy');}dialog.append(card);}const close=()=>{dialog.close();dialog.remove();render();};dialog.append(button('返回旅程',close,'quiet'));dialog.oncancel=e=>{e.preventDefault();close();};dialog.showModal();
+  }
   $('campAchievementsButton').onclick=openAchievements;
+  $('campChallengesButton').onclick=openChallengeRecords;$('campBeastsButton').onclick=openBeastCatalog;
 
   function renderCast(parent){const cast=campaign?.state.pending?.castIntroductions;if(!cast||!Object.keys(cast).length)return;const box=el('aside',undefined,'journey-cast');box.setAttribute('aria-label','本幕人物');for(const identity of Object.values(cast))paragraph(box,identity,'micro');parent.append(box);}
   function renderQuestStatus(parent){const stage=campaign?.questStage();if(stage){const box=el('section',undefined,'journey-quest-status');box.append(el('strong',stage.title));paragraph(box,(campaign.state.pending.questStarted?'任务链已开启 · ':'')+'第'+stage.number+'环节 · '+stage.nodeTitle+(stage.status==='completed'?' · 已完成':''),'micro');parent.append(box);return;}const q=campaign?.questSummary();if(!q)return;const box=el('section',undefined,'journey-quest-status');box.append(el('strong',q.title));paragraph(box,(q.cadence==='same_period_episode'?'本期连续故事':'跨期故事')+' · 已经历'+q.finished+'幕'+(q.status==='waiting'?' · 等待后续条件':' · 线索进行中'),'micro');parent.append(box);}
@@ -373,7 +385,7 @@
     if(c.rings.length<R.benchmark(c.level).rings)paragraph(body,'考核日期已经到了。未补齐的魂环仍为空缺，你将以当前实际能力登台。','camp-note');
     const form=el('div',undefined,'camp-form');const make=(label,id,items)=>{const wrap=el('div'),labelEl=el('label',label),select=el('select');labelEl.htmlFor=id;select.id=id;items.forEach(([value,text])=>select.append(new Option(text,value)));wrap.append(labelEl,select);form.append(wrap);return select;};
     let enemy,mode,support;
-    if(member){enemy=make('转正对手','campEnemy',WitnessTemplates.filter(t=>!t.support).map(t=>[t.id,t.name+' · '+t.weapon]));enemy.value=exam.opponent||'xiaowen';mode=make('考核模式','campDifficulty',[['admission','入会考核'],['standard','同级切磋']]);body.append(form);}
+    if(member){const picker=WitnessChallengeUI.memberPicker({parent:form,el,categoryId:'campEnemyCategory',enemyId:'campEnemy',selected:exam.opponent||'xiaowen',onchange:()=>update(),completed:id=>archive.challengeProgress(WitnessTemplates).some(r=>r.mode==='admission'&&r.id===id&&r.completed)});enemy=picker.enemy;mode=make('考核模式','campDifficulty',[['admission','入会考核'],['standard','同级切磋']]);body.append(form);}
     const brief=el('section',undefined,'camp-recap');
     const update=()=>{const t=WitnessTemplates.find(t=>t.id===(member?enemy.value:campaign.assignExaminer()));const level=member&&mode?.value==='standard'?c.level:WitnessCombatV13.admissionLevel(c.level);brief.replaceChildren(el('strong',t.name+' · 见证者公会正式会员'),el('p','武魂：'+t.weapon));paragraph(brief,`本场考官${level}级 · ${R.benchmark(level).rings}环 · 使用${WitnessCombatV13.skillCount(level)}项魂技`,'micro');paragraph(brief,t.style+'系魂师。考核单上列着本场使用的魂技：'+t.skills.slice(0,WitnessCombatV13.skillCount(member&&mode?.value==='standard'?c.level:WitnessCombatV13.admissionLevel(c.level))).map(skill=>skill.name).join('、')+'。','micro');};
     if(member){enemy.onchange=update;mode.onchange=update;}update();body.append(brief);
@@ -402,7 +414,7 @@
     const badge=el('div',undefined,'camp-badge');badge.append(el('span','见'),el('strong','正式会员'),el('small',`6102年${c.time.month}月 · ${c.name}`));body.append(badge);
     paragraph(body,`从${c.time.startYear}年走到6102年，你实际经历${s.completed-(s.skippedPeriods||0)}个${periodWord()}，魂力从${c.initialLevel}级成长到${c.level}级，拥有${c.rings.length}个魂环。转正战用时${(s.result.time/1000).toFixed(1)}秒。`,'camp-note');
     paragraph(body,`你曾希望${c.identity.motivation}。现在，这个愿望多了一个可以开始实现的地方。`);
-    const row=el('div',undefined,'camp-action-row');row.append(button('保存完整人物与旅程',()=>exportSave()),button('再开一段旅程',()=>$('campNewDialog').showModal(),'quiet'));body.append(row);WitnessChallengeUI.render({campaign,body,el,button,paragraph,save,render,start:options=>{boundBattle=null;save();render();WitnessBattleUI.start(options);$('battleStage').scrollIntoView({block:'start'});}});
+    const row=el('div',undefined,'camp-action-row');row.append(button('保存完整人物与旅程',()=>exportSave()),button('再开一段旅程',()=>$('campNewDialog').showModal(),'quiet'));body.append(row);WitnessChallengeUI.render({campaign,body,el,button,paragraph,save,render,progress:archive.challengeProgress(WitnessTemplates),start:options=>{boundBattle=null;save();render();WitnessBattleUI.start(options);$('battleStage').scrollIntoView({block:'start'});}});
     WitnessChallengeUI.renderReports({state:s,body,el,paragraph,button,download});
   }
   function leaveBattle(){cancelAnimationFrame(animation);animRoll=null;busy=false;$('campBusy').hidden=true;if(WitnessBattleUI.leave)WitnessBattleUI.leave();}
@@ -424,7 +436,7 @@
     else if(s.phase==='hunt'){if(s.hunt.result||s.hunt.stage==='second'){stopAuto();render();}else perform(()=>s.hunt.stage==='plan'?campaign.huntPlan('balanced'):campaign.huntStep(),false);}
     else{stopAuto();render();}
   },quickAuto?100:speed===0?0:600/speed);}
-  async function exportSave(){if(!campaign)return;if(campaign.state.phase==='v12Hunt'&&WitnessBattleUI.get()?.v12Battle)campaign.v12Observe(WitnessBattleUI.get());if(campaign.state.challenge?.active&&WitnessBattleUI.get()?.postGameChallenge){try{WitnessChallengeUI.observe(campaign,WitnessBattleUI.get());}catch(e){notice(e.message);}}if(campaign.state.phase==='battle'&&WitnessBattleUI.get())campaign.observeBattle(WitnessBattleUI.get());migrateReports(campaign.state);const payload={format:'witness-complete-game',version:9,gameVersion:'v12.05.01',speed,training,state:campaign.snapshot()};const api=reportArchive();if(api?.exportAll){try{const reports=await api.exportAll();if(reports.length){payload.reportArchiveVersion=1;payload.huntReports=reports;}}catch{}}
+  async function exportSave(){if(!campaign)return;if(campaign.state.phase==='v12Hunt'&&WitnessBattleUI.get()?.v12Battle)campaign.v12Observe(WitnessBattleUI.get());if(campaign.state.challenge?.active&&WitnessBattleUI.get()?.postGameChallenge){try{WitnessChallengeUI.observe(campaign,WitnessBattleUI.get());}catch(e){notice(e.message);}}if(campaign.state.phase==='battle'&&WitnessBattleUI.get())campaign.observeBattle(WitnessBattleUI.get());migrateReports(campaign.state);const payload={format:'witness-complete-game',version:9,gameVersion:'v12.05.03',speed,training,state:campaign.snapshot()};const api=reportArchive();if(api?.exportAll){try{const reports=await api.exportAll();if(reports.length){payload.reportArchiveVersion=1;payload.huntReports=reports;}}catch{}}
    download(payload,'见证者_'+(campaign.state.character?.name||campaign.state.draft?.options.name||'开局')+'_完整存档.json');}
   $('campExport').onclick=()=>{exportSave().catch(error=>notice('导出失败：'+error.message));};$('campReveal').onclick=reveal;
   $('campNew').onclick=()=>{stopAuto();if(busy)reveal();if(campaign){if(campaign.state.phase==='battle'||campaign.state.phase==='v12Hunt'){WitnessBattleUI.halt();WitnessBattleUI.update();}$('campNewDialog').showModal();}else render();};

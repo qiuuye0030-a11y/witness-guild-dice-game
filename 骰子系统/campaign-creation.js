@@ -94,7 +94,7 @@
       if(key==='charm')note='魅力1—10档，影响交往、协商与被理解的机会，不替代你的能力。';
       if(key==='luck')note='气运1—10档，影响机缘；低气运也会遇到善意与突破。';
       if(key==='talent')note='一次1d10同时决定修炼天赋与先天魂力等级：几档天赋即几级先天魂力。修炼系数×0.50—1.56，能力训练×1.00—1.36。';
-      if(key==='tier'){sides=1000;note='先决定武魂潜力，再决定种类。低潜力直接迎来觉醒，高潜力还将投取属性。';}
+      if(key==='tier'){sides=1000;note='1—10档潜力各占10%，等概率投取。随后决定种类，高潜力还将投取属性。';}
       if(key==='soulKind'){options=[...new Set(this.catalog.filter(x=>x.tier===v.tier).map(x=>x.main_kind))];note=v.tier<=3?'武魂种类落定后，将直接暗骰决定你的武魂。':'先落定种类，随后投取武魂属性，具体武魂由暗骰揭晓。';}
       if(key==='soulAttribute'){options=[...new Set(this.catalog.filter(x=>x.tier===v.tier&&x.main_kind===v.soulKind).map(attributeKey))];note='属性落定后，觉醒将自行完成。不提前展示具体武魂候选。';}
       if(key==='level'){sides=this.state.timeSchema===2?10:40;note=this.state.timeSchema===2?'6岁觉醒，投取1—10级先天魂力；随后通过成长与猎魂达到入会条件。':'骰面−1：初始0—39级，随后靠季度成长与猎魂，按日期抵达公会参加考核。';}

@@ -4,7 +4,7 @@
   "tacticsRulesVersion": 1007,
   "snapshotVersion": 10,
   "baseV12Sha256": "939892e8535cdf9dd4fb5decda9d57e755c8ab2ad0801903bb0019be062fc1e9",
-  "adaptedSha256": "f24ee13caa222d3e20ce4ab22c324afd88503b6999e9e3a256c1ffffb7bef518",
+  "adaptedSha256": "39213d7db0097d868d0b9fd632b1e0558842d659dc5659f5833d8c851746fb99",
   "source": "canonical systems/battle modules; V14 canonical modular implementation",
   "modules": [
     "../dice/engine.js",

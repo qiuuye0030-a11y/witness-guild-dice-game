@@ -1,0 +1,19 @@
+{
+  "passed": 13,
+  "tests": [
+    "all1000 potential faces split exactly100 each; explicit tier and already rolled legacy result survive reload",
+    "yiqiran can be explicit or random primary examiner;2v2 completion credits primary rather than partner",
+    "yixiaobei can be explicit or random primary examiner;2v2 completion credits primary rather than partner",
+    "postgame support challenge records actual primary target, including reports and shared ledger",
+    "manual admission ends when only two guards remain; automatic, paused/not-ready, hunt, postgame and an available action do not",
+    "bone achievements detect equipped legacy traits and six slots immediately, but not carried bones or tests",
+    "shared category picker exposes both support members and no cross-category opponents",
+    "high difficulty is a parent directory; both special opponents remain separately selectable",
+    "achievement book and challenge records are separate; unfinished targets first; beast book contains only seven names and14 traits",
+    "bone achievement modal precedes pending promotion, closing record books replays pending notices",
+    "background redraw never removes a displayed achievement or replaces it with a promotion",
+    "closing independent challenge records immediately opens a deferred bone achievement",
+    "actual normal random examiner roll can land on Yiqiran and records her after victory"
+  ],
+  "visualReview": false
+}

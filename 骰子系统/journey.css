@@ -131,3 +131,17 @@
 .chenxi-mode .cultivation-talent>strong{color:#876123}
 .chenxi-mode .v12-bones,.chenxi-mode .v12-reports{border-color:#c4ad7b66}
 .bone-drop-notice strong,.hunt-bone-found{color:var(--gold,#b78b2e);font-size:18px;font-weight:700}
+
+/* v12.05.02: platinum completion witness and quiet wish note. */
+.achievement-platinum{background:radial-gradient(ellipse at top,#405775,#131e35 72%)!important;border-color:#e2edf8!important;box-shadow:0 0 38px #d9ecff88,0 0 100px #a7d2ff55!important;color:#eff8ff!important}
+.achievement-platinum h2{color:#f2faff!important;text-shadow:0 0 18px #d3eaff88;letter-spacing:.12em}
+.achievement-platinum .achievement-seal{color:#f1f9ff;border-color:#deefff;box-shadow:0 0 30px #dcefff88}
+.achievement-platinum .legendary-halo{filter:saturate(.2);opacity:.8}
+.achievement-reward-note{display:block;margin:14px 0;font-size:12px;line-height:1.8;color:inherit;opacity:.9;background:transparent;border:0}
+.achievement-platinum-record{border:1px solid #a8bed6!important;background:linear-gradient(135deg,#bedbf71a,transparent)}
+.achievement-grade{font-size:12px;font-weight:700;color:inherit;letter-spacing:.1em}
+
+/* v12.05.03: separate records and reference book, both themes use readable prose. */
+:is(#campBeasts,#campChallenges) .collection-copy{color:inherit;background:transparent;border:0;line-height:1.9;font-size:14px;padding:0;margin:10px 0}
+.member-picker{display:grid;gap:10px;grid-column:1/-1}.member-picker select{width:100%;min-width:0}#challengeMode,#challengeSpecial{width:100%;margin:10px 0}
+:is(#campBeasts,#campChallenges){max-width:min(900px,94vw);max-height:88vh;overflow:auto;color:var(--ink);background:var(--paper)}

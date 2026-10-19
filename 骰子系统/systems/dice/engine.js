@@ -1,6 +1,6 @@
 (function(root) {
   'use strict';
-  const TIERS = [138,304,469,607,717,800,892,954,985,1000];
+  const TIERS = [100,200,300,400,500,600,700,800,900,1000];
   function hashSeed(seed) {
     let h=2166136261;
     for (const c of String(seed)) { h^=c.codePointAt(0); h=Math.imul(h,16777619); }

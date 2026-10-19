@@ -4,7 +4,13 @@ let storage;try{storage=root.localStorage;}catch{}
 const C=root.WitnessChallenge;
 function authorize(c,options){const q=C.ensure(c,storage);return !!(q?.active&&q.active===options.challengeSessionId&&JSON.stringify(q.options)===JSON.stringify(options));}
 function observe(c,b){return C.observe(c,b,storage);}
-function render({campaign:c,body,el,button,paragraph,save,render:rerender,start}){
+function memberPicker({parent,el,categoryId='challengeCategory',enemyId='challengeEnemy',selected='qinyan',onchange=()=>{},completed=()=>false}){
+ const category=el('select'),enemy=el('select'),group=el('div',undefined,'member-picker');category.id=categoryId;enemy.id=enemyId;category.setAttribute('aria-label','会员系别');enemy.setAttribute('aria-label','选择会员');
+ const styles=['强攻','敏攻','控制','防御','辅助'].filter(style=>root.WitnessTemplates.some(t=>t.style===style));for(const style of styles)category.append(new Option(style+'系',style));category.value=root.WitnessTemplates.find(t=>t.id===selected)?.style||styles[0];
+ const refresh=()=>{const old=enemy.value||selected,list=root.WitnessTemplates.filter(t=>t.style===category.value).sort((a,b)=>Number(completed(a.id))-Number(completed(b.id)));enemy.replaceChildren();for(const t of list)enemy.append(new Option((completed(t.id)?'✓ ':'')+t.name+' · '+t.weapon,t.id));enemy.value=list.some(t=>t.id===old)?old:list[0]?.id||'';};
+ category.onchange=()=>{refresh();onchange();};enemy.onchange=onchange;const label=el('label','先选择系别，再选择会员');label.htmlFor=category.id;group.append(label,category,enemy);parent.append(group);refresh();return {category,enemy,group,refresh};
+}
+function render({campaign:c,body,el,button,paragraph,save,render:rerender,start,progress=[]}){
  let q;try{q=C.ensure(c,storage);}catch(e){paragraph(body,e.message,'camp-note');return;}if(!q||q.exhausted)return;
  const box=el('section',undefined,'challenge-zone');box.dataset.challengeZone='true';box.append(el('h3','继续挑战'));
  paragraph(box,'会徽已经属于你。若还意犹未尽，可以继续向公会会员请教。','camp-narrative');
@@ -13,13 +19,15 @@ function render({campaign:c,body,el,button,paragraph,save,render:rerender,start}
  if(q.active){paragraph(box,'当前挑战尚未结束，刷新会继续同一场。请在下方斗魂台继续或认输。');body.append(box);return;}
  const tree=el('details');tree.append(el('summary','展开挑战目录'));
  const mode=el('select');mode.setAttribute('aria-label','挑战目录');mode.id='challengeMode';
- for(const [value,label]of [['member','会员切磋 · 对手高5级'],['advanced','进阶试炼 · 对手高10级'],['guildmaster','公会会长——雪寂冬 · 95级封号斗罗·凶级'],['mysterious','神秘伤疤女 · 与你同级·神级']])mode.append(new Option(label,value));
- const enemy=el('select');enemy.id='challengeEnemy';enemy.setAttribute('aria-label','选择会员');for(const t of root.WitnessTemplates)enemy.append(new Option(t.name+' · '+t.weapon,t.id));
- const brief=el('p');const refresh=()=>{enemy.hidden=['guildmaster','mysterious'].includes(mode.value);brief.textContent=mode.value==='mysterious'?'神秘伤疤女：'+c.state.character.level+'级·神级，仅两项万年最高档魂技。事象洞穿、祥光、多识、幽行常驻；需在时限内清空生命与精神双槽。':mode.value==='guildmaster'?'独立会长档案：九魂技、头部魂骨与四个专属被动，不属于普通转正考核。':'使用标准斗魂规则，对手实际等级'+Math.min(99,c.state.character.level+(mode.value==='advanced'?10:5))+'级，不使用入会降级与伤害优惠。';};mode.onchange=refresh;refresh();
+ for(const [value,label]of [['member','会员切磋 · 对手高5级'],['advanced','进阶试炼 · 对手高10级'],['high','高难挑战']])mode.append(new Option(label,value));
+ const special=el('select');special.id='challengeSpecial';special.setAttribute('aria-label','高难挑战对手');const specialDone=id=>q.completed.includes(id+':xuejidong')||progress.some(r=>r.mode===id&&r.completed);for(const [id,name]of [['guildmaster','会长雪寂冬 · 95级凶级'],['mysterious','神秘伤疤女 · 与你同级神级']].sort((a,b)=>Number(specialDone(a[0]))-Number(specialDone(b[0]))))special.append(new Option((specialDone(id)?'✓ ':'')+name,id));
+ const selectedMode=()=>mode.value==='high'?special.value:mode.value;
+ const picker=memberPicker({parent:tree,el,completed:id=>q.completed.includes(selectedMode()+':'+id)||progress.some(r=>r.mode===selectedMode()&&r.id===id&&r.completed)}),enemy=picker.enemy;
+ const brief=el('p');const refresh=()=>{const selected=selectedMode();picker.group.hidden=mode.value==='high';special.hidden=mode.value!=='high';picker.refresh();brief.textContent=selected==='mysterious'?'神秘伤疤女：'+c.state.character.level+'级·神级，仅两项万年最高档魂技。事象洞穿、祥光、多识、幽行常驻；需在时限内清空生命与精神双槽。':selected==='guildmaster'?'独立会长档案：九魂技、头部魂骨与四个专属被动，不属于普通转正考核。':'使用标准斗魂规则，对手实际等级'+Math.min(99,c.state.character.level+(selected==='advanced'?10:5))+'级，不使用入会降级与伤害优惠。';};mode.onchange=refresh;special.onchange=refresh;refresh();
  const launch=button('接受挑战',()=>{
   const d=el('dialog');d.className='challenge-confirm';d.append(el('h3','高难度挑战提醒'));paragraph(d,brief.textContent);paragraph(d,'剩余'+(5-q.failures)+'次失败机会。累计五次失败后挑战入口隐藏，只能保留结局或重开旅程。取消不会消耗机会。');
-  d.append(button('确认登台',()=>{try{const options=C.start(c,{mode:mode.value,enemyId:enemy.value},storage);d.close();d.remove();save();start(options);}catch(e){paragraph(d,e.message,'camp-note');}}),button('暂不挑战',()=>{d.close();d.remove();},'quiet'));d.addEventListener('cancel',()=>d.remove());document.body.append(d);d.showModal();
- });tree.append(mode,enemy,brief,launch);box.append(tree);body.append(box);
+  d.append(button('确认登台',()=>{try{const options=C.start(c,{mode:selectedMode(),enemyId:enemy.value},storage);d.close();d.remove();save();start(options);}catch(e){paragraph(d,e.message,'camp-note');}}),button('暂不挑战',()=>{d.close();d.remove();},'quiet'));d.addEventListener('cancel',()=>d.remove());document.body.append(d);d.showModal();
+ });tree.prepend(mode,special);tree.append(brief,launch);box.append(tree);body.append(box);
 }
 function renderReports({state:s,body,el,paragraph,button,download}){
  const reports=C.reportEntries(s.challenge).reverse();
@@ -55,5 +63,5 @@ function renderReports({state:s,body,el,paragraph,button,download}){
  let populated=false;report.ontoggle=()=>{if(!report.open||populated)return;populated=true;for(const line of s.battleSnapshot?.log||[])paragraph(report,`${(line.time/1000).toFixed(1)}秒 · ${line.text}`,'micro');};
  body.append(report);
 }
-root.WitnessChallengeUI={render,renderReports,observe,authorize};
+root.WitnessChallengeUI={memberPicker,render,renderReports,observe,authorize};
 })(window);

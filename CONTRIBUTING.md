@@ -1,12 +1,14 @@
 # 开发约定
 
-游戏版本以VERSION为准，当前v12.05.01，战斗规则V17，成长规则10081。
+游戏版本以VERSION为准，当前v12.05.03，战斗规则V17，成长规则10082。
+
+仓库按分享包的目录格式整理：源码在`骰子系统/`，构建输入是`晨曦城_朝阳前端组件/`与`见证者公会战斗试玩.html`，资料文档在`资料与校验/参考资料/`，测试报告由回归写入`骰子系统/output/v12/`。新增或改名资料文档时同步改`_build_v12.py`里从`资料与校验/参考资料`取文件的循环，否则分享包会缺文件。
 
 修改前读“骰子系统/systems/v12/modules/README.md”（独立讨伐模块包）。主游戏规则编辑`骰子系统/systems/`，讨伐与魂骨规则编辑`骰子系统/systems/v12/`，模块包编辑`systems/v12/modules/src/`。不要直接修改生成的引擎包（`battle-v13-browser.js`、`battle-engine-v13-player.js`、`battle.js`、`core.js`、`campaign.js`、`campaign-events.js`、`systems/v12/modules-bundle.js`）或追加prototype覆盖补丁。
 
-在仓库根目录运行`npm run build`（生成主题HTML与分享包），随后`npm test`（封装核对）与`npm run regression`（15组回归）。构建必须早于检查，因为两项检查都读取生成后的主题HTML与`v12.05.01版双前端分享/构建清单.json`。纯数值与结构检查无npm依赖；Python只用标准库。
+在仓库根目录运行`npm run build`（生成主题HTML与分享包），随后`npm test`（封装核对）与`npm run regression`（17组回归）。构建必须早于检查，因为两项检查都读取生成后的主题HTML与`v12.05.03版双前端分享/资料与校验/构建清单.json`。纯数值与结构检查无npm依赖；Python只用标准库。
 
-改动`systems/v12/modules/data/`的魂兽或NPC数据后，先跑该包的`node tools/build-beasts.cjs`再跑`node tools/check.cjs`；改`systems/v12/`的界面、效果视图或魂骨说明样式后重跑整条回归链。
+改动`systems/v12/modules/data/`的魂兽或NPC数据后，先跑该包的`node tools/build-beasts.cjs`再跑`node tools/check.cjs`；改`systems/v12/`的界面、效果视图、魂骨说明样式或图录后重跑整条回归链。
 
 两条不可删的“文档即输入”：`systems/v12/modules/reference/v12_重大更新交接文档.md`（`tools/lib/doc-text.cjs` 按路径读取，用于定稿文本校验）与 `systems/v12/modules/reference/魂兽资料_*.txt`（魂兽编目来源）。清理中文文档时不要删除它们。
 

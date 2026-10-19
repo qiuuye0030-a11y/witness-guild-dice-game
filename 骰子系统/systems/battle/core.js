@@ -360,7 +360,17 @@ function runtime(unit){
       this.result={winner:delta>0?0:1,reason:'180秒裁判',time:this.now};this.addLog('180秒结束，按存活人数与生命／精神剩余比例裁判。');
     };
 
+  const settleManualExhaustion=function({manual=false,campaignExam=false}={}){
+      if(!manual||!campaignExam||this.v12Battle||this.postGameChallenge||this.result)return false;
+      const u=this.unit('player');if(!u||!this.canAct(u)||u.mp>=this.basicCost(u))return false;
+      if(this.actionReason(u,'defend')||this.actionReason(u,'defendSH'))return false;
+      const others=['skipBonus','attack','dodge','calm',...u.skills.map(s=>s.id)];if(others.some(id=>!this.actionReason(u,id)))return false;
+      const teams=[0,1].map(team=>{const us=this.units.filter(u=>u.team===team&&this.alive(u));return {count:us.length,score:us.reduce((n,u)=>n+Math.min(u.hp/u.model.derived.HP,u.sh/u.model.derived.SH),0)};});
+      const delta=teams[0].count-teams[1].count||teams[0].score-teams[1].score,reason='魂力不足，仅剩防守 · 提前裁判';
+      if(Math.abs(delta)<1e-9)this.resolveDraw(reason);else{this.result={winner:delta>0?0:1,reason,time:this.now};this.addLog('玩家仅余生命与精神防守，按存活人数及生命／精神剩余比例提前裁判。',{type:'resourceVerdict'});}return true;
+    };
+
   const surrender=function(){this.result={winner:1,reason:'认输',time:this.now};this.addLog('你选择结束这场切磋。');};
 
-  return {methods:{unit,alive,status,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender}};
+  return {methods:{unit,alive,status,basicCost,refreshExhaustion,cost,castTime,targetOptions,canAct,actionRate,advanceGauge,selectActor,endTurn,cooldownKey,cooldownUntil,actionReason,command,addLog,plan,tryControl,applyDamage,heal,scheduleAI,nextTime,tick,hasOffense,resolveDraw,checkResult,finishByTime,surrender,settleManualExhaustion}};
 })(globalThis);

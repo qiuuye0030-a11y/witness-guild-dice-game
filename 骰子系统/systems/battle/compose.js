@@ -56,6 +56,7 @@
     checkResult:BattleCore.methods.checkResult,
     finishByTime:ScarredActions.methods.finishByTime,
     surrender:BattleCore.methods.surrender,
+    settleManualExhaustion:BattleCore.methods.settleManualExhaustion,
     hitChance:AttributeActions.methods.hitChance,
     controlNumbers:MemberActions.methods.controlNumbers,
     forecastDamage:BattleProjection.methods.forecastDamage,

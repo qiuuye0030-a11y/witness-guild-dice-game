@@ -3,7 +3,7 @@
 const runtime=typeof module!=='undefined'&&module.exports?require('../../v13-runtime.cjs'):root;
 const copy=x=>JSON.parse(JSON.stringify(x)),KEY='witness-postgame-challenges-v1',REPORT_LIMIT=30;
 // 主存档键随版本变化；挑战进度读取时按新到旧依次查找，避免把当前存档当成不存在。
-const SAVE_KEYS=['witness-complete-game-v1203','witness-complete-game-v1202','witness-complete-game-v1201','witness-complete-game-v12'];
+const SAVE_KEYS=['witness-complete-game-v1204','witness-complete-game-v1203','witness-complete-game-v1202','witness-complete-game-v1201','witness-complete-game-v12'];
 function identity(s){let h=2166136261;for(const c of [s.seed,s.character?.name,s.character?.soulId,s.character?.initialLevel,s.character?.time?.month].join('|'))h=Math.imul(h^c.charCodeAt(0),16777619);return 'journey-'+(h>>>0).toString(16);}
 function ledger(storage){const x=JSON.parse(storage?.getItem(KEY)||'{}');if(!x||typeof x!=='object'||Array.isArray(x))throw Error('挑战账本无效');return x;}
 function eligible(c){const s=c?.state;return !!(s?.phase==='ending'&&s.result?.winner===0&&!s.exam?.badEnding&&s.character&&s.journal?.some(x=>x.type==='ending'));}
@@ -21,6 +21,7 @@ function mergeReports(...lists){
 function reportEntries(q){return q?mergeReports(q.reports,q.last?[q.last]:[]):[];}
 function normalize(q){
  q.reports=reportEntries(q);q.reportVersion=1;
+ q.completed=[...new Set([...(q.completed||[]),...q.reports.filter(r=>r.result?.winner===0).map(r=>r.mode+':'+(['guildmaster','mysterious'].includes(r.mode)?'xuejidong':r.snapshot?.units?.find(u=>u.id==='enemy')?.templateId||r.enemy))])];
  if(q.reports.length)q.last=summary(q.reports.at(-1));
  q.resolved=[...new Set(q.resolved||[])].slice(-200);
  return q;
@@ -81,8 +82,9 @@ function observe(c,b,storage){runtime.WitnessV12Live?.persist(c.state.character,
  q.snapshot=b.snapshot();
  if(b.result&&!q.resolved.includes(q.active)){
   const id=q.active;q.resolved=[...q.resolved,id].slice(-200);
-  if(b.result.winner===0)q.completed=[...new Set([...q.completed,q.mode+':'+(q.options.enemyId||'')])];else q.failures=Math.min(5,q.failures+1);
-  const record={id,mode:q.mode,enemy:q.options.enemyId,result:copy(b.result),initial:copy(q.options),snapshot:copy(q.snapshot)};
+  const actualEnemy=['guildmaster','mysterious'].includes(q.mode)?q.options.enemyId:b.unit('enemy')?.templateId||q.options.enemyId;
+  if(b.result.winner===0)q.completed=[...new Set([...q.completed,q.mode+':'+(actualEnemy||'')])];else q.failures=Math.min(5,q.failures+1);
+  const record={id,mode:q.mode,enemy:actualEnemy,result:copy(b.result),initial:copy(q.options),snapshot:copy(q.snapshot)};
   q.reports=mergeReports(reportEntries(q),[record]);q.last=summary(record);q.reportVersion=1;
   q.active=null;q.snapshot=null;q.options=null;q.exhausted=q.failures>=5;persist(c,storage);return true;
  }

@@ -1,0 +1,92 @@
+{
+  "gameVersion": "v12.05.03",
+  "combatRulesVersion": 17,
+  "cultivationRulesVersion": 10082,
+  "huntVersion": 2,
+  "huntAttemptLimit": 3,
+  "huntTargetSelectable": true,
+  "beastLibrary": 7,
+  "achievementCount": 14,
+  "initialPotentialProbabilities": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+  "packageLayoutVersion": 2,
+  "regression": {
+    "entry": "骰子系统/tools/verify-v12-release.py",
+    "scripts": 17,
+    "allPassed": true,
+    "suites": {
+      "v12.05.03专项": "passed",
+      "v12.05.02专项": "passed",
+      "v12.05.01专项": 7,
+      "v12.05专项": 20,
+      "v12.04专项": 44,
+      "v12.04弹窗组件": 7,
+      "v12.03.01专项": 16,
+      "v12.03专项": 43,
+      "v12.01专项": 12,
+      "v12核心": 31,
+      "界面组件": 9,
+      "合并回归": 7,
+      "伤疤女挑战": "passed",
+      "成长曲线10082": "passed",
+      "隐藏成就": "passed",
+      "培养与读档": "60 journeys / 7145 actions / 518 reloads",
+      "独立模块包": 188
+    },
+    "evidence": "骰子系统/output/v12/"
+  },
+  "repositoryLayout": {
+    "source": "骰子系统/",
+    "buildInputs": ["晨曦城_朝阳前端组件/", "见证者公会战斗试玩.html"],
+    "documents": "资料与校验/参考资料/ (the files the share ZIP ships under the same name)",
+    "testReports": "骰子系统/output/v12/ (the share ZIP copies them to 资料与校验/测试报告)",
+    "repoDocs": "docs/"
+  },
+  "reproducibility": {
+    "themeHtmlByteIdentical": true,
+    "editions": {
+      "经典深靛版": {
+        "bytes": 11264243,
+        "sha256": "06fecb33bb0d2a24f297b342fab50a3bfd481084ab755c68bc357bbbbaa43a14"
+      },
+      "晨曦朝阳版": {
+        "bytes": 11297550,
+        "sha256": "f93f1c4e2c70a53f78701fbf2fd83b609cfa75503a67c184b3a7f4827b591792"
+      }
+    },
+    "shareArchive": {
+      "file": "见证者公会_v12.05.03版_双前端分享包.zip",
+      "bytes": 14115540,
+      "sha256": "ce65bc84a5bc55f5492dbf8c191e8d2486c33e3e6f1b2a7508ceabca68d3af5f",
+      "note": "sha256 placeholder replaced after the final asset hashing; the rebuilt archive differs by ~10 bytes because the build manifest records the absolute build path."
+    }
+  },
+  "portabilityPatches": [
+    {
+      "file": "骰子系统/tools/verify-v1204.cjs",
+      "reason": "Compares against v12.02开发/骰子系统/dawn.css and v12.04开发/.../trait-pool.json, which are outside the tree; a clean copy failed with ENOENT.",
+      "action": "Both baselines vendored as fixtures/v12.02-reference/dawn.css and fixtures/v12.04-reference/trait-pool.json; only the two paths changed."
+    },
+    {
+      "file": "骰子系统/_build_v12.py",
+      "reason": "The build read the package documents from the repository root, which no longer holds them after the layout tidy-up.",
+      "action": "Reads them from 资料与校验/参考资料/ instead; the produced HTML/ZIP content is unchanged."
+    }
+  ],
+  "documentationCleanup": {
+    "moved": "the nine documents the package ships → 资料与校验/参考资料/",
+    "removed": [
+      "v12.01..v12.05.02 的更新说明、平衡模拟、卡顿修复、魂骨特性池与旧参数对照",
+      "武魂精简版_更新说明.md / v12_更新说明.md / DeepSeek v12.02 接入指南",
+      "骰子系统/v12.03.02_平衡模拟.md",
+      "骰子系统/systems/v12/modules/{审查验证结果.txt,拼接说明.md,核对报告.md,独立审查与修复报告.md,验收清单.md}"
+    ],
+    "kept": [
+      "骰子系统/systems/v12/modules/reference/v12_重大更新交接文档.md (read by tools/lib/doc-text.cjs)",
+      "骰子系统/systems/v12/modules/reference/魂兽资料_七例.txt / 魂兽资料_三例.txt"
+    ]
+  },
+  "visualBrowserQA": false,
+  "privateSaveIncluded": false,
+  "verifiedCodeCommit": null,
+  "remoteCiStatus": "pending"
+}
